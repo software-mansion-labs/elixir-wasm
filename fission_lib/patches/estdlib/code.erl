@@ -30,8 +30,7 @@
     load_abs/1,
     load_binary/3,
     ensure_loaded/1,
-    which/1,
-    get_object_code/1
+    which/1
 ]).
 
 %%-----------------------------------------------------------------------------
@@ -104,7 +103,3 @@ ensure_loaded(_Module) ->
 % Patch reason: mock implementation, prevents elixir_module:format_error/1 from crashing
 which(_Module) ->
     non_existing.
-
-% Patch reason: mock implementation, prevents ParallelChecker.cache_module/2 from crashing
-get_object_code(_Module) ->
-    error.
