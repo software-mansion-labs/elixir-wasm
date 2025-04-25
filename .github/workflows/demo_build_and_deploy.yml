@@ -34,11 +34,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - uses: webfactory/ssh-agent@v0.6.0
         with:
-          ssh-private-key: |
-            ${{ secrets.ACCESS_TO_FISSIONVM }}
-
+          submodules: 'false'
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
@@ -70,13 +67,13 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: "{{defaultContext}}:demos-docker"
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           # tags: ${{ steps.meta.outputs.tags }}
           # labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
