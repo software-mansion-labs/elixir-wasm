@@ -7,7 +7,6 @@ name: Build & test
 
 on:
   push:
-    branches: [ "*" ]
     branches-ignore: [ "deploy" ]
 
   pull_request:
