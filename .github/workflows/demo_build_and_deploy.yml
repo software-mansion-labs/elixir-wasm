@@ -71,7 +71,7 @@ jobs:
           file: demos-docker/Dockerfile
           push: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          tags: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}::latest"
+          tags: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           # tags: ${{ steps.meta.outputs.tags }}
           # labels: ${{ steps.meta.outputs.labels }}
           # cache-from: type=gha
