@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>GenServer — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/GenServer.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">GenServer</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A behaviour module for implementing the server of a client-server relation.</p><p>A GenServer is a process like any other Elixir process and it can be used
+to keep state, execute code asynchronously and so on. The advantage of using
+a generic server process (GenServer) implemented using this module is that it
+will have a standard set of interface functions and include functionality for
+tracing and error reporting. It will also fit into a supervision tree.</p><pre><code class="mermaid">graph BT
+    C(Client #3) ~~~ B(Client #2) ~~~ A(Client #1)
+    A &amp; B &amp; C --&gt;|request| GenServer
+    GenServer -.-&gt;|reply| A &amp; B &amp; C</code></pre><h2 id="module-example" class="section-heading">
+  <a href="#module-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<p>The GenServer behaviour abstracts the common client-server interaction.
+Developers are only required to implement the callbacks and functionality
+they are interested in.</p><p>Let's start with a code example and then explore the available callbacks.
+Imagine we want to implement a service with a GenServer that works
+like a stack, allowing us to push and pop elements. We'll customize a
+generic GenServer with our own module by implementing three callbacks.</p><p><a href="#c:init/1"><code class="inline">init/1</code></a> transforms our initial argument to the initial state for the
+GenServer. <a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a> fires when the server receives a synchronous
+<code class="inline">pop</code> message, popping an element from the stack and returning it to the
+user. <a href="#c:handle_cast/2"><code class="inline">handle_cast/2</code></a> will fire when the server receives an asynchronous
+<code class="inline">push</code> message, pushing an element onto the stack:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Stack</span><span class="w"> </span><span class="k" data-group-id="2042100160-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="c1"># Callbacks</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="2042100160-2">(</span><span class="n">elements</span><span class="p" data-group-id="2042100160-2">)</span><span class="w"> </span><span class="k" data-group-id="2042100160-3">do</span><span class="w">
+    </span><span class="n">initial_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="2042100160-4">(</span><span class="n">elements</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">trim</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2042100160-4">)</span><span class="w">
+    </span><span class="p" data-group-id="2042100160-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">initial_state</span><span class="p" data-group-id="2042100160-5">}</span><span class="w">
+  </span><span class="k" data-group-id="2042100160-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="2042100160-6">(</span><span class="ss">:pop</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="2042100160-6">)</span><span class="w"> </span><span class="k" data-group-id="2042100160-7">do</span><span class="w">
+    </span><span class="p" data-group-id="2042100160-8">[</span><span class="n">to_caller</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">new_state</span><span class="p" data-group-id="2042100160-8">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="w">
+    </span><span class="p" data-group-id="2042100160-9">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">to_caller</span><span class="p">,</span><span class="w"> </span><span class="n">new_state</span><span class="p" data-group-id="2042100160-9">}</span><span class="w">
+  </span><span class="k" data-group-id="2042100160-7">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_cast</span><span class="p" data-group-id="2042100160-10">(</span><span class="p" data-group-id="2042100160-11">{</span><span class="ss">:push</span><span class="p">,</span><span class="w"> </span><span class="n">element</span><span class="p" data-group-id="2042100160-11">}</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="2042100160-10">)</span><span class="w"> </span><span class="k" data-group-id="2042100160-12">do</span><span class="w">
+    </span><span class="n">new_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2042100160-13">[</span><span class="n">element</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="2042100160-13">]</span><span class="w">
+    </span><span class="p" data-group-id="2042100160-14">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">new_state</span><span class="p" data-group-id="2042100160-14">}</span><span class="w">
+  </span><span class="k" data-group-id="2042100160-12">end</span><span class="w">
+</span><span class="k" data-group-id="2042100160-1">end</span></code></pre><p>We leave the process machinery of startup, message passing, and the message
+loop to the GenServer behaviour and focus only on the stack
+implementation. We can now use the GenServer API to interact with
+the service by creating a process and sending it messages:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Start the server</span><span class="w">
+</span><span class="p" data-group-id="2653039736-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="2653039736-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="2653039736-2">(</span><span class="nc">Stack</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello,world&quot;</span><span class="p" data-group-id="2653039736-2">)</span><span class="w">
+
+</span><span class="c1"># This is the client</span><span class="w">
+</span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="2653039736-3">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="ss">:pop</span><span class="p" data-group-id="2653039736-3">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;hello&quot;</span><span class="w">
+
+</span><span class="nc">GenServer</span><span class="o">.</span><span class="n">cast</span><span class="p" data-group-id="2653039736-4">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2653039736-5">{</span><span class="ss">:push</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;elixir&quot;</span><span class="p" data-group-id="2653039736-5">}</span><span class="p" data-group-id="2653039736-4">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span><span class="w">
+
+</span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="2653039736-6">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="ss">:pop</span><span class="p" data-group-id="2653039736-6">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;elixir&quot;</span></code></pre><p>We start our <code class="inline">Stack</code> by calling <a href="#start_link/2"><code class="inline">start_link/2</code></a>, passing the module
+with the server implementation and its initial argument with a
+comma-separated list of elements. The GenServer behaviour calls the
+<a href="#c:init/1"><code class="inline">init/1</code></a> callback to establish the initial GenServer state. From
+this point on, the GenServer has control so we interact with it by
+sending two types of messages on the client. <strong>call</strong> messages expect
+a reply from the server (and are therefore synchronous) while <strong>cast</strong>
+messages do not.</p><p>Each call to <a href="#call/3"><code class="inline">GenServer.call/3</code></a> results in a message
+that must be handled by the <a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a> callback in the GenServer.
+A <a href="#cast/2"><code class="inline">cast/2</code></a> message must be handled by <a href="#c:handle_cast/2"><code class="inline">handle_cast/2</code></a>. <a href="GenServer.html"><code class="inline">GenServer</code></a>
+supports 8 callbacks, but only <a href="#c:init/1"><code class="inline">init/1</code></a> is required.</p><section role="note" class="admonition info"><h4 class="admonition-title info"><code class="inline">use GenServer</code></h4><p>When you <code class="inline">use GenServer</code>, the <a href="GenServer.html"><code class="inline">GenServer</code></a> module will
+set <code class="inline">@behaviour GenServer</code> and define a <code class="inline">child_spec/1</code>
+function, so your module can be used as a child
+in a supervision tree.</p></section><h2 id="module-client-server-apis" class="section-heading">
+  <a href="#module-client-server-apis" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Client / Server APIs</span>
+</h2>
+<p>Although in the example above we have used <a href="#start_link/3"><code class="inline">GenServer.start_link/3</code></a> and
+friends to directly start and communicate with the server, most of the
+time we don't call the <a href="GenServer.html"><code class="inline">GenServer</code></a> functions directly. Instead, we wrap
+the calls in new functions representing the public API of the server.
+These thin wrappers are called the <strong>client API</strong>.</p><p>Here is a better implementation of our Stack module:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Stack</span><span class="w"> </span><span class="k" data-group-id="3352910669-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="c1"># Client</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="3352910669-2">(</span><span class="n">default</span><span class="p" data-group-id="3352910669-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="3352910669-3">(</span><span class="n">default</span><span class="p" data-group-id="3352910669-3">)</span><span class="w"> </span><span class="k" data-group-id="3352910669-4">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="3352910669-5">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">default</span><span class="p" data-group-id="3352910669-5">)</span><span class="w">
+  </span><span class="k" data-group-id="3352910669-4">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">push</span><span class="p" data-group-id="3352910669-6">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">element</span><span class="p" data-group-id="3352910669-6">)</span><span class="w"> </span><span class="k" data-group-id="3352910669-7">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">cast</span><span class="p" data-group-id="3352910669-8">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3352910669-9">{</span><span class="ss">:push</span><span class="p">,</span><span class="w"> </span><span class="n">element</span><span class="p" data-group-id="3352910669-9">}</span><span class="p" data-group-id="3352910669-8">)</span><span class="w">
+  </span><span class="k" data-group-id="3352910669-7">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">pop</span><span class="p" data-group-id="3352910669-10">(</span><span class="n">pid</span><span class="p" data-group-id="3352910669-10">)</span><span class="w"> </span><span class="k" data-group-id="3352910669-11">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="3352910669-12">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="ss">:pop</span><span class="p" data-group-id="3352910669-12">)</span><span class="w">
+  </span><span class="k" data-group-id="3352910669-11">end</span><span class="w">
+
+  </span><span class="c1"># Server (callbacks)</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="3352910669-13">(</span><span class="n">elements</span><span class="p" data-group-id="3352910669-13">)</span><span class="w"> </span><span class="k" data-group-id="3352910669-14">do</span><span class="w">
+    </span><span class="n">initial_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="3352910669-15">(</span><span class="n">elements</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">trim</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3352910669-15">)</span><span class="w">
+    </span><span class="p" data-group-id="3352910669-16">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">initial_state</span><span class="p" data-group-id="3352910669-16">}</span><span class="w">
+  </span><span class="k" data-group-id="3352910669-14">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="3352910669-17">(</span><span class="ss">:pop</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="3352910669-17">)</span><span class="w"> </span><span class="k" data-group-id="3352910669-18">do</span><span class="w">
+    </span><span class="p" data-group-id="3352910669-19">[</span><span class="n">to_caller</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">new_state</span><span class="p" data-group-id="3352910669-19">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="w">
+    </span><span class="p" data-group-id="3352910669-20">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">to_caller</span><span class="p">,</span><span class="w"> </span><span class="n">new_state</span><span class="p" data-group-id="3352910669-20">}</span><span class="w">
+  </span><span class="k" data-group-id="3352910669-18">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_cast</span><span class="p" data-group-id="3352910669-21">(</span><span class="p" data-group-id="3352910669-22">{</span><span class="ss">:push</span><span class="p">,</span><span class="w"> </span><span class="n">element</span><span class="p" data-group-id="3352910669-22">}</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="3352910669-21">)</span><span class="w"> </span><span class="k" data-group-id="3352910669-23">do</span><span class="w">
+    </span><span class="n">new_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3352910669-24">[</span><span class="n">element</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="3352910669-24">]</span><span class="w">
+    </span><span class="p" data-group-id="3352910669-25">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">new_state</span><span class="p" data-group-id="3352910669-25">}</span><span class="w">
+  </span><span class="k" data-group-id="3352910669-23">end</span><span class="w">
+</span><span class="k" data-group-id="3352910669-1">end</span></code></pre><p>In practice, it is common to have both server and client functions in
+the same module. If the server and/or client implementations are growing
+complex, you may want to have them in different modules.</p><p>The following diagram summarizes the interactions between client and server.
+Both Client and Server are processes and communication happens via messages
+(continuous line). The Server &lt;-&gt; Module interaction happens when the
+GenServer process calls your code (dotted lines):</p><pre><code class="mermaid">sequenceDiagram
+    participant C as Client (Process)
+    participant S as Server (Process)
+    participant M as Module (Code)
+
+    note right of C: Typically started by a supervisor
+    C-&gt;&gt;+S: GenServer.start_link(module, arg, options)
+    S--&gt;&gt;+M: init(arg)
+    M--&gt;&gt;-S: {:ok, state} | :ignore | {:error, reason}
+    S-&gt;&gt;-C: {:ok, pid} | :ignore | {:error, reason}
+
+    note right of C: call is synchronous
+    C-&gt;&gt;+S: GenServer.call(pid, message)
+    S--&gt;&gt;+M: handle_call(message, from, state)
+    M--&gt;&gt;-S: {:reply, reply, state} | {:stop, reason, reply, state}
+    S-&gt;&gt;-C: reply
+
+    note right of C: cast is asynchronous
+    C-)S: GenServer.cast(pid, message)
+    S--&gt;&gt;+M: handle_cast(message, state)
+    M--&gt;&gt;-S: {:noreply, state} | {:stop, reason, state}
+
+    note right of C: send is asynchronous
+    C-)S: Kernel.send(pid, message)
+    S--&gt;&gt;+M: handle_info(message, state)
+    M--&gt;&gt;-S: {:noreply, state} | {:stop, reason, state}</code></pre><h2 id="module-how-to-supervise" class="section-heading">
+  <a href="#module-how-to-supervise" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">How to supervise</span>
+</h2>
+<p>A <a href="GenServer.html"><code class="inline">GenServer</code></a> is most commonly started under a supervision tree.
+When we invoke <code class="inline">use GenServer</code>, it automatically defines a <code class="inline">child_spec/1</code>
+function that allows us to start the <code class="inline">Stack</code> directly under a supervisor.
+To start a default stack of <code class="inline">[&quot;hello&quot;, &quot;world&quot;]</code> under a supervisor,
+we can do:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5329359152-1">[</span><span class="w">
+  </span><span class="p" data-group-id="5329359152-2">{</span><span class="nc">Stack</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello,world&quot;</span><span class="p" data-group-id="5329359152-2">}</span><span class="w">
+</span><span class="p" data-group-id="5329359152-1">]</span><span class="w">
+
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="5329359152-3">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_all</span><span class="p" data-group-id="5329359152-3">)</span></code></pre><p>Note that specifying a module <code class="inline">MyServer</code> would be the same as specifying
+the  tuple <code class="inline">{MyServer, []}</code>.</p><p><code class="inline">use GenServer</code> also accepts a list of options which configures the
+child specification and therefore how it runs under a supervisor.
+The generated <code class="inline">child_spec/1</code> can be customized with the following options:</p><ul><li><code class="inline">:id</code> - the child specification identifier, defaults to the current module</li><li><code class="inline">:restart</code> - when the child should be restarted, defaults to <code class="inline">:permanent</code></li><li><code class="inline">:shutdown</code> - how to shut down the child, either immediately or by giving it time to shut down</li></ul><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="p">,</span><span class="w"> </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:transient</span><span class="p">,</span><span class="w"> </span><span class="ss">shutdown</span><span class="p">:</span><span class="w"> </span><span class="mi">10_000</span></code></pre><p>See the &quot;Child specification&quot; section in the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module for more
+detailed information. The <code class="inline">@doc</code> annotation immediately preceding
+<code class="inline">use GenServer</code> will be attached to the generated <code class="inline">child_spec/1</code> function.</p><p>When stopping the GenServer, for example by returning a <code class="inline">{:stop, reason, new_state}</code>
+tuple from a callback, the exit reason is used by the supervisor to determine
+whether the GenServer needs to be restarted. See the &quot;Exit reasons and restarts&quot;
+section in the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module.</p><h2 id="module-name-registration" class="section-heading">
+  <a href="#module-name-registration" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Name registration</span>
+</h2>
+<p>Both <a href="#start_link/3"><code class="inline">start_link/3</code></a> and <a href="#start/3"><code class="inline">start/3</code></a> support the <a href="GenServer.html"><code class="inline">GenServer</code></a> to register
+a name on start via the <code class="inline">:name</code> option. Registered names are also
+automatically cleaned up on termination. The supported values are:</p><ul><li><p>an atom - the GenServer is registered locally (to the current node)
+with the given name using <a href="Process.html#register/2"><code class="inline">Process.register/2</code></a>.</p></li><li><p><code class="inline">{:global, term}</code> - the GenServer is registered globally with the given
+term using the functions in the <a href="https://www.erlang.org/doc/apps/kernel/global.html"><code class="inline">:global</code> module</a>.</p></li><li><p><code class="inline">{:via, module, term}</code> - the GenServer is registered with the given
+mechanism and name. The <code class="inline">:via</code> option expects a module that exports
+<code class="inline">register_name/2</code>, <code class="inline">unregister_name/1</code>, <code class="inline">whereis_name/1</code> and <a href="Kernel.html#send/2"><code class="inline">send/2</code></a>.
+One such example is the <a href="https://www.erlang.org/doc/apps/kernel/global.html"><code class="inline">:global</code> module</a> which uses these functions
+for keeping the list of names of processes and their associated PIDs
+that are available globally for a network of Elixir nodes. Elixir also
+ships with a local, decentralized and scalable registry called <a href="Registry.html"><code class="inline">Registry</code></a>
+for locally storing names that are generated dynamically.</p></li></ul><p>For example, we could start and register our <code class="inline">Stack</code> server locally as follows:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Start the server and register it locally with name MyStack</span><span class="w">
+</span><span class="p" data-group-id="5072586559-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5072586559-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="5072586559-2">(</span><span class="nc">Stack</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyStack</span><span class="p" data-group-id="5072586559-2">)</span><span class="w">
+
+</span><span class="c1"># Now messages can be sent directly to MyStack</span><span class="w">
+</span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="5072586559-3">(</span><span class="nc">MyStack</span><span class="p">,</span><span class="w"> </span><span class="ss">:pop</span><span class="p" data-group-id="5072586559-3">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;hello&quot;</span></code></pre><p>Once the server is started, the remaining functions in this module (<a href="#call/3"><code class="inline">call/3</code></a>,
+<a href="#cast/2"><code class="inline">cast/2</code></a>, and friends) will also accept an atom, or any <code class="inline">{:global, ...}</code> or
+<code class="inline">{:via, ...}</code> tuples. In general, the following formats are supported:</p><ul><li>a PID</li><li>an atom if the server is locally registered</li><li><code class="inline">{atom, node}</code> if the server is locally registered at another node</li><li><code class="inline">{:global, term}</code> if the server is globally registered</li><li><code class="inline">{:via, module, name}</code> if the server is registered through an alternative
+registry</li></ul><p>If there is an interest to register dynamic names locally, do not use
+atoms, as atoms are never garbage-collected and therefore dynamically
+generated atoms won't be garbage-collected. For such cases, you can
+set up your own local registry by using the <a href="Registry.html"><code class="inline">Registry</code></a> module.</p><h2 id="module-receiving-regular-messages" class="section-heading">
+  <a href="#module-receiving-regular-messages" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Receiving &quot;regular&quot; messages</span>
+</h2>
+<p>The goal of a <a href="GenServer.html"><code class="inline">GenServer</code></a> is to abstract the &quot;receive&quot; loop for developers,
+automatically handling system messages, supporting code change, synchronous
+calls and more. Therefore, you should never call your own &quot;receive&quot; inside
+the GenServer callbacks as doing so will cause the GenServer to misbehave.</p><p>Besides the synchronous and asynchronous communication provided by <a href="#call/3"><code class="inline">call/3</code></a>
+and <a href="#cast/2"><code class="inline">cast/2</code></a>, &quot;regular&quot; messages sent by functions such as <a href="Kernel.html#send/2"><code class="inline">send/2</code></a>,
+<a href="Process.html#send_after/4"><code class="inline">Process.send_after/4</code></a> and similar, can be handled inside the <a href="#c:handle_info/2"><code class="inline">handle_info/2</code></a>
+callback.</p><p><a href="#c:handle_info/2"><code class="inline">handle_info/2</code></a> can be used in many situations, such as handling monitor
+DOWN messages sent by <a href="Process.html#monitor/1"><code class="inline">Process.monitor/1</code></a>. Another use case for <a href="#c:handle_info/2"><code class="inline">handle_info/2</code></a>
+is to perform periodic work, with the help of <a href="Process.html#send_after/4"><code class="inline">Process.send_after/4</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Periodically</span><span class="w"> </span><span class="k" data-group-id="0240890874-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="0240890874-2">(</span><span class="bp">_</span><span class="p" data-group-id="0240890874-2">)</span><span class="w"> </span><span class="k" data-group-id="0240890874-3">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="0240890874-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0240890874-5">%{</span><span class="p" data-group-id="0240890874-5">}</span><span class="p" data-group-id="0240890874-4">)</span><span class="w">
+  </span><span class="k" data-group-id="0240890874-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="0240890874-6">(</span><span class="n">state</span><span class="p" data-group-id="0240890874-6">)</span><span class="w"> </span><span class="k" data-group-id="0240890874-7">do</span><span class="w">
+    </span><span class="c1"># Schedule work to be performed on start</span><span class="w">
+    </span><span class="n">schedule_work</span><span class="p" data-group-id="0240890874-8">(</span><span class="p" data-group-id="0240890874-8">)</span><span class="w">
+
+    </span><span class="p" data-group-id="0240890874-9">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="0240890874-9">}</span><span class="w">
+  </span><span class="k" data-group-id="0240890874-7">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_info</span><span class="p" data-group-id="0240890874-10">(</span><span class="ss">:work</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="0240890874-10">)</span><span class="w"> </span><span class="k" data-group-id="0240890874-11">do</span><span class="w">
+    </span><span class="c1"># Do the desired work here</span><span class="w">
+    </span><span class="c1"># ...</span><span class="w">
+
+    </span><span class="c1"># Reschedule once more</span><span class="w">
+    </span><span class="n">schedule_work</span><span class="p" data-group-id="0240890874-12">(</span><span class="p" data-group-id="0240890874-12">)</span><span class="w">
+
+    </span><span class="p" data-group-id="0240890874-13">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="0240890874-13">}</span><span class="w">
+  </span><span class="k" data-group-id="0240890874-11">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">schedule_work</span><span class="w"> </span><span class="k" data-group-id="0240890874-14">do</span><span class="w">
+    </span><span class="c1"># We schedule the work to happen in 2 hours (written in milliseconds).</span><span class="w">
+    </span><span class="c1"># Alternatively, one might write :timer.hours(2)</span><span class="w">
+    </span><span class="nc">Process</span><span class="o">.</span><span class="n">send_after</span><span class="p" data-group-id="0240890874-15">(</span><span class="n">self</span><span class="p" data-group-id="0240890874-16">(</span><span class="p" data-group-id="0240890874-16">)</span><span class="p">,</span><span class="w"> </span><span class="ss">:work</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p" data-group-id="0240890874-15">)</span><span class="w">
+  </span><span class="k" data-group-id="0240890874-14">end</span><span class="w">
+</span><span class="k" data-group-id="0240890874-1">end</span></code></pre><h2 id="module-timeouts" class="section-heading">
+  <a href="#module-timeouts" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Timeouts</span>
+</h2>
+<p>The return value of <a href="#c:init/1"><code class="inline">init/1</code></a> or any of the <code class="inline">handle_*</code> callbacks may include
+a timeout value in milliseconds; if not, <code class="inline">:infinity</code> is assumed.
+The timeout can be used to detect a lull in incoming messages.</p><p>The <code class="inline">timeout()</code> value is used as follows:</p><ul><li><p>If the process has any message already waiting when the <code class="inline">timeout()</code> value
+is returned, the timeout is ignored and the waiting message is handled as
+usual. This means that even a timeout of <code class="inline">0</code> milliseconds is not guaranteed
+to execute (if you want to take another action immediately and unconditionally,
+use a <code class="inline">:continue</code> instruction instead).</p></li><li><p>If any message arrives before the specified number of milliseconds
+elapse, the timeout is cleared and that message is handled as usual.</p></li><li><p>Otherwise, when the specified number of milliseconds have elapsed with no
+message arriving, <code class="inline">handle_info/2</code> is called with <code class="inline">:timeout</code> as the first
+argument.</p></li></ul><h2 id="module-when-not-to-use-a-genserver" class="section-heading">
+  <a href="#module-when-not-to-use-a-genserver" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">When (not) to use a GenServer</span>
+</h2>
+<p>So far, we have learned that a <a href="GenServer.html"><code class="inline">GenServer</code></a> can be used as a supervised process
+that handles sync and async calls. It can also handle system messages, such as
+periodic messages and monitoring events. GenServer processes may also be named.</p><p>A GenServer, or a process in general, must be used to model runtime characteristics
+of your system. A GenServer must never be used for code organization purposes.</p><p>In Elixir, code organization is done by modules and functions, processes are not
+necessary. For example, imagine you are implementing a calculator and you decide
+to put all the calculator operations behind a GenServer:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">add</span><span class="p" data-group-id="5657456168-1">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="5657456168-1">)</span><span class="w"> </span><span class="k" data-group-id="5657456168-2">do</span><span class="w">
+  </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="5657456168-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5657456168-4">{</span><span class="ss">:add</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="5657456168-4">}</span><span class="p" data-group-id="5657456168-3">)</span><span class="w">
+</span><span class="k" data-group-id="5657456168-2">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p" data-group-id="5657456168-5">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="5657456168-5">)</span><span class="w"> </span><span class="k" data-group-id="5657456168-6">do</span><span class="w">
+  </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="5657456168-7">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5657456168-8">{</span><span class="ss">:subtract</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="5657456168-8">}</span><span class="p" data-group-id="5657456168-7">)</span><span class="w">
+</span><span class="k" data-group-id="5657456168-6">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="5657456168-9">(</span><span class="p" data-group-id="5657456168-10">{</span><span class="ss">:add</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="5657456168-10">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="5657456168-9">)</span><span class="w"> </span><span class="k" data-group-id="5657456168-11">do</span><span class="w">
+  </span><span class="p" data-group-id="5657456168-12">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="5657456168-12">}</span><span class="w">
+</span><span class="k" data-group-id="5657456168-11">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="5657456168-13">(</span><span class="p" data-group-id="5657456168-14">{</span><span class="ss">:subtract</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="5657456168-14">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="5657456168-13">)</span><span class="w"> </span><span class="k" data-group-id="5657456168-15">do</span><span class="w">
+  </span><span class="p" data-group-id="5657456168-16">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="5657456168-16">}</span><span class="w">
+</span><span class="k" data-group-id="5657456168-15">end</span></code></pre><p>This is an anti-pattern not only because it convolutes the calculator logic but
+also because you put the calculator logic behind a single process that will
+potentially become a bottleneck in your system, especially as the number of
+calls grow. Instead just define the functions directly:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">add</span><span class="p" data-group-id="4415973371-1">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="4415973371-1">)</span><span class="w"> </span><span class="k" data-group-id="4415973371-2">do</span><span class="w">
+  </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w">
+</span><span class="k" data-group-id="4415973371-2">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p" data-group-id="4415973371-3">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="4415973371-3">)</span><span class="w"> </span><span class="k" data-group-id="4415973371-4">do</span><span class="w">
+  </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="w">
+</span><span class="k" data-group-id="4415973371-4">end</span></code></pre><p>If you don't need a process, then you don't need a process. Use processes only to
+model runtime properties, such as mutable state, concurrency and failures, never
+for code organization.</p><h2 id="module-debugging-with-the-sys-module" class="section-heading">
+  <a href="#module-debugging-with-the-sys-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Debugging with the :sys module</span>
+</h2>
+<p>GenServers, as <a href="https://www.erlang.org/doc/design_principles/spec_proc.html">special processes</a>,
+can be debugged using the <a href="https://www.erlang.org/doc/apps/stdlib/sys.html"><code class="inline">:sys</code> module</a>.
+Through various hooks, this module allows developers to introspect the state of
+the process and trace system events that happen during its execution, such as
+received messages, sent replies and state changes.</p><p>Let's explore the basic functions from the
+<a href="https://www.erlang.org/doc/apps/stdlib/sys.html"><code class="inline">:sys</code> module</a> used for debugging:</p><ul><li><a href="https://www.erlang.org/doc/apps/stdlib/sys.html#get_state/2"><code class="inline">:sys.get_state/2</code></a> - allows retrieval of the state of the process.
+In the case of a GenServer process, it will be the callback module state,
+as passed into the callback functions as last argument.</li><li><a href="https://www.erlang.org/doc/apps/stdlib/sys.html#get_status/2"><code class="inline">:sys.get_status/2</code></a> - allows retrieval of the status of the process.
+This status includes the process dictionary, if the process is running
+or is suspended, the parent PID, the debugger state, and the state of
+the behaviour module, which includes the callback module state
+(as returned by <a href="https://www.erlang.org/doc/apps/stdlib/sys.html#get_state/2"><code class="inline">:sys.get_state/2</code></a>). It's possible to change how this
+status is represented by defining the optional <a href="#c:format_status/1"><code class="inline">GenServer.format_status/1</code></a>
+callback.</li><li><a href="https://www.erlang.org/doc/apps/stdlib/sys.html#trace/3"><code class="inline">:sys.trace/3</code></a> - prints all the system events to <code class="inline">:stdio</code>.</li><li><a href="https://www.erlang.org/doc/apps/stdlib/sys.html#statistics/3"><code class="inline">:sys.statistics/3</code></a> - manages collection of process statistics.</li><li><a href="https://www.erlang.org/doc/apps/stdlib/sys.html#no_debug/2"><code class="inline">:sys.no_debug/2</code></a> - turns off all debug handlers for the given process.
+It is very important to switch off debugging once we're done. Excessive
+debug handlers or those that should be turned off, but weren't, can
+seriously damage the performance of the system.</li><li><a href="https://www.erlang.org/doc/apps/stdlib/sys.html#suspend/2"><code class="inline">:sys.suspend/2</code></a> - allows to suspend a process so that it only
+replies to system messages but no other messages. A suspended process
+can be reactivated via <a href="https://www.erlang.org/doc/apps/stdlib/sys.html#resume/2"><code class="inline">:sys.resume/2</code></a>.</li></ul><p>Let's see how we could use those functions for debugging the stack server
+we defined earlier.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="6332150496-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="6332150496-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stack</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="6332150496-2">(</span><span class="p" data-group-id="6332150496-3">[</span><span class="p" data-group-id="6332150496-3">]</span><span class="p" data-group-id="6332150496-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:sys</span><span class="o">.</span><span class="n">statistics</span><span class="p" data-group-id="6332150496-4">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6332150496-4">)</span><span class="w"> </span><span class="c1"># turn on collecting process statistics</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:sys</span><span class="o">.</span><span class="n">trace</span><span class="p" data-group-id="6332150496-5">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6332150496-5">)</span><span class="w"> </span><span class="c1"># turn on event printing</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Stack</span><span class="o">.</span><span class="n">push</span><span class="p" data-group-id="6332150496-6">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6332150496-6">)</span><span class="w">
+</span><span class="o">*</span><span class="nc">DBG</span><span class="o">*</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.122</span><span class="o">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="n">cast</span><span class="w"> </span><span class="p" data-group-id="6332150496-7">{</span><span class="n">push</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="6332150496-7">}</span><span class="w">
+</span><span class="o">*</span><span class="nc">DBG</span><span class="o">*</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.122</span><span class="o">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w"> </span><span class="n">new</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="p" data-group-id="6332150496-8">[</span><span class="mi">1</span><span class="p" data-group-id="6332150496-8">]</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:sys</span><span class="o">.</span><span class="n">get_state</span><span class="p" data-group-id="6332150496-9">(</span><span class="n">pid</span><span class="p" data-group-id="6332150496-9">)</span><span class="w">
+</span><span class="p" data-group-id="6332150496-10">[</span><span class="mi">1</span><span class="p" data-group-id="6332150496-10">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Stack</span><span class="o">.</span><span class="n">pop</span><span class="p" data-group-id="6332150496-11">(</span><span class="n">pid</span><span class="p" data-group-id="6332150496-11">)</span><span class="w">
+</span><span class="o">*</span><span class="nc">DBG</span><span class="o">*</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.122</span><span class="o">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.80</span><span class="o">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">
+</span><span class="o">*</span><span class="nc">DBG</span><span class="o">*</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.122</span><span class="o">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sent</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.80</span><span class="o">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">new</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="p" data-group-id="6332150496-12">[</span><span class="p" data-group-id="6332150496-12">]</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:sys</span><span class="o">.</span><span class="n">statistics</span><span class="p" data-group-id="6332150496-13">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="ss">:get</span><span class="p" data-group-id="6332150496-13">)</span><span class="w">
+</span><span class="p" data-group-id="6332150496-14">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="6332150496-15">[</span><span class="w">
+   </span><span class="ss">start_time</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6332150496-16">{</span><span class="p" data-group-id="6332150496-17">{</span><span class="mi">2016</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="6332150496-17">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-18">{</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">41</span><span class="p" data-group-id="6332150496-18">}</span><span class="p" data-group-id="6332150496-16">}</span><span class="p">,</span><span class="w">
+   </span><span class="ss">current_time</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6332150496-19">{</span><span class="p" data-group-id="6332150496-20">{</span><span class="mi">2016</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="6332150496-20">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-21">{</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p" data-group-id="6332150496-21">}</span><span class="p" data-group-id="6332150496-19">}</span><span class="p">,</span><span class="w">
+   </span><span class="ss">reductions</span><span class="p">:</span><span class="w"> </span><span class="mi">117</span><span class="p">,</span><span class="w">
+   </span><span class="ss">messages_in</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+   </span><span class="ss">messages_out</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+ </span><span class="p" data-group-id="6332150496-15">]</span><span class="p" data-group-id="6332150496-14">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:sys</span><span class="o">.</span><span class="n">no_debug</span><span class="p" data-group-id="6332150496-22">(</span><span class="n">pid</span><span class="p" data-group-id="6332150496-22">)</span><span class="w"> </span><span class="c1"># turn off all debug handlers</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:sys</span><span class="o">.</span><span class="n">get_status</span><span class="p" data-group-id="6332150496-23">(</span><span class="n">pid</span><span class="p" data-group-id="6332150496-23">)</span><span class="w">
+</span><span class="p" data-group-id="6332150496-24">{</span><span class="ss">:status</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-25">#</span><span class="nc" data-group-id="6332150496-25">PID</span><span class="p" data-group-id="6332150496-25">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">122</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6332150496-25">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-26">{</span><span class="ss">:module</span><span class="p">,</span><span class="w"> </span><span class="ss">:gen_server</span><span class="p" data-group-id="6332150496-26">}</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="6332150496-27">[</span><span class="w">
+   </span><span class="p" data-group-id="6332150496-28">[</span><span class="w">
+     </span><span class="ss">&quot;$initial_call&quot;</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6332150496-29">{</span><span class="nc">Stack</span><span class="p">,</span><span class="w"> </span><span class="ss">:init</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6332150496-29">}</span><span class="p">,</span><span class="w">            </span><span class="c1"># process dictionary</span><span class="w">
+     </span><span class="ss">&quot;$ancestors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6332150496-30">[</span><span class="p" data-group-id="6332150496-31">#</span><span class="nc" data-group-id="6332150496-31">PID</span><span class="p" data-group-id="6332150496-31">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">80</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6332150496-31">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-32">#</span><span class="nc" data-group-id="6332150496-32">PID</span><span class="p" data-group-id="6332150496-32">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">51</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6332150496-32">&gt;</span><span class="p" data-group-id="6332150496-30">]</span><span class="w">
+   </span><span class="p" data-group-id="6332150496-28">]</span><span class="p">,</span><span class="w">
+   </span><span class="ss">:running</span><span class="p">,</span><span class="w">                                        </span><span class="c1"># :running | :suspended</span><span class="w">
+   </span><span class="p" data-group-id="6332150496-33">#</span><span class="nc" data-group-id="6332150496-33">PID</span><span class="p" data-group-id="6332150496-33">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">80</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6332150496-33">&gt;</span><span class="p">,</span><span class="w">                                    </span><span class="c1"># parent</span><span class="w">
+   </span><span class="p" data-group-id="6332150496-34">[</span><span class="p" data-group-id="6332150496-34">]</span><span class="p">,</span><span class="w">                                              </span><span class="c1"># debugger state</span><span class="w">
+   </span><span class="p" data-group-id="6332150496-35">[</span><span class="w">
+     </span><span class="ss">header</span><span class="p">:</span><span class="w"> </span><span class="sc">&#39;Status for generic server &lt;0.122.0&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1"># module status</span><span class="w">
+     </span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6332150496-36">[</span><span class="w">
+       </span><span class="p" data-group-id="6332150496-37">{</span><span class="sc">&#39;Status&#39;</span><span class="p">,</span><span class="w"> </span><span class="ss">:running</span><span class="p" data-group-id="6332150496-37">}</span><span class="p">,</span><span class="w">
+       </span><span class="p" data-group-id="6332150496-38">{</span><span class="sc">&#39;Parent&#39;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-39">#</span><span class="nc" data-group-id="6332150496-39">PID</span><span class="p" data-group-id="6332150496-39">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">80</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6332150496-39">&gt;</span><span class="p" data-group-id="6332150496-38">}</span><span class="p">,</span><span class="w">
+       </span><span class="p" data-group-id="6332150496-40">{</span><span class="sc">&#39;Logged events&#39;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-41">[</span><span class="p" data-group-id="6332150496-41">]</span><span class="p" data-group-id="6332150496-40">}</span><span class="w">
+     </span><span class="p" data-group-id="6332150496-36">]</span><span class="p">,</span><span class="w">
+     </span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6332150496-42">[</span><span class="p" data-group-id="6332150496-43">{</span><span class="sc">&#39;State&#39;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6332150496-44">[</span><span class="mi">1</span><span class="p" data-group-id="6332150496-44">]</span><span class="p" data-group-id="6332150496-43">}</span><span class="p" data-group-id="6332150496-42">]</span><span class="w">
+   </span><span class="p" data-group-id="6332150496-35">]</span><span class="w">
+ </span><span class="p" data-group-id="6332150496-27">]</span><span class="p" data-group-id="6332150496-24">}</span></code></pre><h2 id="module-learn-more" class="section-heading">
+  <a href="#module-learn-more" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Learn more</span>
+</h2>
+<p>If you wish to find out more about GenServers, the Elixir Getting Started
+guide provides a tutorial-like introduction. The documentation and links
+in Erlang can also provide extra insight.</p><ul><li><a href="genservers.html">GenServer - Elixir's Getting Started Guide</a></li><li><a href="https://www.erlang.org/doc/apps/stdlib/gen_server.html"><code class="inline">:gen_server</code> module documentation</a></li><li><a href="https://www.erlang.org/doc/design_principles/gen_server_concepts.html">gen_server Behaviour - OTP Design Principles</a></li><li><a href="http://learnyousomeerlang.com/clients-and-servers">Clients and Servers - Learn You Some Erlang for Great Good!</a></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:debug/0" data-no-tooltip="" translate="no">debug()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Debug options supported by the <code class="inline">start*</code> functions</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:from/0" data-no-tooltip="" translate="no">from()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Tuple describing the client of a call request.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:name/0" data-no-tooltip="" translate="no">name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The GenServer name</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:on_start/0" data-no-tooltip="" translate="no">on_start()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Return values of <code class="inline">start*</code> functions</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:option/0" data-no-tooltip="" translate="no">option()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Option values used by the <code class="inline">start*</code> functions</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:options/0" data-no-tooltip="" translate="no">options()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Options used by the <code class="inline">start*</code> functions</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:server/0" data-no-tooltip="" translate="no">server()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The server reference.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:code_change/3" data-no-tooltip="" translate="no">code_change(old_vsn, state, extra)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked to change the state of the <a href="GenServer.html"><code class="inline">GenServer</code></a> when a different version of a
+module is loaded (hot code swapping) and the state's term structure should be
+changed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:format_status/1" data-no-tooltip="" translate="no">format_status(status)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>This function is called by a <a href="GenServer.html"><code class="inline">GenServer</code></a> process in the following situations</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:format_status/2" data-no-tooltip="" translate="no">format_status(reason, pdict_and_state)</a>
+
+          <span class="deprecated" title="Use format_status/1 callback instead">deprecated</span>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:handle_call/3" data-no-tooltip="" translate="no">handle_call(request, from, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked to handle synchronous <a href="#call/3"><code class="inline">call/3</code></a> messages. <a href="#call/3"><code class="inline">call/3</code></a> will block until a
+reply is received (unless the call times out or nodes are disconnected).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:handle_cast/2" data-no-tooltip="" translate="no">handle_cast(request, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked to handle asynchronous <a href="#cast/2"><code class="inline">cast/2</code></a> messages.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:handle_continue/2" data-no-tooltip="" translate="no">handle_continue(continue_arg, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked to handle continue instructions.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:handle_info/2" data-no-tooltip="" translate="no">handle_info(msg, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked to handle all other messages.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:init/1" data-no-tooltip="" translate="no">init(init_arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked when the server is started. <a href="#start_link/3"><code class="inline">start_link/3</code></a> or <a href="#start/3"><code class="inline">start/3</code></a> will
+block until it returns.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:terminate/2" data-no-tooltip="" translate="no">terminate(reason, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked when the server is about to exit. It should do any cleanup required.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#abcast/3" data-no-tooltip="" translate="no">abcast(nodes \\ [node() | Node.list()], name, request)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Casts all servers locally registered as <code class="inline">name</code> at the specified nodes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#call/3" data-no-tooltip="" translate="no">call(server, request, timeout \\ 5000)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Makes a synchronous call to the <code class="inline">server</code> and waits for its reply.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cast/2" data-no-tooltip="" translate="no">cast(server, request)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Casts a request to the <code class="inline">server</code> without waiting for a response.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#multi_call/4" data-no-tooltip="" translate="no">multi_call(nodes \\ [node() | Node.list()], name, request, timeout \\ :infinity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calls all servers locally registered as <code class="inline">name</code> at the specified <code class="inline">nodes</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reply/2" data-no-tooltip="" translate="no">reply(client, reply)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Replies to a client.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start/3" data-no-tooltip="" translate="no">start(module, init_arg, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a <a href="GenServer.html"><code class="inline">GenServer</code></a> process without links (outside of a supervision tree).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_link/3" data-no-tooltip="" translate="no">start_link(module, init_arg, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a <a href="GenServer.html"><code class="inline">GenServer</code></a> process linked to the current process.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stop/3" data-no-tooltip="" translate="no">stop(server, reason \\ :normal, timeout \\ :infinity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Synchronously stops the server with the given <code class="inline">reason</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#whereis/1" data-no-tooltip="" translate="no">whereis(server)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the <code class="inline">pid</code> or <code class="inline">{name, node}</code> of a GenServer process, <code class="inline">nil</code> otherwise.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:debug/0">
+
+  <div class="detail-header">
+    <a href="#t:debug/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">debug()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L825" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> debug() :: [:trace | :log | :statistics | {:log_to_file, <a href="Path.html#t:t/0">Path.t</a>()}]</pre>
+
+      </div>
+
+<p>Debug options supported by the <code class="inline">start*</code> functions</p>
+  </section>
+</section>
+<section class="detail" id="t:from/0">
+
+  <div class="detail-header">
+    <a href="#t:from/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L841" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> from() :: {<a href="typespecs.html#basic-types">pid</a>(), tag :: <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Tuple describing the client of a call request.</p><p><code class="inline">pid</code> is the PID of the caller and <code class="inline">tag</code> is a unique term used to identify the
+call.</p>
+  </section>
+</section>
+<section class="detail" id="t:name/0">
+
+  <div class="detail-header">
+    <a href="#t:name/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">name()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L811" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> name() :: <a href="typespecs.html#basic-types">atom</a>() | {:global, <a href="typespecs.html#built-in-types">term</a>()} | {:via, <a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>The GenServer name</p>
+  </section>
+</section>
+<section class="detail" id="t:on_start/0">
+
+  <div class="detail-header">
+    <a href="#t:on_start/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_start()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L808" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> on_start() ::
+  {:ok, <a href="typespecs.html#basic-types">pid</a>()} | :ignore | {:error, {:already_started, <a href="typespecs.html#basic-types">pid</a>()} | <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Return values of <code class="inline">start*</code> functions</p>
+  </section>
+</section>
+<section class="detail" id="t:option/0">
+
+  <div class="detail-header">
+    <a href="#t:option/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">option()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L817" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> option() ::
+  {:debug, <a href="#t:debug/0">debug</a>()}
+  | {:name, <a href="#t:name/0">name</a>()}
+  | {:timeout, <a href="typespecs.html#built-in-types">timeout</a>()}
+  | {:spawn_opt, [<a href="Process.html#t:spawn_opt/0">Process.spawn_opt</a>()]}
+  | {:hibernate_after, <a href="typespecs.html#built-in-types">timeout</a>()}</pre>
+
+      </div>
+
+<p>Option values used by the <code class="inline">start*</code> functions</p>
+  </section>
+</section>
+<section class="detail" id="t:options/0">
+
+  <div class="detail-header">
+    <a href="#t:options/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">options()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L814" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> options() :: [<a href="#t:option/0">option</a>()]</pre>
+
+      </div>
+
+<p>Options used by the <code class="inline">start*</code> functions</p>
+  </section>
+</section>
+<section class="detail" id="t:server/0">
+
+  <div class="detail-header">
+    <a href="#t:server/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">server()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L833" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> server() :: <a href="typespecs.html#basic-types">pid</a>() | <a href="#t:name/0">name</a>() | {<a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">node</a>()}</pre>
+
+      </div>
+
+<p>The server reference.</p><p>This is either a plain PID or a value representing a registered name.
+See the &quot;Name registration&quot; section of this document for more information.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:code_change/3">
+
+  <div class="detail-header">
+    <a href="#c:code_change/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">code_change(old_vsn, state, extra)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L756" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> code_change(old_vsn, state :: <a href="typespecs.html#built-in-types">term</a>(), extra :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:ok, new_state :: <a href="typespecs.html#built-in-types">term</a>()} | {:error, reason :: <a href="typespecs.html#built-in-types">term</a>()}
+when old_vsn: <a href="typespecs.html#built-in-types">term</a>() | {:down, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Invoked to change the state of the <a href="GenServer.html"><code class="inline">GenServer</code></a> when a different version of a
+module is loaded (hot code swapping) and the state's term structure should be
+changed.</p><p><code class="inline">old_vsn</code> is the previous version of the module (defined by the <code class="inline">@vsn</code>
+attribute) when upgrading. When downgrading the previous version is wrapped in
+a 2-tuple with first element <code class="inline">:down</code>. <code class="inline">state</code> is the current state of the
+<a href="GenServer.html"><code class="inline">GenServer</code></a> and <code class="inline">extra</code> is any extra data required to change the state.</p><p>Returning <code class="inline">{:ok, new_state}</code> changes the state to <code class="inline">new_state</code> and the code
+change is successful.</p><p>Returning <code class="inline">{:error, reason}</code> fails the code change with reason <code class="inline">reason</code> and
+the state remains as the previous state.</p><p>If <a href="#c:code_change/3"><code class="inline">code_change/3</code></a> raises the code change fails and the loop will continue
+with its previous state. Therefore this callback does not usually contain side effects.</p><p>This callback is optional.</p>
+  </section>
+</section>
+<section class="detail" id="c:format_status/1">
+
+  <div class="detail-header">
+    <a href="#c:format_status/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">format_status(status)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L790" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> format_status(status :: <a href="https://www.erlang.org/doc/apps/stdlib/gen_server.html#t:format_status/0">:gen_server.format_status</a>()) ::
+  new_status :: <a href="https://www.erlang.org/doc/apps/stdlib/gen_server.html#t:format_status/0">:gen_server.format_status</a>()</pre>
+
+      </div>
+
+<p>This function is called by a <a href="GenServer.html"><code class="inline">GenServer</code></a> process in the following situations:</p><ul><li><a href="https://www.erlang.org/doc/apps/stdlib/sys.html#get_status/1"><code class="inline">:sys.get_status/1,2</code></a> is invoked to get the <a href="GenServer.html"><code class="inline">GenServer</code></a> status.</li><li>The <a href="GenServer.html"><code class="inline">GenServer</code></a> process terminates abnormally and logs an error.</li></ul><p>This callback is used to limit the status of the process returned by
+<a href="https://www.erlang.org/doc/apps/stdlib/sys.html#get_status/1"><code class="inline">:sys.get_status/1,2</code></a> or sent to logger.</p><p>The callback gets a map <code class="inline">status</code> describing the current status and shall return
+a map <code class="inline">new_status</code> with the same keys, but it may transform some values.</p><p>Two possible use cases for this callback is to remove sensitive information
+from the state to prevent it from being printed in log files, or to compact
+large irrelevant status items that would only clutter the logs.</p><h2 id="c:format_status/1-example" class="section-heading">
+  <a href="#c:format_status/1-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="na">@impl</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">format_status</span><span class="p" data-group-id="9900501281-1">(</span><span class="n">status</span><span class="p" data-group-id="9900501281-1">)</span><span class="w"> </span><span class="k" data-group-id="9900501281-2">do</span><span class="w">
+  </span><span class="nc">Map</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="9900501281-3">(</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9900501281-4">fn</span><span class="w">
+    </span><span class="p" data-group-id="9900501281-5">{</span><span class="ss">:state</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="9900501281-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9900501281-6">{</span><span class="ss">:state</span><span class="p">,</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">delete</span><span class="p" data-group-id="9900501281-7">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="ss">:private_key</span><span class="p" data-group-id="9900501281-7">)</span><span class="p" data-group-id="9900501281-6">}</span><span class="w">
+    </span><span class="p" data-group-id="9900501281-8">{</span><span class="ss">:message</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9900501281-9">{</span><span class="ss">:password</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="9900501281-9">}</span><span class="p" data-group-id="9900501281-8">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9900501281-10">{</span><span class="ss">:message</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9900501281-11">{</span><span class="ss">:password</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;redacted&quot;</span><span class="p" data-group-id="9900501281-11">}</span><span class="p" data-group-id="9900501281-10">}</span><span class="w">
+    </span><span class="n">key_value</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">key_value</span><span class="w">
+  </span><span class="k" data-group-id="9900501281-4">end</span><span class="p" data-group-id="9900501281-3">)</span><span class="w">
+</span><span class="k" data-group-id="9900501281-2">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="c:format_status/2">
+
+  <div class="detail-header">
+    <a href="#c:format_status/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">format_status(reason, pdict_and_state)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L795" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This callback is deprecated. Use format_status/1 callback instead.
+    </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> format_status(reason, pdict_and_state :: <a href="typespecs.html#built-in-types">list</a>()) :: <a href="typespecs.html#built-in-types">term</a>()
+when reason: :normal | :terminate</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:handle_call/3">
+
+  <div class="detail-header">
+    <a href="#c:handle_call/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">handle_call(request, from, state)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L592" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> handle_call(request :: <a href="typespecs.html#built-in-types">term</a>(), <a href="#t:from/0">from</a>(), state :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:reply, reply, new_state}
+  | {:reply, reply, new_state,
+     <a href="typespecs.html#built-in-types">timeout</a>() | :hibernate | {:continue, continue_arg :: <a href="typespecs.html#built-in-types">term</a>()}}
+  | {:noreply, new_state}
+  | {:noreply, new_state,
+     <a href="typespecs.html#built-in-types">timeout</a>() | :hibernate | {:continue, continue_arg :: <a href="typespecs.html#built-in-types">term</a>()}}
+  | {:stop, reason, reply, new_state}
+  | {:stop, reason, new_state}
+when reply: <a href="typespecs.html#built-in-types">term</a>(), new_state: <a href="typespecs.html#built-in-types">term</a>(), reason: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Invoked to handle synchronous <a href="#call/3"><code class="inline">call/3</code></a> messages. <a href="#call/3"><code class="inline">call/3</code></a> will block until a
+reply is received (unless the call times out or nodes are disconnected).</p><p><code class="inline">request</code> is the request message sent by a <a href="#call/3"><code class="inline">call/3</code></a>, <code class="inline">from</code> is a 2-tuple
+containing the caller's PID and a term that uniquely identifies the call, and
+<code class="inline">state</code> is the current state of the <a href="GenServer.html"><code class="inline">GenServer</code></a>.</p><p>Returning <code class="inline">{:reply, reply, new_state}</code> sends the response <code class="inline">reply</code> to the
+caller and continues the loop with new state <code class="inline">new_state</code>.</p><p>Returning <code class="inline">{:reply, reply, new_state, timeout}</code> is similar to
+<code class="inline">{:reply, reply, new_state}</code> except that it also sets a timeout.
+See the &quot;Timeouts&quot; section in the module documentation for more information.</p><p>Returning <code class="inline">{:reply, reply, new_state, :hibernate}</code> is similar to
+<code class="inline">{:reply, reply, new_state}</code> except the process is hibernated and will
+continue the loop once a message is in its message queue. However, if a message is
+already in the message queue, the process will continue the loop immediately.
+Hibernating a <a href="GenServer.html"><code class="inline">GenServer</code></a> causes garbage collection and leaves a continuous
+heap that minimises the memory used by the process.</p><p>Hibernating should not be used aggressively as too much time could be spent
+garbage collecting, which would delay the processing of incoming messages.
+Normally it should only be used when you are not expecting new messages to
+immediately arrive and minimising the memory of the process is shown to be
+beneficial.</p><p>Returning <code class="inline">{:reply, reply, new_state, {:continue, continue_arg}}</code> is similar to
+<code class="inline">{:reply, reply, new_state}</code> except that <a href="#c:handle_continue/2"><code class="inline">handle_continue/2</code></a> will be invoked
+immediately after with <code class="inline">continue_arg</code> as the first argument and
+<code class="inline">state</code> as the second one.</p><p>Returning <code class="inline">{:noreply, new_state}</code> does not send a response to the caller and
+continues the loop with new state <code class="inline">new_state</code>. The response must be sent with
+<a href="#reply/2"><code class="inline">reply/2</code></a>.</p><p>There are three main use cases for not replying using the return value:</p><ul><li>To reply before returning from the callback because the response is known
+before calling a slow function.</li><li>To reply after returning from the callback because the response is not yet
+available.</li><li>To reply from another process, such as a task.</li></ul><p>When replying from another process the <a href="GenServer.html"><code class="inline">GenServer</code></a> should exit if the other
+process exits without replying as the caller will be blocking awaiting a
+reply.</p><p>Returning <code class="inline">{:noreply, new_state, timeout | :hibernate | {:continue, continue_arg}}</code>
+is similar to <code class="inline">{:noreply, new_state}</code> except a timeout, hibernation or continue
+occurs as with a <code class="inline">:reply</code> tuple.</p><p>Returning <code class="inline">{:stop, reason, reply, new_state}</code> stops the loop and <a href="#c:terminate/2"><code class="inline">terminate/2</code></a>
+is called with reason <code class="inline">reason</code> and state <code class="inline">new_state</code>. Then, the <code class="inline">reply</code> is sent
+as the response to call and the process exits with reason <code class="inline">reason</code>.</p><p>Returning <code class="inline">{:stop, reason, new_state}</code> is similar to
+<code class="inline">{:stop, reason, reply, new_state}</code> except a reply is not sent.</p><p>This callback is optional. If one is not implemented, the server will fail
+if a call is performed against it.</p>
+  </section>
+</section>
+<section class="detail" id="c:handle_cast/2">
+
+  <div class="detail-header">
+    <a href="#c:handle_cast/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">handle_cast(request, state)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L630" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> handle_cast(request :: <a href="typespecs.html#built-in-types">term</a>(), state :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:noreply, new_state}
+  | {:noreply, new_state,
+     <a href="typespecs.html#built-in-types">timeout</a>() | :hibernate | {:continue, continue_arg :: <a href="typespecs.html#built-in-types">term</a>()}}
+  | {:stop, reason :: <a href="typespecs.html#built-in-types">term</a>(), new_state}
+when new_state: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Invoked to handle asynchronous <a href="#cast/2"><code class="inline">cast/2</code></a> messages.</p><p><code class="inline">request</code> is the request message sent by a <a href="#cast/2"><code class="inline">cast/2</code></a> and <code class="inline">state</code> is the current
+state of the <a href="GenServer.html"><code class="inline">GenServer</code></a>.</p><p>Returning <code class="inline">{:noreply, new_state}</code> continues the loop with new state <code class="inline">new_state</code>.</p><p>Returning <code class="inline">{:noreply, new_state, timeout}</code> is similar to <code class="inline">{:noreply, new_state}</code>
+except that it also sets a timeout. See the &quot;Timeouts&quot; section in the module
+documentation for more information.</p><p>Returning <code class="inline">{:noreply, new_state, :hibernate}</code> is similar to
+<code class="inline">{:noreply, new_state}</code> except the process is hibernated before continuing the
+loop. See <a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a> for more information.</p><p>Returning <code class="inline">{:noreply, new_state, {:continue, continue_arg}}</code> is similar to
+<code class="inline">{:noreply, new_state}</code> except <a href="#c:handle_continue/2"><code class="inline">handle_continue/2</code></a> will be invoked
+immediately after with <code class="inline">continue_arg</code> as the first argument and
+<code class="inline">state</code> as the second one.</p><p>Returning <code class="inline">{:stop, reason, new_state}</code> stops the loop and <a href="#c:terminate/2"><code class="inline">terminate/2</code></a> is
+called with the reason <code class="inline">reason</code> and state <code class="inline">new_state</code>. The process exits with
+reason <code class="inline">reason</code>.</p><p>This callback is optional. If one is not implemented, the server will fail
+if a cast is performed against it.</p>
+  </section>
+</section>
+<section class="detail" id="c:handle_continue/2">
+
+  <div class="detail-header">
+    <a href="#c:handle_continue/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">handle_continue(continue_arg, state)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L664" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> handle_continue(continue_arg, state :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:noreply, new_state}
+  | {:noreply, new_state, <a href="typespecs.html#built-in-types">timeout</a>() | :hibernate | {:continue, continue_arg}}
+  | {:stop, reason :: <a href="typespecs.html#built-in-types">term</a>(), new_state}
+when new_state: <a href="typespecs.html#built-in-types">term</a>(), continue_arg: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Invoked to handle continue instructions.</p><p>It is useful for performing work after initialization or for splitting the work
+in a callback in multiple steps, updating the process state along the way.</p><p>Return values are the same as <a href="#c:handle_cast/2"><code class="inline">handle_cast/2</code></a>.</p><p>This callback is optional. If one is not implemented, the server will fail
+if a continue instruction is used.</p>
+  </section>
+</section>
+<section class="detail" id="c:handle_info/2">
+
+  <div class="detail-header">
+    <a href="#c:handle_info/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">handle_info(msg, state)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L647" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> handle_info(msg :: :timeout | <a href="typespecs.html#built-in-types">term</a>(), state :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:noreply, new_state}
+  | {:noreply, new_state,
+     <a href="typespecs.html#built-in-types">timeout</a>() | :hibernate | {:continue, continue_arg :: <a href="typespecs.html#built-in-types">term</a>()}}
+  | {:stop, reason :: <a href="typespecs.html#built-in-types">term</a>(), new_state}
+when new_state: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Invoked to handle all other messages.</p><p><code class="inline">msg</code> is the message and <code class="inline">state</code> is the current state of the <a href="GenServer.html"><code class="inline">GenServer</code></a>. When
+a timeout occurs the message is <code class="inline">:timeout</code>.</p><p>Return values are the same as <a href="#c:handle_cast/2"><code class="inline">handle_cast/2</code></a>.</p><p>This callback is optional. If one is not implemented, the received message
+will be logged.</p>
+  </section>
+</section>
+<section class="detail" id="c:init/1">
+
+  <div class="detail-header">
+    <a href="#c:init/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">init(init_arg)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L522" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> init(init_arg :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:ok, state}
+  | {:ok, state, <a href="typespecs.html#built-in-types">timeout</a>() | :hibernate | {:continue, continue_arg :: <a href="typespecs.html#built-in-types">term</a>()}}
+  | :ignore
+  | {:stop, reason :: <a href="typespecs.html#basic-types">any</a>()}
+when state: <a href="typespecs.html#basic-types">any</a>()</pre>
+
+      </div>
+
+<p>Invoked when the server is started. <a href="#start_link/3"><code class="inline">start_link/3</code></a> or <a href="#start/3"><code class="inline">start/3</code></a> will
+block until it returns.</p><p><code class="inline">init_arg</code> is the argument term (second argument) passed to <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</p><p>Returning <code class="inline">{:ok, state}</code> will cause <a href="#start_link/3"><code class="inline">start_link/3</code></a> to return
+<code class="inline">{:ok, pid}</code> and the process to enter its loop.</p><p>Returning <code class="inline">{:ok, state, timeout}</code> is similar to <code class="inline">{:ok, state}</code>,
+except that it also sets a timeout. See the &quot;Timeouts&quot; section
+in the module documentation for more information.</p><p>Returning <code class="inline">{:ok, state, :hibernate}</code> is similar to <code class="inline">{:ok, state}</code>
+except the process is hibernated before entering the loop. See
+<a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a> for more information on hibernation.</p><p>Returning <code class="inline">{:ok, state, {:continue, continue_arg}}</code> is similar to
+<code class="inline">{:ok, state}</code> except that immediately after entering the loop,
+the <a href="#c:handle_continue/2"><code class="inline">handle_continue/2</code></a> callback will be invoked with <code class="inline">continue_arg</code>
+as the first argument and <code class="inline">state</code> as the second one.</p><p>Returning <code class="inline">:ignore</code> will cause <a href="#start_link/3"><code class="inline">start_link/3</code></a> to return <code class="inline">:ignore</code> and
+the process will exit normally without entering the loop or calling
+<a href="#c:terminate/2"><code class="inline">terminate/2</code></a>. If used when part of a supervision tree the parent
+supervisor will not fail to start nor immediately try to restart the
+<a href="GenServer.html"><code class="inline">GenServer</code></a>. The remainder of the supervision tree will be started
+and so the <a href="GenServer.html"><code class="inline">GenServer</code></a> should not be required by other processes.
+It can be started later with <a href="Supervisor.html#restart_child/2"><code class="inline">Supervisor.restart_child/2</code></a> as the child
+specification is saved in the parent supervisor. The main use cases for
+this are:</p><ul><li>The <a href="GenServer.html"><code class="inline">GenServer</code></a> is disabled by configuration but might be enabled later.</li><li>An error occurred and it will be handled by a different mechanism than the
+<a href="Supervisor.html"><code class="inline">Supervisor</code></a>. Likely this approach involves calling <a href="Supervisor.html#restart_child/2"><code class="inline">Supervisor.restart_child/2</code></a>
+after a delay to attempt a restart.</li></ul><p>Returning <code class="inline">{:stop, reason}</code> will cause <a href="#start_link/3"><code class="inline">start_link/3</code></a> to return
+<code class="inline">{:error, reason}</code> and the process to exit with reason <code class="inline">reason</code> without
+entering the loop or calling <a href="#c:terminate/2"><code class="inline">terminate/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="c:terminate/2">
+
+  <div class="detail-header">
+    <a href="#c:terminate/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">terminate(reason, state)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L732" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> terminate(reason, state :: <a href="typespecs.html#built-in-types">term</a>()) :: <a href="typespecs.html#built-in-types">term</a>()
+when reason: :normal | :shutdown | {:shutdown, <a href="typespecs.html#built-in-types">term</a>()} | <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Invoked when the server is about to exit. It should do any cleanup required.</p><p><code class="inline">reason</code> is exit reason and <code class="inline">state</code> is the current state of the <a href="GenServer.html"><code class="inline">GenServer</code></a>.
+The return value is ignored.</p><p><a href="#c:terminate/2"><code class="inline">terminate/2</code></a> is useful for cleanup that requires access to the
+<a href="GenServer.html"><code class="inline">GenServer</code></a>'s state. However, it is <strong>not guaranteed</strong> that <a href="#c:terminate/2"><code class="inline">terminate/2</code></a>
+is called when a <a href="GenServer.html"><code class="inline">GenServer</code></a> exits. Therefore, important cleanup should be
+done using process links and/or monitors. A monitoring process will receive the
+same exit <code class="inline">reason</code> that would be passed to <a href="#c:terminate/2"><code class="inline">terminate/2</code></a>.</p><p><a href="#c:terminate/2"><code class="inline">terminate/2</code></a> is called if:</p><ul><li><p>the <a href="GenServer.html"><code class="inline">GenServer</code></a> traps exits (using <a href="Process.html#flag/2"><code class="inline">Process.flag/2</code></a>) <em>and</em> the parent
+process (the one which called <code class="inline">start_link/1</code>) sends an exit signal</p></li><li><p>a callback (except <a href="#c:init/1"><code class="inline">init/1</code></a>) does one of the following:</p><ul><li><p>returns a <code class="inline">:stop</code> tuple</p></li><li><p>raises (via <a href="Kernel.html#raise/2"><code class="inline">raise/2</code></a>) or exits (via <a href="Kernel.html#exit/1"><code class="inline">exit/1</code></a>)</p></li><li><p>returns an invalid value</p></li></ul></li></ul><p>If part of a supervision tree, a <a href="GenServer.html"><code class="inline">GenServer</code></a> will receive an exit signal from
+its parent process (its supervisor) when the tree is shutting down. The exit
+signal is based on the shutdown strategy in the child's specification, where
+this value can be:</p><ul><li><p><code class="inline">:brutal_kill</code>: the <a href="GenServer.html"><code class="inline">GenServer</code></a> is killed and so <a href="#c:terminate/2"><code class="inline">terminate/2</code></a> is not called.</p></li><li><p>a timeout value, where the supervisor will send the exit signal <code class="inline">:shutdown</code> and
+the <a href="GenServer.html"><code class="inline">GenServer</code></a> will have the duration of the timeout to terminate.
+If after duration of this timeout the process is still alive, it will be killed
+immediately.</p></li></ul><p>For a more in-depth explanation, please read the &quot;Shutdown values (:shutdown)&quot;
+section in the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module.</p><p>If the <a href="GenServer.html"><code class="inline">GenServer</code></a> receives an exit signal (that is not <code class="inline">:normal</code>) from any
+process when it is not trapping exits it will exit abruptly with the same
+reason and so not call <a href="#c:terminate/2"><code class="inline">terminate/2</code></a>. Note that a process does <em>NOT</em> trap
+exits by default and an exit signal is sent when a linked process exits or its
+node is disconnected.</p><p><a href="#c:terminate/2"><code class="inline">terminate/2</code></a> is only called after the <a href="GenServer.html"><code class="inline">GenServer</code></a> finishes processing all
+messages which arrived in its mailbox prior to the exit signal. If it
+receives a <code class="inline">:kill</code> signal before it finishes processing those,
+<a href="#c:terminate/2"><code class="inline">terminate/2</code></a> will not be called. If <a href="#c:terminate/2"><code class="inline">terminate/2</code></a> is called, any
+messages received after the exit signal will still be in the mailbox.</p><p>There is no cleanup needed when the <a href="GenServer.html"><code class="inline">GenServer</code></a> controls a <code class="inline">port</code> (for example,
+<code class="inline">:gen_tcp.socket</code>) or <a href="File.html#t:io_device/0"><code class="inline">File.io_device/0</code></a>, because these will be closed on
+receiving a <a href="GenServer.html"><code class="inline">GenServer</code></a>'s exit signal and do not need to be closed manually
+in <a href="#c:terminate/2"><code class="inline">terminate/2</code></a>.</p><p>If <code class="inline">reason</code> is neither <code class="inline">:normal</code>, <code class="inline">:shutdown</code>, nor <code class="inline">{:shutdown, term}</code> an error is
+logged.</p><p>This callback is optional.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="abcast/3">
+
+    <span id="abcast/2"></span>
+
+  <div class="detail-header">
+    <a href="#abcast/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">abcast(nodes \\ [node() | Node.list()], name, request)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1181" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> abcast([<a href="typespecs.html#built-in-types">node</a>()], name :: <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: :abcast</pre>
+
+      </div>
+
+<p>Casts all servers locally registered as <code class="inline">name</code> at the specified nodes.</p><p>This function returns immediately and ignores nodes that do not exist, or where the
+server name does not exist.</p><p>See <a href="#multi_call/4"><code class="inline">multi_call/4</code></a> for more information.</p>
+  </section>
+</section>
+<section class="detail" id="call/3">
+
+    <span id="call/2"></span>
+
+  <div class="detail-header">
+    <a href="#call/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">call(server, request, timeout \\ 5000)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1117" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> call(<a href="#t:server/0">server</a>(), <a href="typespecs.html#built-in-types">term</a>(), <a href="typespecs.html#built-in-types">timeout</a>()) :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Makes a synchronous call to the <code class="inline">server</code> and waits for its reply.</p><p>The client sends the given <code class="inline">request</code> to the server and waits until a reply
+arrives or a timeout occurs. <a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a> will be called on the server
+to handle the request.</p><p><code class="inline">server</code> can be any of the values described in the &quot;Name registration&quot;
+section of the documentation for this module.</p><h2 id="call/3-timeouts" class="section-heading">
+  <a href="#call/3-timeouts" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Timeouts</span>
+</h2>
+<p><code class="inline">timeout</code> is an integer greater than zero which specifies how many
+milliseconds to wait for a reply, or the atom <code class="inline">:infinity</code> to wait
+indefinitely. The default value is <code class="inline">5000</code>. If no reply is received within
+the specified time, the function call fails and the caller exits. If the
+caller catches the failure and continues running, and the server is just late
+with the reply, it may arrive at any time later into the caller's message
+queue. The caller must in this case be prepared for this and discard any such
+garbage messages that are two-element tuples with a reference as the first
+element.</p>
+  </section>
+</section>
+<section class="detail" id="cast/2">
+
+  <div class="detail-header">
+    <a href="#cast/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cast(server, request)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1147" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cast(<a href="#t:server/0">server</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Casts a request to the <code class="inline">server</code> without waiting for a response.</p><p>This function always returns <code class="inline">:ok</code> regardless of whether
+the destination <code class="inline">server</code> (or node) exists. Therefore it
+is unknown whether the destination <code class="inline">server</code> successfully
+handled the request.</p><p><code class="inline">server</code> can be any of the values described in the &quot;Name registration&quot;
+section of the documentation for this module.</p>
+  </section>
+</section>
+<section class="detail" id="multi_call/4">
+
+    <span id="multi_call/2"></span>
+
+    <span id="multi_call/3"></span>
+
+  <div class="detail-header">
+    <a href="#multi_call/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">multi_call(nodes \\ [node() | Node.list()], name, request, timeout \\ :infinity)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1228" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> multi_call([<a href="typespecs.html#built-in-types">node</a>()], name :: <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">term</a>(), <a href="typespecs.html#built-in-types">timeout</a>()) ::
+  {replies :: [{<a href="typespecs.html#built-in-types">node</a>(), <a href="typespecs.html#built-in-types">term</a>()}], bad_nodes :: [<a href="typespecs.html#built-in-types">node</a>()]}</pre>
+
+      </div>
+
+<p>Calls all servers locally registered as <code class="inline">name</code> at the specified <code class="inline">nodes</code>.</p><p>First, the <code class="inline">request</code> is sent to every node in <code class="inline">nodes</code>; then, the caller waits
+for the replies. This function returns a two-element tuple <code class="inline">{replies, bad_nodes}</code> where:</p><ul><li><code class="inline">replies</code> - is a list of <code class="inline">{node, reply}</code> tuples where <code class="inline">node</code> is the node
+that replied and <code class="inline">reply</code> is its reply</li><li><code class="inline">bad_nodes</code> - is a list of nodes that either did not exist or where a
+server with the given <code class="inline">name</code> did not exist or did not reply</li></ul><p><code class="inline">nodes</code> is a list of node names to which the request is sent. The default
+value is the list of all known nodes (including this node).</p><h2 id="multi_call/4-examples" class="section-heading">
+  <a href="#multi_call/4-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Assuming the <code class="inline">Stack</code> GenServer mentioned in the docs for the <a href="GenServer.html"><code class="inline">GenServer</code></a>
+module is registered as <code class="inline">Stack</code> in the <code class="inline">:&quot;foo@my-machine&quot;</code> and
+<code class="inline">:&quot;bar@my-machine&quot;</code> nodes:</p><pre><code class="makeup elixir" translate="no"><span class="nc">GenServer</span><span class="o">.</span><span class="n">multi_call</span><span class="p" data-group-id="2988533732-1">(</span><span class="nc">Stack</span><span class="p">,</span><span class="w"> </span><span class="ss">:pop</span><span class="p" data-group-id="2988533732-1">)</span><span class="w">
+</span><span class="c1">#=&gt; {[{:&quot;foo@my-machine&quot;, :hello}, {:&quot;bar@my-machine&quot;, :world}], []}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="reply/2">
+
+  <div class="detail-header">
+    <a href="#reply/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reply(client, reply)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1263" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reply(<a href="#t:from/0">from</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Replies to a client.</p><p>This function can be used to explicitly send a reply to a client that called
+<a href="#call/3"><code class="inline">call/3</code></a> or <a href="#multi_call/4"><code class="inline">multi_call/4</code></a> when the reply cannot be specified in the return
+value of <a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a>.</p><p><code class="inline">client</code> must be the <code class="inline">from</code> argument (the second argument) accepted by
+<a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a> callbacks. <code class="inline">reply</code> is an arbitrary term which will be given
+back to the client as the return value of the call.</p><p>Note that <a href="#reply/2"><code class="inline">reply/2</code></a> can be called from any process, not just the GenServer
+that originally received the call (as long as that GenServer communicated the
+<code class="inline">from</code> argument somehow).</p><p>This function always returns <code class="inline">:ok</code>.</p><h2 id="reply/2-examples" class="section-heading">
+  <a href="#reply/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="4104305566-1">(</span><span class="ss">:reply_in_one_second</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="4104305566-1">)</span><span class="w"> </span><span class="k" data-group-id="4104305566-2">do</span><span class="w">
+  </span><span class="nc">Process</span><span class="o">.</span><span class="n">send_after</span><span class="p" data-group-id="4104305566-3">(</span><span class="n">self</span><span class="p" data-group-id="4104305566-4">(</span><span class="p" data-group-id="4104305566-4">)</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4104305566-5">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="p" data-group-id="4104305566-5">}</span><span class="p">,</span><span class="w"> </span><span class="mi">1_000</span><span class="p" data-group-id="4104305566-3">)</span><span class="w">
+  </span><span class="p" data-group-id="4104305566-6">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="4104305566-6">}</span><span class="w">
+</span><span class="k" data-group-id="4104305566-2">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_info</span><span class="p" data-group-id="4104305566-7">(</span><span class="p" data-group-id="4104305566-8">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="p" data-group-id="4104305566-8">}</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="4104305566-7">)</span><span class="w"> </span><span class="k" data-group-id="4104305566-9">do</span><span class="w">
+  </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">reply</span><span class="p" data-group-id="4104305566-10">(</span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="ss">:one_second_has_passed</span><span class="p" data-group-id="4104305566-10">)</span><span class="w">
+  </span><span class="p" data-group-id="4104305566-11">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="4104305566-11">}</span><span class="w">
+</span><span class="k" data-group-id="4104305566-9">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="start/3">
+
+    <span id="start/2"></span>
+
+  <div class="detail-header">
+    <a href="#start/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start(module, init_arg, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1032" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">any</a>(), <a href="#t:options/0">options</a>()) :: <a href="#t:on_start/0">on_start</a>()</pre>
+
+      </div>
+
+<p>Starts a <a href="GenServer.html"><code class="inline">GenServer</code></a> process without links (outside of a supervision tree).</p><p>See <a href="#start_link/3"><code class="inline">start_link/3</code></a> for more information.</p>
+  </section>
+</section>
+<section class="detail" id="start_link/3">
+
+    <span id="start_link/2"></span>
+
+  <div class="detail-header">
+    <a href="#start_link/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_link(module, init_arg, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1022" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_link(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">any</a>(), <a href="#t:options/0">options</a>()) :: <a href="#t:on_start/0">on_start</a>()</pre>
+
+      </div>
+
+<p>Starts a <a href="GenServer.html"><code class="inline">GenServer</code></a> process linked to the current process.</p><p>This is often used to start the <a href="GenServer.html"><code class="inline">GenServer</code></a> as part of a supervision tree.</p><p>Once the server is started, the <a href="#c:init/1"><code class="inline">init/1</code></a> function of the given <code class="inline">module</code> is
+called with <code class="inline">init_arg</code> as its argument to initialize the server. To ensure a
+synchronized start-up procedure, this function does not return until <a href="#c:init/1"><code class="inline">init/1</code></a>
+has returned.</p><p>Note that a <a href="GenServer.html"><code class="inline">GenServer</code></a> started with <a href="#start_link/3"><code class="inline">start_link/3</code></a> is linked to the
+parent process and will exit in case of crashes from the parent. The GenServer
+will also exit due to the <code class="inline">:normal</code> reasons in case it is configured to trap
+exits in the <a href="#c:init/1"><code class="inline">init/1</code></a> callback.</p><h2 id="start_link/3-options" class="section-heading">
+  <a href="#start_link/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:name</code> - used for name registration as described in the &quot;Name
+registration&quot; section in the documentation for <a href="GenServer.html"><code class="inline">GenServer</code></a></p></li><li><p><code class="inline">:timeout</code> - if present, the server is allowed to spend the given number of
+milliseconds initializing or it will be terminated and the start function
+will return <code class="inline">{:error, :timeout}</code></p></li><li><p><code class="inline">:debug</code> - if present, the corresponding function in the <a href="https://www.erlang.org/doc/apps/stdlib/sys.html"><code class="inline">:sys</code> module</a> is invoked</p></li><li><p><code class="inline">:spawn_opt</code> - if present, its value is passed as options to the
+underlying process as in <a href="Process.html#spawn/4"><code class="inline">Process.spawn/4</code></a></p></li><li><p><code class="inline">:hibernate_after</code> - if present, the GenServer process awaits any message for
+the given number of milliseconds and if no message is received, the process goes
+into hibernation automatically (by calling <a href="https://www.erlang.org/doc/apps/stdlib/proc_lib.html#hibernate/3"><code class="inline">:proc_lib.hibernate/3</code></a>).</p></li></ul><h2 id="start_link/3-return-values" class="section-heading">
+  <a href="#start_link/3-return-values" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Return values</span>
+</h2>
+<p>If the server is successfully created and initialized, this function returns
+<code class="inline">{:ok, pid}</code>, where <code class="inline">pid</code> is the PID of the server. If a process with the
+specified server name already exists, this function returns
+<code class="inline">{:error, {:already_started, pid}}</code> with the PID of that process.</p><p>If the <a href="#c:init/1"><code class="inline">init/1</code></a> callback fails with <code class="inline">reason</code>, this function returns
+<code class="inline">{:error, reason}</code>. Otherwise, if it returns <code class="inline">{:stop, reason}</code>
+or <code class="inline">:ignore</code>, the process is terminated and this function returns
+<code class="inline">{:error, reason}</code> or <code class="inline">:ignore</code>, respectively.</p>
+  </section>
+</section>
+<section class="detail" id="stop/3">
+
+    <span id="stop/1"></span>
+
+    <span id="stop/2"></span>
+
+  <div class="detail-header">
+    <a href="#stop/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stop(server, reason \\ :normal, timeout \\ :infinity)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1076" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stop(<a href="#t:server/0">server</a>(), reason :: <a href="typespecs.html#built-in-types">term</a>(), <a href="typespecs.html#built-in-types">timeout</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Synchronously stops the server with the given <code class="inline">reason</code>.</p><p>The <a href="#c:terminate/2"><code class="inline">terminate/2</code></a> callback of the given <code class="inline">server</code> will be invoked before
+exiting. This function returns <code class="inline">:ok</code> if the server terminates with the
+given reason; if it terminates with another reason, the call exits.</p><p>This function keeps OTP semantics regarding error reporting.
+If the reason is any other than <code class="inline">:normal</code>, <code class="inline">:shutdown</code> or
+<code class="inline">{:shutdown, _}</code>, an error report is logged.</p>
+  </section>
+</section>
+<section class="detail" id="whereis/1">
+
+  <div class="detail-header">
+    <a href="#whereis/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">whereis(server)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/gen_server.ex#L1284" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> whereis(<a href="#t:server/0">server</a>()) :: <a href="typespecs.html#basic-types">pid</a>() | {<a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">node</a>()} | nil</pre>
+
+      </div>
+
+<p>Returns the <code class="inline">pid</code> or <code class="inline">{name, node}</code> of a GenServer process, <code class="inline">nil</code> otherwise.</p><p>To be precise, <code class="inline">nil</code> is returned whenever a <code class="inline">pid</code> or <code class="inline">{name, node}</code> cannot
+be returned. Note there is no guarantee the returned <code class="inline">pid</code> or <code class="inline">{name, node}</code>
+is alive, as a process could terminate immediately after it is looked up.</p><h2 id="whereis/1-examples" class="section-heading">
+  <a href="#whereis/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>For example, to lookup a server process, monitor it and send a cast to it:</p><pre><code class="makeup elixir" translate="no"><span class="n">process</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">whereis</span><span class="p" data-group-id="9490835669-1">(</span><span class="n">server</span><span class="p" data-group-id="9490835669-1">)</span><span class="w">
+</span><span class="n">monitor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Process</span><span class="o">.</span><span class="n">monitor</span><span class="p" data-group-id="9490835669-2">(</span><span class="n">process</span><span class="p" data-group-id="9490835669-2">)</span><span class="w">
+</span><span class="nc">GenServer</span><span class="o">.</span><span class="n">cast</span><span class="p" data-group-id="9490835669-3">(</span><span class="n">process</span><span class="p">,</span><span class="w"> </span><span class="ss">:hello</span><span class="p" data-group-id="9490835669-3">)</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

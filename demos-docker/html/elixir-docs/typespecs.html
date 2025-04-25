@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Typespecs reference — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/typespecs.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Typespecs reference</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/references/typespecs.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir comes with a notation for declaring types and specifications. This document is a
+reference into their uses and syntax.</p><p>Elixir is a dynamically typed language, and as such, type specifications are never used by the compiler to optimize or modify code. Still, using type specifications is useful because:</p><ul><li>they provide documentation (for example, tools such as <a href="https://hexdocs.pm/ex_doc/"><code class="inline">ExDoc</code></a> show type specifications in the documentation)</li><li>they're used by tools such as <a href="https://www.erlang.org/doc/apps/dialyzer/dialyzer.html">Dialyzer</a>, that can analyze code with typespecs to find type inconsistencies and possible bugs</li></ul><p>Type specifications (most often referred to as <em>typespecs</em>) are defined in different contexts using the following attributes:</p><ul><li><code class="inline">@type</code></li><li><code class="inline">@opaque</code></li><li><code class="inline">@typep</code></li><li><code class="inline">@spec</code></li><li><code class="inline">@callback</code></li><li><code class="inline">@macrocallback</code></li></ul><p>In addition, you can use <code class="inline">@typedoc</code> to document a custom <code class="inline">@type</code> definition.</p><p>See the &quot;User-defined types&quot; and &quot;Defining a specification&quot; sub-sections below for more information on defining types and typespecs.</p><h2 id="a-simple-example" class="section-heading">
+  <a href="#a-simple-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">A simple example</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">StringHelpers</span><span class="w"> </span><span class="k" data-group-id="2584394117-1">do</span><span class="w">
+  </span><span class="na">@typedoc</span><span class="w"> </span><span class="s">&quot;A word from the dictionary&quot;</span><span class="w">
+  </span><span class="na">@type</span><span class="w"> </span><span class="n">word</span><span class="p" data-group-id="2584394117-2">(</span><span class="p" data-group-id="2584394117-2">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="2584394117-3">(</span><span class="p" data-group-id="2584394117-3">)</span><span class="w">
+
+  </span><span class="na">@spec</span><span class="w"> </span><span class="n">long_word?</span><span class="p" data-group-id="2584394117-4">(</span><span class="n">word</span><span class="p" data-group-id="2584394117-5">(</span><span class="p" data-group-id="2584394117-5">)</span><span class="p" data-group-id="2584394117-4">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">boolean</span><span class="p" data-group-id="2584394117-6">(</span><span class="p" data-group-id="2584394117-6">)</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">long_word?</span><span class="p" data-group-id="2584394117-7">(</span><span class="n">word</span><span class="p" data-group-id="2584394117-7">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="2584394117-8">(</span><span class="n">word</span><span class="p" data-group-id="2584394117-8">)</span><span class="w"> </span><span class="k" data-group-id="2584394117-9">do</span><span class="w">
+    </span><span class="nc">String</span><span class="o">.</span><span class="n">length</span><span class="p" data-group-id="2584394117-10">(</span><span class="n">word</span><span class="p" data-group-id="2584394117-10">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">8</span><span class="w">
+  </span><span class="k" data-group-id="2584394117-9">end</span><span class="w">
+</span><span class="k" data-group-id="2584394117-1">end</span></code></pre><p>In the example above:</p><ul><li><p>We declare a new type (<code class="inline">word()</code>) that is equivalent to the string type (<code class="inline">String.t()</code>).</p></li><li><p>We describe the type using a <code class="inline">@typedoc</code>, which will be included in the generated documentation.</p></li><li><p>We specify that the <code class="inline">long_word?/1</code> function takes an argument of type <code class="inline">word()</code> and
+returns a boolean (<code class="inline">boolean()</code>), that is, either <code class="inline">true</code> or <code class="inline">false</code>.</p></li></ul><h2 id="types-and-their-syntax" class="section-heading">
+  <a href="#types-and-their-syntax" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Types and their syntax</span>
+</h2>
+<p>The syntax Elixir provides for type specifications is similar to <a href="https://www.erlang.org/doc/reference_manual/typespec.html">the one in Erlang</a>. Most of the built-in types provided in Erlang (for example, <code class="inline">pid()</code>) are expressed in the same way: <code class="inline">pid()</code> (or simply <code class="inline">pid</code>). Parameterized types (such as <code class="inline">list(integer)</code>) are supported as well and so are remote types (such as <a href="Enum.html#t:t/0"><code class="inline">Enum.t()</code></a>). Integers and atom literals are allowed as types (for example, <code class="inline">1</code>, <code class="inline">:atom</code>, or <code class="inline">false</code>). All other types are built out of unions of predefined types. Some types can also be declared using their syntactical notation, such as <code class="inline">[type]</code> for lists, <code class="inline">{type1, type2, ...}</code> for tuples and <code class="inline">&lt;&lt;_ * _&gt;&gt;</code> for binaries.</p><p>The notation to represent the union of types is the pipe <code class="inline">|</code>. For example, the typespec <code class="inline">type :: atom() | pid() | tuple()</code> creates a type <code class="inline">type</code> that can be either an <code class="inline">atom</code>, a <code class="inline">pid</code>, or a <code class="inline">tuple</code>. This is usually called a <a href="https://en.wikipedia.org/wiki/Tagged_union">sum type</a> in other languages</p><h3 id="basic-types" class="section-heading">
+  <a href="#basic-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Basic types</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="n">type</span><span class="w"> </span><span class="o">::</span><span class="w">
+      </span><span class="n">any</span><span class="p" data-group-id="5169122620-1">(</span><span class="p" data-group-id="5169122620-1">)</span><span class="w">                     </span><span class="c1"># the top type, the set of all terms</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">none</span><span class="p" data-group-id="5169122620-2">(</span><span class="p" data-group-id="5169122620-2">)</span><span class="w">                  </span><span class="c1"># the bottom type, contains no terms</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">atom</span><span class="p" data-group-id="5169122620-3">(</span><span class="p" data-group-id="5169122620-3">)</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">map</span><span class="p" data-group-id="5169122620-4">(</span><span class="p" data-group-id="5169122620-4">)</span><span class="w">                   </span><span class="c1"># any map</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="5169122620-5">(</span><span class="p" data-group-id="5169122620-5">)</span><span class="w">                   </span><span class="c1"># process identifier</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">port</span><span class="p" data-group-id="5169122620-6">(</span><span class="p" data-group-id="5169122620-6">)</span><span class="w">                  </span><span class="c1"># port identifier</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">reference</span><span class="p" data-group-id="5169122620-7">(</span><span class="p" data-group-id="5169122620-7">)</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">tuple</span><span class="p" data-group-id="5169122620-8">(</span><span class="p" data-group-id="5169122620-8">)</span><span class="w">                 </span><span class="c1"># tuple of any size</span><span class="w">
+
+                                </span><span class="c1">## Numbers</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">float</span><span class="p" data-group-id="5169122620-9">(</span><span class="p" data-group-id="5169122620-9">)</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="5169122620-10">(</span><span class="p" data-group-id="5169122620-10">)</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">neg_integer</span><span class="p" data-group-id="5169122620-11">(</span><span class="p" data-group-id="5169122620-11">)</span><span class="w">           </span><span class="c1"># ..., -3, -2, -1</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">non_neg_integer</span><span class="p" data-group-id="5169122620-12">(</span><span class="p" data-group-id="5169122620-12">)</span><span class="w">       </span><span class="c1"># 0, 1, 2, 3, ...</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">pos_integer</span><span class="p" data-group-id="5169122620-13">(</span><span class="p" data-group-id="5169122620-13">)</span><span class="w">           </span><span class="c1"># 1, 2, 3, ...</span><span class="w">
+
+                                                                      </span><span class="c1">## Lists</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">list</span><span class="p" data-group-id="5169122620-14">(</span><span class="n">type</span><span class="p" data-group-id="5169122620-14">)</span><span class="w">                                                    </span><span class="c1"># proper list ([]-terminated)</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">nonempty_list</span><span class="p" data-group-id="5169122620-15">(</span><span class="n">type</span><span class="p" data-group-id="5169122620-15">)</span><span class="w">                                           </span><span class="c1"># non-empty proper list</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">maybe_improper_list</span><span class="p" data-group-id="5169122620-16">(</span><span class="n">content_type</span><span class="p">,</span><span class="w"> </span><span class="n">termination_type</span><span class="p" data-group-id="5169122620-16">)</span><span class="w">           </span><span class="c1"># proper or improper list</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">nonempty_improper_list</span><span class="p" data-group-id="5169122620-17">(</span><span class="n">content_type</span><span class="p">,</span><span class="w"> </span><span class="n">termination_type</span><span class="p" data-group-id="5169122620-17">)</span><span class="w">        </span><span class="c1"># improper list</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="n">nonempty_maybe_improper_list</span><span class="p" data-group-id="5169122620-18">(</span><span class="n">content_type</span><span class="p">,</span><span class="w"> </span><span class="n">termination_type</span><span class="p" data-group-id="5169122620-18">)</span><span class="w">  </span><span class="c1"># non-empty proper or improper list</span><span class="w">
+
+      </span><span class="o">|</span><span class="w"> </span><span class="nc">Literals</span><span class="w">                </span><span class="c1"># Described in section &quot;Literals&quot;</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="nc">BuiltIn</span><span class="w">                 </span><span class="c1"># Described in section &quot;Built-in types&quot;</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="nc">Remotes</span><span class="w">                 </span><span class="c1"># Described in section &quot;Remote types&quot;</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="nc">UserDefined</span><span class="w">             </span><span class="c1"># Described in section &quot;User-defined types&quot;</span></code></pre><h3 id="literals" class="section-heading">
+  <a href="#literals" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Literals</span>
+</h3>
+<p>The following literals are also supported in typespecs:</p><pre><code class="makeup elixir" translate="no"><span class="n">type</span><span class="w"> </span><span class="o">::</span><span class="w">                               </span><span class="c1">## Atoms</span><span class="w">
+      </span><span class="ss">:atom</span><span class="w">                           </span><span class="c1"># atoms: :foo, :bar, ...</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="no">true</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="no">false</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="no">nil</span><span class="w">            </span><span class="c1"># special atom literals</span><span class="w">
+
+                                      </span><span class="c1">## Bitstrings</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-1">&lt;&lt;</span><span class="p" data-group-id="0696550511-1">&gt;&gt;</span><span class="w">                          </span><span class="c1"># empty bitstring</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-2">&lt;&lt;</span><span class="bp">_</span><span class="o">::</span><span class="n">size</span><span class="p" data-group-id="0696550511-2">&gt;&gt;</span><span class="w">                   </span><span class="c1"># size is 0 or a positive integer</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-3">&lt;&lt;</span><span class="bp">_</span><span class="o">::</span><span class="bp">_</span><span class="o">*</span><span class="n">unit</span><span class="p" data-group-id="0696550511-3">&gt;&gt;</span><span class="w">                 </span><span class="c1"># unit is an integer from 1 to 256</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-4">&lt;&lt;</span><span class="bp">_</span><span class="o">::</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="o">::</span><span class="bp">_</span><span class="o">*</span><span class="n">unit</span><span class="p" data-group-id="0696550511-4">&gt;&gt;</span><span class="w">
+
+                                      </span><span class="c1">## (Anonymous) Functions</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-5">(</span><span class="o">-&gt;</span><span class="w"> </span><span class="n">type</span><span class="p" data-group-id="0696550511-5">)</span><span class="w">                     </span><span class="c1"># zero-arity, returns type</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-6">(</span><span class="n">type1</span><span class="p">,</span><span class="w"> </span><span class="n">type2</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">type</span><span class="p" data-group-id="0696550511-6">)</span><span class="w">        </span><span class="c1"># two-arity, returns type</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-7">(</span><span class="n">...</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">type</span><span class="p" data-group-id="0696550511-7">)</span><span class="w">                 </span><span class="c1"># any arity, returns type</span><span class="w">
+
+                                      </span><span class="c1">## Integers</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">                             </span><span class="c1"># integer</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="w">                         </span><span class="c1"># integer from 1 to 10</span><span class="w">
+
+                                      </span><span class="c1">## Lists</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-8">[</span><span class="n">type</span><span class="p" data-group-id="0696550511-8">]</span><span class="w">                        </span><span class="c1"># list with any number of type elements</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-9">[</span><span class="p" data-group-id="0696550511-9">]</span><span class="w">                            </span><span class="c1"># empty list</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-10">[</span><span class="n">...</span><span class="p" data-group-id="0696550511-10">]</span><span class="w">                         </span><span class="c1"># shorthand for nonempty_list(any())</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-11">[</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0696550511-11">]</span><span class="w">                   </span><span class="c1"># shorthand for nonempty_list(type)</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-12">[</span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="n">value_type</span><span class="p" data-group-id="0696550511-12">]</span><span class="w">             </span><span class="c1"># keyword list with optional key :key of value_type</span><span class="w">
+
+                                              </span><span class="c1">## Maps</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-13">%{</span><span class="p" data-group-id="0696550511-13">}</span><span class="w">                                   </span><span class="c1"># empty map</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-14">%{</span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="n">value_type</span><span class="p" data-group-id="0696550511-14">}</span><span class="w">                    </span><span class="c1"># map with required key :key of value_type</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-15">%{</span><span class="n">key_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">value_type</span><span class="p" data-group-id="0696550511-15">}</span><span class="w">             </span><span class="c1"># map with required pairs of key_type and value_type</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-16">%{</span><span class="n">required</span><span class="p" data-group-id="0696550511-17">(</span><span class="n">key_type</span><span class="p" data-group-id="0696550511-17">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">value_type</span><span class="p" data-group-id="0696550511-16">}</span><span class="w">   </span><span class="c1"># map with required pairs of key_type and value_type</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-18">%{</span><span class="n">optional</span><span class="p" data-group-id="0696550511-19">(</span><span class="n">key_type</span><span class="p" data-group-id="0696550511-19">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">value_type</span><span class="p" data-group-id="0696550511-18">}</span><span class="w">   </span><span class="c1"># map with optional pairs of key_type and value_type</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-20">%</span><span class="nc" data-group-id="0696550511-20">SomeStruct</span><span class="p" data-group-id="0696550511-20">{</span><span class="p" data-group-id="0696550511-20">}</span><span class="w">                         </span><span class="c1"># struct with all fields of any type</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-21">%</span><span class="nc" data-group-id="0696550511-21">SomeStruct</span><span class="p" data-group-id="0696550511-21">{</span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="n">value_type</span><span class="p" data-group-id="0696550511-21">}</span><span class="w">          </span><span class="c1"># struct with required key :key of value_type</span><span class="w">
+
+                                      </span><span class="c1">## Tuples</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-22">{</span><span class="p" data-group-id="0696550511-22">}</span><span class="w">                            </span><span class="c1"># empty tuple</span><span class="w">
+      </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="0696550511-23">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p" data-group-id="0696550511-23">}</span><span class="w">                   </span><span class="c1"># two-element tuple with an atom and any type</span></code></pre><h3 id="built-in-types" class="section-heading">
+  <a href="#built-in-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Built-in types</span>
+</h3>
+<p>The following types are also provided by Elixir as shortcuts on top of the basic and literal types described above.</p><table><thead><tr><th style="text-align: left;">Built-in type</th><th style="text-align: left;">Defined as</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">term()</code></td><td style="text-align: left;"><code class="inline">any()</code></td></tr><tr><td style="text-align: left;"><code class="inline">arity()</code></td><td style="text-align: left;"><code class="inline">0..255</code></td></tr><tr><td style="text-align: left;"><code class="inline">as_boolean(t)</code></td><td style="text-align: left;"><code class="inline">t</code></td></tr><tr><td style="text-align: left;"><code class="inline">binary()</code></td><td style="text-align: left;"><code class="inline">&lt;&lt;_::_*8&gt;&gt;</code></td></tr><tr><td style="text-align: left;"><code class="inline">nonempty_binary()</code></td><td style="text-align: left;"><code class="inline">&lt;&lt;_::8, _::_*8&gt;&gt;</code></td></tr><tr><td style="text-align: left;"><code class="inline">bitstring()</code></td><td style="text-align: left;"><code class="inline">&lt;&lt;_::_*1&gt;&gt;</code></td></tr><tr><td style="text-align: left;"><code class="inline">nonempty_bitstring()</code></td><td style="text-align: left;"><code class="inline">&lt;&lt;_::1, _::_*1&gt;&gt;</code></td></tr><tr><td style="text-align: left;"><code class="inline">boolean()</code></td><td style="text-align: left;"><code class="inline">true</code> | <code class="inline">false</code></td></tr><tr><td style="text-align: left;"><code class="inline">byte()</code></td><td style="text-align: left;"><code class="inline">0..255</code></td></tr><tr><td style="text-align: left;"><code class="inline">char()</code></td><td style="text-align: left;"><code class="inline">0..0x10FFFF</code></td></tr><tr><td style="text-align: left;"><code class="inline">charlist()</code></td><td style="text-align: left;"><code class="inline">[char()]</code></td></tr><tr><td style="text-align: left;"><code class="inline">nonempty_charlist()</code></td><td style="text-align: left;"><code class="inline">[char(), ...]</code></td></tr><tr><td style="text-align: left;"><code class="inline">fun()</code></td><td style="text-align: left;"><code class="inline">(... -&gt; any)</code></td></tr><tr><td style="text-align: left;"><code class="inline">function()</code></td><td style="text-align: left;"><code class="inline">fun()</code></td></tr><tr><td style="text-align: left;"><code class="inline">identifier()</code></td><td style="text-align: left;"><code class="inline">pid()</code> | <code class="inline">port()</code> | <code class="inline">reference()</code></td></tr><tr><td style="text-align: left;"><code class="inline">iodata()</code></td><td style="text-align: left;"><code class="inline">iolist()</code> | <code class="inline">binary()</code></td></tr><tr><td style="text-align: left;"><code class="inline">iolist()</code></td><td style="text-align: left;"><code class="inline">maybe_improper_list(byte() | binary() | iolist(), binary() | [])</code></td></tr><tr><td style="text-align: left;"><code class="inline">keyword()</code></td><td style="text-align: left;"><code class="inline">[{atom(), any()}]</code></td></tr><tr><td style="text-align: left;"><code class="inline">keyword(t)</code></td><td style="text-align: left;"><code class="inline">[{atom(), t}]</code></td></tr><tr><td style="text-align: left;"><code class="inline">list()</code></td><td style="text-align: left;"><code class="inline">[any()]</code></td></tr><tr><td style="text-align: left;"><code class="inline">nonempty_list()</code></td><td style="text-align: left;"><code class="inline">nonempty_list(any())</code></td></tr><tr><td style="text-align: left;"><code class="inline">maybe_improper_list()</code></td><td style="text-align: left;"><code class="inline">maybe_improper_list(any(), any())</code></td></tr><tr><td style="text-align: left;"><code class="inline">nonempty_maybe_improper_list()</code></td><td style="text-align: left;"><code class="inline">nonempty_maybe_improper_list(any(), any())</code></td></tr><tr><td style="text-align: left;"><code class="inline">mfa()</code></td><td style="text-align: left;"><code class="inline">{module(), atom(), arity()}</code></td></tr><tr><td style="text-align: left;"><code class="inline">module()</code></td><td style="text-align: left;"><code class="inline">atom()</code></td></tr><tr><td style="text-align: left;"><code class="inline">no_return()</code></td><td style="text-align: left;"><code class="inline">none()</code></td></tr><tr><td style="text-align: left;"><code class="inline">node()</code></td><td style="text-align: left;"><code class="inline">atom()</code></td></tr><tr><td style="text-align: left;"><code class="inline">number()</code></td><td style="text-align: left;"><code class="inline">integer()</code> | <code class="inline">float()</code></td></tr><tr><td style="text-align: left;"><code class="inline">struct()</code></td><td style="text-align: left;"><code class="inline">%{:__struct__ =&gt; atom(), optional(atom()) =&gt; any()}</code></td></tr><tr><td style="text-align: left;"><code class="inline">timeout()</code></td><td style="text-align: left;"><code class="inline">:infinity</code> | <code class="inline">non_neg_integer()</code></td></tr></tbody></table><p><code class="inline">as_boolean(t)</code> exists to signal users that the given value will be treated as a boolean, where <code class="inline">nil</code> and <code class="inline">false</code> will be evaluated as <code class="inline">false</code> and everything else is <code class="inline">true</code>. For example, <a href="Enum.html#filter/2"><code class="inline">Enum.filter/2</code></a> has the following specification: <code class="inline">filter(t, (element -&gt; as_boolean(term))) :: list</code>.</p><h3 id="remote-types" class="section-heading">
+  <a href="#remote-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Remote types</span>
+</h3>
+<p>Any module is also able to define its own types and the modules in Elixir are no exception. For example, the <a href="Range.html"><code class="inline">Range</code></a> module defines a <code class="inline">t/0</code> type that represents a range: this type can be referred to as <a href="Range.html#t:t/0"><code class="inline">Range.t/0</code></a>. In a similar fashion, a string is <a href="String.html#t:t/0"><code class="inline">String.t/0</code></a>, and so on.</p><h3 id="maps" class="section-heading">
+  <a href="#maps" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Maps</span>
+</h3>
+<p>The key types in maps are allowed to overlap, and if they do, the leftmost key takes precedence.
+A map value does not belong to this type if it contains a key that is not in the allowed map keys.</p><p>If you want to denote that keys that were not previously defined in the map are allowed,
+it is common to end a map type with <code class="inline">optional(any) =&gt; any</code>.</p><p>Note that the syntactic representation of <code class="inline">map()</code> is <code class="inline">%{optional(any) =&gt; any}</code>, not <code class="inline">%{}</code>. The notation <code class="inline">%{}</code> specifies the singleton type for the empty map.</p><h3 id="keyword-lists" class="section-heading">
+  <a href="#keyword-lists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Keyword Lists</span>
+</h3>
+<p>Beyond <code class="inline">keyword()</code> and <code class="inline">keyword(t)</code>, it can be helpful to compose a spec for an expected keyword list.
+For example:</p><pre><code class="makeup elixir" translate="no"><span class="na">@type</span><span class="w"> </span><span class="n">option</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1235522240-1">{</span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="1235522240-1">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="1235522240-2">{</span><span class="ss">:max</span><span class="p">,</span><span class="w"> </span><span class="n">pos_integer</span><span class="p" data-group-id="1235522240-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="1235522240-3">{</span><span class="ss">:min</span><span class="p">,</span><span class="w"> </span><span class="n">pos_integer</span><span class="p" data-group-id="1235522240-3">}</span><span class="w">
+</span><span class="na">@type</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1235522240-4">[</span><span class="n">option</span><span class="p" data-group-id="1235522240-5">(</span><span class="p" data-group-id="1235522240-5">)</span><span class="p" data-group-id="1235522240-4">]</span></code></pre><p>This makes it clear that only these options are allowed, none are required, and order does not matter.</p><p>It also allows composition with existing types.
+For example:</p><pre><code class="makeup elixir" translate="no"><span class="na">@type</span><span class="w"> </span><span class="n">option</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="5376445985-1">{</span><span class="ss">:my_option</span><span class="p">,</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="5376445985-2">(</span><span class="p" data-group-id="5376445985-2">)</span><span class="p" data-group-id="5376445985-1">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">option</span><span class="p" data-group-id="5376445985-3">(</span><span class="p" data-group-id="5376445985-3">)</span><span class="w">
+
+</span><span class="na">@spec</span><span class="w"> </span><span class="n">start_link</span><span class="p" data-group-id="5376445985-4">(</span><span class="p" data-group-id="5376445985-5">[</span><span class="n">option</span><span class="p" data-group-id="5376445985-6">(</span><span class="p" data-group-id="5376445985-6">)</span><span class="p" data-group-id="5376445985-5">]</span><span class="p" data-group-id="5376445985-4">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">on_start</span><span class="p" data-group-id="5376445985-7">(</span><span class="p" data-group-id="5376445985-7">)</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="5376445985-8">(</span><span class="n">opts</span><span class="p" data-group-id="5376445985-8">)</span><span class="w"> </span><span class="k" data-group-id="5376445985-9">do</span><span class="w">
+  </span><span class="p" data-group-id="5376445985-10">{</span><span class="n">my_opts</span><span class="p">,</span><span class="w"> </span><span class="n">gen_server_opts</span><span class="p" data-group-id="5376445985-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="5376445985-11">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5376445985-12">[</span><span class="ss">:my_option</span><span class="p" data-group-id="5376445985-12">]</span><span class="p" data-group-id="5376445985-11">)</span><span class="w">
+  </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="5376445985-13">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">my_opts</span><span class="p">,</span><span class="w"> </span><span class="n">gen_server_opts</span><span class="p" data-group-id="5376445985-13">)</span><span class="w">
+</span><span class="k" data-group-id="5376445985-9">end</span></code></pre><p>The following spec syntaxes are equivalent:</p><pre><code class="makeup elixir" translate="no"><span class="na">@type</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="p" data-group-id="2503537458-1">[</span><span class="p" data-group-id="2503537458-2">{</span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="2503537458-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="2503537458-3">{</span><span class="ss">:max</span><span class="p">,</span><span class="w"> </span><span class="n">pos_integer</span><span class="p" data-group-id="2503537458-3">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="2503537458-4">{</span><span class="ss">:min</span><span class="p">,</span><span class="w"> </span><span class="n">pos_integer</span><span class="p" data-group-id="2503537458-4">}</span><span class="p" data-group-id="2503537458-1">]</span><span class="w">
+
+</span><span class="na">@type</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="p" data-group-id="2503537458-5">[</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="ss">max</span><span class="p">:</span><span class="w"> </span><span class="n">pos_integer</span><span class="p">,</span><span class="w"> </span><span class="ss">min</span><span class="p">:</span><span class="w"> </span><span class="n">pos_integer</span><span class="p" data-group-id="2503537458-5">]</span></code></pre><h3 id="user-defined-types" class="section-heading">
+  <a href="#user-defined-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">User-defined types</span>
+</h3>
+<p>The <code class="inline">@type</code>, <code class="inline">@typep</code>, and <code class="inline">@opaque</code> module attributes can be used to define new types:</p><pre><code class="makeup elixir" translate="no"><span class="na">@type</span><span class="w"> </span><span class="n">type_name</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">type</span><span class="w">
+</span><span class="na">@typep</span><span class="w"> </span><span class="n">type_name</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">type</span><span class="w">
+</span><span class="na">@opaque</span><span class="w"> </span><span class="n">type_name</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">type</span></code></pre><p>A type defined with <code class="inline">@typep</code> is private. An opaque type, defined with <code class="inline">@opaque</code> is a type where the internal structure of the type will not be visible, but the type is still public.</p><p>Types can be parameterized by defining variables as parameters; these variables can then be used to define the type.</p><pre><code class="makeup elixir" translate="no"><span class="na">@type</span><span class="w"> </span><span class="n">dict</span><span class="p" data-group-id="4171472435-1">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4171472435-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="4171472435-2">[</span><span class="p" data-group-id="4171472435-3">{</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4171472435-3">}</span><span class="p" data-group-id="4171472435-2">]</span></code></pre><h2 id="defining-a-specification" class="section-heading">
+  <a href="#defining-a-specification" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Defining a specification</span>
+</h2>
+<p>A specification for a function can be defined as follows:</p><pre><code class="makeup elixir" translate="no"><span class="na">@spec</span><span class="w"> </span><span class="n">function_name</span><span class="p" data-group-id="6185779865-1">(</span><span class="n">type1</span><span class="p">,</span><span class="w"> </span><span class="n">type2</span><span class="p" data-group-id="6185779865-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">return_type</span></code></pre><p>Guards can be used to restrict type variables given as arguments to the function.</p><pre><code class="makeup elixir" translate="no"><span class="na">@spec</span><span class="w"> </span><span class="n">function</span><span class="p" data-group-id="8422850798-1">(</span><span class="n">arg</span><span class="p" data-group-id="8422850798-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="8422850798-2">[</span><span class="n">arg</span><span class="p" data-group-id="8422850798-2">]</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="ss">arg</span><span class="p">:</span><span class="w"> </span><span class="n">atom</span></code></pre><p>If you want to specify more than one variable, you separate them by a comma.</p><pre><code class="makeup elixir" translate="no"><span class="na">@spec</span><span class="w"> </span><span class="n">function</span><span class="p" data-group-id="1067742222-1">(</span><span class="n">arg1</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="p" data-group-id="1067742222-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1067742222-2">{</span><span class="n">arg1</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="p" data-group-id="1067742222-2">}</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="ss">arg1</span><span class="p">:</span><span class="w"> </span><span class="n">atom</span><span class="p">,</span><span class="w"> </span><span class="ss">arg2</span><span class="p">:</span><span class="w"> </span><span class="n">integer</span></code></pre><p>Type variables with no restriction can also be defined using <code class="inline">var</code>.</p><pre><code class="makeup elixir" translate="no"><span class="na">@spec</span><span class="w"> </span><span class="n">function</span><span class="p" data-group-id="7944749561-1">(</span><span class="n">arg</span><span class="p" data-group-id="7944749561-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="7944749561-2">[</span><span class="n">arg</span><span class="p" data-group-id="7944749561-2">]</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="ss">arg</span><span class="p">:</span><span class="w"> </span><span class="n">var</span></code></pre><p>This guard notation only works with <code class="inline">@spec</code>, <code class="inline">@callback</code>, and <code class="inline">@macrocallback</code>.</p><p>You can also name your arguments in a typespec using <code class="inline">arg_name :: arg_type</code> syntax. This is particularly useful in documentation as a way to differentiate multiple arguments of the same type (or multiple elements of the same type in a type definition):</p><pre><code class="makeup elixir" translate="no"><span class="na">@spec</span><span class="w"> </span><span class="n">days_since_epoch</span><span class="p" data-group-id="2181832746-1">(</span><span class="n">year</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">day</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="2181832746-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="w">
+</span><span class="na">@type</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="2181832746-2">{</span><span class="n">red</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">blue</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="2181832746-2">}</span></code></pre><p>Specifications can be overloaded, just like ordinary functions.</p><pre><code class="makeup elixir" translate="no"><span class="na">@spec</span><span class="w"> </span><span class="n">function</span><span class="p" data-group-id="7743347667-1">(</span><span class="n">integer</span><span class="p" data-group-id="7743347667-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">atom</span><span class="w">
+</span><span class="na">@spec</span><span class="w"> </span><span class="n">function</span><span class="p" data-group-id="7743347667-2">(</span><span class="n">atom</span><span class="p" data-group-id="7743347667-2">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span></code></pre><h2 id="behaviours" class="section-heading">
+  <a href="#behaviours" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Behaviours</span>
+</h2>
+<p>Behaviours in Elixir (and Erlang) are a way to separate and abstract the generic part of a component (which becomes the <em>behaviour module</em>) from the specific part (which becomes the <em>callback module</em>).</p><p>A behaviour module defines a set of functions and macros (referred to as <em>callbacks</em>) that callback modules implementing that behaviour must export. This &quot;interface&quot; identifies the specific part of the component. For example, the <a href="GenServer.html"><code class="inline">GenServer</code></a> behaviour and functions abstract away all the message-passing (sending and receiving) and error reporting that a &quot;server&quot; process will likely want to implement from the specific parts such as the actions that this server process has to perform.</p><p>Say we want to implement a bunch of parsers, each parsing structured data: for example, a JSON parser and a MessagePack parser. Each of these two parsers will <em>behave</em> the same way: both will provide a <code class="inline">parse/1</code> function and an <code class="inline">extensions/0</code> function. The <code class="inline">parse/1</code> function will return an Elixir representation of the structured data, while the <code class="inline">extensions/0</code> function will return a list of file extensions that can be used for each type of data (e.g., <code class="inline">.json</code> for JSON files).</p><p>We can create a <code class="inline">Parser</code> behaviour:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Parser</span><span class="w"> </span><span class="k" data-group-id="1424091364-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Parses a string.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="na">@callback</span><span class="w"> </span><span class="n">parse</span><span class="p" data-group-id="1424091364-2">(</span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="1424091364-2">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1424091364-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="1424091364-3">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="1424091364-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">atom</span><span class="p" data-group-id="1424091364-4">}</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Lists all supported file extensions.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="na">@callback</span><span class="w"> </span><span class="n">extensions</span><span class="p" data-group-id="1424091364-5">(</span><span class="p" data-group-id="1424091364-5">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1424091364-6">[</span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="1424091364-6">]</span><span class="w">
+</span><span class="k" data-group-id="1424091364-1">end</span></code></pre><p>As seen in the example above, defining a callback is a matter of defining a specification for that callback, made of:</p><ul><li>the callback name (<code class="inline">parse</code> or <code class="inline">extensions</code> in the example)</li><li>the arguments that the callback must accept (<code class="inline">String.t</code>)</li><li>the <em>expected</em> type of the callback return value</li></ul><p>Modules adopting the <code class="inline">Parser</code> behaviour will have to implement all the functions defined with the <code class="inline">@callback</code> attribute. As you can see, <code class="inline">@callback</code> expects a function name but also a function specification like the ones used with the <code class="inline">@spec</code> attribute we saw above.</p><h3 id="implementing-behaviours" class="section-heading">
+  <a href="#implementing-behaviours" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Implementing behaviours</span>
+</h3>
+<p>Implementing a behaviour is straightforward:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">JSONParser</span><span class="w"> </span><span class="k" data-group-id="1651671995-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="1651671995-2">(</span><span class="n">str</span><span class="p" data-group-id="1651671995-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1651671995-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;some json &quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">str</span><span class="p" data-group-id="1651671995-3">}</span><span class="w"> </span><span class="c1"># ... parse JSON</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">extensions</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1651671995-4">[</span><span class="s">&quot;.json&quot;</span><span class="p" data-group-id="1651671995-4">]</span><span class="w">
+</span><span class="k" data-group-id="1651671995-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">CSVParser</span><span class="w"> </span><span class="k" data-group-id="1535622024-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="1535622024-2">(</span><span class="n">str</span><span class="p" data-group-id="1535622024-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1535622024-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;some csv &quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">str</span><span class="p" data-group-id="1535622024-3">}</span><span class="w"> </span><span class="c1"># ... parse CSV</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">extensions</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1535622024-4">[</span><span class="s">&quot;.csv&quot;</span><span class="p" data-group-id="1535622024-4">]</span><span class="w">
+</span><span class="k" data-group-id="1535622024-1">end</span></code></pre><p>If a module adopting a given behaviour doesn't implement one of the callbacks required by that behaviour, a compile-time warning will be generated.</p><p>Furthermore, with <code class="inline">@impl</code> you can also make sure that you are implementing the <strong>correct</strong> callbacks from the given behaviour in an explicit manner. For example, the following parser implements both <code class="inline">parse</code> and <code class="inline">extensions</code>. However, thanks to a typo, <code class="inline">BADParser</code> is implementing <code class="inline">parse/0</code> instead of <code class="inline">parse/1</code>.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">BADParser</span><span class="w"> </span><span class="k" data-group-id="1420133406-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1420133406-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;something bad&quot;</span><span class="p" data-group-id="1420133406-2">}</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">Parser</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">extensions</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1420133406-3">[</span><span class="s">&quot;bad&quot;</span><span class="p" data-group-id="1420133406-3">]</span><span class="w">
+</span><span class="k" data-group-id="1420133406-1">end</span></code></pre><p>This code generates a warning letting you know that you are mistakenly implementing <code class="inline">parse/0</code> instead of <code class="inline">parse/1</code>.
+You can read more about <code class="inline">@impl</code> in the <a href="Module.html#module-impl">module documentation</a>.</p><h3 id="using-behaviours" class="section-heading">
+  <a href="#using-behaviours" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Using behaviours</span>
+</h3>
+<p>Behaviours are useful because you can pass modules around as arguments and you can then <em>call back</em> to any of the functions specified in the behaviour. For example, we can have a function that receives a filename, several parsers, and parses the file based on its extension:</p><pre><code class="makeup elixir" translate="no"><span class="na">@spec</span><span class="w"> </span><span class="n">parse_path</span><span class="p" data-group-id="4008566780-1">(</span><span class="nc">Path</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="4008566780-2">(</span><span class="p" data-group-id="4008566780-2">)</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4008566780-3">[</span><span class="n">module</span><span class="p" data-group-id="4008566780-4">(</span><span class="p" data-group-id="4008566780-4">)</span><span class="p" data-group-id="4008566780-3">]</span><span class="p" data-group-id="4008566780-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="4008566780-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="4008566780-5">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="4008566780-6">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">atom</span><span class="p" data-group-id="4008566780-6">}</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">parse_path</span><span class="p" data-group-id="4008566780-7">(</span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="n">parsers</span><span class="p" data-group-id="4008566780-7">)</span><span class="w"> </span><span class="k" data-group-id="4008566780-8">do</span><span class="w">
+  </span><span class="k">with</span><span class="w"> </span><span class="p" data-group-id="4008566780-9">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">ext</span><span class="p" data-group-id="4008566780-9">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">parse_extension</span><span class="p" data-group-id="4008566780-10">(</span><span class="n">filename</span><span class="p" data-group-id="4008566780-10">)</span><span class="p">,</span><span class="w">
+       </span><span class="p" data-group-id="4008566780-11">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">parser</span><span class="p" data-group-id="4008566780-11">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">find_parser</span><span class="p" data-group-id="4008566780-12">(</span><span class="n">ext</span><span class="p">,</span><span class="w"> </span><span class="n">parsers</span><span class="p" data-group-id="4008566780-12">)</span><span class="p">,</span><span class="w">
+       </span><span class="p" data-group-id="4008566780-13">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">contents</span><span class="p" data-group-id="4008566780-13">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="4008566780-14">(</span><span class="n">filename</span><span class="p" data-group-id="4008566780-14">)</span><span class="w"> </span><span class="k" data-group-id="4008566780-15">do</span><span class="w">
+    </span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4008566780-16">(</span><span class="n">contents</span><span class="p" data-group-id="4008566780-16">)</span><span class="w">
+  </span><span class="k" data-group-id="4008566780-15">end</span><span class="w">
+</span><span class="k" data-group-id="4008566780-8">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">parse_extension</span><span class="p" data-group-id="4008566780-17">(</span><span class="n">filename</span><span class="p" data-group-id="4008566780-17">)</span><span class="w"> </span><span class="k" data-group-id="4008566780-18">do</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="n">ext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">extname</span><span class="p" data-group-id="4008566780-19">(</span><span class="n">filename</span><span class="p" data-group-id="4008566780-19">)</span><span class="w"> </span><span class="k" data-group-id="4008566780-20">do</span><span class="w">
+    </span><span class="p" data-group-id="4008566780-21">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">ext</span><span class="p" data-group-id="4008566780-21">}</span><span class="w">
+  </span><span class="k" data-group-id="4008566780-20">else</span><span class="w">
+    </span><span class="p" data-group-id="4008566780-22">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:no_extension</span><span class="p" data-group-id="4008566780-22">}</span><span class="w">
+  </span><span class="k" data-group-id="4008566780-20">end</span><span class="w">
+</span><span class="k" data-group-id="4008566780-18">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">find_parser</span><span class="p" data-group-id="4008566780-23">(</span><span class="n">ext</span><span class="p">,</span><span class="w"> </span><span class="n">parsers</span><span class="p" data-group-id="4008566780-23">)</span><span class="w"> </span><span class="k" data-group-id="4008566780-24">do</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="n">parser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find</span><span class="p" data-group-id="4008566780-25">(</span><span class="n">parsers</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4008566780-26">fn</span><span class="w"> </span><span class="n">parser</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">ext</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">parser</span><span class="o">.</span><span class="n">extensions</span><span class="p" data-group-id="4008566780-27">(</span><span class="p" data-group-id="4008566780-27">)</span><span class="w"> </span><span class="k" data-group-id="4008566780-26">end</span><span class="p" data-group-id="4008566780-25">)</span><span class="w"> </span><span class="k" data-group-id="4008566780-28">do</span><span class="w">
+    </span><span class="p" data-group-id="4008566780-29">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">parser</span><span class="p" data-group-id="4008566780-29">}</span><span class="w">
+  </span><span class="k" data-group-id="4008566780-28">else</span><span class="w">
+    </span><span class="p" data-group-id="4008566780-30">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:no_matching_parser</span><span class="p" data-group-id="4008566780-30">}</span><span class="w">
+  </span><span class="k" data-group-id="4008566780-28">end</span><span class="w">
+</span><span class="k" data-group-id="4008566780-24">end</span></code></pre><p>You could also invoke any parser directly: <code class="inline">CSVParser.parse(...)</code>.</p><p>Note you don't need to define a behaviour in order to dynamically dispatch on a module, but those features often go hand in hand.</p><h3 id="optional-callbacks" class="section-heading">
+  <a href="#optional-callbacks" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Optional callbacks</span>
+</h3>
+<p>Optional callbacks are callbacks that callback modules may implement if they want to, but are not required to. Usually, behaviour modules know if they should call those callbacks based on configuration, or they check if the callbacks are defined with <a href="Kernel.html#function_exported?/3"><code class="inline">function_exported?/3</code></a> or <a href="Kernel.html#macro_exported?/3"><code class="inline">macro_exported?/3</code></a>.</p><p>Optional callbacks can be defined through the <code class="inline">@optional_callbacks</code> module attribute, which has to be a keyword list with function or macro name as key and arity as value. For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyBehaviour</span><span class="w"> </span><span class="k" data-group-id="7788385337-1">do</span><span class="w">
+  </span><span class="na">@callback</span><span class="w"> </span><span class="n">vital_fun</span><span class="p" data-group-id="7788385337-2">(</span><span class="p" data-group-id="7788385337-2">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">any</span><span class="w">
+  </span><span class="na">@callback</span><span class="w"> </span><span class="n">non_vital_fun</span><span class="p" data-group-id="7788385337-3">(</span><span class="p" data-group-id="7788385337-3">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">any</span><span class="w">
+  </span><span class="na">@macrocallback</span><span class="w"> </span><span class="n">non_vital_macro</span><span class="p" data-group-id="7788385337-4">(</span><span class="n">arg</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">any</span><span class="p" data-group-id="7788385337-4">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nc">Macro</span><span class="o">.</span><span class="n">t</span><span class="w">
+  </span><span class="na">@optional_callbacks</span><span class="w"> </span><span class="ss">non_vital_fun</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">non_vital_macro</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="k" data-group-id="7788385337-1">end</span></code></pre><p>One example of optional callback in Elixir's standard library is <a href="GenServer.html#c:format_status/1"><code class="inline">GenServer.format_status/1</code></a>.</p><h3 id="inspecting-behaviours" class="section-heading">
+  <a href="#inspecting-behaviours" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Inspecting behaviours</span>
+</h3>
+<p>The <code class="inline">@callback</code> and <code class="inline">@optional_callbacks</code> attributes are used to create a <code class="inline">behaviour_info/1</code> function available on the defining module. This function can be used to retrieve the callbacks and optional callbacks defined by that module.</p><p>For example, for the <code class="inline">MyBehaviour</code> module defined in &quot;Optional callbacks&quot; above:</p><pre><code class="makeup elixir" translate="no"><span class="nc">MyBehaviour</span><span class="o">.</span><span class="n">behaviour_info</span><span class="p" data-group-id="0509975433-1">(</span><span class="ss">:callbacks</span><span class="p" data-group-id="0509975433-1">)</span><span class="w">
+</span><span class="c1">#=&gt; [vital_fun: 0, &quot;MACRO-non_vital_macro&quot;: 2, non_vital_fun: 0]</span><span class="w">
+</span><span class="nc">MyBehaviour</span><span class="o">.</span><span class="n">behaviour_info</span><span class="p" data-group-id="0509975433-2">(</span><span class="ss">:optional_callbacks</span><span class="p" data-group-id="0509975433-2">)</span><span class="w">
+</span><span class="c1">#=&gt; [&quot;MACRO-non_vital_macro&quot;: 2, non_vital_fun: 0]</span></code></pre><p>When using <code class="inline">iex</code>, the <a href="https://hexdocs.pm/iex/IEx.Helpers.html#b/1"><code class="inline">IEx.Helpers.b/1</code></a> helper is also available.</p><h2 id="pitfalls" class="section-heading">
+  <a href="#pitfalls" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pitfalls</span>
+</h2>
+<p>There are some known pitfalls when using typespecs, they are documented next.</p><h2 id="the-string-type" class="section-heading">
+  <a href="#the-string-type" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The <code class="inline">string()</code> type</span>
+</h2>
+<p>Elixir discourages the use of the <code class="inline">string()</code> type. The <code class="inline">string()</code> type refers to Erlang strings, which are known as &quot;charlists&quot; in Elixir. They do not refer to Elixir strings, which are UTF-8 encoded binaries. To avoid confusion, if you attempt to use the type <code class="inline">string()</code>, Elixir will emit a warning. You should use <code class="inline">charlist()</code>, <code class="inline">nonempty_charlist()</code>, <code class="inline">binary()</code> or <code class="inline">String.t()</code> accordingly, or any of the several literal representations for these types.</p><p>Note that <code class="inline">String.t()</code> and <code class="inline">binary()</code> are equivalent to analysis tools. Although, for those reading the documentation, <code class="inline">String.t()</code> implies it is a UTF-8 encoded binary.</p><h2 id="functions-which-raise-an-error" class="section-heading">
+  <a href="#functions-which-raise-an-error" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Functions which raise an error</span>
+</h2>
+<p>Typespecs do not need to indicate that a function can raise an error; any function can fail any time if given invalid input.
+In the past, the Elixir standard library sometimes used <code class="inline">no_return()</code> to indicate this, but these usages have been removed.</p><p>The <code class="inline">no_return()</code> type also should not be used for functions which do return but whose purpose is a &quot;side effect&quot;, such as <a href="IO.html#puts/1"><code class="inline">IO.puts/1</code></a>.
+In these cases, the expected return type is <code class="inline">:ok</code>.</p><p>Instead, <code class="inline">no_return()</code> should be used as the return type for functions which can never return a value.
+This includes functions which loop forever calling <code class="inline">receive</code>, or which exist specifically to raise an error, or which shut down the VM.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="syntax-reference.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Syntax reference
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="unicode-syntax.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Unicode syntax
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

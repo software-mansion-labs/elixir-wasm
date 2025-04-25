@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Debugging — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/debugging.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Debugging</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/debugging.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>There are a number of ways to debug code in Elixir. In this chapter we will cover some of the more common ways of doing so.</p><h2 id="io-inspect-2" class="section-heading">
+  <a href="#io-inspect-2" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">IO.inspect/2</span>
+</h2>
+<p>What makes <code class="inline">IO.inspect(item, opts \\ [])</code> really useful in debugging is that it returns the <code class="inline">item</code> argument passed to it without affecting the behavior of the original code. Let's see an example.</p><pre class="elixir" data-code-id="32363331"><p class="output output-initial" data-code-type="output"># (1..10)</p><p class="output output-initial" data-code-type="output"># |&gt; IO.inspect()</p><p class="output output-initial" data-code-type="output"># |&gt; Enum.map(fn x -&gt; x * 2 end)</p><p class="output output-initial" data-code-type="output"># |&gt; IO.inspect()</p><p class="output output-initial" data-code-type="output"># |&gt; Enum.sum()</p><p class="output output-initial" data-code-type="output"># |&gt; IO.inspect()</p></pre><p>Prints:</p><pre><code class="makeup elixir" translate="no"><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="w">
+</span><span class="p" data-group-id="5341816062-1">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="5341816062-1">]</span><span class="w">
+</span><span class="mi">110</span></code></pre><p>As you can see <a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a> makes it possible to &quot;spy&quot; on values almost anywhere in your code without altering the result, making it very helpful inside of a pipeline like in the above case.</p><p><a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a> also provides the ability to decorate the output with a <code class="inline">label</code> option. The label will be printed before the inspected <code class="inline">item</code>:</p><pre class="elixir" data-code-id="32363935"><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><p class="output output-initial" data-code-type="output"># |&gt; IO.inspect(label: &quot;before&quot;)</p><p class="output output-initial" data-code-type="output"># |&gt; Enum.map(&amp;(&amp;1 * 2))</p><p class="output output-initial" data-code-type="output"># |&gt; IO.inspect(label: &quot;after&quot;)</p><p class="output output-initial" data-code-type="output"># |&gt; Enum.sum</p></pre><p>Prints:</p><pre><code class="makeup elixir" translate="no"><span class="ss">before</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3400021315-1">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3400021315-1">]</span><span class="w">
+</span><span class="ss">after</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3400021315-2">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3400021315-2">]</span></code></pre><p>It is also very common to use <a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a> with <a href="Kernel.html#binding/0"><code class="inline">binding/0</code></a>, which returns all variable names and their values:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">some_fun</span><span class="p" data-group-id="7396919341-1">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p" data-group-id="7396919341-1">)</span><span class="w"> </span><span class="k" data-group-id="7396919341-2">do</span><span class="w">
+  </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="w"> </span><span class="n">binding</span><span class="p" data-group-id="7396919341-3">(</span><span class="p" data-group-id="7396919341-3">)</span><span class="w">
+  </span><span class="n">...</span><span class="w">
+</span><span class="k" data-group-id="7396919341-2">end</span></code></pre><p>When <code class="inline">some_fun/3</code> is invoked with <code class="inline">:foo</code>, <code class="inline">&quot;bar&quot;</code>, <code class="inline">:baz</code> it prints:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7903014470-1">[</span><span class="ss">a</span><span class="p">:</span><span class="w"> </span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">b</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">c</span><span class="p">:</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="7903014470-1">]</span></code></pre><p>See <a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a> and <a href="Inspect.Opts.html"><code class="inline">Inspect.Opts</code></a> respectively to learn more about the function and read about all supported options.</p><h2 id="dbg-2" class="section-heading">
+  <a href="#dbg-2" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">dbg/2</span>
+</h2>
+<p>Elixir v1.14 introduced <a href="Kernel.html#dbg/2"><code class="inline">dbg/2</code></a>. <code class="inline">dbg</code> is similar to <a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a> but specifically tailored for debugging. It prints the value passed to it and returns it (just like <a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a>), but it also prints the code and location.</p><pre class="elixir" data-code-id="32373539"><p class="comment" data-code-type="comment"># In my_file.exs</p><p class="output output-initial" data-code-type="output"># feature = %{name: :dbg, inspiration: &quot;Rust&quot;}</p><p class="output output-initial" data-code-type="output"># dbg(feature)</p><p class="output output-initial" data-code-type="output"># dbg(Map.put(feature, :in_version, &quot;1.14.0&quot;))</p></pre><p>The code above prints this:</p><pre><code class="makeup shell" translate="no"><span class="">[my_file.exs:2: (file)]
+</span><span class="">feature #=&gt; %{inspiration: &quot;Rust&quot;, name: :dbg}
+</span><span class="">[my_file.exs:3: (file)]
+</span><span class="">Map.put(feature, :in_version, &quot;1.14.0&quot;) #=&gt; %{in_version: &quot;1.14.0&quot;, inspiration: &quot;Rust&quot;, name: :dbg}
+</span></code></pre><p>When talking about <a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a>, we mentioned its usefulness when placed between steps of <code class="inline">|&gt;</code> pipelines. <code class="inline">dbg</code> does it better: it understands Elixir code, so it will print values at <em>every step of the pipeline</em>.</p><pre class="elixir" data-code-id="32383233"><p class="comment" data-code-type="comment"># In dbg_pipes.exs</p><p class="output output-initial" data-code-type="output"># __ENV__.file</p><p class="output output-initial" data-code-type="output"># |&gt; String.split(&quot;/&quot;, trim: true)</p><p class="output output-initial" data-code-type="output"># |&gt; List.last()</p><p class="output output-initial" data-code-type="output"># |&gt; File.exists?()</p><p class="output output-initial" data-code-type="output"># |&gt; dbg()</p></pre><p>This code prints:</p><pre><code class="makeup shell" translate="no"><span class="">[dbg_pipes.exs:5: (file)]
+</span><span class="">__ENV__.file #=&gt; &quot;/home/myuser/dbg_pipes.exs&quot;
+</span><span class="">|&gt; String.split(&quot;/&quot;, trim: true) #=&gt; [&quot;home&quot;, &quot;myuser&quot;, &quot;dbg_pipes.exs&quot;]
+</span><span class="">|&gt; List.last() #=&gt; &quot;dbg_pipes.exs&quot;
+</span><span class="">|&gt; File.exists?() #=&gt; true
+</span></code></pre><p>While <code class="inline">dbg</code> provides conveniences around Elixir constructs, you will need <a href="https://hexdocs.pm/iex/IEx.html"><code class="inline">IEx</code></a> if you want to execute code and set breakpoints while debugging.</p><h2 id="pry" class="section-heading">
+  <a href="#pry" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pry</span>
+</h2>
+<p>When using <a href="https://hexdocs.pm/iex/IEx.html"><code class="inline">IEx</code></a>, you may pass <code class="inline">--dbg pry</code> as an option to &quot;stop&quot; the code execution where the <code class="inline">dbg</code> call is:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex --dbg pry
+</span></code></pre><p>Or to debug inside a of a project:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex --dbg pry -S mix
+</span></code></pre><p>Now any call to <code class="inline">dbg</code> will ask if you want to pry the existing code. If you accept, you'll be able to access all variables, as well as imports and aliases from the code, directly from IEx. This is called &quot;prying&quot;. While the pry session is running, the code execution stops, until <code class="inline">continue</code> (or <code class="inline">c</code>) or <code class="inline">next</code> (or <code class="inline">n</code>) are called. Remember you can always run <code class="inline">iex</code> in the context of a project with <code class="inline">iex -S mix TASK</code>.</p><script id="asciicast-509509" src="https://asciinema.org/a/509509.js" async="async"></script><h2 id="breakpoints" class="section-heading">
+  <a href="#breakpoints" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Breakpoints</span>
+</h2>
+<p><code class="inline">dbg</code> calls require us to change the code we intend to debug and has limited stepping functionality. Luckily IEx also provides a <a href="https://hexdocs.pm/iex/IEx.html#break!/2"><code class="inline">IEx.break!/2</code></a> function which allows you to set and manage breakpoints on any Elixir code without modifying its source:</p><script type="text/javascript" src="https://asciinema.org/a/0h3po0AmTcBAorc5GBNU97nrs.js" id="asciicast-0h3po0AmTcBAorc5GBNU97nrs" async="async"></script><p>Similar to <code class="inline">dbg</code>, once a breakpoint is reached, code execution stops until <code class="inline">continue</code> (or <code class="inline">c</code>) or <code class="inline">next</code> (or <code class="inline">n</code>) are invoked. Breakpoints can navigate line-by-line by default, however, they do not have access to aliases and imports when breakpoints are set on compiled modules.</p><p>The <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> task direct integration with breakpoints via the <code class="inline">-b</code>/<code class="inline">--breakpoints</code> flag. When the flag is used, a breakpoint is set at the beginning of every test that will run:</p><script async="async" id="asciicast-XTZ15jFKFAlr8ZxIZMzaHgL5n" src="https://asciinema.org/a/XTZ15jFKFAlr8ZxIZMzaHgL5n.js"></script><p>Here are some commands you can use in practice:</p><pre><code class="makeup console" translate="no"><span class=""># Debug all failed tests
+</span><span class="gp unselectable">$ </span><span class="">iex -S mix test --breakpoints --failed
+</span><span class=""># Debug the test at the given file:line
+</span><span class="gp unselectable">$ </span><span class="">iex -S mix test -b path/to/file:line
+</span></code></pre><h2 id="observer" class="section-heading">
+  <a href="#observer" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Observer</span>
+</h2>
+<p>For debugging complex systems, jumping at the code is not enough. It is necessary to have an understanding of the whole virtual machine, processes, applications, as well as set up tracing mechanisms. Luckily this can be achieved in Erlang with <code class="inline">:observer</code>. In your application:</p><pre><code class="makeup elixir" translate="no"><span class="err">$</span><span class="w"> </span><span class="n">iex</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:observer</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="2851259353-1">(</span><span class="p" data-group-id="2851259353-1">)</span></code></pre><section role="note" class="admonition warning"><h4 class="admonition-title warning">Missing dependencies</h4><p>When running <code class="inline">iex</code> inside a project with <code class="inline">iex -S mix</code>, <code class="inline">observer</code> won't be available as a dependency. To do so, you will need to call the following functions before:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Mix</span><span class="o">.</span><span class="n">ensure_application!</span><span class="p" data-group-id="0770526171-1">(</span><span class="ss">:wx</span><span class="p" data-group-id="0770526171-1">)</span><span class="w">             </span><span class="c1"># Not necessary on Erlang/OTP 27+</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Mix</span><span class="o">.</span><span class="n">ensure_application!</span><span class="p" data-group-id="0770526171-2">(</span><span class="ss">:runtime_tools</span><span class="p" data-group-id="0770526171-2">)</span><span class="w">  </span><span class="c1"># Not necessary on Erlang/OTP 27+</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Mix</span><span class="o">.</span><span class="n">ensure_application!</span><span class="p" data-group-id="0770526171-3">(</span><span class="ss">:observer</span><span class="p" data-group-id="0770526171-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:observer</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="0770526171-4">(</span><span class="p" data-group-id="0770526171-4">)</span></code></pre><p>If any of the calls above fail, here is what may have happened: some package managers default to installing a minimized Erlang without WX bindings for GUI support. In some package managers, you may be able to replace the headless Erlang with a more complete package (look for packages named <code class="inline">erlang</code> vs <code class="inline">erlang-nox</code> on Debian/Ubuntu/Arch). In others managers, you may need to install a separate <code class="inline">erlang-wx</code> (or similarly named) package.</p></section><p>The above will open another Graphical User Interface that provides many panes to fully understand and navigate the runtime and your project.</p><p>We explore the Observer in the context of an actual project <a href="dynamic-supervisor.html">in the Dynamic Supervisor chapter of the Mix &amp; OTP guide</a>. This is one of the debugging techniques <a href="https://phoenixframework.org/blog/the-road-to-2-million-websocket-connections">the Phoenix framework used to achieve 2 million connections on a single machine</a>.</p><p>If you are using the Phoenix web framework, it ships with the <a href="https://github.com/phoenixframework/phoenix_live_dashboard">Phoenix LiveDashboard</a>, a web dashboard for production nodes which provides similar features to Observer.</p><p>Finally, remember you can also get a mini-overview of the runtime info by calling <code class="inline">runtime_info/0</code> directly in IEx.</p><h2 id="other-tools-and-community" class="section-heading">
+  <a href="#other-tools-and-community" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Other tools and community</span>
+</h2>
+<p>We have just scratched the surface of what the Erlang VM has to offer, for example:</p><ul><li><p>Alongside the observer application, Erlang also includes a <a href="https://www.erlang.org/doc/man/crashdump_viewer.html"><code class="inline">:crashdump_viewer</code></a> to view crash dumps</p></li><li><p>Integration with OS level tracers, such as <a href="https://www.erlang.org/doc/apps/runtime_tools/lttng">Linux Trace Toolkit,</a> <a href="https://www.erlang.org/doc/apps/runtime_tools/dtrace">DTRACE,</a> and <a href="https://www.erlang.org/doc/apps/runtime_tools/systemtap">SystemTap</a></p></li><li><p><a href="http://www.erlang.org/doc/man/msacc.html">Microstate accounting</a> measures how much time the runtime spends in several low-level tasks in a short time interval</p></li><li><p>Mix ships with many tasks under the <code class="inline">profile</code> namespace, such as <a href="https://hexdocs.pm/mix/Mix.Tasks.Profile.Cprof.html"><code class="inline">mix profile.cprof</code></a> and <a href="https://hexdocs.pm/mix/Mix.Tasks.Profile.Fprof.html"><code class="inline">mix profile.fprof</code></a></p></li><li><p>For more advanced use cases, we recommend the excellent <a href="https://www.erlang-in-anger.com/">Erlang in Anger</a>, which is available as a free ebook</p></li></ul><p>Happy debugging!</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="erlang-libraries.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Erlang libraries
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="enum-cheat.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Enum cheatsheet
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

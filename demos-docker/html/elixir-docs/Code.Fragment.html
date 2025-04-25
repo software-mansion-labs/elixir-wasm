@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Code.Fragment — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Code.Fragment.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Code.Fragment</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/code/fragment.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>This module provides conveniences for analyzing fragments of
+textual code and extract available information whenever possible.</p><p>This module should be considered experimental.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:position/0" data-no-tooltip="" translate="no">position()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#container_cursor_to_quoted/2" data-no-tooltip="" translate="no">container_cursor_to_quoted(fragment, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a string and returns a quoted expression
+with the cursor AST position within its parent expression.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor_context/2" data-no-tooltip="" translate="no">cursor_context(fragment, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a string and returns the cursor context.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#surround_context/3" data-no-tooltip="" translate="no">surround_context(fragment, position, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a string and returns the surround context.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:position/0">
+
+  <div class="detail-header">
+    <a href="#t:position/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">position()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/code/fragment.ex#L9" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> position() :: {line :: <a href="typespecs.html#basic-types">pos_integer</a>(), column :: <a href="typespecs.html#basic-types">pos_integer</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="container_cursor_to_quoted/2">
+
+    <span id="container_cursor_to_quoted/1"></span>
+
+  <div class="detail-header">
+    <a href="#container_cursor_to_quoted/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">container_cursor_to_quoted(fragment, opts \\ [])</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/code/fragment.ex#L1090" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> container_cursor_to_quoted(
+  <a href="List.Chars.html#t:t/0">List.Chars.t</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) ::
+  {:ok, <a href="Macro.html#t:t/0">Macro.t</a>()}
+  | {:error, {location :: <a href="typespecs.html#built-in-types">keyword</a>(), <a href="typespecs.html#built-in-types">binary</a>() | {<a href="typespecs.html#built-in-types">binary</a>(), <a href="typespecs.html#built-in-types">binary</a>()}, <a href="typespecs.html#built-in-types">binary</a>()}}</pre>
+
+      </div>
+
+<p>Receives a string and returns a quoted expression
+with the cursor AST position within its parent expression.</p><p>This function receives a string with an Elixir code fragment,
+representing a cursor position, and converts such string to
+AST with the inclusion of special <code class="inline">__cursor__()</code> node representing
+the cursor position within its container (i.e. its parent).</p><p>For example, take this code, which would be given as input:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="4939984331-1">(</span><span class="n">some_value</span><span class="p">,</span></code></pre><p>This function will return the AST equivalent to:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="5681651670-1">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="c">__cursor__</span><span class="p" data-group-id="5681651670-2">(</span><span class="p" data-group-id="5681651670-2">)</span><span class="p" data-group-id="5681651670-1">)</span></code></pre><p>In other words, this function is capable of closing any open
+brackets and insert the cursor position. Other content at the
+cursor position which is not a parent is discarded.
+For example, if this is given as input:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="4171378210-1">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="n">another_val</span></code></pre><p>It will return the same AST:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="6723237896-1">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="c">__cursor__</span><span class="p" data-group-id="6723237896-2">(</span><span class="p" data-group-id="6723237896-2">)</span><span class="p" data-group-id="6723237896-1">)</span></code></pre><p>Similarly, if only this is given:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="0419342545-1">(</span><span class="n">some_va</span></code></pre><p>Then it returns:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="1484453775-1">(</span><span class="c">__cursor__</span><span class="p" data-group-id="1484453775-2">(</span><span class="p" data-group-id="1484453775-2">)</span><span class="p" data-group-id="1484453775-1">)</span></code></pre><p>Calls without parenthesis are also supported, as we assume the
+brackets are implicit.</p><p>Tuples, lists, maps, and binaries all retain the cursor position:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="9706235628-1">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9706235628-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span></code></pre><p>Returns the following AST:</p><pre><code class="makeup elixir" translate="no"><span class="n">max</span><span class="p" data-group-id="5899733671-1">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5899733671-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="c">__cursor__</span><span class="p" data-group-id="5899733671-3">(</span><span class="p" data-group-id="5899733671-3">)</span><span class="p" data-group-id="5899733671-2">]</span><span class="p" data-group-id="5899733671-1">)</span></code></pre><p>Keyword lists (and do-end blocks) are also retained. The following:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="p" data-group-id="2335546878-1">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w">
+</span><span class="k">if</span><span class="p" data-group-id="2335546878-2">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:token</span><span class="w">
+</span><span class="k">if</span><span class="p" data-group-id="2335546878-3">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">val</span></code></pre><p>all return:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="p" data-group-id="4082179582-1">(</span><span class="n">some_value</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="c">__cursor__</span><span class="p" data-group-id="4082179582-2">(</span><span class="p" data-group-id="4082179582-2">)</span><span class="p" data-group-id="4082179582-1">)</span></code></pre><p>For multi-line blocks, all previous lines are preserved.</p><p>The AST returned by this function is not safe to evaluate but
+it can be analyzed and expanded.</p><h2 id="container_cursor_to_quoted/2-examples" class="section-heading">
+  <a href="#container_cursor_to_quoted/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Function call:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">container_cursor_to_quoted</span><span class="p" data-group-id="7987313267-1">(</span><span class="s">&quot;max(some_value, &quot;</span><span class="p" data-group-id="7987313267-1">)</span><span class="w">
+</span><span class="p" data-group-id="7987313267-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7987313267-3">{</span><span class="ss">:max</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7987313267-4">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7987313267-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7987313267-5">[</span><span class="p" data-group-id="7987313267-6">{</span><span class="ss">:some_value</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7987313267-7">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7987313267-7">]</span><span class="p">,</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="7987313267-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7987313267-8">{</span><span class="ss">:__cursor__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7987313267-9">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7987313267-9">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7987313267-10">[</span><span class="p" data-group-id="7987313267-10">]</span><span class="p" data-group-id="7987313267-8">}</span><span class="p" data-group-id="7987313267-5">]</span><span class="p" data-group-id="7987313267-3">}</span><span class="p" data-group-id="7987313267-2">}</span></code></pre><p>Containers (for example, a list):</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">container_cursor_to_quoted</span><span class="p" data-group-id="3389834009-1">(</span><span class="s">&quot;[some, value&quot;</span><span class="p" data-group-id="3389834009-1">)</span><span class="w">
+</span><span class="p" data-group-id="3389834009-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3389834009-3">[</span><span class="p" data-group-id="3389834009-4">{</span><span class="ss">:some</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3389834009-5">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3389834009-5">]</span><span class="p">,</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="3389834009-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3389834009-6">{</span><span class="ss">:__cursor__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3389834009-7">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3389834009-7">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3389834009-8">[</span><span class="p" data-group-id="3389834009-8">]</span><span class="p" data-group-id="3389834009-6">}</span><span class="p" data-group-id="3389834009-3">]</span><span class="p" data-group-id="3389834009-2">}</span></code></pre><p>If an expression is complete, then the whole expression is discarded
+and only the parent is returned:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">container_cursor_to_quoted</span><span class="p" data-group-id="4376731952-1">(</span><span class="s">&quot;if(is_atom(var)&quot;</span><span class="p" data-group-id="4376731952-1">)</span><span class="w">
+</span><span class="p" data-group-id="4376731952-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4376731952-3">{</span><span class="ss">:if</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4376731952-4">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4376731952-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4376731952-5">[</span><span class="p" data-group-id="4376731952-6">{</span><span class="ss">:__cursor__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4376731952-7">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4376731952-7">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4376731952-8">[</span><span class="p" data-group-id="4376731952-8">]</span><span class="p" data-group-id="4376731952-6">}</span><span class="p" data-group-id="4376731952-5">]</span><span class="p" data-group-id="4376731952-3">}</span><span class="p" data-group-id="4376731952-2">}</span></code></pre><p>this means complete expressions themselves return only the cursor:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">container_cursor_to_quoted</span><span class="p" data-group-id="8497090479-1">(</span><span class="s">&quot;if(is_atom(var))&quot;</span><span class="p" data-group-id="8497090479-1">)</span><span class="w">
+</span><span class="p" data-group-id="8497090479-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8497090479-3">{</span><span class="ss">:__cursor__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8497090479-4">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8497090479-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8497090479-5">[</span><span class="p" data-group-id="8497090479-5">]</span><span class="p" data-group-id="8497090479-3">}</span><span class="p" data-group-id="8497090479-2">}</span></code></pre><p>Operators are also included from Elixir v1.15:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">container_cursor_to_quoted</span><span class="p" data-group-id="7267079580-1">(</span><span class="s">&quot;foo +&quot;</span><span class="p" data-group-id="7267079580-1">)</span><span class="w">
+</span><span class="p" data-group-id="7267079580-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7267079580-3">{</span><span class="ss">:+</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7267079580-4">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7267079580-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7267079580-5">[</span><span class="p" data-group-id="7267079580-6">{</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7267079580-7">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7267079580-7">]</span><span class="p">,</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="7267079580-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7267079580-8">{</span><span class="ss">:__cursor__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7267079580-9">[</span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7267079580-9">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7267079580-10">[</span><span class="p" data-group-id="7267079580-10">]</span><span class="p" data-group-id="7267079580-8">}</span><span class="p" data-group-id="7267079580-5">]</span><span class="p" data-group-id="7267079580-3">}</span><span class="p" data-group-id="7267079580-2">}</span></code></pre><h2 id="container_cursor_to_quoted/2-options" class="section-heading">
+  <a href="#container_cursor_to_quoted/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:file</code> - the filename to be reported in case of parsing errors.
+Defaults to <code class="inline">&quot;nofile&quot;</code>.</p></li><li><p><code class="inline">:line</code> - the starting line of the string being parsed.
+Defaults to 1.</p></li><li><p><code class="inline">:column</code> - the starting column of the string being parsed.
+Defaults to 1.</p></li><li><p><code class="inline">:columns</code> - when <code class="inline">true</code>, attach a <code class="inline">:column</code> key to the quoted
+metadata. Defaults to <code class="inline">false</code>.</p></li><li><p><code class="inline">:token_metadata</code> - when <code class="inline">true</code>, includes token-related
+metadata in the expression AST, such as metadata for <code class="inline">do</code> and <code class="inline">end</code>
+tokens, for closing tokens, end of expressions, as well as delimiters
+for sigils. See <a href="Macro.html#t:metadata/0"><code class="inline">Macro.metadata/0</code></a>. Defaults to <code class="inline">false</code>.</p></li><li><p><code class="inline">:literal_encoder</code> - a function to encode literals in the AST.
+See the documentation for <a href="Code.html#string_to_quoted/2"><code class="inline">Code.string_to_quoted/2</code></a> for more information.</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="cursor_context/2">
+
+    <span id="cursor_context/1"></span>
+
+  <div class="detail-header">
+    <a href="#cursor_context/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor_context(fragment, opts \\ [])</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/code/fragment.ex#L173" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor_context(
+  <a href="List.Chars.html#t:t/0">List.Chars.t</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) ::
+  {:alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:alias, inside_alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:dot, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:dot_arity, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:dot_call, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | :expr
+  | {:local_or_var, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:local_arity, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:local_call, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:anonymous_call, inside_caller}
+  | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:operator, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:operator_arity, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:operator_call, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | :none
+  | {:sigil, <a href="typespecs.html#built-in-types">charlist</a>()}
+  | {:struct, inside_struct}
+  | {:unquoted_atom, <a href="typespecs.html#built-in-types">charlist</a>()}
+when inside_dot:
+       {:alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:alias, inside_alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:dot, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:unquoted_atom, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:var, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | :expr,
+     inside_alias: {:local_or_var, <a href="typespecs.html#built-in-types">charlist</a>()} | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()},
+     inside_struct:
+       <a href="typespecs.html#built-in-types">charlist</a>()
+       | {:alias, inside_alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:local_or_var, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:dot, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()},
+     inside_caller: {:var, <a href="typespecs.html#built-in-types">charlist</a>()} | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()}</pre>
+
+      </div>
+
+<p>Receives a string and returns the cursor context.</p><p>This function receives a string with an Elixir code fragment,
+representing a cursor position, and based on the string, it
+provides contextual information about the latest token.
+The return of this function can then be used to provide tips,
+suggestions, and autocompletion functionality.</p><p>This function performs its analyses on tokens. This means
+it does not understand how constructs are nested within each
+other. See the &quot;Limitations&quot; section below.</p><p>Consider adding a catch-all clause when handling the return
+type of this function as new cursor information may be added
+in future releases.</p><h2 id="cursor_context/2-examples" class="section-heading">
+  <a href="#cursor_context/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">cursor_context</span><span class="p" data-group-id="9688041847-1">(</span><span class="s">&quot;&quot;</span><span class="p" data-group-id="9688041847-1">)</span><span class="w">
+</span><span class="ss">:expr</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">cursor_context</span><span class="p" data-group-id="9688041847-2">(</span><span class="s">&quot;hello_wor&quot;</span><span class="p" data-group-id="9688041847-2">)</span><span class="w">
+</span><span class="p" data-group-id="9688041847-3">{</span><span class="ss">:local_or_var</span><span class="p">,</span><span class="w"> </span><span class="s">~c&quot;hello_wor&quot;</span><span class="p" data-group-id="9688041847-3">}</span></code></pre><h2 id="cursor_context/2-return-values" class="section-heading">
+  <a href="#cursor_context/2-return-values" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Return values</span>
+</h2>
+<ul><li><p><code class="inline">{:alias, charlist}</code> - the context is an alias, potentially
+a nested one, such as <code class="inline">Hello.Wor</code> or <code class="inline">HelloWor</code></p></li><li><p><code class="inline">{:alias, inside_alias, charlist}</code> - the context is an alias, potentially
+a nested one, where <code class="inline">inside_alias</code> is an expression <code class="inline">{:module_attribute, charlist}</code>
+or <code class="inline">{:local_or_var, charlist}</code> and <code class="inline">charlist</code> is a static part
+Examples are <code class="inline">__MODULE__.Submodule</code> or <code class="inline">@hello.Submodule</code></p></li><li><p><code class="inline">{:dot, inside_dot, charlist}</code> - the context is a dot
+where <code class="inline">inside_dot</code> is either a <code class="inline">{:var, charlist}</code>, <code class="inline">{:alias, charlist}</code>,
+<code class="inline">{:module_attribute, charlist}</code>, <code class="inline">{:unquoted_atom, charlist}</code> or a <code class="inline">dot</code>
+itself. If a var is given, this may either be a remote call or a map
+field access. Examples are <code class="inline">Hello.wor</code>, <code class="inline">:hello.wor</code>, <code class="inline">hello.wor</code>,
+<code class="inline">Hello.nested.wor</code>, <code class="inline">hello.nested.wor</code>, and <code class="inline">@hello.world</code>. If <code class="inline">charlist</code>
+is empty and <code class="inline">inside_dot</code> is an alias, then the autocompletion may either
+be an alias or a remote call.</p></li><li><p><code class="inline">{:dot_arity, inside_dot, charlist}</code> - the context is a dot arity
+where <code class="inline">inside_dot</code> is either a <code class="inline">{:var, charlist}</code>, <code class="inline">{:alias, charlist}</code>,
+<code class="inline">{:module_attribute, charlist}</code>, <code class="inline">{:unquoted_atom, charlist}</code> or a <code class="inline">dot</code>
+itself. If a var is given, it must be a remote arity. Examples are
+<code class="inline">Hello.world/</code>, <code class="inline">:hello.world/</code>, <code class="inline">hello.world/2</code>, and <code class="inline">@hello.world/2</code></p></li><li><p><code class="inline">{:dot_call, inside_dot, charlist}</code> - the context is a dot
+call. This means parentheses or space have been added after the expression.
+where <code class="inline">inside_dot</code> is either a <code class="inline">{:var, charlist}</code>, <code class="inline">{:alias, charlist}</code>,
+<code class="inline">{:module_attribute, charlist}</code>, <code class="inline">{:unquoted_atom, charlist}</code> or a <code class="inline">dot</code>
+itself. If a var is given, it must be a remote call. Examples are
+<code class="inline">Hello.world(</code>, <code class="inline">:hello.world(</code>, <code class="inline">Hello.world</code>, <code class="inline">hello.world(</code>, <code class="inline">hello.world</code>,
+and <code class="inline">@hello.world(</code></p></li><li><p><code class="inline">:expr</code> - may be any expression. Autocompletion may suggest an alias,
+local or var</p></li><li><p><code class="inline">{:local_or_var, charlist}</code> - the context is a variable or a local
+(import or local) call, such as <code class="inline">hello_wor</code></p></li><li><p><code class="inline">{:local_arity, charlist}</code> - the context is a local (import or local)
+arity, such as <code class="inline">hello_world/</code></p></li><li><p><code class="inline">{:local_call, charlist}</code> - the context is a local (import or local)
+call, such as <code class="inline">hello_world(</code> and <code class="inline">hello_world</code></p></li><li><p><code class="inline">{:anonymous_call, inside_caller}</code> - the context is an anonymous
+call, such as <code class="inline">fun.(</code> and <code class="inline">@fun.(</code>.</p></li><li><p><code class="inline">{:module_attribute, charlist}</code> - the context is a module attribute,
+such as <code class="inline">@hello_wor</code></p></li><li><p><code class="inline">{:operator, charlist}</code> - the context is an operator, such as <code class="inline">+</code> or
+<code class="inline">==</code>. Note textual operators, such as <code class="inline">when</code> do not appear as operators
+but rather as <code class="inline">:local_or_var</code>. <code class="inline">@</code> is never an <code class="inline">:operator</code> and always a
+<code class="inline">:module_attribute</code></p></li><li><p><code class="inline">{:operator_arity, charlist}</code> - the context is an operator arity, which
+is an operator followed by /, such as <code class="inline">+/</code>, <code class="inline">not/</code> or <code class="inline">when/</code></p></li><li><p><code class="inline">{:operator_call, charlist}</code> - the context is an operator call, which is
+an operator followed by space, such as <code class="inline">left +</code>, <code class="inline">not</code> or <code class="inline">x when</code></p></li><li><p><code class="inline">:none</code> - no context possible</p></li><li><p><code class="inline">{:sigil, charlist}</code> - the context is a sigil. It may be either the beginning
+of a sigil, such as <code class="inline">~</code> or <code class="inline">~s</code>, or an operator starting with <code class="inline">~</code>, such as
+<code class="inline">~&gt;</code> and <code class="inline">~&gt;&gt;</code></p></li><li><p><code class="inline">{:struct, inside_struct}</code> - the context is a struct, such as <code class="inline">%</code>, <code class="inline">%UR</code> or <code class="inline">%URI</code>.
+<code class="inline">inside_struct</code> can either be a <code class="inline">charlist</code> in case of a static alias or an
+expression <code class="inline">{:alias, inside_alias, charlist}</code>, <code class="inline">{:module_attribute, charlist}</code>,
+<code class="inline">{:local_or_var, charlist}</code>, <code class="inline">{:dot, inside_dot, charlist}</code></p></li><li><p><code class="inline">{:unquoted_atom, charlist}</code> - the context is an unquoted atom. This
+can be any atom or an atom representing a module</p></li></ul><p>We recommend looking at the test suite of this function for a complete list
+of examples and their return values.</p><h2 id="cursor_context/2-limitations" class="section-heading">
+  <a href="#cursor_context/2-limitations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Limitations</span>
+</h2>
+<p>The analysis is based on the current token, by analysing the last line of
+the input. For example, this code:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">cursor_context</span><span class="p" data-group-id="2300619813-1">(</span><span class="s">&quot;%URI{&quot;</span><span class="p" data-group-id="2300619813-1">)</span><span class="w">
+</span><span class="ss">:expr</span></code></pre><p>returns <code class="inline">:expr</code>, which suggests any variable, local function or alias
+could be used. However, given we are inside a struct, the best suggestion
+would be a struct field. In such cases, you can use
+<code class="inline">container_cursor_to_quoted</code>, which will return the container of the AST
+the cursor is currently within. You can then analyse this AST to provide
+completion of field names.</p><p>As a consequence of its token-based implementation, this function considers
+only the last line of the input. This means it will show suggestions inside
+strings, heredocs, etc, which is intentional as it helps with doctests,
+references, and more.</p>
+  </section>
+</section>
+<section class="detail" id="surround_context/3">
+
+    <span id="surround_context/2"></span>
+
+  <div class="detail-header">
+    <a href="#surround_context/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">surround_context(fragment, position, options \\ [])</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/code/fragment.ex#L611" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> surround_context(<a href="List.Chars.html#t:t/0">List.Chars.t</a>(), <a href="#t:position/0">position</a>(), <a href="typespecs.html#built-in-types">keyword</a>()) ::
+  %{begin: <a href="#t:position/0">position</a>(), end: <a href="#t:position/0">position</a>(), context: context} | :none
+when context:
+       {:alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:alias, inside_alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:dot, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:local_or_var, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:local_arity, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:local_call, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:operator, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:sigil, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:struct, inside_struct}
+       | {:unquoted_atom, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:keyword, <a href="typespecs.html#built-in-types">charlist</a>()},
+     inside_dot:
+       {:alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:alias, inside_alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:dot, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:unquoted_atom, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:var, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | :expr,
+     inside_alias: {:local_or_var, <a href="typespecs.html#built-in-types">charlist</a>()} | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()},
+     inside_struct:
+       <a href="typespecs.html#built-in-types">charlist</a>()
+       | {:alias, inside_alias, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:local_or_var, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:module_attribute, <a href="typespecs.html#built-in-types">charlist</a>()}
+       | {:dot, inside_dot, <a href="typespecs.html#built-in-types">charlist</a>()}</pre>
+
+      </div>
+
+<p>Receives a string and returns the surround context.</p><p>This function receives a string with an Elixir code fragment
+and a <code class="inline">position</code>. It returns a map containing the beginning
+and ending of the identifier alongside its context, or <code class="inline">:none</code>
+if there is nothing with a known context. This is useful to
+provide mouse-over and highlight functionality in editors.</p><p>The difference between <a href="#cursor_context/2"><code class="inline">cursor_context/2</code></a> and <a href="#surround_context/3"><code class="inline">surround_context/3</code></a>
+is that the former assumes the expression in the code fragment
+is incomplete. For example, <code class="inline">do</code> in <a href="#cursor_context/2"><code class="inline">cursor_context/2</code></a> may be
+a keyword or a variable or a local call, while <a href="#surround_context/3"><code class="inline">surround_context/3</code></a>
+assumes the expression in the code fragment is complete, therefore
+<code class="inline">do</code> would always be a keyword.</p><p>The <code class="inline">position</code> contains both the <code class="inline">line</code> and <code class="inline">column</code>, both starting
+with the index of 1. The column must precede the surrounding expression.
+For example, the expression <code class="inline">foo</code>, will return something for the columns
+1, 2, and 3, but not 4:</p><pre><code class="makeup elixir" translate="no"><span class="n">foo</span><span class="w">
+</span><span class="o">^</span><span class="w"> </span><span class="n">column</span><span class="w"> </span><span class="mi">1</span><span class="w">
+
+</span><span class="n">foo</span><span class="w">
+ </span><span class="o">^</span><span class="w"> </span><span class="n">column</span><span class="w"> </span><span class="mi">2</span><span class="w">
+
+</span><span class="n">foo</span><span class="w">
+  </span><span class="o">^</span><span class="w"> </span><span class="n">column</span><span class="w"> </span><span class="mi">3</span><span class="w">
+
+</span><span class="n">foo</span><span class="w">
+   </span><span class="o">^</span><span class="w"> </span><span class="n">column</span><span class="w"> </span><span class="mi">4</span></code></pre><p>The returned map contains the column the expression starts and the
+first column after the expression ends.</p><p>Similar to <a href="#cursor_context/2"><code class="inline">cursor_context/2</code></a>, this function is also token-based
+and may not be accurate under all circumstances. See the
+&quot;Return values&quot; and &quot;Limitations&quot; section under <a href="#cursor_context/2"><code class="inline">cursor_context/2</code></a>
+for more information.</p><h2 id="surround_context/3-examples" class="section-heading">
+  <a href="#surround_context/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Code.Fragment</span><span class="o">.</span><span class="n">surround_context</span><span class="p" data-group-id="1798082414-1">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1798082414-2">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1798082414-2">}</span><span class="p" data-group-id="1798082414-1">)</span><span class="w">
+</span><span class="p" data-group-id="1798082414-3">%{</span><span class="ss">begin</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1798082414-4">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1798082414-4">}</span><span class="p">,</span><span class="w"> </span><span class="ss">context</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1798082414-5">{</span><span class="ss">:local_or_var</span><span class="p">,</span><span class="w"> </span><span class="s">~c&quot;foo&quot;</span><span class="p" data-group-id="1798082414-5">}</span><span class="p">,</span><span class="w"> </span><span class="ss">end</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1798082414-6">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="1798082414-6">}</span><span class="p" data-group-id="1798082414-3">}</span></code></pre><h2 id="surround_context/3-differences-to-cursor_context-2" class="section-heading">
+  <a href="#surround_context/3-differences-to-cursor_context-2" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Differences to <a href="#cursor_context/2"><code class="inline">cursor_context/2</code></a></span>
+</h2>
+<p>Because <a href="#surround_context/3"><code class="inline">surround_context/3</code></a> attempts to capture complex expressions,
+it has some differences to <a href="#cursor_context/2"><code class="inline">cursor_context/2</code></a>:</p><ul><li><p><code class="inline">dot_call</code>/<code class="inline">dot_arity</code> and <code class="inline">operator_call</code>/<code class="inline">operator_arity</code>
+are collapsed into <code class="inline">dot</code> and <code class="inline">operator</code> contexts respectively
+as there aren't any meaningful distinctions between them</p></li><li><p>On the other hand, this function still makes a distinction between
+<code class="inline">local_call</code>/<code class="inline">local_arity</code> and <code class="inline">local_or_var</code>, since the latter can
+be a local or variable</p></li><li><p><code class="inline">@</code> when not followed by any identifier is returned as <code class="inline">{:operator, '@'}</code>
+(in contrast to <code class="inline">{:module_attribute, ''}</code> in <a href="#cursor_context/2"><code class="inline">cursor_context/2</code></a></p></li><li><p>This function never returns empty sigils <code class="inline">{:sigil, ''}</code> or empty structs
+<code class="inline">{:struct, ''}</code> as context</p></li><li><p>This function returns keywords as <code class="inline">{:keyword, 'do'}</code></p></li><li><p>This function never returns <code class="inline">:expr</code></p></li></ul><p>We recommend looking at the test suite of this function for a complete list
+of examples and their return values.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

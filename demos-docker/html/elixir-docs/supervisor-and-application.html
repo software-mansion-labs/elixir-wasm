@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Supervision trees and applications — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/supervisor-and-application.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Supervision trees and applications</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/supervisor-and-application.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In the previous chapter about <a href="GenServer.html"><code class="inline">GenServer</code></a>, we implemented <code class="inline">KV.Registry</code> to manage buckets. At some point, we started monitoring buckets so we were able to take action whenever a <code class="inline">KV.Bucket</code> crashed. Although the change was relatively small, it introduced a question which is frequently asked by Elixir developers: what happens when something fails?</p><p>Before we added monitoring, if a bucket crashed, the registry would forever point to a bucket that no longer exists. If a user tried to read or write to the crashed bucket, it would fail. Any attempt at creating a new bucket with the same name would just return the PID of the crashed bucket. In other words, that registry entry for that bucket would forever be in a bad state. Once we added monitoring, the registry automatically removes the entry for the crashed bucket. Trying to lookup the crashed bucket now (correctly) says the bucket does not exist and a user of the system can successfully create a new one if desired.</p><p>In practice, we are not expecting the processes working as buckets to fail. But, if it does happen, for whatever reason, we can rest assured that our system will continue to work as intended.</p><p>If you have prior programming experience, you may be wondering: &quot;could we just guarantee the bucket does not crash in the first place?&quot;. As we will see, Elixir developers tend to refer to those practices as &quot;defensive programming&quot;. That's because a live production system has dozens of different reasons why something can go wrong. The disk can fail, memory can be corrupted, bugs, the network may stop working for a second, etc. If we were to write software that attempted to protect or circumvent all of those errors, we would spend more time handling failures than writing our own software!</p><p>Therefore, an Elixir developer prefers to &quot;let it crash&quot; or &quot;fail fast&quot;. And one of the most common ways we can recover from a failure is by restarting whatever part of the system crashed.</p><p>For example, imagine your computer, router, printer, or whatever device is not working properly. How often do you fix it by restarting it? Once we restart the device, we reset the device back to its initial state, which is well-tested and guaranteed to work. In Elixir, we apply this same approach to software: whenever a process crashes, we start a new process to perform the same job as the crashed process.</p><p>In Elixir, this is done by a Supervisor. A Supervisor is a process that supervises other processes and restarts them whenever they crash. To do so, Supervisors manage the whole life cycle of any supervised processes, including startup and shutdown.</p><p>In this chapter, we will learn how to put those concepts into practice by supervising the <code class="inline">KV.Registry</code> process. After all, if something goes wrong with the registry, the whole registry is lost and no bucket could ever be found! To address this, we will define a <code class="inline">KV.Supervisor</code> module that guarantees that our <code class="inline">KV.Registry</code> is up and running at any given moment.</p><p>At the end of the chapter, we will also talk about Applications. As we will see, Mix has been packaging all of our code into an application, and we will learn how to customize our application to guarantee that our Supervisor and the Registry are up and running whenever our system starts.</p><h2 id="our-first-supervisor" class="section-heading">
+  <a href="#our-first-supervisor" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Our first supervisor</span>
+</h2>
+<p>A supervisor is a process which supervises other processes, which we refer to as child processes. The act of supervising a process includes three distinct responsibilities. The first one is to start child processes. Once a child process is running, the supervisor may restart a child process, either because it terminated abnormally or because a certain condition was reached. For example, a supervisor may restart all children if any child dies. Finally, a supervisor is also responsible for shutting down the child processes when the system is shutting down. Please see the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module for a more in-depth discussion.</p><p>Creating a supervisor is not much different from creating a GenServer. We are going to define a module named <code class="inline">KV.Supervisor</code>, which will use the Supervisor behaviour, inside the <code class="inline">lib/kv/supervisor.ex</code> file:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.Supervisor</span><span class="w"> </span><span class="k" data-group-id="6629388514-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Supervisor</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="6629388514-2">(</span><span class="n">opts</span><span class="p" data-group-id="6629388514-2">)</span><span class="w"> </span><span class="k" data-group-id="6629388514-3">do</span><span class="w">
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="6629388514-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="6629388514-4">)</span><span class="w">
+  </span><span class="k" data-group-id="6629388514-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="6629388514-5">(</span><span class="ss">:ok</span><span class="p" data-group-id="6629388514-5">)</span><span class="w"> </span><span class="k" data-group-id="6629388514-6">do</span><span class="w">
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6629388514-7">[</span><span class="w">
+      </span><span class="nc">KV.Registry</span><span class="w">
+    </span><span class="p" data-group-id="6629388514-7">]</span><span class="w">
+
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">init</span><span class="p" data-group-id="6629388514-8">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="6629388514-8">)</span><span class="w">
+  </span><span class="k" data-group-id="6629388514-6">end</span><span class="w">
+</span><span class="k" data-group-id="6629388514-1">end</span></code></pre><p>Our supervisor has a single child so far: <code class="inline">KV.Registry</code>. After we define a list of children, we call <a href="Supervisor.html#init/2"><code class="inline">Supervisor.init/2</code></a>, passing the children and the supervision strategy.</p><p>The supervision strategy dictates what happens when one of the children crashes. <code class="inline">:one_for_one</code> means that if a child dies, it will be the only one restarted. Since we have only one child now, that's all we need. The <a href="Supervisor.html"><code class="inline">Supervisor</code></a> behaviour supports several strategies, which we will discuss in this chapter.</p><p>Once the supervisor starts, it will traverse the list of children and it will invoke the <code class="inline">child_spec/1</code> function on each module.</p><p>The <code class="inline">child_spec/1</code> function returns the child specification which describes how to start the process, if the process is a worker or a supervisor, if the process is temporary, transient or permanent and so on. The <code class="inline">child_spec/1</code> function is automatically defined when we <code class="inline">use Agent</code>, <code class="inline">use GenServer</code>, <code class="inline">use Supervisor</code>, etc. Let's give it a try in the terminal with <code class="inline">iex -S mix</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">child_spec</span><span class="p" data-group-id="3417836745-1">(</span><span class="p" data-group-id="3417836745-2">[</span><span class="p" data-group-id="3417836745-2">]</span><span class="p" data-group-id="3417836745-1">)</span><span class="w">
+</span><span class="p" data-group-id="3417836745-3">%{</span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="ss">start</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3417836745-4">{</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="ss">:start_link</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3417836745-5">[</span><span class="p" data-group-id="3417836745-6">[</span><span class="p" data-group-id="3417836745-6">]</span><span class="p" data-group-id="3417836745-5">]</span><span class="p" data-group-id="3417836745-4">}</span><span class="p" data-group-id="3417836745-3">}</span></code></pre><p>We will learn those details as we move forward on this guide. If you would rather peek ahead, check the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> docs.</p><p>After the supervisor retrieves all child specifications, it proceeds to start its children one by one, in the order they were defined, using the information in the <code class="inline">:start</code> key in the child specification. For our current specification, it will call <code class="inline">KV.Registry.start_link([])</code>.</p><p>Let's take the supervisor for a spin:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2170620112-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">sup</span><span class="p" data-group-id="2170620112-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="2170620112-2">(</span><span class="p" data-group-id="2170620112-3">[</span><span class="p" data-group-id="2170620112-3">]</span><span class="p" data-group-id="2170620112-2">)</span><span class="w">
+</span><span class="p" data-group-id="2170620112-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2170620112-5">#</span><span class="nc" data-group-id="2170620112-5">PID</span><span class="p" data-group-id="2170620112-5">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">148</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="2170620112-5">&gt;</span><span class="p" data-group-id="2170620112-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">which_children</span><span class="p" data-group-id="2170620112-6">(</span><span class="n">sup</span><span class="p" data-group-id="2170620112-6">)</span><span class="w">
+</span><span class="p" data-group-id="2170620112-7">[</span><span class="p" data-group-id="2170620112-8">{</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2170620112-9">#</span><span class="nc" data-group-id="2170620112-9">PID</span><span class="p" data-group-id="2170620112-9">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">150</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="2170620112-9">&gt;</span><span class="p">,</span><span class="w"> </span><span class="ss">:worker</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2170620112-10">[</span><span class="nc">KV.Registry</span><span class="p" data-group-id="2170620112-10">]</span><span class="p" data-group-id="2170620112-8">}</span><span class="p" data-group-id="2170620112-7">]</span></code></pre><p>So far we have started the supervisor and listed its children. Once the supervisor started, it also started all of its children.</p><p>What happens if we intentionally crash the registry started by the supervisor? Let's do so by sending it a bad input on <code class="inline">call</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="5386967252-1">[</span><span class="p" data-group-id="5386967252-2">{</span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5386967252-2">}</span><span class="p" data-group-id="5386967252-1">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">which_children</span><span class="p" data-group-id="5386967252-3">(</span><span class="n">sup</span><span class="p" data-group-id="5386967252-3">)</span><span class="w">
+</span><span class="p" data-group-id="5386967252-4">[</span><span class="p" data-group-id="5386967252-5">{</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5386967252-6">#</span><span class="nc" data-group-id="5386967252-6">PID</span><span class="p" data-group-id="5386967252-6">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">150</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="5386967252-6">&gt;</span><span class="p">,</span><span class="w"> </span><span class="ss">:worker</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5386967252-7">[</span><span class="nc">KV.Registry</span><span class="p" data-group-id="5386967252-7">]</span><span class="p" data-group-id="5386967252-5">}</span><span class="p" data-group-id="5386967252-4">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="5386967252-8">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="ss">:bad_input</span><span class="p" data-group-id="5386967252-8">)</span><span class="w">
+</span><span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">57.311</span><span class="w"> </span><span class="p" data-group-id="5386967252-9">[</span><span class="n">error</span><span class="p" data-group-id="5386967252-9">]</span><span class="w"> </span><span class="nc">GenServer</span><span class="w"> </span><span class="p" data-group-id="5386967252-10">#</span><span class="nc" data-group-id="5386967252-10">PID</span><span class="p" data-group-id="5386967252-10">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">150</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="5386967252-10">&gt;</span><span class="w"> </span><span class="n">terminating</span><span class="w">
+</span><span class="gt">** (FunctionClauseError) no function clause matching in KV.Registry.handle_call/3</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">which_children</span><span class="p" data-group-id="5386967252-11">(</span><span class="n">sup</span><span class="p" data-group-id="5386967252-11">)</span><span class="w">
+</span><span class="p" data-group-id="5386967252-12">[</span><span class="p" data-group-id="5386967252-13">{</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5386967252-14">#</span><span class="nc" data-group-id="5386967252-14">PID</span><span class="p" data-group-id="5386967252-14">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">157</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="5386967252-14">&gt;</span><span class="p">,</span><span class="w"> </span><span class="ss">:worker</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5386967252-15">[</span><span class="nc">KV.Registry</span><span class="p" data-group-id="5386967252-15">]</span><span class="p" data-group-id="5386967252-13">}</span><span class="p" data-group-id="5386967252-12">]</span></code></pre><p>Notice how the supervisor automatically started a new registry, with a new PID, in place of the first one once we caused it to crash due to a bad input.</p><p>In the previous chapters, we have always started processes directly. For example, we would call <code class="inline">KV.Registry.start_link([])</code>, which would return <code class="inline">{:ok, pid}</code>, and that would allow us to interact with the registry via its <code class="inline">pid</code>. Now that processes are started by the supervisor, we have to directly ask the supervisor who its children are, and fetch the PID from the returned list of children. In practice, doing so every time would be very expensive. To address this, we often give names to processes, allowing them to be uniquely identified in a single machine from anywhere in our code.</p><p>Let's learn how to do that.</p><h2 id="naming-processes" class="section-heading">
+  <a href="#naming-processes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Naming processes</span>
+</h2>
+<p>While our application will have many buckets, it will only have a single registry. Therefore, whenever we start the registry, we want to give it a unique name so we can reach out to it from anywhere. We do so by passing a <code class="inline">:name</code> option to <code class="inline">KV.Registry.start_link/1</code>.</p><p>Let's slightly change our children definition (in <code class="inline">KV.Supervisor.init/1</code>) to be a list of tuples instead of a list of atoms:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="3094772669-1">(</span><span class="ss">:ok</span><span class="p" data-group-id="3094772669-1">)</span><span class="w"> </span><span class="k" data-group-id="3094772669-2">do</span><span class="w">
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3094772669-3">[</span><span class="w">
+      </span><span class="p" data-group-id="3094772669-4">{</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="p" data-group-id="3094772669-4">}</span><span class="w">
+    </span><span class="p" data-group-id="3094772669-3">]</span></code></pre><p>With this in place, the supervisor will now start <code class="inline">KV.Registry</code> by calling <code class="inline">KV.Registry.start_link(name: KV.Registry)</code>.</p><p>If you revisit the <code class="inline">KV.Registry.start_link/1</code> implementation, you will remember it simply passes the options to GenServer:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="1395956383-1">(</span><span class="n">opts</span><span class="p" data-group-id="1395956383-1">)</span><span class="w"> </span><span class="k" data-group-id="1395956383-2">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="1395956383-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="1395956383-3">)</span><span class="w">
+  </span><span class="k" data-group-id="1395956383-2">end</span></code></pre><p>which in turn will register the process with the given name. The <code class="inline">:name</code> option expects an atom for locally named processes (locally named means it is available to this machine — there are other options, which we won't discuss here). Since module identifiers are atoms (try <code class="inline">i(KV.Registry)</code> in IEx), we can name a process after the module that implements it, provided there is only one process for that name. This helps when debugging and introspecting the system.</p><p>Let's give the updated supervisor a try inside <code class="inline">iex -S mix</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">KV.Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="0307538006-1">(</span><span class="p" data-group-id="0307538006-2">[</span><span class="p" data-group-id="0307538006-2">]</span><span class="p" data-group-id="0307538006-1">)</span><span class="w">
+</span><span class="p" data-group-id="0307538006-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0307538006-4">#</span><span class="nc" data-group-id="0307538006-4">PID</span><span class="p" data-group-id="0307538006-4">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">66</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="0307538006-4">&gt;</span><span class="p" data-group-id="0307538006-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="0307538006-5">(</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="0307538006-5">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="0307538006-6">(</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="0307538006-6">)</span><span class="w">
+</span><span class="p" data-group-id="0307538006-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0307538006-8">#</span><span class="nc" data-group-id="0307538006-8">PID</span><span class="p" data-group-id="0307538006-8">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">70</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="0307538006-8">&gt;</span><span class="p" data-group-id="0307538006-7">}</span></code></pre><p>This time the supervisor started a named registry, allowing us to create buckets without having to explicitly fetch the PID from the supervisor. You should also know how to make the registry crash again, without looking up its PID: give it a try.</p><blockquote><p>At this point, you may be wondering: should you also locally name bucket processes? Remember buckets are started dynamically based on user input. Since local names MUST be atoms, we would have to dynamically create atoms, which is a bad idea since once an atom is defined, it is never erased nor garbage collected. This means that, if we create atoms dynamically based on user input, we will eventually run out of memory (or to be more precise, the VM will crash because it imposes a hard limit on the number of atoms). This limitation is precisely why we created our own registry (or why one would use Elixir's built-in <a href="Registry.html"><code class="inline">Registry</code></a> module).</p></blockquote><p>We are getting closer and closer to a fully working system. The supervisor automatically starts the registry. But how can we automatically start the supervisor whenever our system starts? To answer this question, let's talk about applications.</p><h2 id="understanding-applications" class="section-heading">
+  <a href="#understanding-applications" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Understanding applications</span>
+</h2>
+<p>We have been working inside an application this entire time. Every time we changed a file and ran <a href="https://hexdocs.pm/mix/Mix.Tasks.Compile.html"><code class="inline">mix compile</code></a>, we could see a <code class="inline">Generated kv app</code> message in the compilation output.</p><p>We can find the generated <code class="inline">.app</code> file at <code class="inline">_build/dev/lib/kv/ebin/kv.app</code>. Let's have a look at its contents:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="3986333151-1">{</span><span class="ss">application</span><span class="p">,</span><span class="ss">kv</span><span class="p">,</span><span class="w">
+             </span><span class="p" data-group-id="3986333151-2">[</span><span class="p" data-group-id="3986333151-3">{</span><span class="ss">applications</span><span class="p">,</span><span class="p" data-group-id="3986333151-4">[</span><span class="ss">kernel</span><span class="p">,</span><span class="ss">stdlib</span><span class="p">,</span><span class="ss">elixir</span><span class="p">,</span><span class="ss">logger</span><span class="p" data-group-id="3986333151-4">]</span><span class="p" data-group-id="3986333151-3">}</span><span class="p">,</span><span class="w">
+              </span><span class="p" data-group-id="3986333151-5">{</span><span class="ss">description</span><span class="p">,</span><span class="s">&quot;kv&quot;</span><span class="p" data-group-id="3986333151-5">}</span><span class="p">,</span><span class="w">
+              </span><span class="p" data-group-id="3986333151-6">{</span><span class="ss">modules</span><span class="p">,</span><span class="p" data-group-id="3986333151-7">[</span><span class="ss">&#39;Elixir.KV&#39;</span><span class="p">,</span><span class="ss">&#39;Elixir.KV.Bucket&#39;</span><span class="p">,</span><span class="ss">&#39;Elixir.KV.Registry&#39;</span><span class="p">,</span><span class="w">
+                        </span><span class="ss">&#39;Elixir.KV.Supervisor&#39;</span><span class="p" data-group-id="3986333151-7">]</span><span class="p" data-group-id="3986333151-6">}</span><span class="p">,</span><span class="w">
+              </span><span class="p" data-group-id="3986333151-8">{</span><span class="ss">registered</span><span class="p">,</span><span class="p" data-group-id="3986333151-9">[</span><span class="p" data-group-id="3986333151-9">]</span><span class="p" data-group-id="3986333151-8">}</span><span class="p">,</span><span class="w">
+              </span><span class="p" data-group-id="3986333151-10">{</span><span class="ss">vsn</span><span class="p">,</span><span class="s">&quot;0.1.0&quot;</span><span class="p" data-group-id="3986333151-10">}</span><span class="p" data-group-id="3986333151-2">]</span><span class="p" data-group-id="3986333151-1">}</span><span class="p">.</span></code></pre><p>This file contains Erlang terms (written using Erlang syntax). Even though we are not familiar with Erlang, it is easy to guess this file holds our application definition. It contains our application <code class="inline">version</code>, all the modules defined by it, as well as a list of applications we depend on, like Erlang's <code class="inline">kernel</code>, <code class="inline">elixir</code> itself, and <code class="inline">logger</code>.</p><blockquote><p>The <code class="inline">logger</code> application ships as part of Elixir. We stated that our application needs it by specifying it in the <code class="inline">:extra_applications</code> list in <code class="inline">mix.exs</code>. See the <a href="https://hexdocs.pm/logger/Logger.html">official documentation</a> for more information.</p></blockquote><p>In a nutshell, an application consists of all the modules defined in the <code class="inline">.app</code> file, including the <code class="inline">.app</code> file itself. An application has generally only two directories: <code class="inline">ebin</code>, for Elixir artifacts, such as <code class="inline">.beam</code> and <code class="inline">.app</code> files, and <code class="inline">priv</code>, with any other artifact or asset you may need in your application.</p><p>Although Mix generates and maintains the <code class="inline">.app</code> file for us, we can customize its contents by adding new entries to the <code class="inline">application/0</code> function inside the <code class="inline">mix.exs</code> project file. We are going to do our first customization soon.</p><h3 id="starting-applications" class="section-heading">
+  <a href="#starting-applications" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Starting applications</span>
+</h3>
+<p>Each application in our system can be started and stopped. The rules for starting and stopping an application are also defined in the <code class="inline">.app</code> file. When we invoke <code class="inline">iex -S mix</code>, Mix compiles our application and then starts it.</p><p>Let's see this in practice. Start a console with <code class="inline">iex -S mix</code> and try:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Application</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="4831580500-1">(</span><span class="ss">:kv</span><span class="p" data-group-id="4831580500-1">)</span><span class="w">
+</span><span class="p" data-group-id="4831580500-2">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4831580500-3">{</span><span class="ss">:already_started</span><span class="p">,</span><span class="w"> </span><span class="ss">:kv</span><span class="p" data-group-id="4831580500-3">}</span><span class="p" data-group-id="4831580500-2">}</span></code></pre><p>Oops, it's already started. Mix starts the current application and all of its dependencies automatically. This is also true for <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> and many other Mix commands.</p><p>We can, however, stop our <code class="inline">:kv</code> application, as well as the <code class="inline">:logger</code> application:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Application</span><span class="o">.</span><span class="n">stop</span><span class="p" data-group-id="8847375373-1">(</span><span class="ss">:kv</span><span class="p" data-group-id="8847375373-1">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Application</span><span class="o">.</span><span class="n">stop</span><span class="p" data-group-id="8847375373-2">(</span><span class="ss">:logger</span><span class="p" data-group-id="8847375373-2">)</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><p>And let's try to start our application again:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Application</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="5064779963-1">(</span><span class="ss">:kv</span><span class="p" data-group-id="5064779963-1">)</span><span class="w">
+</span><span class="p" data-group-id="5064779963-2">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5064779963-3">{</span><span class="ss">:not_started</span><span class="p">,</span><span class="w"> </span><span class="ss">:logger</span><span class="p" data-group-id="5064779963-3">}</span><span class="p" data-group-id="5064779963-2">}</span></code></pre><p>Now we get an error because an application that <code class="inline">:kv</code> depends on (<code class="inline">:logger</code> in this case) isn't started. We need to either start each application manually in the correct order or call <a href="Application.html#ensure_all_started/1"><code class="inline">Application.ensure_all_started/1</code></a> as follows:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Application</span><span class="o">.</span><span class="n">ensure_all_started</span><span class="p" data-group-id="9526667511-1">(</span><span class="ss">:kv</span><span class="p" data-group-id="9526667511-1">)</span><span class="w">
+</span><span class="p" data-group-id="9526667511-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9526667511-3">[</span><span class="ss">:logger</span><span class="p">,</span><span class="w"> </span><span class="ss">:kv</span><span class="p" data-group-id="9526667511-3">]</span><span class="p" data-group-id="9526667511-2">}</span></code></pre><p>In practice, our tools always start our applications for us, but there is an API available if you need fine-grained control.</p><h2 id="the-application-callback" class="section-heading">
+  <a href="#the-application-callback" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The application callback</span>
+</h2>
+<p>Whenever we invoke <code class="inline">iex -S mix</code>, Mix automatically starts our application by calling <code class="inline">Application.start(:kv)</code>. But can we customize what happens when our application starts? As a matter of fact, we can! To do so, we define an application callback.</p><p>The first step is to tell our application definition (for example, our <code class="inline">.app</code> file) which module is going to implement the application callback. Let's do so by opening <code class="inline">mix.exs</code> and changing <code class="inline">def application</code> to the following:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">application</span><span class="w"> </span><span class="k" data-group-id="2154023935-1">do</span><span class="w">
+    </span><span class="p" data-group-id="2154023935-2">[</span><span class="w">
+      </span><span class="ss">extra_applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2154023935-3">[</span><span class="ss">:logger</span><span class="p" data-group-id="2154023935-3">]</span><span class="p">,</span><span class="w">
+      </span><span class="ss">mod</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2154023935-4">{</span><span class="nc">KV</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2154023935-5">[</span><span class="p" data-group-id="2154023935-5">]</span><span class="p" data-group-id="2154023935-4">}</span><span class="w">
+    </span><span class="p" data-group-id="2154023935-2">]</span><span class="w">
+  </span><span class="k" data-group-id="2154023935-1">end</span></code></pre><p>The <code class="inline">:mod</code> option specifies the &quot;application callback module&quot;, followed by the arguments to be passed on application start. The application callback module can be any module that implements the <a href="Application.html"><code class="inline">Application</code></a> behaviour.</p><p>To implement the <a href="Application.html"><code class="inline">Application</code></a> behaviour, we have to <code class="inline">use Application</code> and define a <code class="inline">start/2</code> function. The goal of <code class="inline">start/2</code> is to start a supervisor, which will then start any child services or execute any other code our application may need. Let's use this opportunity to start the <code class="inline">KV.Supervisor</code> we have implemented earlier in this chapter.</p><p>Since we have specified <code class="inline">KV</code> as the module callback, let's change the <code class="inline">KV</code> module defined in <code class="inline">lib/kv.ex</code> to implement a <code class="inline">start/2</code> function:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV</span><span class="w"> </span><span class="k" data-group-id="0379444781-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Application</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start</span><span class="p" data-group-id="0379444781-2">(</span><span class="c">_type</span><span class="p">,</span><span class="w"> </span><span class="c">_args</span><span class="p" data-group-id="0379444781-2">)</span><span class="w"> </span><span class="k" data-group-id="0379444781-3">do</span><span class="w">
+    </span><span class="c1"># Although we don&#39;t use the supervisor name below directly,</span><span class="w">
+    </span><span class="c1"># it can be useful when debugging or introspecting the system.</span><span class="w">
+    </span><span class="nc">KV.Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="0379444781-4">(</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KV.Supervisor</span><span class="p" data-group-id="0379444781-4">)</span><span class="w">
+  </span><span class="k" data-group-id="0379444781-3">end</span><span class="w">
+</span><span class="k" data-group-id="0379444781-1">end</span></code></pre><blockquote><p>Please note that by doing this, we are breaking the boilerplate test case which tested the <code class="inline">hello</code> function in <code class="inline">KV</code>. You can simply remove that test case.</p></blockquote><p>When we <code class="inline">use Application</code>, we may define a couple of functions, similar to when we used <a href="Supervisor.html"><code class="inline">Supervisor</code></a> or <a href="GenServer.html"><code class="inline">GenServer</code></a>. This time we only had to define a <code class="inline">start/2</code> function. The <a href="Application.html"><code class="inline">Application</code></a> behaviour also has a <code class="inline">stop/1</code> callback, but it is rarely used in practice. You can check the documentation for more information.</p><p>Now that you have defined an application callback which starts our supervisor, we expect the <code class="inline">KV.Registry</code> process to be up and running as soon as we start <code class="inline">iex -S mix</code>. Let's give it another try:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="6170345702-1">(</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="6170345702-1">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="6170345702-2">(</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="6170345702-2">)</span><span class="w">
+</span><span class="p" data-group-id="6170345702-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6170345702-4">#</span><span class="nc" data-group-id="6170345702-4">PID</span><span class="p" data-group-id="6170345702-4">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">88</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6170345702-4">&gt;</span><span class="p" data-group-id="6170345702-3">}</span></code></pre><p>Let's recap what is happening. Whenever we invoke <code class="inline">iex -S mix</code>, it automatically starts our application by calling <code class="inline">Application.start(:kv)</code>, which then invokes the application callback. The application callback's job is to start a <strong>supervision tree</strong>. Right now, our supervisor has a single child named <code class="inline">KV.Registry</code>, started with name <code class="inline">KV.Registry</code>. Our supervisor could have other children, and some of these children could be their own supervisors with their own children, leading to the so-called supervision trees.</p><h2 id="projects-or-applications" class="section-heading">
+  <a href="#projects-or-applications" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Projects or applications?</span>
+</h2>
+<p>Mix makes a distinction between projects and applications. Based on the contents of our <code class="inline">mix.exs</code> file, we would say we have a Mix project that defines the <code class="inline">:kv</code> application. As we will see in later chapters, there are projects that don't define any application.</p><p>When we say &quot;project&quot; you should think about Mix. Mix is the tool that manages your project. It knows how to compile your project, test your project and more. It also knows how to compile and start the application relevant to your project.</p><p>When we talk about applications, we talk about OTP. Applications are the entities that are started and stopped as a whole by the runtime. You can learn more about applications and how they relate to booting and shutting down of your system as a whole in the documentation for the <a href="Application.html"><code class="inline">Application</code></a> module.</p><h2 id="next-steps" class="section-heading">
+  <a href="#next-steps" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Next steps</span>
+</h2>
+<p>Although this chapter was the first time we implemented a supervisor, it was not the first time we used one! In the previous chapter, when we used <code class="inline">start_supervised!</code> to start the registry during our tests, <a href="https://hexdocs.pm/ex_unit/ExUnit.html"><code class="inline">ExUnit</code></a> started the registry under a supervisor managed by the ExUnit framework itself. By defining our own supervisor, we provide more structure on how we initialize, shutdown and supervise processes in our applications, aligning our production code and tests with best practices.</p><p>But we are not done yet. So far we are supervising the registry but our application is also starting buckets. Since buckets are started dynamically, we can use a special type of supervisor called <a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a>, which is optimized to handle such scenarios. Let's explore it next.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="genservers.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Client-server communication with GenServer
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="dynamic-supervisor.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Supervising dynamic children
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

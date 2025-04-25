@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Optional syntax sheet — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/optional-syntax.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Optional syntax sheet</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/optional-syntax.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In the previous chapters, we learned that the Elixir syntax allows developers to omit delimiters in a few occasions to make code more readable. For example, we learned that parentheses are optional:</p><pre class="elixir" data-code-id="323631"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">length([1, 2, 3]) == length [1, 2, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>and that <code class="inline">do</code>-<code class="inline">end</code> blocks are equivalent to keyword lists:</p><pre class="elixir" data-code-id="333235"><p class="comment" data-code-type="comment"># do-end blocks</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">if true do
+  :this
+else
+  :that
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># :this</p><p class="comment" data-code-type="comment"># keyword lists</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">if true, do: :this, else: :that</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># :this</p></pre><p>Keyword lists use Elixir's regular notation for separating arguments, where we separate each key-value pair with commas, and each key is followed by <code class="inline">:</code>. In the <code class="inline">do</code>-blocks, we get rid of the colons, the commas, and separate each keyword by a newline. They are useful exactly because they remove the verbosity when writing blocks of code. Most of the time, we use the block syntax, but it is good to know they are equivalent.</p><p>Those conveniences, which we call here &quot;optional syntax&quot;, allow the language syntax core to be small, without sacrificing the readability and expressiveness of your code. In this brief chapter, we will review the four rules provided by the language, using a short snippet as playground.</p><h2 id="walk-through" class="section-heading">
+  <a href="#walk-through" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Walk-through</span>
+</h2>
+<p>Take the following code:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="w"> </span><span class="n">variable?</span><span class="w"> </span><span class="k" data-group-id="9032525692-1">do</span><span class="w">
+  </span><span class="nc">Call</span><span class="o">.</span><span class="n">this</span><span class="p" data-group-id="9032525692-2">(</span><span class="p" data-group-id="9032525692-2">)</span><span class="w">
+</span><span class="k" data-group-id="9032525692-1">else</span><span class="w">
+  </span><span class="nc">Call</span><span class="o">.</span><span class="n">that</span><span class="p" data-group-id="9032525692-3">(</span><span class="p" data-group-id="9032525692-3">)</span><span class="w">
+</span><span class="k" data-group-id="9032525692-1">end</span></code></pre><p>Now let's remove the conveniences one by one:</p><ol><li><p><code class="inline">do</code>-<code class="inline">end</code> blocks are equivalent to keywords:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="w"> </span><span class="n">variable?</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">this</span><span class="p" data-group-id="2232084977-1">(</span><span class="p" data-group-id="2232084977-1">)</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">that</span><span class="p" data-group-id="2232084977-2">(</span><span class="p" data-group-id="2232084977-2">)</span></code></pre></li><li><p>Keyword lists as last argument do not require square brackets, but let's add them:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="w"> </span><span class="n">variable?</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7734783820-1">[</span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">this</span><span class="p" data-group-id="7734783820-2">(</span><span class="p" data-group-id="7734783820-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">that</span><span class="p" data-group-id="7734783820-3">(</span><span class="p" data-group-id="7734783820-3">)</span><span class="p" data-group-id="7734783820-1">]</span></code></pre></li><li><p>Keyword lists are the same as lists of two-element tuples:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="w"> </span><span class="n">variable?</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6501977681-1">[</span><span class="p" data-group-id="6501977681-2">{</span><span class="ss">:do</span><span class="p">,</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">this</span><span class="p" data-group-id="6501977681-3">(</span><span class="p" data-group-id="6501977681-3">)</span><span class="p" data-group-id="6501977681-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6501977681-4">{</span><span class="ss">:else</span><span class="p">,</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">that</span><span class="p" data-group-id="6501977681-5">(</span><span class="p" data-group-id="6501977681-5">)</span><span class="p" data-group-id="6501977681-4">}</span><span class="p" data-group-id="6501977681-1">]</span></code></pre></li><li><p>Finally, parentheses are optional on function calls, but let's add them:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="p" data-group-id="3900062763-1">(</span><span class="n">variable?</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3900062763-2">[</span><span class="p" data-group-id="3900062763-3">{</span><span class="ss">:do</span><span class="p">,</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">this</span><span class="p" data-group-id="3900062763-4">(</span><span class="p" data-group-id="3900062763-4">)</span><span class="p" data-group-id="3900062763-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3900062763-5">{</span><span class="ss">:else</span><span class="p">,</span><span class="w"> </span><span class="nc">Call</span><span class="o">.</span><span class="n">that</span><span class="p" data-group-id="3900062763-6">(</span><span class="p" data-group-id="3900062763-6">)</span><span class="p" data-group-id="3900062763-5">}</span><span class="p" data-group-id="3900062763-2">]</span><span class="p" data-group-id="3900062763-1">)</span></code></pre></li></ol><p>That's it! Those four rules outline the optional syntax available in Elixir.</p><p>To understand why these rules matter, we can briefly compare Elixir with many other programming languages. Most programming languages have several keywords for defining methods, functions, conditionals, loops, and so forth. Each of those keywords have their own syntax rules attached to them.</p><p>However, in Elixir, none of these language features require special &quot;keywords&quot;, instead they all build from this small set of rules. The other benefit is that developers can also extend the language in a way that is consistent with the language itself, since the constructs for designing and extending the language are the same. We further explore this topic in <a href="quote-and-unquote.html">the &quot;Meta-programming&quot; guide</a>.</p><p>At the end of the day, those rules are what enables us to write:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Math</span><span class="w"> </span><span class="k" data-group-id="9932161760-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">add</span><span class="p" data-group-id="9932161760-2">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="9932161760-2">)</span><span class="w"> </span><span class="k" data-group-id="9932161760-3">do</span><span class="w">
+    </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w">
+  </span><span class="k" data-group-id="9932161760-3">end</span><span class="w">
+</span><span class="k" data-group-id="9932161760-1">end</span></code></pre><p>instead of:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="p" data-group-id="7147440766-1">(</span><span class="nc">Math</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7147440766-2">[</span><span class="w">
+  </span><span class="p" data-group-id="7147440766-3">{</span><span class="ss">:do</span><span class="p">,</span><span class="w"> </span><span class="kd">def</span><span class="p" data-group-id="7147440766-4">(</span><span class="n">add</span><span class="p" data-group-id="7147440766-5">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="7147440766-5">)</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7147440766-6">[</span><span class="p" data-group-id="7147440766-7">{</span><span class="ss">:do</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="7147440766-7">}</span><span class="p" data-group-id="7147440766-6">]</span><span class="p" data-group-id="7147440766-4">)</span><span class="p" data-group-id="7147440766-3">}</span><span class="w">
+</span><span class="p" data-group-id="7147440766-2">]</span><span class="p" data-group-id="7147440766-1">)</span></code></pre><p>Whenever you have any questions, this quick walk-through has you covered.</p><p>Finally, if you are concerned about when to apply these rules, it's worth noting that the Elixir formatter handles those concerns for you. Most Elixir developers use the <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html"><code class="inline">mix format</code></a> task to format their codebases according to a well-defined set of rules defined by the Elixir team and the community. For instance, <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html"><code class="inline">mix format</code></a> will always add parentheses to function calls unless explicitly configured not to do so. This helps to maintain consistency across all codebases within organizations and the wider community.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="writing-documentation.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Writing documentation
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="erlang-libraries.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Erlang libraries
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

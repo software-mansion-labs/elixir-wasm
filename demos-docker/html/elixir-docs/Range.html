@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Range — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Range.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Range</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Ranges represent a sequence of zero, one or many, ascending
+or descending integers with a common difference called step.</p><p>The most common form of creating and matching on ranges is
+via the <a href="Kernel.html#../2"><code class="inline">first..last</code></a> and <a href="Kernel.html#..///3"><code class="inline">first..last//step</code></a>
+notations, auto-imported from <a href="Kernel.html"><code class="inline">Kernel</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="mi">5</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="mi">10</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="w">
+</span><span class="no">true</span></code></pre><p>Ranges are always inclusive in Elixir. When a step is defined,
+integers will only belong to the range if they match the step:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="mi">5</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="mi">2</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="mi">4</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="mi">2</span><span class="w">
+</span><span class="no">false</span></code></pre><p>When defining a range without a step, the step will be
+defined based on the first and last position of the
+range, If <code class="inline">last &gt;= first</code>, it will be an increasing range
+with a step of 1. Otherwise, it is a decreasing range.
+Note, however, implicit decreasing ranges are deprecated.
+Therefore, if you need a decreasing range from <code class="inline">3</code> to <code class="inline">1</code>,
+prefer to write <code class="inline">3..1//-1</code> instead.</p><p><a href="Kernel.html#../0"><code class="inline">../0</code></a> can also be used as a shortcut to create the range <code class="inline">0..-1//1</code>,
+also known as the full-slice range:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="o">..</span><span class="w">
+</span><span class="mi">0</span><span class="o">..</span><span class="o">-</span><span class="mi">1</span><span class="o">//</span><span class="mi">1</span></code></pre><h2 id="module-use-cases" class="section-heading">
+  <a href="#module-use-cases" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Use cases</span>
+</h2>
+<p>Ranges typically have two uses in Elixir: as a collection or
+to represent a slice of another data structure.</p><h3 id="module-ranges-as-collections" class="section-heading">
+  <a href="#module-ranges-as-collections" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Ranges as collections</span>
+</h3>
+<p>Ranges in Elixir are enumerables and therefore can be used
+with the <a href="Enum.html"><code class="inline">Enum</code></a> module:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7806799773-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">3</span><span class="p" data-group-id="7806799773-1">)</span><span class="w">
+</span><span class="p" data-group-id="7806799773-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7806799773-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7806799773-3">(</span><span class="mi">3</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="7806799773-3">)</span><span class="w">
+</span><span class="p" data-group-id="7806799773-4">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7806799773-4">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7806799773-5">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p" data-group-id="7806799773-5">)</span><span class="w">
+</span><span class="p" data-group-id="7806799773-6">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="7806799773-6">]</span></code></pre><p>Ranges may also have a single element:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7904372733-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">1</span><span class="p" data-group-id="7904372733-1">)</span><span class="w">
+</span><span class="p" data-group-id="7904372733-2">[</span><span class="mi">1</span><span class="p" data-group-id="7904372733-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7904372733-3">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="mi">2</span><span class="p" data-group-id="7904372733-3">)</span><span class="w">
+</span><span class="p" data-group-id="7904372733-4">[</span><span class="mi">1</span><span class="p" data-group-id="7904372733-4">]</span></code></pre><p>Or even no elements at all:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="1132683868-1">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">0</span><span class="o">//</span><span class="mi">1</span><span class="p" data-group-id="1132683868-1">)</span><span class="w">
+</span><span class="p" data-group-id="1132683868-2">[</span><span class="p" data-group-id="1132683868-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="1132683868-3">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="1132683868-3">)</span><span class="w">
+</span><span class="p" data-group-id="1132683868-4">[</span><span class="p" data-group-id="1132683868-4">]</span></code></pre><p>The full-slice range, returned by <a href="Kernel.html#../0"><code class="inline">../0</code></a>, is an empty collection:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="0375046133-1">(</span><span class="o">..</span><span class="p" data-group-id="0375046133-1">)</span><span class="w">
+</span><span class="p" data-group-id="0375046133-2">[</span><span class="p" data-group-id="0375046133-2">]</span></code></pre><h3 id="module-ranges-as-slices" class="section-heading">
+  <a href="#module-ranges-as-slices" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Ranges as slices</span>
+</h3>
+<p>Ranges are also frequently used to slice collections.
+You can slice strings or any enumerable:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="8538832270-1">(</span><span class="s">&quot;elixir&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">4</span><span class="p" data-group-id="8538832270-1">)</span><span class="w">
+</span><span class="s">&quot;lixi&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="8538832270-2">(</span><span class="p" data-group-id="8538832270-3">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="8538832270-3">]</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">4</span><span class="p" data-group-id="8538832270-2">)</span><span class="w">
+</span><span class="p" data-group-id="8538832270-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="8538832270-4">]</span></code></pre><p>In those cases, the first and last values of the range
+are mapped to positions in the collections.</p><p>If a negative number is given, it maps to a position
+from the back:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="2125575715-1">(</span><span class="s">&quot;elixir&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="o">-</span><span class="mi">2</span><span class="o">//</span><span class="mi">1</span><span class="p" data-group-id="2125575715-1">)</span><span class="w">
+</span><span class="s">&quot;lixi&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="2125575715-2">(</span><span class="p" data-group-id="2125575715-3">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="2125575715-3">]</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="o">-</span><span class="mi">2</span><span class="o">//</span><span class="mi">1</span><span class="p" data-group-id="2125575715-2">)</span><span class="w">
+</span><span class="p" data-group-id="2125575715-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="2125575715-4">]</span></code></pre><p>The range <code class="inline">0..-1//1</code>, returned by <a href="Kernel.html#../0"><code class="inline">../0</code></a>, returns the
+collection as is, which is why it is called the full-slice
+range:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="3380020070-1">(</span><span class="s">&quot;elixir&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">..</span><span class="p" data-group-id="3380020070-1">)</span><span class="w">
+</span><span class="s">&quot;elixir&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="3380020070-2">(</span><span class="p" data-group-id="3380020070-3">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="3380020070-3">]</span><span class="p">,</span><span class="w"> </span><span class="o">..</span><span class="p" data-group-id="3380020070-2">)</span><span class="w">
+</span><span class="p" data-group-id="3380020070-4">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="3380020070-4">]</span></code></pre><h2 id="module-definition" class="section-heading">
+  <a href="#module-definition" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Definition</span>
+</h2>
+<p>An increasing range <code class="inline">first..last//step</code> is a range from <code class="inline">first</code>
+to <code class="inline">last</code> increasing by <code class="inline">step</code> where  <code class="inline">step</code> must be a positive
+integer and all values <code class="inline">v</code> must be <code class="inline">first &lt;= v and v &lt;= last</code>.
+Therefore, a range <code class="inline">10..0//1</code> is an empty range because there
+is no value <code class="inline">v</code> that is <code class="inline">10 &lt;= v and v &lt;= 0</code>.</p><p>Similarly, a decreasing range <code class="inline">first..last//step</code> is a range
+from <code class="inline">first</code> to <code class="inline">last</code> decreasing by <code class="inline">step</code> where <code class="inline">step</code> must
+be a negative integer and  values <code class="inline">v</code> must be <code class="inline">first &gt;= v and v &gt;= last</code>.
+Therefore, a range <code class="inline">0..10//-1</code> is an empty range because there
+is no value <code class="inline">v</code> that is <code class="inline">0 &gt;= v and v &gt;= 10</code>.</p><h2 id="module-representation" class="section-heading">
+  <a href="#module-representation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Representation</span>
+</h2>
+<p>Internally, ranges are represented as structs:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">9</span><span class="o">//</span><span class="mi">2</span><span class="w">
+</span><span class="mi">1</span><span class="o">..</span><span class="mi">9</span><span class="o">//</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">first</span><span class="o">..</span><span class="n">last</span><span class="o">//</span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">first</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">last</span><span class="w">
+</span><span class="mi">9</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">step</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">range</span><span class="o">.</span><span class="n">step</span><span class="w">
+</span><span class="mi">2</span></code></pre><p>You can access the range fields (<code class="inline">first</code>, <code class="inline">last</code>, and <code class="inline">step</code>)
+directly but you should not modify nor create ranges by hand.
+Instead use the proper operators or <a href="#new/2"><code class="inline">new/2</code></a> and <a href="#new/3"><code class="inline">new/3</code></a>.</p><p>Ranges implement the <a href="Enumerable.html"><code class="inline">Enumerable</code></a> protocol with memory
+efficient versions of all <a href="Enumerable.html"><code class="inline">Enumerable</code></a> callbacks:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="w">
+</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reduce</span><span class="p" data-group-id="5436711741-1">(</span><span class="n">range</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5436711741-2">fn</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="k" data-group-id="5436711741-2">end</span><span class="p" data-group-id="5436711741-1">)</span><span class="w">
+</span><span class="mi">385</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="5436711741-3">(</span><span class="n">range</span><span class="p" data-group-id="5436711741-3">)</span><span class="w">
+</span><span class="mi">10</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">member?</span><span class="p" data-group-id="5436711741-4">(</span><span class="n">range</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="5436711741-4">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">member?</span><span class="p" data-group-id="5436711741-5">(</span><span class="n">range</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p" data-group-id="5436711741-5">)</span><span class="w">
+</span><span class="no">true</span></code></pre><p>Such function calls are efficient memory-wise no matter the
+size of the range. The implementation of the <a href="Enumerable.html"><code class="inline">Enumerable</code></a>
+protocol uses logic based solely on the endpoints and does
+not materialize the whole list of integers.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:limit/0" data-no-tooltip="" translate="no">limit()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:step/0" data-no-tooltip="" translate="no">step()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/2" data-no-tooltip="" translate="no">t(first, last)</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#disjoint?/2" data-no-tooltip="" translate="no">disjoint?(range1, range2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if two ranges are disjoint.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/2" data-no-tooltip="" translate="no">new(first, last)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a new range.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/3" data-no-tooltip="" translate="no">new(first, last, step)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a new range with <code class="inline">step</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#shift/2" data-no-tooltip="" translate="no">shift(arg, steps_to_shift)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Shifts a range by the given number of steps.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#size/1" data-no-tooltip="" translate="no">size(range)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the size of <code class="inline">range</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#split/2" data-no-tooltip="" translate="no">split(range, split)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Splits a range in two.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_list/1" data-no-tooltip="" translate="no">to_list(arg1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a range to a list.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:limit/0">
+
+  <div class="detail-header">
+    <a href="#t:limit/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">limit()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L162" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> limit() :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:step/0">
+
+  <div class="detail-header">
+    <a href="#t:step/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">step()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L163" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> step() :: <a href="typespecs.html#basic-types">pos_integer</a>() | <a href="typespecs.html#basic-types">neg_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L164" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Range{first: <a href="#t:limit/0">limit</a>(), last: <a href="#t:limit/0">limit</a>(), step: <a href="#t:step/0">step</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/2">
+
+  <div class="detail-header">
+    <a href="#t:t/2" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t(first, last)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L165" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t(first, last) :: %Range{first: first, last: last, step: <a href="#t:step/0">step</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="disjoint?/2">
+
+  <div class="detail-header">
+    <a href="#disjoint?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">disjoint?(range1, range2)</h1>
+
+        <span class="note">(since 1.8.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L464" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> disjoint?(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if two ranges are disjoint.</p><h2 id="disjoint?/2-examples" class="section-heading">
+  <a href="#disjoint?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="6808007924-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="o">..</span><span class="mi">9</span><span class="p" data-group-id="6808007924-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="6808007924-2">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="o">..</span><span class="mi">9</span><span class="p" data-group-id="6808007924-2">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="6808007924-3">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">..</span><span class="mi">9</span><span class="p" data-group-id="6808007924-3">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="6808007924-4">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">..</span><span class="mi">7</span><span class="p" data-group-id="6808007924-4">)</span><span class="w">
+</span><span class="no">false</span></code></pre><p>Steps are also considered when computing the ranges to be disjoint:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="mi">2</span><span class="p" data-group-id="9435752228-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="c1"># First element in common is 29</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-2">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span><span class="o">//</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">..</span><span class="mi">100</span><span class="o">//</span><span class="mi">21</span><span class="p" data-group-id="9435752228-2">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-3">(</span><span class="mi">57</span><span class="o">..</span><span class="o">-</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">..</span><span class="mi">100</span><span class="o">//</span><span class="mi">21</span><span class="p" data-group-id="9435752228-3">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-4">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span><span class="o">//</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="o">..</span><span class="mi">8</span><span class="o">//</span><span class="o">-</span><span class="mi">21</span><span class="p" data-group-id="9435752228-4">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-5">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">28</span><span class="o">//</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">..</span><span class="mi">28</span><span class="o">//</span><span class="mi">21</span><span class="p" data-group-id="9435752228-5">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="c1"># First element in common is 14</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-6">(</span><span class="mi">2</span><span class="o">..</span><span class="mi">28</span><span class="o">//</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="o">..</span><span class="mi">28</span><span class="o">//</span><span class="mi">5</span><span class="p" data-group-id="9435752228-6">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-7">(</span><span class="mi">26</span><span class="o">..</span><span class="mi">2</span><span class="o">//</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="o">..</span><span class="mi">9</span><span class="o">//</span><span class="o">-</span><span class="mi">5</span><span class="p" data-group-id="9435752228-7">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+
+</span><span class="c1"># Starting from the back without alignment</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="9435752228-8">(</span><span class="mi">27</span><span class="o">..</span><span class="mi">11</span><span class="o">//</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="o">..</span><span class="mi">0</span><span class="o">//</span><span class="o">-</span><span class="mi">7</span><span class="p" data-group-id="9435752228-8">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/2">
+
+  <div class="detail-header">
+    <a href="#new/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(first, last)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L186" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="#t:limit/0">limit</a>(), <a href="#t:limit/0">limit</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Creates a new range.</p><p>If <code class="inline">first</code> is less than <code class="inline">last</code>, the range will be increasing from
+<code class="inline">first</code> to <code class="inline">last</code>. If <code class="inline">first</code> is equal to <code class="inline">last</code>, the range will contain
+one element, which is the number itself.</p><p>If <code class="inline">first</code> is greater than <code class="inline">last</code>, the range will be decreasing from <code class="inline">first</code>
+to <code class="inline">last</code>, albeit this behavior is deprecated. Therefore, it is advised to
+explicitly list the step with <a href="#new/3"><code class="inline">new/3</code></a>.</p><h2 id="new/2-examples" class="section-heading">
+  <a href="#new/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="0394935989-1">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="0394935989-1">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">100</span><span class="o">..</span><span class="mi">100</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/3">
+
+  <div class="detail-header">
+    <a href="#new/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(first, last, step)</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L209" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="#t:limit/0">limit</a>(), <a href="#t:limit/0">limit</a>(), <a href="#t:step/0">step</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Creates a new range with <code class="inline">step</code>.</p><h2 id="new/3-examples" class="section-heading">
+  <a href="#new/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1009404022-1">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1009404022-1">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">100</span><span class="o">..</span><span class="mi">100</span><span class="o">//</span><span class="mi">2</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="shift/2">
+
+  <div class="detail-header">
+    <a href="#shift/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shift(arg, steps_to_shift)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L275" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> shift(<a href="#t:t/0">t</a>(), <a href="typespecs.html#basic-types">integer</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Shifts a range by the given number of steps.</p><h2 id="shift/2-examples" class="section-heading">
+  <a href="#shift/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="9399141805-1">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9399141805-1">)</span><span class="w">
+</span><span class="mi">1</span><span class="o">..</span><span class="mi">11</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="9399141805-2">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9399141805-2">)</span><span class="w">
+</span><span class="mi">2</span><span class="o">..</span><span class="mi">12</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="9399141805-3">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9399141805-3">)</span><span class="w">
+</span><span class="mi">4</span><span class="o">..</span><span class="mi">14</span><span class="o">//</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="9399141805-4">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">0</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9399141805-4">)</span><span class="w">
+</span><span class="mi">6</span><span class="o">..</span><span class="o">-</span><span class="mi">4</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="size/1">
+
+  <div class="detail-header">
+    <a href="#size/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">size(range)</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L246" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> size(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Returns the size of <code class="inline">range</code>.</p><h2 id="size/1-examples" class="section-heading">
+  <a href="#size/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p" data-group-id="6853348094-1">)</span><span class="w">
+</span><span class="mi">10</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-2">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="mi">2</span><span class="p" data-group-id="6853348094-2">)</span><span class="w">
+</span><span class="mi">5</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-3">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="mi">3</span><span class="p" data-group-id="6853348094-3">)</span><span class="w">
+</span><span class="mi">4</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-4">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="6853348094-4">)</span><span class="w">
+</span><span class="mi">0</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-5">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="6853348094-5">)</span><span class="w">
+</span><span class="mi">10</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-6">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="6853348094-6">)</span><span class="w">
+</span><span class="mi">5</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-7">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">3</span><span class="p" data-group-id="6853348094-7">)</span><span class="w">
+</span><span class="mi">4</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="6853348094-8">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="mi">1</span><span class="p" data-group-id="6853348094-8">)</span><span class="w">
+</span><span class="mi">0</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="split/2">
+
+  <div class="detail-header">
+    <a href="#split/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">split(range, split)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L367" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> split(<a href="#t:t/0">t</a>(), <a href="typespecs.html#basic-types">integer</a>()) :: {<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()}</pre>
+
+      </div>
+
+<p>Splits a range in two.</p><p>It returns a tuple of two elements.</p><p>If <code class="inline">split</code> is less than the number of elements in the range, the first
+element in the range will have <code class="inline">split</code> entries and the second will have
+all remaining entries.</p><p>If <code class="inline">split</code> is more than the number of elements in the range, the second
+range in the tuple will emit zero elements.</p><h2 id="split/2-examples" class="section-heading">
+  <a href="#split/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Increasing ranges:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="7769082569-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7769082569-1">)</span><span class="w">
+</span><span class="p" data-group-id="7769082569-2">{</span><span class="mi">1</span><span class="o">..</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="o">..</span><span class="mi">5</span><span class="p" data-group-id="7769082569-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="7769082569-3">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7769082569-3">)</span><span class="w">
+</span><span class="p" data-group-id="7769082569-4">{</span><span class="mi">1</span><span class="o">..</span><span class="mi">3</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p" data-group-id="7769082569-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="7769082569-5">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7769082569-5">)</span><span class="w">
+</span><span class="p" data-group-id="7769082569-6">{</span><span class="mi">1</span><span class="o">..</span><span class="o">-</span><span class="mi">1</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p" data-group-id="7769082569-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="7769082569-7">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="7769082569-7">)</span><span class="w">
+</span><span class="p" data-group-id="7769082569-8">{</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="mi">2</span><span class="p" data-group-id="7769082569-8">}</span></code></pre><p>Decreasing ranges can also be split:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4332555032-1">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="4332555032-1">)</span><span class="w">
+</span><span class="p" data-group-id="4332555032-2">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">4</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="4332555032-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4332555032-3">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="4332555032-3">)</span><span class="w">
+</span><span class="p" data-group-id="4332555032-4">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">3</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="4332555032-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4332555032-5">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4332555032-5">)</span><span class="w">
+</span><span class="p" data-group-id="4332555032-6">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">7</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="4332555032-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4332555032-7">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="4332555032-7">)</span><span class="w">
+</span><span class="p" data-group-id="4332555032-8">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="4332555032-8">}</span></code></pre><p>Empty ranges preserve their property but still return empty ranges:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="9043524911-1">(</span><span class="mi">2</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9043524911-1">)</span><span class="w">
+</span><span class="p" data-group-id="9043524911-2">{</span><span class="mi">2</span><span class="o">..</span><span class="mi">3</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="9043524911-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="9043524911-3">(</span><span class="mi">2</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="9043524911-3">)</span><span class="w">
+</span><span class="p" data-group-id="9043524911-4">{</span><span class="mi">2</span><span class="o">..</span><span class="mi">3</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="o">..</span><span class="mi">5</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="9043524911-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="9043524911-5">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">2</span><span class="o">//</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9043524911-5">)</span><span class="w">
+</span><span class="p" data-group-id="9043524911-6">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">4</span><span class="o">//</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="o">..</span><span class="mi">2</span><span class="o">//</span><span class="mi">1</span><span class="p" data-group-id="9043524911-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="9043524911-7">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">2</span><span class="o">//</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="9043524911-7">)</span><span class="w">
+</span><span class="p" data-group-id="9043524911-8">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">4</span><span class="o">//</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="o">..</span><span class="mi">2</span><span class="o">//</span><span class="mi">1</span><span class="p" data-group-id="9043524911-8">}</span></code></pre><p>If the number to split is negative, it splits from the back:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="6506003173-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="6506003173-1">)</span><span class="w">
+</span><span class="p" data-group-id="6506003173-2">{</span><span class="mi">1</span><span class="o">..</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="o">..</span><span class="mi">5</span><span class="p" data-group-id="6506003173-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="6506003173-3">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="6506003173-3">)</span><span class="w">
+</span><span class="p" data-group-id="6506003173-4">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">3</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="6506003173-4">}</span></code></pre><p>If it is negative and greater than the elements in the range,
+the first element of the tuple will be an empty range:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="5978042030-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p" data-group-id="5978042030-1">)</span><span class="w">
+</span><span class="p" data-group-id="5978042030-2">{</span><span class="mi">1</span><span class="o">..</span><span class="mi">0</span><span class="o">//</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p" data-group-id="5978042030-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="5978042030-3">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p" data-group-id="5978042030-3">)</span><span class="w">
+</span><span class="p" data-group-id="5978042030-4">{</span><span class="mi">5</span><span class="o">..</span><span class="mi">6</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">..</span><span class="mi">1</span><span class="o">//</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="5978042030-4">}</span></code></pre><h2 id="split/2-properties" class="section-heading">
+  <a href="#split/2-properties" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Properties</span>
+</h2>
+<p>When a range is split, the following properties are observed.
+Given <code class="inline">split(input)</code> returns <code class="inline">{left, right}</code>, we have:</p><pre><code class="makeup elixir" translate="no"><span class="n">assert</span><span class="w"> </span><span class="n">input</span><span class="o">.</span><span class="n">first</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">left</span><span class="o">.</span><span class="n">first</span><span class="w">
+</span><span class="n">assert</span><span class="w"> </span><span class="n">input</span><span class="o">.</span><span class="n">last</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">right</span><span class="o">.</span><span class="n">last</span><span class="w">
+</span><span class="n">assert</span><span class="w"> </span><span class="n">input</span><span class="o">.</span><span class="n">step</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">left</span><span class="o">.</span><span class="n">step</span><span class="w">
+</span><span class="n">assert</span><span class="w"> </span><span class="n">input</span><span class="o">.</span><span class="n">step</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">right</span><span class="o">.</span><span class="n">step</span><span class="w">
+</span><span class="n">assert</span><span class="w"> </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="5803794618-1">(</span><span class="n">input</span><span class="p" data-group-id="5803794618-1">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="5803794618-2">(</span><span class="n">left</span><span class="p" data-group-id="5803794618-2">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Range</span><span class="o">.</span><span class="n">size</span><span class="p" data-group-id="5803794618-3">(</span><span class="n">right</span><span class="p" data-group-id="5803794618-3">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_list/1">
+
+  <div class="detail-header">
+    <a href="#to_list/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_list(arg1)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/range.ex#L406" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_list(<a href="#t:t/0">t</a>()) :: [<a href="typespecs.html#basic-types">integer</a>()]</pre>
+
+      </div>
+
+<p>Converts a range to a list.</p><h2 id="to_list/1-examples" class="section-heading">
+  <a href="#to_list/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="0903658281-1">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">5</span><span class="p" data-group-id="0903658281-1">)</span><span class="w">
+</span><span class="p" data-group-id="0903658281-2">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="0903658281-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Range</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="0903658281-3">(</span><span class="o">-</span><span class="mi">3</span><span class="o">..</span><span class="mi">0</span><span class="p" data-group-id="0903658281-3">)</span><span class="w">
+</span><span class="p" data-group-id="0903658281-4">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0903658281-4">]</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

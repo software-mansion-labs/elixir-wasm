@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Sigils — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/sigils.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Sigils</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/sigils.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir provides double-quoted strings as well as a concept called charlists, which are defined using the <code class="inline">~c&quot;hello world&quot;</code> sigil syntax. In this chapter, we will learn more about sigils and how to define our own.</p><p>One of Elixir's goals is extensibility: developers should be able to extend the language to fit any particular domain. Sigils provide the foundation for extending the language with custom textual representations. Sigils start with the tilde (<code class="inline">~</code>) character which is followed by either a single lower-case letter or one or more upper-case letters, and then a delimiter. Optional modifiers are added after the final delimiter.</p><h2 id="regular-expressions" class="section-heading">
+  <a href="#regular-expressions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Regular expressions</span>
+</h2>
+<p>The most common sigil in Elixir is <code class="inline">~r</code>, which is used to create <a href="https://en.wikipedia.org/wiki/Regular_Expressions">regular expressions</a>:</p><pre class="elixir" data-code-id="363432"><p class="comment" data-code-type="comment"># A regular expression that matches strings which contain &quot;foo&quot; or &quot;bar&quot;:</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">regex = ~r/foo|bar/</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~r/foo|bar/</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;foo&quot; =~ regex</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;bat&quot; =~ regex</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>Elixir provides Perl-compatible regular expressions (regexes), as implemented by the <a href="http://www.pcre.org/">PCRE</a> library. Regexes also support modifiers. For example, the <code class="inline">i</code> modifier makes a regular expression case insensitive:</p><pre class="elixir" data-code-id="373036"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;HELLO&quot; =~ ~r/hello/</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;HELLO&quot; =~ ~r/hello/i</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Check out the <a href="Regex.html"><code class="inline">Regex</code></a> module for more information on other modifiers and the supported operations with regular expressions.</p><p>So far, all examples have used <code class="inline">/</code> to delimit a regular expression. However, sigils support 8 different delimiters:</p><pre><code class="makeup elixir" translate="no"><span class="sr">~r/hello/</span><span class="w">
+</span><span class="sr">~r|hello|</span><span class="w">
+</span><span class="sr">~r&quot;hello&quot;</span><span class="w">
+</span><span class="sr">~r&#39;hello&#39;</span><span class="w">
+</span><span class="sr">~r(hello)</span><span class="w">
+</span><span class="sr">~r[hello]</span><span class="w">
+</span><span class="sr">~r{hello}</span><span class="w">
+</span><span class="sr">~r&lt;hello&gt;</span></code></pre><p>The reason behind supporting different delimiters is to provide a way to write literals without escaped delimiters. For example, a regular expression with forward slashes like <code class="inline">~r(^https?://)</code> reads arguably better than <code class="inline">~r/^https?:\/\//</code>. Similarly, if the regular expression has forward slashes and capturing groups (that use <code class="inline">()</code>), you may then choose double quotes instead of parentheses.</p><h2 id="strings-charlists-and-word-lists-sigils" class="section-heading">
+  <a href="#strings-charlists-and-word-lists-sigils" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Strings, charlists, and word lists sigils</span>
+</h2>
+<p>Besides regular expressions, Elixir ships with three other sigils.</p><h3 id="strings" class="section-heading">
+  <a href="#strings" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Strings</span>
+</h3>
+<p>The <code class="inline">~s</code> sigil is used to generate strings, like double quotes are. The <code class="inline">~s</code> sigil is useful when a string contains double quotes:</p><pre class="elixir" data-code-id="373730"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~s(this is a string with &quot;double&quot; quotes, not 'single' ones)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;this is a string with \&quot;double\&quot; quotes, not 'single' ones&quot;</p></pre><h3 id="charlists" class="section-heading">
+  <a href="#charlists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Charlists</span>
+</h3>
+<p>The <code class="inline">~c</code> sigil is the regular way to represent charlists.</p><pre class="elixir" data-code-id="383334"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[?c, ?a, ?t]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;cat&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~c(this is a char list containing &quot;double quotes&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;this is a char list containing \&quot;double quotes\&quot;&quot;</p></pre><h3 id="word-lists" class="section-heading">
+  <a href="#word-lists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Word lists</span>
+</h3>
+<p>The <code class="inline">~w</code> sigil is used to generate lists of words (<em>words</em> are just regular strings). Inside the <code class="inline">~w</code> sigil, words are separated by whitespace.</p><pre class="elixir" data-code-id="383938"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~w(foo bar bat)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;foo&quot;, &quot;bar&quot;, &quot;bat&quot;]</p></pre><p>The <code class="inline">~w</code> sigil also accepts the <code class="inline">c</code>, <code class="inline">s</code> and <code class="inline">a</code> modifiers (for charlists, strings, and atoms, respectively), which specify the data type of the elements of the resulting list:</p><pre class="elixir" data-code-id="393632"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~w(foo bar bat)a</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [:foo, :bar, :bat]</p></pre><h2 id="interpolation-and-escaping-in-string-sigils" class="section-heading">
+  <a href="#interpolation-and-escaping-in-string-sigils" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Interpolation and escaping in string sigils</span>
+</h2>
+<p>Elixir supports some sigil variants to deal with escaping characters and interpolation. In particular, uppercase letters sigils do not perform interpolation nor escaping. For example, although both <code class="inline">~s</code> and <code class="inline">~S</code> will return strings, the former allows escape codes and interpolation while the latter does not:</p><pre class="elixir" data-code-id="31303236"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~s(String with escape codes \x26 #{&quot;inter&quot; &lt;&gt; &quot;polation&quot;})</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;String with escape codes &amp; interpolation&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~S(String without escape codes \x26 without #{interpolation})</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;String without escape codes \\x26 without \#{interpolation}&quot;</p></pre><p>The following escape codes can be used in strings and charlists:</p><ul><li><code class="inline">\\</code> – single backslash</li><li><code class="inline">\a</code> – bell/alert</li><li><code class="inline">\b</code> – backspace</li><li><code class="inline">\d</code> - delete</li><li><code class="inline">\e</code> - escape</li><li><code class="inline">\f</code> - form feed</li><li><code class="inline">\n</code> – newline</li><li><code class="inline">\r</code> – carriage return</li><li><code class="inline">\s</code> – space</li><li><code class="inline">\t</code> – tab</li><li><code class="inline">\v</code> – vertical tab</li><li><code class="inline">\0</code> - null byte</li><li><code class="inline">\xDD</code> - represents a single byte in hexadecimal (such as <code class="inline">\x13</code>)</li><li><code class="inline">\uDDDD</code> and <code class="inline">\u{D...}</code> - represents a Unicode codepoint in hexadecimal (such as <code class="inline">\u{1F600}</code>)</li></ul><p>In addition to those, a double quote inside a double-quoted string needs to be escaped as <code class="inline">\&quot;</code>, and, analogously, a single quote inside a single-quoted char list needs to be escaped as <code class="inline">\'</code>. Nevertheless, it is better style to change delimiters as seen above than to escape them.</p><p>Sigils also support heredocs, that is, three double-quotes or single-quotes as separators:</p><pre class="elixir" data-code-id="31303930"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~s&quot;&quot;&quot;
+this is
+a heredoc string
+&quot;&quot;&quot;</span><span class="info"></span></div></pre><p>The most common use case for heredoc sigils is when writing documentation. For example, writing escape characters in the documentation would soon become error prone because of the need to double-escape some characters:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+Converts double-quotes to single-quotes.
+
+## Examples
+
+    iex&gt; convert(&quot;</span><span class="se">\\</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\\</span><span class="se">\&quot;</span><span class="s">&quot;)
+    &quot;&#39;foo&#39;&quot;
+
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">convert</span><span class="p" data-group-id="5892790654-1">(</span><span class="n">...</span><span class="p" data-group-id="5892790654-1">)</span></code></pre><p>By using <code class="inline">~S</code>, this problem can be avoided altogether:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">~S&quot;&quot;&quot;
+Converts double-quotes to single-quotes.
+
+## Examples
+
+    iex&gt; convert(&quot;\&quot;foo\&quot;&quot;)
+    &quot;&#39;foo&#39;&quot;
+
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">convert</span><span class="p" data-group-id="0279582014-1">(</span><span class="n">...</span><span class="p" data-group-id="0279582014-1">)</span></code></pre><h2 id="calendar-sigils" class="section-heading">
+  <a href="#calendar-sigils" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Calendar sigils</span>
+</h2>
+<p>Elixir offers several sigils to deal with various flavors of times and dates.</p><h3 id="date" class="section-heading">
+  <a href="#date" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Date</span>
+</h3>
+<p>A <a href="Date.html">%Date{}</a> struct contains the fields <code class="inline">year</code>, <code class="inline">month</code>, <code class="inline">day</code>, and <code class="inline">calendar</code>. You can create one using the <code class="inline">~D</code> sigil:</p><pre class="elixir" data-code-id="31313534"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">d = ~D[2019-10-31]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~D[2019-10-31]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">d.day</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 31</p></pre><h3 id="time" class="section-heading">
+  <a href="#time" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Time</span>
+</h3>
+<p>The <a href="Time.html">%Time{}</a> struct contains the fields <code class="inline">hour</code>, <code class="inline">minute</code>, <code class="inline">second</code>, <code class="inline">microsecond</code>, and <code class="inline">calendar</code>. You can create one using the <code class="inline">~T</code> sigil:</p><pre class="elixir" data-code-id="31323138"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">t = ~T[23:00:07.0]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~T[23:00:07.0]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">t.second</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 7</p></pre><h3 id="naivedatetime" class="section-heading">
+  <a href="#naivedatetime" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">NaiveDateTime</span>
+</h3>
+<p>The <a href="NaiveDateTime.html">%NaiveDateTime{}</a> struct contains fields from both <a href="Date.html"><code class="inline">Date</code></a> and <a href="Time.html"><code class="inline">Time</code></a>. You can create one using the <code class="inline">~N</code> sigil:</p><pre class="elixir" data-code-id="31323832"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">ndt = ~N[2019-10-31 23:00:07]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~N[2019-10-31 23:00:07]</p></pre><p>Why is it called naive? Because it does not contain timezone information. Therefore, the given datetime may not exist at all or it may exist twice in certain timezones - for example, when we move the clock back and forward for daylight saving time.</p><h3 id="utc-datetime" class="section-heading">
+  <a href="#utc-datetime" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">UTC DateTime</span>
+</h3>
+<p>A <a href="DateTime.html">%DateTime{}</a> struct contains the same fields as a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> with the addition of fields to track timezones. The <code class="inline">~U</code> sigil allows developers to create a DateTime in the UTC timezone:</p><pre class="elixir" data-code-id="31333436"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">dt = ~U[2019-10-31 19:59:03Z]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~U[2019-10-31 19:59:03Z]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%DateTime{minute: minute, time_zone: time_zone} = dt</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~U[2019-10-31 19:59:03Z]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">minute</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 59</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">time_zone</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;Etc/UTC&quot;</p></pre><h2 id="custom-sigils" class="section-heading">
+  <a href="#custom-sigils" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Custom sigils</span>
+</h2>
+<p>As hinted at the beginning of this chapter, sigils in Elixir are extensible. In fact, using the sigil <code class="inline">~r/foo/i</code> is equivalent to calling <code class="inline">sigil_r</code> with a binary and a char list as the argument:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">sigil_r</span><span class="p" data-group-id="8264770899-1">(</span><span class="p" data-group-id="8264770899-2">&lt;&lt;</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="8264770899-2">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8264770899-3">[</span><span class="sc">?i</span><span class="p" data-group-id="8264770899-3">]</span><span class="p" data-group-id="8264770899-1">)</span><span class="w">
+</span><span class="sr">~r&quot;foo&quot;i</span></code></pre><p>We can access the documentation for the <code class="inline">~r</code> sigil via <code class="inline">sigil_r</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">h</span><span class="w"> </span><span class="n">sigil_r</span><span class="w">
+</span><span class="n">...</span></code></pre><p>We can also provide our own sigils by implementing functions that follow the <code class="inline">sigil_{character}</code> pattern. For example, let's implement the <code class="inline">~i</code> sigil that returns an integer (with the optional <code class="inline">n</code> modifier to make it negative):</p><pre class="elixir" data-code-id="31343130"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">defmodule MySigils do
+  def sigil_i(string, []), do: String.to_integer(string)
+  def sigil_i(string, [?n]), do: -String.to_integer(string)
+end</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">import MySigils</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~i(13)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 13</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~i(42)n</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># -42</p></pre><p>Custom sigils may be either a single lowercase character, or an uppercase character followed by more uppercase characters and digits.</p><p>Sigils can also be used to do compile-time work with the help of macros. For example, regular expressions in Elixir are compiled into an efficient representation during compilation of the source code, therefore skipping this step at runtime. If you're interested in the subject, you can learn more about macros and check out how sigils are implemented in the <a href="Kernel.html"><code class="inline">Kernel</code></a> module (where the <code class="inline">sigil_*</code> functions are defined).</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="comprehensions.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Comprehensions
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="try-catch-and-rescue.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+try, catch, and rescue
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

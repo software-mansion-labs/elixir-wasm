@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Design-related anti-patterns — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/design-anti-patterns.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Design-related anti-patterns</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/anti-patterns/design-anti-patterns.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This document outlines potential anti-patterns related to your modules, functions, and the role they play within a codebase.</p><h2 id="alternative-return-types" class="section-heading">
+  <a href="#alternative-return-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Alternative return types</span>
+</h2>
+<h4>Problem</h4><p>This anti-pattern refers to functions that receive options (typically as a <em>keyword list</em> parameter) that drastically change their return type. Because options are optional and sometimes set dynamically, if they also change the return type, it may be hard to understand what the function actually returns.</p><h4>Example</h4><p>An example of this anti-pattern, as shown below, is when a function has many alternative return types, depending on the options received as a parameter.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">AlternativeInteger</span><span class="w"> </span><span class="k" data-group-id="3833156586-1">do</span><span class="w">
+  </span><span class="na">@spec</span><span class="w"> </span><span class="n">parse</span><span class="p" data-group-id="3833156586-2">(</span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="3833156586-3">(</span><span class="p" data-group-id="3833156586-3">)</span><span class="p">,</span><span class="w"> </span><span class="n">keyword</span><span class="p" data-group-id="3833156586-4">(</span><span class="p" data-group-id="3833156586-4">)</span><span class="p" data-group-id="3833156586-2">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="3833156586-5">(</span><span class="p" data-group-id="3833156586-5">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="3833156586-6">{</span><span class="n">integer</span><span class="p" data-group-id="3833156586-7">(</span><span class="p" data-group-id="3833156586-7">)</span><span class="p">,</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="3833156586-8">(</span><span class="p" data-group-id="3833156586-8">)</span><span class="p" data-group-id="3833156586-6">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="3833156586-9">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">\\</span><span class="w"> </span><span class="p" data-group-id="3833156586-10">[</span><span class="p" data-group-id="3833156586-10">]</span><span class="p" data-group-id="3833156586-9">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_list</span><span class="p" data-group-id="3833156586-11">(</span><span class="n">options</span><span class="p" data-group-id="3833156586-11">)</span><span class="w"> </span><span class="k" data-group-id="3833156586-12">do</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3833156586-13">(</span><span class="n">options</span><span class="p">,</span><span class="w"> </span><span class="ss">:discard_rest</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="3833156586-13">)</span><span class="w"> </span><span class="k" data-group-id="3833156586-14">do</span><span class="w">
+      </span><span class="k">case</span><span class="w"> </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3833156586-15">(</span><span class="n">string</span><span class="p" data-group-id="3833156586-15">)</span><span class="w"> </span><span class="k" data-group-id="3833156586-16">do</span><span class="w">
+        </span><span class="p" data-group-id="3833156586-17">{</span><span class="n">int</span><span class="p">,</span><span class="w"> </span><span class="c">_rest</span><span class="p" data-group-id="3833156586-17">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">int</span><span class="w">
+        </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+      </span><span class="k" data-group-id="3833156586-16">end</span><span class="w">
+    </span><span class="k" data-group-id="3833156586-14">else</span><span class="w">
+      </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3833156586-18">(</span><span class="n">string</span><span class="p" data-group-id="3833156586-18">)</span><span class="w">
+    </span><span class="k" data-group-id="3833156586-14">end</span><span class="w">
+  </span><span class="k" data-group-id="3833156586-12">end</span><span class="w">
+</span><span class="k" data-group-id="3833156586-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">AlternativeInteger</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3963851939-1">(</span><span class="s">&quot;13&quot;</span><span class="p" data-group-id="3963851939-1">)</span><span class="w">
+</span><span class="p" data-group-id="3963851939-2">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="3963851939-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">AlternativeInteger</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3963851939-3">(</span><span class="s">&quot;13&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">discard_rest</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="3963851939-3">)</span><span class="w">
+</span><span class="p" data-group-id="3963851939-4">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="3963851939-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">AlternativeInteger</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3963851939-5">(</span><span class="s">&quot;13&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">discard_rest</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3963851939-5">)</span><span class="w">
+</span><span class="mi">13</span></code></pre><h4>Refactoring</h4><p>To refactor this anti-pattern, as shown next, add a specific function for each return type (for example, <code class="inline">parse_discard_rest/1</code>), no longer delegating this to options passed as arguments.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">AlternativeInteger</span><span class="w"> </span><span class="k" data-group-id="3009503770-1">do</span><span class="w">
+  </span><span class="na">@spec</span><span class="w"> </span><span class="n">parse</span><span class="p" data-group-id="3009503770-2">(</span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="3009503770-3">(</span><span class="p" data-group-id="3009503770-3">)</span><span class="p" data-group-id="3009503770-2">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="3009503770-4">{</span><span class="n">integer</span><span class="p" data-group-id="3009503770-5">(</span><span class="p" data-group-id="3009503770-5">)</span><span class="p">,</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="3009503770-6">(</span><span class="p" data-group-id="3009503770-6">)</span><span class="p" data-group-id="3009503770-4">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="3009503770-7">(</span><span class="n">string</span><span class="p" data-group-id="3009503770-7">)</span><span class="w"> </span><span class="k" data-group-id="3009503770-8">do</span><span class="w">
+    </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3009503770-9">(</span><span class="n">string</span><span class="p" data-group-id="3009503770-9">)</span><span class="w">
+  </span><span class="k" data-group-id="3009503770-8">end</span><span class="w">
+
+  </span><span class="na">@spec</span><span class="w"> </span><span class="n">parse_discard_rest</span><span class="p" data-group-id="3009503770-10">(</span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="3009503770-11">(</span><span class="p" data-group-id="3009503770-11">)</span><span class="p" data-group-id="3009503770-10">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="3009503770-12">(</span><span class="p" data-group-id="3009503770-12">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse_discard_rest</span><span class="p" data-group-id="3009503770-13">(</span><span class="n">string</span><span class="p" data-group-id="3009503770-13">)</span><span class="w"> </span><span class="k" data-group-id="3009503770-14">do</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3009503770-15">(</span><span class="n">string</span><span class="p" data-group-id="3009503770-15">)</span><span class="w"> </span><span class="k" data-group-id="3009503770-16">do</span><span class="w">
+      </span><span class="p" data-group-id="3009503770-17">{</span><span class="n">int</span><span class="p">,</span><span class="w"> </span><span class="c">_rest</span><span class="p" data-group-id="3009503770-17">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">int</span><span class="w">
+      </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+    </span><span class="k" data-group-id="3009503770-16">end</span><span class="w">
+  </span><span class="k" data-group-id="3009503770-14">end</span><span class="w">
+</span><span class="k" data-group-id="3009503770-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">AlternativeInteger</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1072916868-1">(</span><span class="s">&quot;13&quot;</span><span class="p" data-group-id="1072916868-1">)</span><span class="w">
+</span><span class="p" data-group-id="1072916868-2">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="1072916868-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">AlternativeInteger</span><span class="o">.</span><span class="n">parse_discard_rest</span><span class="p" data-group-id="1072916868-3">(</span><span class="s">&quot;13&quot;</span><span class="p" data-group-id="1072916868-3">)</span><span class="w">
+</span><span class="mi">13</span></code></pre><h2 id="boolean-obsession" class="section-heading">
+  <a href="#boolean-obsession" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Boolean obsession</span>
+</h2>
+<h4>Problem</h4><p>This anti-pattern happens when booleans are used instead of atoms to encode information. The usage of booleans themselves is not an anti-pattern, but whenever multiple booleans are used with overlapping states, replacing the booleans by atoms (or composite data types such as <em>tuples</em>) may lead to clearer code.</p><p>This is a special case of <a href="#primitive-obsession"><em>Primitive obsession</em></a>, specific to boolean values.</p><h4>Example</h4><p>An example of this anti-pattern is a function that receives two or more options, such as <code class="inline">editor: true</code> and <code class="inline">admin: true</code>, to configure its behavior in overlapping ways. In the code below, the <code class="inline">:editor</code> option has no effect if <code class="inline">:admin</code> is set, meaning that the <code class="inline">:admin</code> option has higher priority than <code class="inline">:editor</code>, and they are ultimately related.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp</span><span class="w"> </span><span class="k" data-group-id="0699012960-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">process</span><span class="p" data-group-id="0699012960-2">(</span><span class="n">invoice</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">\\</span><span class="w"> </span><span class="p" data-group-id="0699012960-3">[</span><span class="p" data-group-id="0699012960-3">]</span><span class="p" data-group-id="0699012960-2">)</span><span class="w"> </span><span class="k" data-group-id="0699012960-4">do</span><span class="w">
+    </span><span class="k">cond</span><span class="w"> </span><span class="k" data-group-id="0699012960-5">do</span><span class="w">
+      </span><span class="n">options</span><span class="p" data-group-id="0699012960-6">[</span><span class="ss">:admin</span><span class="p" data-group-id="0699012960-6">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">  </span><span class="c1"># Is an admin</span><span class="w">
+      </span><span class="n">options</span><span class="p" data-group-id="0699012960-7">[</span><span class="ss">:editor</span><span class="p" data-group-id="0699012960-7">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># Is an editor</span><span class="w">
+      </span><span class="no">true</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">          </span><span class="c1"># Is none</span><span class="w">
+    </span><span class="k" data-group-id="0699012960-5">end</span><span class="w">
+  </span><span class="k" data-group-id="0699012960-4">end</span><span class="w">
+</span><span class="k" data-group-id="0699012960-1">end</span></code></pre><h4>Refactoring</h4><p>Instead of using multiple options, the code above could be refactored to receive a single option, called <code class="inline">:role</code>, that can be either <code class="inline">:admin</code>, <code class="inline">:editor</code>, or <code class="inline">:default</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp</span><span class="w"> </span><span class="k" data-group-id="5281638643-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">process</span><span class="p" data-group-id="5281638643-2">(</span><span class="n">invoice</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">\\</span><span class="w"> </span><span class="p" data-group-id="5281638643-3">[</span><span class="p" data-group-id="5281638643-3">]</span><span class="p" data-group-id="5281638643-2">)</span><span class="w"> </span><span class="k" data-group-id="5281638643-4">do</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="5281638643-5">(</span><span class="n">options</span><span class="p">,</span><span class="w"> </span><span class="ss">:role</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="5281638643-5">)</span><span class="w"> </span><span class="k" data-group-id="5281638643-6">do</span><span class="w">
+      </span><span class="ss">:admin</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">   </span><span class="c1"># Is an admin</span><span class="w">
+      </span><span class="ss">:editor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">  </span><span class="c1"># Is an editor</span><span class="w">
+      </span><span class="ss">:default</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># Is none</span><span class="w">
+    </span><span class="k" data-group-id="5281638643-6">end</span><span class="w">
+  </span><span class="k" data-group-id="5281638643-4">end</span><span class="w">
+</span><span class="k" data-group-id="5281638643-1">end</span></code></pre><p>This anti-pattern may also happen in our own data structures. For example, we may define a <code class="inline">User</code> struct with two boolean fields, <code class="inline">:editor</code> and <code class="inline">:admin</code>, while a single field named <code class="inline">:role</code> may be preferred.</p><p>Finally, it is worth noting that using atoms may be preferred even when we have a single boolean argument/option. For example, consider an invoice which may be set as approved/unapproved. One option is to provide a function that expects a boolean:</p><pre><code class="makeup elixir" translate="no"><span class="nc">MyApp</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="7225177517-1">(</span><span class="n">invoice</span><span class="p">,</span><span class="w"> </span><span class="ss">approved</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7225177517-1">)</span></code></pre><p>However, using atoms may read better and make it simpler to add further states (such as pending) in the future:</p><pre><code class="makeup elixir" translate="no"><span class="nc">MyApp</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="6299616723-1">(</span><span class="n">invoice</span><span class="p">,</span><span class="w"> </span><span class="ss">status</span><span class="p">:</span><span class="w"> </span><span class="ss">:approved</span><span class="p" data-group-id="6299616723-1">)</span></code></pre><p>Remember booleans are internally represented as atoms. Therefore there is no performance penalty in one approach over the other.</p><h2 id="exceptions-for-control-flow" class="section-heading">
+  <a href="#exceptions-for-control-flow" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Exceptions for control-flow</span>
+</h2>
+<h4>Problem</h4><p>This anti-pattern refers to code that uses <a href="Exception.html"><code class="inline">Exception</code></a>s for control flow. Exception handling itself does not represent an anti-pattern, but developers must prefer to use <code class="inline">case</code> and pattern matching to change the flow of their code, instead of <code class="inline">try/rescue</code>. In turn, library authors should provide developers with APIs to handle errors without relying on exception handling. When developers have no freedom to decide if an error is exceptional or not, this is considered an anti-pattern.</p><h4>Example</h4><p>An example of this anti-pattern, as shown below, is using <code class="inline">try/rescue</code> to deal with file operations:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="5138484564-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">print_file</span><span class="p" data-group-id="5138484564-2">(</span><span class="n">file</span><span class="p" data-group-id="5138484564-2">)</span><span class="w"> </span><span class="k" data-group-id="5138484564-3">do</span><span class="w">
+    </span><span class="k">try</span><span class="w"> </span><span class="k" data-group-id="5138484564-4">do</span><span class="w">
+      </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="5138484564-5">(</span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="5138484564-6">(</span><span class="n">file</span><span class="p" data-group-id="5138484564-6">)</span><span class="p" data-group-id="5138484564-5">)</span><span class="w">
+    </span><span class="k" data-group-id="5138484564-4">rescue</span><span class="w">
+      </span><span class="n">e</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="5138484564-7">(</span><span class="ss">:stderr</span><span class="p">,</span><span class="w"> </span><span class="nc">Exception</span><span class="o">.</span><span class="n">message</span><span class="p" data-group-id="5138484564-8">(</span><span class="n">e</span><span class="p" data-group-id="5138484564-8">)</span><span class="p" data-group-id="5138484564-7">)</span><span class="w">
+    </span><span class="k" data-group-id="5138484564-4">end</span><span class="w">
+  </span><span class="k" data-group-id="5138484564-3">end</span><span class="w">
+</span><span class="k" data-group-id="5138484564-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">MyModule</span><span class="o">.</span><span class="n">print_file</span><span class="p" data-group-id="3972292997-1">(</span><span class="s">&quot;valid_file&quot;</span><span class="p" data-group-id="3972292997-1">)</span><span class="w">
+</span><span class="nc">This</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">valid</span><span class="w"> </span><span class="n">file!</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">MyModule</span><span class="o">.</span><span class="n">print_file</span><span class="p" data-group-id="3972292997-2">(</span><span class="s">&quot;invalid_file&quot;</span><span class="p" data-group-id="3972292997-2">)</span><span class="w">
+</span><span class="n">could</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">read</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="ss">&quot;invalid_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">such</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">directory</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><h4>Refactoring</h4><p>To refactor this anti-pattern, as shown next, use <a href="File.html#read/1"><code class="inline">File.read/1</code></a>, which returns tuples instead of raising when a file cannot be read:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="3282576525-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">print_file</span><span class="p" data-group-id="3282576525-2">(</span><span class="n">file</span><span class="p" data-group-id="3282576525-2">)</span><span class="w"> </span><span class="k" data-group-id="3282576525-3">do</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="3282576525-4">(</span><span class="n">file</span><span class="p" data-group-id="3282576525-4">)</span><span class="w"> </span><span class="k" data-group-id="3282576525-5">do</span><span class="w">
+      </span><span class="p" data-group-id="3282576525-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="3282576525-6">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="3282576525-7">(</span><span class="n">binary</span><span class="p" data-group-id="3282576525-7">)</span><span class="w">
+      </span><span class="p" data-group-id="3282576525-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="3282576525-8">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="3282576525-9">(</span><span class="ss">:stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;could not read file </span><span class="si" data-group-id="3282576525-10">#{</span><span class="n">file</span><span class="si" data-group-id="3282576525-10">}</span><span class="s">: </span><span class="si" data-group-id="3282576525-11">#{</span><span class="n">reason</span><span class="si" data-group-id="3282576525-11">}</span><span class="s">&quot;</span><span class="p" data-group-id="3282576525-9">)</span><span class="w">
+    </span><span class="k" data-group-id="3282576525-5">end</span><span class="w">
+  </span><span class="k" data-group-id="3282576525-3">end</span><span class="w">
+</span><span class="k" data-group-id="3282576525-1">end</span></code></pre><p>This is only possible because the <a href="File.html"><code class="inline">File</code></a> module provides APIs for reading files with tuples as results (<a href="File.html#read/1"><code class="inline">File.read/1</code></a>), as well as a version that raises an exception (<a href="File.html#read!/1"><code class="inline">File.read!/1</code></a>). The bang (exclamation point) is effectively part of <a href="naming-conventions.html#trailing-bang-foo">Elixir's naming conventions</a>.</p><p>Library authors are encouraged to follow the same practices. In practice, the bang variant is implemented on top of the non-raising version of the code. For example, <a href="File.html#read!/1"><code class="inline">File.read!/1</code></a> is implemented as:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">read!</span><span class="p" data-group-id="0860124661-1">(</span><span class="n">path</span><span class="p" data-group-id="0860124661-1">)</span><span class="w"> </span><span class="k" data-group-id="0860124661-2">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="n">read</span><span class="p" data-group-id="0860124661-3">(</span><span class="n">path</span><span class="p" data-group-id="0860124661-3">)</span><span class="w"> </span><span class="k" data-group-id="0860124661-4">do</span><span class="w">
+    </span><span class="p" data-group-id="0860124661-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="0860124661-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="n">binary</span><span class="w">
+
+    </span><span class="p" data-group-id="0860124661-6">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="0860124661-6">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="k">raise</span><span class="w"> </span><span class="nc">File.Error</span><span class="p">,</span><span class="w"> </span><span class="ss">reason</span><span class="p">:</span><span class="w"> </span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="ss">action</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;read file&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">chardata_to_string</span><span class="p" data-group-id="0860124661-7">(</span><span class="n">path</span><span class="p" data-group-id="0860124661-7">)</span><span class="w">
+  </span><span class="k" data-group-id="0860124661-4">end</span><span class="w">
+</span><span class="k" data-group-id="0860124661-2">end</span></code></pre><p>A common practice followed by the community is to make the non-raising version return <code class="inline">{:ok, result}</code> or <code class="inline">{:error, Exception.t}</code>. For example, an HTTP client may return <code class="inline">{:ok, %HTTP.Response{}}</code> on success cases and <code class="inline">{:error, %HTTP.Error{}}</code> for failures, where <code class="inline">HTTP.Error</code> is <a href="Kernel.html#defexception/1">implemented as an exception</a>. This makes it convenient for anyone to raise an exception by simply calling <a href="Kernel.html#raise/1"><code class="inline">Kernel.raise/1</code></a>.</p><h4>Additional remarks</h4><p>This anti-pattern is of special importance to library authors and whenever writing functions that will be invoked by other developers and third-party code. Nevertheless, there are still scenarios where developers can afford to raise exceptions directly, for example:</p><ul><li><p>invalid arguments: it is expected that functions will raise for invalid arguments, as those are structural error and not semantic errors. For example, <code class="inline">File.read(123)</code> will always raise, because <code class="inline">123</code> is never a valid filename</p></li><li><p>during tests, scripts, etc: those are common scenarios where you want your code to fail as soon as possible in case of errors. Using <code class="inline">!</code> functions, such as <a href="File.html#read!/1"><code class="inline">File.read!/1</code></a>, allows you to do so quickly and with clear error messages</p></li><li><p>some frameworks, such as <a href="https://phoenixframework.org">Phoenix</a>, allow developers to raise exceptions in their code and uses a protocol to convert these exceptions into semantic HTTP responses</p></li></ul><p>This anti-pattern was formerly known as <a href="https://github.com/lucasvegi/Elixir-Code-Smells#using-exceptions-for-control-flow">Using exceptions for control-flow</a>.</p><h2 id="primitive-obsession" class="section-heading">
+  <a href="#primitive-obsession" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Primitive obsession</span>
+</h2>
+<h4>Problem</h4><p>This anti-pattern happens when Elixir basic types (for example, <em>integer</em>, <em>float</em>, and <em>string</em>) are excessively used to carry structured information, rather than creating specific composite data types (for example, <em>tuples</em>, <em>maps</em>, and <em>structs</em>) that can better represent a domain.</p><h4>Example</h4><p>An example of this anti-pattern is the use of a single <em>string</em> to represent an <code class="inline">Address</code>. An <code class="inline">Address</code> is a more complex structure than a simple basic (aka, primitive) value.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp</span><span class="w"> </span><span class="k" data-group-id="6296589372-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">extract_postal_code</span><span class="p" data-group-id="6296589372-2">(</span><span class="n">address</span><span class="p" data-group-id="6296589372-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="6296589372-3">(</span><span class="n">address</span><span class="p" data-group-id="6296589372-3">)</span><span class="w"> </span><span class="k" data-group-id="6296589372-4">do</span><span class="w">
+    </span><span class="c1"># Extract postal code with address...</span><span class="w">
+  </span><span class="k" data-group-id="6296589372-4">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">fill_in_country</span><span class="p" data-group-id="6296589372-5">(</span><span class="n">address</span><span class="p" data-group-id="6296589372-5">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="6296589372-6">(</span><span class="n">address</span><span class="p" data-group-id="6296589372-6">)</span><span class="w"> </span><span class="k" data-group-id="6296589372-7">do</span><span class="w">
+    </span><span class="c1"># Fill in missing country...</span><span class="w">
+  </span><span class="k" data-group-id="6296589372-7">end</span><span class="w">
+</span><span class="k" data-group-id="6296589372-1">end</span></code></pre><p>While you may receive the <code class="inline">address</code> as a string from a database, web request, or a third-party, if you find yourself frequently manipulating or extracting information from the string, it is a good indicator you should convert the address into structured data:</p><p>Another example of this anti-pattern is using floating numbers to model money and currency, when <a href="https://hexdocs.pm/ex_money/">richer data structures should be preferred</a>.</p><h4>Refactoring</h4><p>Possible solutions to this anti-pattern is to use maps or structs to model our address. The example below creates an <code class="inline">Address</code> struct, better representing this domain through a composite type. Additionally, we introduce a <code class="inline">parse/1</code> function, that converts the string into an <code class="inline">Address</code>, which will simplify the logic of remaining functions. With this modification, we can extract each field of this composite type individually when needed.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Address</span><span class="w"> </span><span class="k" data-group-id="6874775256-1">do</span><span class="w">
+  </span><span class="kd">defstruct</span><span class="w"> </span><span class="p" data-group-id="6874775256-2">[</span><span class="ss">:street</span><span class="p">,</span><span class="w"> </span><span class="ss">:city</span><span class="p">,</span><span class="w"> </span><span class="ss">:state</span><span class="p">,</span><span class="w"> </span><span class="ss">:postal_code</span><span class="p">,</span><span class="w"> </span><span class="ss">:country</span><span class="p" data-group-id="6874775256-2">]</span><span class="w">
+</span><span class="k" data-group-id="6874775256-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp</span><span class="w"> </span><span class="k" data-group-id="1224592414-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="1224592414-2">(</span><span class="n">address</span><span class="p" data-group-id="1224592414-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="1224592414-3">(</span><span class="n">address</span><span class="p" data-group-id="1224592414-3">)</span><span class="w"> </span><span class="k" data-group-id="1224592414-4">do</span><span class="w">
+    </span><span class="c1"># Returns %Address{}</span><span class="w">
+  </span><span class="k" data-group-id="1224592414-4">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">extract_postal_code</span><span class="p" data-group-id="1224592414-5">(</span><span class="p" data-group-id="1224592414-6">%</span><span class="nc" data-group-id="1224592414-6">Address</span><span class="p" data-group-id="1224592414-6">{</span><span class="p" data-group-id="1224592414-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p" data-group-id="1224592414-5">)</span><span class="w"> </span><span class="k" data-group-id="1224592414-7">do</span><span class="w">
+    </span><span class="c1"># Extract postal code with address...</span><span class="w">
+  </span><span class="k" data-group-id="1224592414-7">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">fill_in_country</span><span class="p" data-group-id="1224592414-8">(</span><span class="p" data-group-id="1224592414-9">%</span><span class="nc" data-group-id="1224592414-9">Address</span><span class="p" data-group-id="1224592414-9">{</span><span class="p" data-group-id="1224592414-9">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p" data-group-id="1224592414-8">)</span><span class="w"> </span><span class="k" data-group-id="1224592414-10">do</span><span class="w">
+    </span><span class="c1"># Fill in missing country...</span><span class="w">
+  </span><span class="k" data-group-id="1224592414-10">end</span><span class="w">
+</span><span class="k" data-group-id="1224592414-1">end</span></code></pre><h2 id="unrelated-multi-clause-function" class="section-heading">
+  <a href="#unrelated-multi-clause-function" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unrelated multi-clause function</span>
+</h2>
+<h4>Problem</h4><p>Using multi-clause functions is a powerful Elixir feature. However, some developers may abuse this feature to group <em>unrelated</em> functionality, which is an anti-pattern.</p><h4>Example</h4><p>A frequent example of this usage of multi-clause functions occurs when developers mix unrelated business logic into the same function definition, in a way that the behavior of each clause becomes completely distinct from the others. Such functions often have too broad specifications, making it difficult for other developers to understand and maintain them.</p><p>Some developers may use documentation mechanisms such as <code class="inline">@doc</code> annotations to compensate for poor code readability, however the documentation itself may end-up full of conditionals to describe how the function behaves for each different argument combination. This is a good indicator that the clauses are ultimately unrelated.</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+Updates a struct.
+
+If given a product, it will...
+
+If given an animal, it will...
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="p" data-group-id="7334610361-1">(</span><span class="p" data-group-id="7334610361-2">%</span><span class="nc" data-group-id="7334610361-2">Product</span><span class="p" data-group-id="7334610361-2">{</span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="ss">material</span><span class="p">:</span><span class="w"> </span><span class="n">material</span><span class="p" data-group-id="7334610361-2">}</span><span class="p" data-group-id="7334610361-1">)</span><span class="w">  </span><span class="k" data-group-id="7334610361-3">do</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="7334610361-3">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="p" data-group-id="7334610361-4">(</span><span class="p" data-group-id="7334610361-5">%</span><span class="nc" data-group-id="7334610361-5">Animal</span><span class="p" data-group-id="7334610361-5">{</span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="ss">skin</span><span class="p">:</span><span class="w"> </span><span class="n">skin</span><span class="p" data-group-id="7334610361-5">}</span><span class="p" data-group-id="7334610361-4">)</span><span class="w">  </span><span class="k" data-group-id="7334610361-6">do</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="7334610361-6">end</span></code></pre><p>If updating an animal is completely different from updating a product and requires a different set of rules, it may be worth splitting those over different functions or even different modules.</p><h4>Refactoring</h4><p>As shown below, a possible solution to this anti-pattern is to break the business rules that are mixed up in a single unrelated multi-clause function in simple functions. Each function can have a specific name and <code class="inline">@doc</code>, describing its behavior and parameters received. While this refactoring sounds simple, it can impact the function's callers, so be careful!</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+Updates a product.
+
+It will...
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">update_product</span><span class="p" data-group-id="1422244045-1">(</span><span class="p" data-group-id="1422244045-2">%</span><span class="nc" data-group-id="1422244045-2">Product</span><span class="p" data-group-id="1422244045-2">{</span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="ss">material</span><span class="p">:</span><span class="w"> </span><span class="n">material</span><span class="p" data-group-id="1422244045-2">}</span><span class="p" data-group-id="1422244045-1">)</span><span class="w"> </span><span class="k" data-group-id="1422244045-3">do</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="1422244045-3">end</span><span class="w">
+
+</span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+Updates an animal.
+
+It will...
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">update_animal</span><span class="p" data-group-id="1422244045-4">(</span><span class="p" data-group-id="1422244045-5">%</span><span class="nc" data-group-id="1422244045-5">Animal</span><span class="p" data-group-id="1422244045-5">{</span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="ss">skin</span><span class="p">:</span><span class="w"> </span><span class="n">skin</span><span class="p" data-group-id="1422244045-5">}</span><span class="p" data-group-id="1422244045-4">)</span><span class="w"> </span><span class="k" data-group-id="1422244045-6">do</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="1422244045-6">end</span></code></pre><p>These functions may still be implemented with multiple clauses, as long as the clauses group related functionality. For example, <code class="inline">update_product</code> could be in practice implemented as follows:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">update_product</span><span class="p" data-group-id="2985932776-1">(</span><span class="p" data-group-id="2985932776-2">%</span><span class="nc" data-group-id="2985932776-2">Product</span><span class="p" data-group-id="2985932776-2">{</span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2985932776-2">}</span><span class="p" data-group-id="2985932776-1">)</span><span class="w"> </span><span class="k" data-group-id="2985932776-3">do</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="2985932776-3">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">update_product</span><span class="p" data-group-id="2985932776-4">(</span><span class="p" data-group-id="2985932776-5">%</span><span class="nc" data-group-id="2985932776-5">Product</span><span class="p" data-group-id="2985932776-5">{</span><span class="ss">material</span><span class="p">:</span><span class="w"> </span><span class="n">material</span><span class="p" data-group-id="2985932776-5">}</span><span class="p" data-group-id="2985932776-4">)</span><span class="w">
+    </span><span class="ow">when</span><span class="w"> </span><span class="n">material</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p" data-group-id="2985932776-6">[</span><span class="s">&quot;metal&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;glass&quot;</span><span class="p" data-group-id="2985932776-6">]</span><span class="w"> </span><span class="k" data-group-id="2985932776-7">do</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="2985932776-7">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">update_product</span><span class="p" data-group-id="2985932776-8">(</span><span class="p" data-group-id="2985932776-9">%</span><span class="nc" data-group-id="2985932776-9">Product</span><span class="p" data-group-id="2985932776-9">{</span><span class="ss">material</span><span class="p">:</span><span class="w"> </span><span class="n">material</span><span class="p" data-group-id="2985932776-9">}</span><span class="p" data-group-id="2985932776-8">)</span><span class="w">
+    </span><span class="ow">when</span><span class="w"> </span><span class="n">material</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p" data-group-id="2985932776-10">[</span><span class="s">&quot;metal&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;glass&quot;</span><span class="p" data-group-id="2985932776-10">]</span><span class="w"> </span><span class="k" data-group-id="2985932776-11">do</span><span class="w">
+  </span><span class="c1"># ...</span><span class="w">
+</span><span class="k" data-group-id="2985932776-11">end</span></code></pre><p>You can see this pattern in practice within Elixir itself. The <a href="Kernel.html#+/2"><code class="inline">+/2</code></a> operator can add <a href="Integer.html"><code class="inline">Integer</code></a>s and <a href="Float.html"><code class="inline">Float</code></a>s together, but not <a href="String.html"><code class="inline">String</code></a>s, which instead use the <a href="Kernel.html#%3C%3E/2"><code class="inline">&lt;&gt;/2</code></a> operator. In this sense, it is reasonable to handle integers and floats in the same operation, but strings are unrelated enough to deserve their own function.</p><p>You will also find examples in Elixir of functions that work with any struct, which would seemingly be an occurrence of this anti-pattern, such as <a href="Kernel.html#struct/2"><code class="inline">struct/2</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">struct</span><span class="p" data-group-id="4501088123-1">(</span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4501088123-2">(</span><span class="s">&quot;/foo/bar&quot;</span><span class="p" data-group-id="4501088123-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/bar/baz&quot;</span><span class="p" data-group-id="4501088123-1">)</span><span class="w">
+</span><span class="p" data-group-id="4501088123-3">%</span><span class="nc" data-group-id="4501088123-3">URI</span><span class="p" data-group-id="4501088123-3">{</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/bar/baz&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="4501088123-3">}</span></code></pre><p>The difference here is that the <a href="Kernel.html#struct/2"><code class="inline">struct/2</code></a> function behaves precisely the same for any struct given, therefore there is no question of how the function handles different inputs. If the behavior is clear and consistent for all inputs, then the anti-pattern does not take place.</p><h2 id="using-application-configuration-for-libraries" class="section-heading">
+  <a href="#using-application-configuration-for-libraries" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Using application configuration for libraries</span>
+</h2>
+<h4>Problem</h4><p>The <a href="https://hexdocs.pm/elixir/Application.html#module-the-application-environment"><em>application environment</em></a> can be used to parameterize global values that can be used in an Elixir system. This mechanism can be very useful and therefore is not considered an anti-pattern by itself. However, library authors should avoid using the application environment to configure their library. The reason is exactly that the application environment is a <strong>global</strong> state, so there can only be a single value for each key in the environment for an application. This makes it impossible for multiple applications depending on the same library to configure the same aspect of the library in different ways.</p><h4>Example</h4><p>The <code class="inline">DashSplitter</code> module represents a library that configures the behavior of its functions through the global application environment. These configurations are concentrated in the <em>config/config.exs</em> file, shown below:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Config</span><span class="w">
+
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:app_config</span><span class="p">,</span><span class="w">
+  </span><span class="ss">parts</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+
+</span><span class="n">import_config</span><span class="w"> </span><span class="s">&quot;</span><span class="si" data-group-id="1830182082-1">#{</span><span class="n">config_env</span><span class="p" data-group-id="1830182082-2">(</span><span class="p" data-group-id="1830182082-2">)</span><span class="si" data-group-id="1830182082-1">}</span><span class="s">.exs&quot;</span></code></pre><p>One of the functions implemented by the <code class="inline">DashSplitter</code> library is <code class="inline">split/1</code>. This function aims to separate a string received via a parameter into a certain number of parts. The character used as a separator in <code class="inline">split/1</code> is always <code class="inline">&quot;-&quot;</code> and the number of parts the string is split into is defined globally by the application environment. This value is retrieved by the <code class="inline">split/1</code> function by calling <a href="Application.html#fetch_env!/2"><code class="inline">Application.fetch_env!/2</code></a>, as shown next:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">DashSplitter</span><span class="w"> </span><span class="k" data-group-id="4468388807-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">split</span><span class="p" data-group-id="4468388807-2">(</span><span class="n">string</span><span class="p" data-group-id="4468388807-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="4468388807-3">(</span><span class="n">string</span><span class="p" data-group-id="4468388807-3">)</span><span class="w"> </span><span class="k" data-group-id="4468388807-4">do</span><span class="w">
+    </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="4468388807-5">(</span><span class="ss">:app_config</span><span class="p">,</span><span class="w"> </span><span class="ss">:parts</span><span class="p" data-group-id="4468388807-5">)</span><span class="w"> </span><span class="c1"># &lt;= retrieve parameterized value</span><span class="w">
+    </span><span class="nc">String</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4468388807-6">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">parts</span><span class="p">:</span><span class="w"> </span><span class="n">parts</span><span class="p" data-group-id="4468388807-6">)</span><span class="w">             </span><span class="c1"># &lt;= parts: 3</span><span class="w">
+  </span><span class="k" data-group-id="4468388807-4">end</span><span class="w">
+</span><span class="k" data-group-id="4468388807-1">end</span></code></pre><p>Due to this parameterized value used by the <code class="inline">DashSplitter</code> library, all applications dependent on it can only use the <code class="inline">split/1</code> function with identical behavior about the number of parts generated by string separation. Currently, this value is equal to 3, as we can see in the use examples shown below:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">DashSplitter</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="7806232709-1">(</span><span class="s">&quot;Lucas-Francisco-Vegi&quot;</span><span class="p" data-group-id="7806232709-1">)</span><span class="w">
+</span><span class="p" data-group-id="7806232709-2">[</span><span class="s">&quot;Lucas&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Francisco&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Vegi&quot;</span><span class="p" data-group-id="7806232709-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">DashSplitter</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="7806232709-3">(</span><span class="s">&quot;Lucas-Francisco-da-Matta-Vegi&quot;</span><span class="p" data-group-id="7806232709-3">)</span><span class="w">
+</span><span class="p" data-group-id="7806232709-4">[</span><span class="s">&quot;Lucas&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Francisco&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;da-Matta-Vegi&quot;</span><span class="p" data-group-id="7806232709-4">]</span></code></pre><h4>Refactoring</h4><p>To remove this anti-pattern, this type of configuration should be performed using a parameter passed to the function. The code shown below performs the refactoring of the <code class="inline">split/1</code> function by accepting <a href="Keyword.html">keyword lists</a> as a new optional parameter. With this new parameter, it is possible to modify the default behavior of the function at the time of its call, allowing multiple different ways of using <code class="inline">split/2</code> within the same application:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">DashSplitter</span><span class="w"> </span><span class="k" data-group-id="5172942686-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">split</span><span class="p" data-group-id="5172942686-2">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="w"> </span><span class="o">\\</span><span class="w"> </span><span class="p" data-group-id="5172942686-3">[</span><span class="p" data-group-id="5172942686-3">]</span><span class="p" data-group-id="5172942686-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="5172942686-4">(</span><span class="n">string</span><span class="p" data-group-id="5172942686-4">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">is_list</span><span class="p" data-group-id="5172942686-5">(</span><span class="n">opts</span><span class="p" data-group-id="5172942686-5">)</span><span class="w"> </span><span class="k" data-group-id="5172942686-6">do</span><span class="w">
+    </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="5172942686-7">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="ss">:parts</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5172942686-7">)</span><span class="w"> </span><span class="c1"># &lt;= default config of parts == 2</span><span class="w">
+    </span><span class="nc">String</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="5172942686-8">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">parts</span><span class="p">:</span><span class="w"> </span><span class="n">parts</span><span class="p" data-group-id="5172942686-8">)</span><span class="w">
+  </span><span class="k" data-group-id="5172942686-6">end</span><span class="w">
+</span><span class="k" data-group-id="5172942686-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">DashSplitter</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="3023308170-1">(</span><span class="s">&quot;Lucas-Francisco-da-Matta-Vegi&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3023308170-2">[</span><span class="ss">parts</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="3023308170-2">]</span><span class="p" data-group-id="3023308170-1">)</span><span class="w">
+</span><span class="p" data-group-id="3023308170-3">[</span><span class="s">&quot;Lucas&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Francisco&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;da&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Matta&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Vegi&quot;</span><span class="p" data-group-id="3023308170-3">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">DashSplitter</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="3023308170-4">(</span><span class="s">&quot;Lucas-Francisco-da-Matta-Vegi&quot;</span><span class="p" data-group-id="3023308170-4">)</span><span class="w"> </span><span class="c1">#&lt;= default config is used!</span><span class="w">
+</span><span class="p" data-group-id="3023308170-5">[</span><span class="s">&quot;Lucas&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Francisco-da-Matta-Vegi&quot;</span><span class="p" data-group-id="3023308170-5">]</span></code></pre><p>Of course, not all uses of the application environment by libraries are incorrect. One example is using configuration to replace a component (or dependency) of a library by another that must behave the exact same. Consider a library that needs to parse CSV files. The library author may pick one package to use as default parser but allow its users to swap to different implementations via the application environment. At the end of the day, choosing a different CSV parser should not change the outcome, and library authors can even enforce this by <a href="typespecs.html#behaviours">defining behaviours</a> with the exact semantics they expect.</p><h4>Additional remarks: Supervision trees</h4><p>In practice, libraries may require additional configuration beyond keyword lists. For example, if a library needs to start a supervision tree, how can the user of said library customize its supervision tree? Given the supervision tree itself is global (as it belongs to the library), library authors may be tempted to use the application configuration once more.</p><p>One solution is for the library to provide its own child specification, instead of starting the supervision tree itself. This allows the user to start all necessary processes under its own supervision tree, potentially passing custom configuration options during initialization.</p><p>You can see this pattern in practice in projects like <a href="https://github.com/elixir-nx/nx">Nx</a> and <a href="https://github.com/phoenixframework/dns_cluster">DNS Cluster</a>. These libraries require that you list processes under your own supervision tree:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9105383652-1">[</span><span class="w">
+  </span><span class="p" data-group-id="9105383652-2">{</span><span class="nc">DNSCluster</span><span class="p">,</span><span class="w"> </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my.subdomain&quot;</span><span class="p" data-group-id="9105383652-2">}</span><span class="w">
+</span><span class="p" data-group-id="9105383652-1">]</span></code></pre><p>In such cases, if the users of <code class="inline">DNSCluster</code> need to configure DNSCluster per environment, they can be the ones reading from the application environment, without the library forcing them to:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2465361215-1">[</span><span class="w">
+  </span><span class="p" data-group-id="2465361215-2">{</span><span class="nc">DNSCluster</span><span class="p">,</span><span class="w"> </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">get_env</span><span class="p" data-group-id="2465361215-3">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:dns_cluster_query</span><span class="p" data-group-id="2465361215-3">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="ss">:ignore</span><span class="p" data-group-id="2465361215-2">}</span><span class="w">
+</span><span class="p" data-group-id="2465361215-1">]</span></code></pre><p>Some libraries, such as <a href="https://github.com/elixir-ecto/ecto">Ecto</a>, allow you to pass your application name as an option (called <code class="inline">:otp_app</code> or similar) and then automatically read the environment from <em>your</em> application. While this addresses the issue with the application environment being global, as they read from each individual application, it comes at the cost of some indirection, compared to the example above where users explicitly read their application environment from their own code, whenever desired.</p><h4>Additional remarks: Compile-time configuration</h4><p>A similar discussion entails compile-time configuration. What if a library author requires some configuration to be provided at compilation time?</p><p>Once again, instead of forcing users of your library to provide compile-time configuration, you may want to allow users of your library to generate the code themselves. That's the approach taken by libraries such as <a href="https://github.com/elixir-ecto/ecto">Ecto</a>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Repo</span><span class="w"> </span><span class="k" data-group-id="9705433358-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Ecto.Repo</span><span class="p">,</span><span class="w"> </span><span class="ss">adapter</span><span class="p">:</span><span class="w"> </span><span class="nc">Ecto.Adapters.Postgres</span><span class="w">
+</span><span class="k" data-group-id="9705433358-1">end</span></code></pre><p>Instead of forcing developers to share a single repository, Ecto allows its users to define as many repositories as they want. Given the <code class="inline">:adapter</code> configuration is required at compile-time, it is a required value on <code class="inline">use Ecto.Repo</code>. If developers want to configure the adapter per environment, then it is their choice:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Repo</span><span class="w"> </span><span class="k" data-group-id="6875012452-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Ecto.Repo</span><span class="p">,</span><span class="w"> </span><span class="ss">adapter</span><span class="p">:</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="6875012452-2">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:repo_adapter</span><span class="p" data-group-id="6875012452-2">)</span><span class="w">
+</span><span class="k" data-group-id="6875012452-1">end</span></code></pre><p>On the other hand, <a href="macro-anti-patterns.html">code generation comes with its own anti-patterns</a>, and must be considered carefully. That's to say: while using the application environment for libraries is discouraged, especially compile-time configuration, in some cases they may be the best option. For example, consider a library needs to parse CSV or JSON files to generate code based on data files. In such cases, it is best to provide reasonable defaults and make them customizable via the application environment, instead of asking each user of your library to generate the exact same code.</p><h4>Additional remarks: Mix tasks</h4><p>For Mix tasks and related tools, it may be necessary to provide per-project configuration. For example, imagine you have a <code class="inline">:linter</code> project, which supports setting the output file and the verbosity level. You may choose to configure it through application environment:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:linter</span><span class="p">,</span><span class="w">
+  </span><span class="ss">output_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/output.json&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">verbosity</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span></code></pre><p>However, <a href="https://hexdocs.pm/mix/Mix.html"><code class="inline">Mix</code></a> allows tasks to read per-project configuration via <a href="https://hexdocs.pm/mix/Mix.Project.html#config/0"><code class="inline">Mix.Project.config/0</code></a>. In this case, you can configure the <code class="inline">:linter</code> directly in the <code class="inline">mix.exs</code> file:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="1642098020-1">do</span><span class="w">
+  </span><span class="p" data-group-id="1642098020-2">[</span><span class="w">
+    </span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w">
+    </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">linter</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1642098020-3">[</span><span class="w">
+      </span><span class="ss">output_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/output.json&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">verbosity</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+    </span><span class="p" data-group-id="1642098020-3">]</span><span class="p">,</span><span class="w">
+    </span><span class="n">...</span><span class="w">
+  </span><span class="p" data-group-id="1642098020-2">]</span><span class="w">
+</span><span class="k" data-group-id="1642098020-1">end</span></code></pre><p>Additionally, if a Mix task is available, you can also accept these options as command line arguments (see <a href="OptionParser.html"><code class="inline">OptionParser</code></a>):</p><pre><code class="makeup bash" translate="no"><span class="">mix linter --output-file /path/to/output.json --verbosity 3
+</span></code></pre>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="code-anti-patterns.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Code-related anti-patterns
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="process-anti-patterns.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Process-related anti-patterns
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

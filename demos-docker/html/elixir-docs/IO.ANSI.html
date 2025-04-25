@@ -1,0 +1,3498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>IO.ANSI — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/IO.ANSI.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">IO.ANSI</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L18" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Functionality to render ANSI escape sequences.</p><p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI escape sequences</a>
+are characters embedded in text used to control formatting, color, and
+other output options on video text terminals.</p><p>ANSI escapes are typically enabled on all Unix terminals. They are also
+available on Windows consoles from Windows 10, although it must be
+explicitly enabled for the current user in the registry by running the
+following command:</p><pre><code class="makeup elixir" translate="no"><span class="n">reg</span><span class="w"> </span><span class="n">add</span><span class="w"> </span><span class="nc">HKCU</span><span class="err">\</span><span class="nc">Console</span><span class="w"> </span><span class="o">/</span><span class="n">v</span><span class="w"> </span><span class="nc">VirtualTerminalLevel</span><span class="w"> </span><span class="o">/</span><span class="n">t</span><span class="w"> </span><span class="nc">REG_DWORD</span><span class="w"> </span><span class="o">/</span><span class="n">d</span><span class="w"> </span><span class="mi">1</span></code></pre><p>After running the command above, you must restart your current console.</p><h2 id="module-examples" class="section-heading">
+  <a href="#module-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Because the ANSI escape sequences are embedded in text, the normal usage of
+these functions is to concatenate their output with text.</p><pre><code class="makeup elixir" translate="no"><span class="n">formatted_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">IO.ANSI</span><span class="o">.</span><span class="n">blue_background</span><span class="p" data-group-id="7682137462-1">(</span><span class="p" data-group-id="7682137462-1">)</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s">&quot;Example&quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="nc">IO.ANSI</span><span class="o">.</span><span class="n">reset</span><span class="p" data-group-id="7682137462-2">(</span><span class="p" data-group-id="7682137462-2">)</span><span class="w">
+</span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="7682137462-3">(</span><span class="n">formatted_text</span><span class="p" data-group-id="7682137462-3">)</span></code></pre><p>A higher level and more convenient API is also available via <a href="#format/1"><code class="inline">IO.ANSI.format/1</code></a>,
+where you use atoms to represent each ANSI escape sequence and by default
+checks if ANSI is enabled:</p><pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6262736366-1">(</span><span class="nc">IO.ANSI</span><span class="o">.</span><span class="n">format</span><span class="p" data-group-id="6262736366-2">(</span><span class="p" data-group-id="6262736366-3">[</span><span class="ss">:blue_background</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Example&quot;</span><span class="p" data-group-id="6262736366-3">]</span><span class="p" data-group-id="6262736366-2">)</span><span class="p" data-group-id="6262736366-1">)</span></code></pre><p>In case ANSI is disabled, the ANSI escape sequences are simply discarded.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:ansicode/0" data-no-tooltip="" translate="no">ansicode()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:ansidata/0" data-no-tooltip="" translate="no">ansidata()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:ansilist/0" data-no-tooltip="" translate="no">ansilist()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#black/0" data-no-tooltip="" translate="no">black()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to black.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#black_background/0" data-no-tooltip="" translate="no">black_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to black.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#blink_off/0" data-no-tooltip="" translate="no">blink_off()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Blink: off.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#blink_rapid/0" data-no-tooltip="" translate="no">blink_rapid()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Blink: rapid. MS-DOS ANSI.SYS; 150 per minute or more; not widely supported.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#blink_slow/0" data-no-tooltip="" translate="no">blink_slow()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Blink: slow. Less than 150 per minute.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#blue/0" data-no-tooltip="" translate="no">blue()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to blue.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#blue_background/0" data-no-tooltip="" translate="no">blue_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to blue.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#bright/0" data-no-tooltip="" translate="no">bright()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bright (increased intensity) or bold.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#clear/0" data-no-tooltip="" translate="no">clear()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Clears screen.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#clear_line/0" data-no-tooltip="" translate="no">clear_line()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Clears line.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#color/1" data-no-tooltip="" translate="no">color(code)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#color/3" data-no-tooltip="" translate="no">color(r, g, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the foreground color from individual RGB values.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#color_background/1" data-no-tooltip="" translate="no">color_background(code)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#color_background/3" data-no-tooltip="" translate="no">color_background(r, g, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the background color from individual RGB values.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#conceal/0" data-no-tooltip="" translate="no">conceal()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Conceal. Not widely supported.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#crossed_out/0" data-no-tooltip="" translate="no">crossed_out()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Crossed-out. Characters legible, but marked for deletion. Not widely supported.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor/2" data-no-tooltip="" translate="no">cursor(line, column)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sends cursor to the absolute position specified by <code class="inline">line</code> and <code class="inline">column</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor_down/1" data-no-tooltip="" translate="no">cursor_down(lines \\ 1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sends cursor <code class="inline">lines</code> down.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor_left/1" data-no-tooltip="" translate="no">cursor_left(columns \\ 1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sends cursor <code class="inline">columns</code> to the left.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor_right/1" data-no-tooltip="" translate="no">cursor_right(columns \\ 1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sends cursor <code class="inline">columns</code> to the right.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor_up/1" data-no-tooltip="" translate="no">cursor_up(lines \\ 1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sends cursor <code class="inline">lines</code> up.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cyan/0" data-no-tooltip="" translate="no">cyan()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to cyan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cyan_background/0" data-no-tooltip="" translate="no">cyan_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to cyan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#default_background/0" data-no-tooltip="" translate="no">default_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Default background color.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#default_color/0" data-no-tooltip="" translate="no">default_color()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Default text color.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#enabled?/0" data-no-tooltip="" translate="no">enabled?()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if ANSI coloring is supported and enabled on this machine.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#encircled/0" data-no-tooltip="" translate="no">encircled()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encircled.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#faint/0" data-no-tooltip="" translate="no">faint()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Faint (decreased intensity). Not widely supported.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_1/0" data-no-tooltip="" translate="no">font_1()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 1.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_2/0" data-no-tooltip="" translate="no">font_2()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 2.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_3/0" data-no-tooltip="" translate="no">font_3()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 3.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_4/0" data-no-tooltip="" translate="no">font_4()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 4.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_5/0" data-no-tooltip="" translate="no">font_5()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 5.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_6/0" data-no-tooltip="" translate="no">font_6()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 6.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_7/0" data-no-tooltip="" translate="no">font_7()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 7.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_8/0" data-no-tooltip="" translate="no">font_8()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 8.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#font_9/0" data-no-tooltip="" translate="no">font_9()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets alternative font 9.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#format/2" data-no-tooltip="" translate="no">format(ansidata, emit? \\ enabled?())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Formats a chardata-like argument by converting named ANSI sequences into actual
+ANSI codes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#format_fragment/2" data-no-tooltip="" translate="no">format_fragment(ansidata, emit? \\ enabled?())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Formats a chardata-like argument by converting named ANSI sequences into actual
+ANSI codes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#framed/0" data-no-tooltip="" translate="no">framed()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Framed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#green/0" data-no-tooltip="" translate="no">green()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to green.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#green_background/0" data-no-tooltip="" translate="no">green_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to green.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#home/0" data-no-tooltip="" translate="no">home()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sends cursor home.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#inverse/0" data-no-tooltip="" translate="no">inverse()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Image: negative. Swap foreground and background.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#inverse_off/0" data-no-tooltip="" translate="no">inverse_off()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Image: positive. Normal foreground and background.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#italic/0" data-no-tooltip="" translate="no">italic()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Italic: on. Not widely supported. Sometimes treated as inverse.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_black/0" data-no-tooltip="" translate="no">light_black()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light black.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_black_background/0" data-no-tooltip="" translate="no">light_black_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light black.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_blue/0" data-no-tooltip="" translate="no">light_blue()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light blue.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_blue_background/0" data-no-tooltip="" translate="no">light_blue_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light blue.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_cyan/0" data-no-tooltip="" translate="no">light_cyan()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light cyan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_cyan_background/0" data-no-tooltip="" translate="no">light_cyan_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light cyan.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_green/0" data-no-tooltip="" translate="no">light_green()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light green.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_green_background/0" data-no-tooltip="" translate="no">light_green_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light green.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_magenta/0" data-no-tooltip="" translate="no">light_magenta()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light magenta.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_magenta_background/0" data-no-tooltip="" translate="no">light_magenta_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light magenta.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_red/0" data-no-tooltip="" translate="no">light_red()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light red.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_red_background/0" data-no-tooltip="" translate="no">light_red_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light red.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_white/0" data-no-tooltip="" translate="no">light_white()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light white.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_white_background/0" data-no-tooltip="" translate="no">light_white_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light white.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_yellow/0" data-no-tooltip="" translate="no">light_yellow()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to light yellow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#light_yellow_background/0" data-no-tooltip="" translate="no">light_yellow_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to light yellow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#magenta/0" data-no-tooltip="" translate="no">magenta()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to magenta.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#magenta_background/0" data-no-tooltip="" translate="no">magenta_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to magenta.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#no_underline/0" data-no-tooltip="" translate="no">no_underline()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Underline: none.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#normal/0" data-no-tooltip="" translate="no">normal()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Normal color or intensity.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#not_framed_encircled/0" data-no-tooltip="" translate="no">not_framed_encircled()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Not framed or encircled.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#not_italic/0" data-no-tooltip="" translate="no">not_italic()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Not italic.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#not_overlined/0" data-no-tooltip="" translate="no">not_overlined()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Not overlined.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#overlined/0" data-no-tooltip="" translate="no">overlined()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Overlined.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#primary_font/0" data-no-tooltip="" translate="no">primary_font()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets primary (default) font.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#red/0" data-no-tooltip="" translate="no">red()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to red.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#red_background/0" data-no-tooltip="" translate="no">red_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to red.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reset/0" data-no-tooltip="" translate="no">reset()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Resets all attributes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reverse/0" data-no-tooltip="" translate="no">reverse()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Image: negative. Swap foreground and background.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reverse_off/0" data-no-tooltip="" translate="no">reverse_off()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Image: positive. Normal foreground and background.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#syntax_colors/0" data-no-tooltip="" translate="no">syntax_colors()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Syntax colors to be used by <a href="Inspect.html"><code class="inline">Inspect</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#underline/0" data-no-tooltip="" translate="no">underline()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Underline: single.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#white/0" data-no-tooltip="" translate="no">white()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to white.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#white_background/0" data-no-tooltip="" translate="no">white_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to white.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#yellow/0" data-no-tooltip="" translate="no">yellow()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets foreground color to yellow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#yellow_background/0" data-no-tooltip="" translate="no">yellow_background()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets background color to yellow.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:ansicode/0">
+
+  <div class="detail-header">
+    <a href="#t:ansicode/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ansicode()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L54" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> ansicode() :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:ansidata/0">
+
+  <div class="detail-header">
+    <a href="#t:ansidata/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ansidata()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L57" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> ansidata() :: <a href="#t:ansilist/0">ansilist</a>() | <a href="#t:ansicode/0">ansicode</a>() | <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:ansilist/0">
+
+  <div class="detail-header">
+    <a href="#t:ansilist/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ansilist()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L55" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> ansilist() ::
+  maybe_improper_list(
+    <a href="typespecs.html#built-in-types">char</a>() | <a href="#t:ansicode/0">ansicode</a>() | <a href="typespecs.html#built-in-types">binary</a>() | <a href="#t:ansilist/0">ansilist</a>(),
+    <a href="typespecs.html#built-in-types">binary</a>() | <a href="#t:ansicode/0">ansicode</a>() | []
+  )</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="black/0">
+
+  <div class="detail-header">
+    <a href="#black/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">black()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> black() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to black.</p>
+  </section>
+</section>
+<section class="detail" id="black_background/0">
+
+  <div class="detail-header">
+    <a href="#black_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">black_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> black_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to black.</p>
+  </section>
+</section>
+<section class="detail" id="blink_off/0">
+
+  <div class="detail-header">
+    <a href="#blink_off/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">blink_off()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L179" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> blink_off() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Blink: off.</p>
+  </section>
+</section>
+<section class="detail" id="blink_rapid/0">
+
+  <div class="detail-header">
+    <a href="#blink_rapid/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">blink_rapid()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L147" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> blink_rapid() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Blink: rapid. MS-DOS ANSI.SYS; 150 per minute or more; not widely supported.</p>
+  </section>
+</section>
+<section class="detail" id="blink_slow/0">
+
+  <div class="detail-header">
+    <a href="#blink_slow/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">blink_slow()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L144" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> blink_slow() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Blink: slow. Less than 150 per minute.</p>
+  </section>
+</section>
+<section class="detail" id="blue/0">
+
+  <div class="detail-header">
+    <a href="#blue/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">blue()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> blue() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to blue.</p>
+  </section>
+</section>
+<section class="detail" id="blue_background/0">
+
+  <div class="detail-header">
+    <a href="#blue_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">blue_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> blue_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to blue.</p>
+  </section>
+</section>
+<section class="detail" id="bright/0">
+
+  <div class="detail-header">
+    <a href="#bright/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">bright()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L132" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> bright() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Bright (increased intensity) or bold.</p>
+  </section>
+</section>
+<section class="detail" id="clear/0">
+
+  <div class="detail-header">
+    <a href="#clear/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">clear()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L255" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> clear() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Clears screen.</p>
+  </section>
+</section>
+<section class="detail" id="clear_line/0">
+
+  <div class="detail-header">
+    <a href="#clear_line/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">clear_line()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L258" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> clear_line() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Clears line.</p>
+  </section>
+</section>
+<section class="detail" id="color/1">
+
+  <div class="detail-header">
+    <a href="#color/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">color(code)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L102" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> color(0..255) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color.</p>
+  </section>
+</section>
+<section class="detail" id="color/3">
+
+  <div class="detail-header">
+    <a href="#color/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">color(r, g, b)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> color(0..5, 0..5, 0..5) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets the foreground color from individual RGB values.</p><p>Valid values for each color are in the range 0 to 5.</p>
+  </section>
+</section>
+<section class="detail" id="color_background/1">
+
+  <div class="detail-header">
+    <a href="#color_background/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">color_background(code)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L116" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> color_background(0..255) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color.</p>
+  </section>
+</section>
+<section class="detail" id="color_background/3">
+
+  <div class="detail-header">
+    <a href="#color_background/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">color_background(r, g, b)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L124" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> color_background(0..5, 0..5, 0..5) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets the background color from individual RGB values.</p><p>Valid values for each color are in the range 0 to 5.</p>
+  </section>
+</section>
+<section class="detail" id="conceal/0">
+
+  <div class="detail-header">
+    <a href="#conceal/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">conceal()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L156" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> conceal() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Conceal. Not widely supported.</p>
+  </section>
+</section>
+<section class="detail" id="crossed_out/0">
+
+  <div class="detail-header">
+    <a href="#crossed_out/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">crossed_out()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L159" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> crossed_out() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Crossed-out. Characters legible, but marked for deletion. Not widely supported.</p>
+  </section>
+</section>
+<section class="detail" id="cursor/2">
+
+  <div class="detail-header">
+    <a href="#cursor/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor(line, column)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L233" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor(<a href="typespecs.html#basic-types">non_neg_integer</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sends cursor to the absolute position specified by <code class="inline">line</code> and <code class="inline">column</code>.</p><p>Line <code class="inline">0</code> and column <code class="inline">0</code> would mean the top left corner.</p>
+  </section>
+</section>
+<section class="detail" id="cursor_down/1">
+
+    <span id="cursor_down/0"></span>
+
+  <div class="detail-header">
+    <a href="#cursor_down/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor_down(lines \\ 1)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L244" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor_down(<a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sends cursor <code class="inline">lines</code> down.</p>
+  </section>
+</section>
+<section class="detail" id="cursor_left/1">
+
+    <span id="cursor_left/0"></span>
+
+  <div class="detail-header">
+    <a href="#cursor_left/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor_left(columns \\ 1)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L252" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor_left(<a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sends cursor <code class="inline">columns</code> to the left.</p>
+  </section>
+</section>
+<section class="detail" id="cursor_right/1">
+
+    <span id="cursor_right/0"></span>
+
+  <div class="detail-header">
+    <a href="#cursor_right/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor_right(columns \\ 1)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L248" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor_right(<a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sends cursor <code class="inline">columns</code> to the right.</p>
+  </section>
+</section>
+<section class="detail" id="cursor_up/1">
+
+    <span id="cursor_up/0"></span>
+
+  <div class="detail-header">
+    <a href="#cursor_up/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor_up(lines \\ 1)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L240" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor_up(<a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sends cursor <code class="inline">lines</code> up.</p>
+  </section>
+</section>
+<section class="detail" id="cyan/0">
+
+  <div class="detail-header">
+    <a href="#cyan/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cyan()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cyan() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to cyan.</p>
+  </section>
+</section>
+<section class="detail" id="cyan_background/0">
+
+  <div class="detail-header">
+    <a href="#cyan_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cyan_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cyan_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to cyan.</p>
+  </section>
+</section>
+<section class="detail" id="default_background/0">
+
+  <div class="detail-header">
+    <a href="#default_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">default_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L207" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> default_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Default background color.</p>
+  </section>
+</section>
+<section class="detail" id="default_color/0">
+
+  <div class="detail-header">
+    <a href="#default_color/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">default_color()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L204" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> default_color() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Default text color.</p>
+  </section>
+</section>
+<section class="detail" id="enabled?/0">
+
+  <div class="detail-header">
+    <a href="#enabled?/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">enabled?()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L68" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> enabled?() :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if ANSI coloring is supported and enabled on this machine.</p><p>This function simply reads the configuration value for
+<code class="inline">:ansi_enabled</code> in the <code class="inline">:elixir</code> application. The value is by
+default <code class="inline">false</code> unless Elixir can detect during startup that
+both <code class="inline">stdout</code> and <code class="inline">stderr</code> are terminals.</p>
+  </section>
+</section>
+<section class="detail" id="encircled/0">
+
+  <div class="detail-header">
+    <a href="#encircled/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encircled()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L213" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> encircled() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Encircled.</p>
+  </section>
+</section>
+<section class="detail" id="faint/0">
+
+  <div class="detail-header">
+    <a href="#faint/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">faint()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> faint() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Faint (decreased intensity). Not widely supported.</p>
+  </section>
+</section>
+<section class="detail" id="font_1/0">
+
+  <div class="detail-header">
+    <a href="#font_1/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_1()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_1() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 1.</p>
+  </section>
+</section>
+<section class="detail" id="font_2/0">
+
+  <div class="detail-header">
+    <a href="#font_2/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_2()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_2() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 2.</p>
+  </section>
+</section>
+<section class="detail" id="font_3/0">
+
+  <div class="detail-header">
+    <a href="#font_3/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_3()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_3() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 3.</p>
+  </section>
+</section>
+<section class="detail" id="font_4/0">
+
+  <div class="detail-header">
+    <a href="#font_4/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_4()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_4() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 4.</p>
+  </section>
+</section>
+<section class="detail" id="font_5/0">
+
+  <div class="detail-header">
+    <a href="#font_5/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_5()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_5() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 5.</p>
+  </section>
+</section>
+<section class="detail" id="font_6/0">
+
+  <div class="detail-header">
+    <a href="#font_6/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_6()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_6() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 6.</p>
+  </section>
+</section>
+<section class="detail" id="font_7/0">
+
+  <div class="detail-header">
+    <a href="#font_7/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_7()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_7() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 7.</p>
+  </section>
+</section>
+<section class="detail" id="font_8/0">
+
+  <div class="detail-header">
+    <a href="#font_8/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_8()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_8() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 8.</p>
+  </section>
+</section>
+<section class="detail" id="font_9/0">
+
+  <div class="detail-header">
+    <a href="#font_9/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">font_9()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> font_9() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets alternative font 9.</p>
+  </section>
+</section>
+<section class="detail" id="format/2">
+
+    <span id="format/1"></span>
+
+  <div class="detail-header">
+    <a href="#format/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">format(ansidata, emit? \\ enabled?())</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L286" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> format(<a href="#t:ansidata/0">ansidata</a>(), <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="IO.html#t:chardata/0">IO.chardata</a>()</pre>
+
+      </div>
+
+<p>Formats a chardata-like argument by converting named ANSI sequences into actual
+ANSI codes.</p><p>The named sequences are represented by atoms.</p><p>It will also append an <a href="#reset/0"><code class="inline">IO.ANSI.reset/0</code></a> to the chardata when a conversion is
+performed. If you don't want this behavior, use <a href="#format_fragment/2"><code class="inline">format_fragment/2</code></a>.</p><p>An optional boolean parameter can be passed to enable or disable
+emitting actual ANSI codes. When <code class="inline">false</code>, no ANSI codes will be emitted.
+By default checks if ANSI is enabled using the <a href="#enabled?/0"><code class="inline">enabled?/0</code></a> function.</p><p>An <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> will be raised if an invalid ANSI code is provided.</p><h2 id="format/2-examples" class="section-heading">
+  <a href="#format/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">IO.ANSI</span><span class="o">.</span><span class="n">format</span><span class="p" data-group-id="0828443237-1">(</span><span class="p" data-group-id="0828443237-2">[</span><span class="s">&quot;Hello, &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">:bright</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world!&quot;</span><span class="p" data-group-id="0828443237-2">]</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="0828443237-1">)</span><span class="w">
+</span><span class="p" data-group-id="0828443237-3">[</span><span class="p" data-group-id="0828443237-4">[</span><span class="p" data-group-id="0828443237-5">[</span><span class="p" data-group-id="0828443237-6">[</span><span class="p" data-group-id="0828443237-7">[</span><span class="p" data-group-id="0828443237-8">[</span><span class="p" data-group-id="0828443237-8">]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello, &quot;</span><span class="p" data-group-id="0828443237-7">]</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\e</span><span class="s">[31m&quot;</span><span class="p" data-group-id="0828443237-6">]</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\e</span><span class="s">[1m&quot;</span><span class="p" data-group-id="0828443237-5">]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world!&quot;</span><span class="p" data-group-id="0828443237-4">]</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\e</span><span class="s">[0m&quot;</span><span class="p" data-group-id="0828443237-3">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="format_fragment/2">
+
+    <span id="format_fragment/1"></span>
+
+  <div class="detail-header">
+    <a href="#format_fragment/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">format_fragment(ansidata, emit? \\ enabled?())</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L307" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> format_fragment(<a href="#t:ansidata/0">ansidata</a>(), <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="IO.html#t:chardata/0">IO.chardata</a>()</pre>
+
+      </div>
+
+<p>Formats a chardata-like argument by converting named ANSI sequences into actual
+ANSI codes.</p><p>The named sequences are represented by atoms.</p><p>An optional boolean parameter can be passed to enable or disable
+emitting actual ANSI codes. When <code class="inline">false</code>, no ANSI codes will be emitted.
+By default checks if ANSI is enabled using the <a href="#enabled?/0"><code class="inline">enabled?/0</code></a> function.</p><h2 id="format_fragment/2-examples" class="section-heading">
+  <a href="#format_fragment/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">IO.ANSI</span><span class="o">.</span><span class="n">format_fragment</span><span class="p" data-group-id="0142455232-1">(</span><span class="p" data-group-id="0142455232-2">[</span><span class="ss">:bright</span><span class="p">,</span><span class="w"> </span><span class="s">~c&quot;Word&quot;</span><span class="p" data-group-id="0142455232-2">]</span><span class="p">,</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="0142455232-1">)</span><span class="w">
+</span><span class="p" data-group-id="0142455232-3">[</span><span class="p" data-group-id="0142455232-4">[</span><span class="p" data-group-id="0142455232-5">[</span><span class="p" data-group-id="0142455232-6">[</span><span class="p" data-group-id="0142455232-7">[</span><span class="p" data-group-id="0142455232-8">[</span><span class="p" data-group-id="0142455232-8">]</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\e</span><span class="s">[1m&quot;</span><span class="p" data-group-id="0142455232-7">]</span><span class="p">,</span><span class="w"> </span><span class="mi">87</span><span class="p" data-group-id="0142455232-6">]</span><span class="p">,</span><span class="w"> </span><span class="mi">111</span><span class="p" data-group-id="0142455232-5">]</span><span class="p">,</span><span class="w"> </span><span class="mi">114</span><span class="p" data-group-id="0142455232-4">]</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="0142455232-3">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="framed/0">
+
+  <div class="detail-header">
+    <a href="#framed/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">framed()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L210" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> framed() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Framed.</p>
+  </section>
+</section>
+<section class="detail" id="green/0">
+
+  <div class="detail-header">
+    <a href="#green/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">green()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> green() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to green.</p>
+  </section>
+</section>
+<section class="detail" id="green_background/0">
+
+  <div class="detail-header">
+    <a href="#green_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">green_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> green_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to green.</p>
+  </section>
+</section>
+<section class="detail" id="home/0">
+
+  <div class="detail-header">
+    <a href="#home/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">home()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L225" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> home() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sends cursor home.</p>
+  </section>
+</section>
+<section class="detail" id="inverse/0">
+
+  <div class="detail-header">
+    <a href="#inverse/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">inverse()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L150" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> inverse() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Image: negative. Swap foreground and background.</p>
+  </section>
+</section>
+<section class="detail" id="inverse_off/0">
+
+  <div class="detail-header">
+    <a href="#inverse_off/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">inverse_off()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L182" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> inverse_off() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Image: positive. Normal foreground and background.</p>
+  </section>
+</section>
+<section class="detail" id="italic/0">
+
+  <div class="detail-header">
+    <a href="#italic/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">italic()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L138" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> italic() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Italic: on. Not widely supported. Sometimes treated as inverse.</p>
+  </section>
+</section>
+<section class="detail" id="light_black/0">
+
+  <div class="detail-header">
+    <a href="#light_black/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_black()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_black() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light black.</p>
+  </section>
+</section>
+<section class="detail" id="light_black_background/0">
+
+  <div class="detail-header">
+    <a href="#light_black_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_black_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_black_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light black.</p>
+  </section>
+</section>
+<section class="detail" id="light_blue/0">
+
+  <div class="detail-header">
+    <a href="#light_blue/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_blue()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_blue() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light blue.</p>
+  </section>
+</section>
+<section class="detail" id="light_blue_background/0">
+
+  <div class="detail-header">
+    <a href="#light_blue_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_blue_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_blue_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light blue.</p>
+  </section>
+</section>
+<section class="detail" id="light_cyan/0">
+
+  <div class="detail-header">
+    <a href="#light_cyan/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_cyan()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_cyan() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light cyan.</p>
+  </section>
+</section>
+<section class="detail" id="light_cyan_background/0">
+
+  <div class="detail-header">
+    <a href="#light_cyan_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_cyan_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_cyan_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light cyan.</p>
+  </section>
+</section>
+<section class="detail" id="light_green/0">
+
+  <div class="detail-header">
+    <a href="#light_green/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_green()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_green() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light green.</p>
+  </section>
+</section>
+<section class="detail" id="light_green_background/0">
+
+  <div class="detail-header">
+    <a href="#light_green_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_green_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_green_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light green.</p>
+  </section>
+</section>
+<section class="detail" id="light_magenta/0">
+
+  <div class="detail-header">
+    <a href="#light_magenta/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_magenta()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_magenta() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light magenta.</p>
+  </section>
+</section>
+<section class="detail" id="light_magenta_background/0">
+
+  <div class="detail-header">
+    <a href="#light_magenta_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_magenta_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_magenta_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light magenta.</p>
+  </section>
+</section>
+<section class="detail" id="light_red/0">
+
+  <div class="detail-header">
+    <a href="#light_red/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_red()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_red() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light red.</p>
+  </section>
+</section>
+<section class="detail" id="light_red_background/0">
+
+  <div class="detail-header">
+    <a href="#light_red_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_red_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_red_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light red.</p>
+  </section>
+</section>
+<section class="detail" id="light_white/0">
+
+  <div class="detail-header">
+    <a href="#light_white/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_white()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_white() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light white.</p>
+  </section>
+</section>
+<section class="detail" id="light_white_background/0">
+
+  <div class="detail-header">
+    <a href="#light_white_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_white_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_white_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light white.</p>
+  </section>
+</section>
+<section class="detail" id="light_yellow/0">
+
+  <div class="detail-header">
+    <a href="#light_yellow/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_yellow()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_yellow() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to light yellow.</p>
+  </section>
+</section>
+<section class="detail" id="light_yellow_background/0">
+
+  <div class="detail-header">
+    <a href="#light_yellow_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">light_yellow_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> light_yellow_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to light yellow.</p>
+  </section>
+</section>
+<section class="detail" id="magenta/0">
+
+  <div class="detail-header">
+    <a href="#magenta/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">magenta()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> magenta() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to magenta.</p>
+  </section>
+</section>
+<section class="detail" id="magenta_background/0">
+
+  <div class="detail-header">
+    <a href="#magenta_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">magenta_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> magenta_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to magenta.</p>
+  </section>
+</section>
+<section class="detail" id="no_underline/0">
+
+  <div class="detail-header">
+    <a href="#no_underline/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">no_underline()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L176" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> no_underline() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Underline: none.</p>
+  </section>
+</section>
+<section class="detail" id="normal/0">
+
+  <div class="detail-header">
+    <a href="#normal/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">normal()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L170" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> normal() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Normal color or intensity.</p>
+  </section>
+</section>
+<section class="detail" id="not_framed_encircled/0">
+
+  <div class="detail-header">
+    <a href="#not_framed_encircled/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">not_framed_encircled()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L219" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> not_framed_encircled() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Not framed or encircled.</p>
+  </section>
+</section>
+<section class="detail" id="not_italic/0">
+
+  <div class="detail-header">
+    <a href="#not_italic/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">not_italic()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L173" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> not_italic() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Not italic.</p>
+  </section>
+</section>
+<section class="detail" id="not_overlined/0">
+
+  <div class="detail-header">
+    <a href="#not_overlined/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">not_overlined()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L222" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> not_overlined() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Not overlined.</p>
+  </section>
+</section>
+<section class="detail" id="overlined/0">
+
+  <div class="detail-header">
+    <a href="#overlined/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">overlined()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L216" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> overlined() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Overlined.</p>
+  </section>
+</section>
+<section class="detail" id="primary_font/0">
+
+  <div class="detail-header">
+    <a href="#primary_font/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">primary_font()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L162" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> primary_font() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets primary (default) font.</p>
+  </section>
+</section>
+<section class="detail" id="red/0">
+
+  <div class="detail-header">
+    <a href="#red/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">red()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> red() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to red.</p>
+  </section>
+</section>
+<section class="detail" id="red_background/0">
+
+  <div class="detail-header">
+    <a href="#red_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">red_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> red_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to red.</p>
+  </section>
+</section>
+<section class="detail" id="reset/0">
+
+  <div class="detail-header">
+    <a href="#reset/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reset()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reset() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Resets all attributes.</p>
+  </section>
+</section>
+<section class="detail" id="reverse/0">
+
+  <div class="detail-header">
+    <a href="#reverse/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reverse()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reverse() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Image: negative. Swap foreground and background.</p>
+  </section>
+</section>
+<section class="detail" id="reverse_off/0">
+
+  <div class="detail-header">
+    <a href="#reverse_off/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reverse_off()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L185" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reverse_off() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Image: positive. Normal foreground and background.</p>
+  </section>
+</section>
+<section class="detail" id="syntax_colors/0">
+
+  <div class="detail-header">
+    <a href="#syntax_colors/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">syntax_colors()</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L96" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> syntax_colors() :: <a href="Keyword.html#t:t/1">Keyword.t</a>(<a href="#t:ansidata/0">ansidata</a>())</pre>
+
+      </div>
+
+<p>Syntax colors to be used by <a href="Inspect.html"><code class="inline">Inspect</code></a>.</p><p>Those colors are used throughout Elixir's standard library,
+such as <a href="Kernel.html#dbg/2"><code class="inline">dbg/2</code></a> and <a href="https://hexdocs.pm/iex/IEx.html"><code class="inline">IEx</code></a>.</p><p>The colors can be changed by setting the <code class="inline">:ansi_syntax_colors</code>
+in the <code class="inline">:elixir</code> application configuration. Configuration for
+most built-in data types are supported: <code class="inline">:atom</code>, <code class="inline">:binary</code>,
+<code class="inline">:boolean</code>, <code class="inline">:charlist</code>, <code class="inline">:list</code>, <code class="inline">:map</code>, <code class="inline">:nil</code>, <code class="inline">:number</code>,
+<code class="inline">:string</code>, and <code class="inline">:tuple</code>. The default is:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="4892186638-1">[</span><span class="w">
+  </span><span class="ss">atom</span><span class="p">:</span><span class="w"> </span><span class="ss">:cyan</span><span class="w">
+  </span><span class="ss">boolean</span><span class="p">:</span><span class="w"> </span><span class="ss">:magenta</span><span class="p">,</span><span class="w">
+  </span><span class="ss">charlist</span><span class="p">:</span><span class="w"> </span><span class="ss">:yellow</span><span class="p">,</span><span class="w">
+  </span><span class="ss">nil</span><span class="p">:</span><span class="w"> </span><span class="ss">:magenta</span><span class="p">,</span><span class="w">
+  </span><span class="ss">number</span><span class="p">:</span><span class="w"> </span><span class="ss">:yellow</span><span class="p">,</span><span class="w">
+  </span><span class="ss">string</span><span class="p">:</span><span class="w"> </span><span class="ss">:green</span><span class="w">
+</span><span class="p" data-group-id="4892186638-1">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="underline/0">
+
+  <div class="detail-header">
+    <a href="#underline/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">underline()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L141" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> underline() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Underline: single.</p>
+  </section>
+</section>
+<section class="detail" id="white/0">
+
+  <div class="detail-header">
+    <a href="#white/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">white()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> white() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to white.</p>
+  </section>
+</section>
+<section class="detail" id="white_background/0">
+
+  <div class="detail-header">
+    <a href="#white_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">white_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> white_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to white.</p>
+  </section>
+</section>
+<section class="detail" id="yellow/0">
+
+  <div class="detail-header">
+    <a href="#yellow/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">yellow()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> yellow() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets foreground color to yellow.</p>
+  </section>
+</section>
+<section class="detail" id="yellow_background/0">
+
+  <div class="detail-header">
+    <a href="#yellow_background/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">yellow_background()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io/ansi.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> yellow_background() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Sets background color to yellow.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

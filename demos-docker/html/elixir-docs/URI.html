@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>URI — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/URI.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">URI</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Utilities for working with URIs.</p><p>This module provides functions for working with URIs (for example, parsing
+URIs or encoding query strings). The functions in this module are implemented
+according to <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>.</p><p>Additionally, the Erlang <a href="https://www.erlang.org/doc/apps/stdlib/uri_string.html"><code class="inline">:uri_string</code> module</a> provides certain functionalities,
+such as RFC 3986 compliant URI normalization.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:authority/0" data-no-tooltip="" translate="no">authority()</a>
+
+          <span class="deprecated" title="The authority field is deprecated">deprecated</span>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#__struct__/0" data-no-tooltip="" translate="no">%URI{}</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The URI struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_path/2" data-no-tooltip="" translate="no">append_path(uri, path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Appends <code class="inline">path</code> to the given <code class="inline">uri</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_query/2" data-no-tooltip="" translate="no">append_query(uri, query)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Appends <code class="inline">query</code> to the given <code class="inline">uri</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#char_reserved?/1" data-no-tooltip="" translate="no">char_reserved?(character)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if <code class="inline">character</code> is a reserved one in a URI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#char_unescaped?/1" data-no-tooltip="" translate="no">char_unescaped?(character)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if <code class="inline">character</code> is allowed unescaped in a URI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#char_unreserved?/1" data-no-tooltip="" translate="no">char_unreserved?(character)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if <code class="inline">character</code> is an unreserved one in a URI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode/1" data-no-tooltip="" translate="no">decode(uri)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Percent-unescapes a URI.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode_query/3" data-no-tooltip="" translate="no">decode_query(query, map \\ %{}, encoding \\ :www_form)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes <code class="inline">query</code> into a map.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode_www_form/1" data-no-tooltip="" translate="no">decode_www_form(string)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes <code class="inline">string</code> as &quot;x-www-form-urlencoded&quot;.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#default_port/1" data-no-tooltip="" translate="no">default_port(scheme)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the default port for a given <code class="inline">scheme</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#default_port/2" data-no-tooltip="" translate="no">default_port(scheme, port)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Registers the default <code class="inline">port</code> for the given <code class="inline">scheme</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#encode/2" data-no-tooltip="" translate="no">encode(string, predicate \\ &amp;char_unescaped?/1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Percent-encodes all characters that require escaping in <code class="inline">string</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#encode_query/2" data-no-tooltip="" translate="no">encode_query(enumerable, encoding \\ :www_form)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encodes <code class="inline">enumerable</code> into a query string using <code class="inline">encoding</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#encode_www_form/1" data-no-tooltip="" translate="no">encode_www_form(string)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encodes <code class="inline">string</code> as &quot;x-www-form-urlencoded&quot;.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#merge/2" data-no-tooltip="" translate="no">merge(uri, rel)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Merges two URIs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/1" data-no-tooltip="" translate="no">new(uri)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a new URI struct from a URI or a string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new!/1" data-no-tooltip="" translate="no">new!(uri)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Similar to <a href="#new/1"><code class="inline">new/1</code></a> but raises <a href="URI.Error.html"><code class="inline">URI.Error</code></a> if an invalid string is given.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#parse/1" data-no-tooltip="" translate="no">parse(uri)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses a URI into its components, without further validation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#query_decoder/2" data-no-tooltip="" translate="no">query_decoder(query, encoding \\ :www_form)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a stream of two-element tuples representing key-value pairs in the
+given <code class="inline">query</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_string/1" data-no-tooltip="" translate="no">to_string(uri)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the string representation of the given <a href="#t:t/0">URI struct</a>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:authority/0">
+
+  <div class="detail-header">
+    <a href="#t:authority/0" class="detail-link" data-no-tooltip="" aria-label="Link to this opaque">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">authority()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L41" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This opaque is deprecated. The authority field is deprecated.
+    </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@opaque</span> authority()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L29" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %URI{
+  authority: <a href="#t:authority/0">authority</a>(),
+  fragment: nil | <a href="typespecs.html#built-in-types">binary</a>(),
+  host: nil | <a href="typespecs.html#built-in-types">binary</a>(),
+  path: nil | <a href="typespecs.html#built-in-types">binary</a>(),
+  port: nil | <a href="https://www.erlang.org/doc/apps/kernel/inet.html#t:port_number/0">:inet.port_number</a>(),
+  query: nil | <a href="typespecs.html#built-in-types">binary</a>(),
+  scheme: nil | <a href="typespecs.html#built-in-types">binary</a>(),
+  userinfo: nil | <a href="typespecs.html#built-in-types">binary</a>()
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="__struct__/0">
+
+  <div class="detail-header">
+    <a href="#__struct__/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">%URI{}</h1>
+
+        <span class="note">(struct)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L27" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The URI struct.</p><p>The fields are defined to match the following URI representation
+(with field names between brackets):</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="8433126406-1">[</span><span class="n">scheme</span><span class="p" data-group-id="8433126406-1">]</span><span class="ss">://</span><span class="p" data-group-id="8433126406-2">[</span><span class="n">userinfo</span><span class="p" data-group-id="8433126406-2">]</span><span class="err">@</span><span class="p" data-group-id="8433126406-3">[</span><span class="n">host</span><span class="p" data-group-id="8433126406-3">]</span><span class="p">:</span><span class="p" data-group-id="8433126406-4">[</span><span class="n">port</span><span class="p" data-group-id="8433126406-4">]</span><span class="p" data-group-id="8433126406-5">[</span><span class="n">path</span><span class="p" data-group-id="8433126406-5">]</span><span class="sc">?[</span><span class="n">query</span><span class="p">]</span><span class="c1">#[fragment]</span></code></pre><p>Note the <code class="inline">authority</code> field is deprecated. <a href="#parse/1"><code class="inline">parse/1</code></a> will still
+populate it for backwards compatibility but you should generally
+avoid setting or getting it.</p>
+  </section>
+</section>
+<section class="detail" id="append_path/2">
+
+  <div class="detail-header">
+    <a href="#append_path/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">append_path(uri, path)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L1012" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> append_path(<a href="#t:t/0">t</a>(), <a href="String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Appends <code class="inline">path</code> to the given <code class="inline">uri</code>.</p><p>Path must start with <code class="inline">/</code> and cannot contain additional URL components like
+fragments or query strings. This function further assumes the path is valid and
+it does not contain a query string or fragment parts.</p><h2 id="append_path/2-examples" class="section-heading">
+  <a href="#append_path/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">append_path</span><span class="p" data-group-id="1281275845-1">(</span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1281275845-2">(</span><span class="s">&quot;http://example.com/foo/?x=1&quot;</span><span class="p" data-group-id="1281275845-2">)</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/my-path&quot;</span><span class="p" data-group-id="1281275845-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="1281275845-3">(</span><span class="p" data-group-id="1281275845-3">)</span><span class="w">
+</span><span class="s">&quot;http://example.com/foo/my-path?x=1&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">append_path</span><span class="p" data-group-id="1281275845-4">(</span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1281275845-5">(</span><span class="s">&quot;http://example.com&quot;</span><span class="p" data-group-id="1281275845-5">)</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my-path&quot;</span><span class="p" data-group-id="1281275845-4">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) path must start with &quot;/&quot;, got: &quot;my-path&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="append_query/2">
+
+  <div class="detail-header">
+    <a href="#append_query/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">append_query(uri, query)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L982" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> append_query(<a href="#t:t/0">t</a>(), <a href="typespecs.html#built-in-types">binary</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Appends <code class="inline">query</code> to the given <code class="inline">uri</code>.</p><p>The given <code class="inline">query</code> is not automatically encoded, use <a href="#encode/2"><code class="inline">encode/2</code></a> or <a href="#encode_www_form/1"><code class="inline">encode_www_form/1</code></a>.</p><h2 id="append_query/2-examples" class="section-heading">
+  <a href="#append_query/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">append_query</span><span class="p" data-group-id="0175790993-1">(</span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="0175790993-2">(</span><span class="s">&quot;http://example.com/&quot;</span><span class="p" data-group-id="0175790993-2">)</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;x=1&quot;</span><span class="p" data-group-id="0175790993-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="0175790993-3">(</span><span class="p" data-group-id="0175790993-3">)</span><span class="w">
+</span><span class="s">&quot;http://example.com/?x=1&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">append_query</span><span class="p" data-group-id="0175790993-4">(</span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="0175790993-5">(</span><span class="s">&quot;http://example.com/?x=1&quot;</span><span class="p" data-group-id="0175790993-5">)</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;y=2&quot;</span><span class="p" data-group-id="0175790993-4">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="0175790993-6">(</span><span class="p" data-group-id="0175790993-6">)</span><span class="w">
+</span><span class="s">&quot;http://example.com/?x=1&amp;y=2&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">append_query</span><span class="p" data-group-id="0175790993-7">(</span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="0175790993-8">(</span><span class="s">&quot;http://example.com/?x=1&quot;</span><span class="p" data-group-id="0175790993-8">)</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;x=2&quot;</span><span class="p" data-group-id="0175790993-7">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="0175790993-9">(</span><span class="p" data-group-id="0175790993-9">)</span><span class="w">
+</span><span class="s">&quot;http://example.com/?x=1&amp;x=2&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="char_reserved?/1">
+
+  <div class="detail-header">
+    <a href="#char_reserved?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">char_reserved?(character)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L325" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> char_reserved?(<a href="typespecs.html#built-in-types">byte</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if <code class="inline">character</code> is a reserved one in a URI.</p><p>As specified in <a href="https://tools.ietf.org/html/rfc3986#section-2.2">RFC 3986, section 2.2</a>,
+the following characters are reserved: <code class="inline">:</code>, <code class="inline">/</code>, <code class="inline">?</code>, <code class="inline">#</code>, <code class="inline">[</code>, <code class="inline">]</code>, <code class="inline">@</code>, <code class="inline">!</code>, <code class="inline">$</code>, <code class="inline">&amp;</code>, <code class="inline">'</code>, <code class="inline">(</code>, <code class="inline">)</code>, <code class="inline">*</code>, <code class="inline">+</code>, <code class="inline">,</code>, <code class="inline">;</code>, <code class="inline">=</code></p><h2 id="char_reserved?/1-examples" class="section-heading">
+  <a href="#char_reserved?/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">char_reserved?</span><span class="p" data-group-id="8476519580-1">(</span><span class="sc">?+</span><span class="p" data-group-id="8476519580-1">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="char_unescaped?/1">
+
+  <div class="detail-header">
+    <a href="#char_unescaped?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">char_unescaped?(character)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L363" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> char_unescaped?(<a href="typespecs.html#built-in-types">byte</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if <code class="inline">character</code> is allowed unescaped in a URI.</p><p>This is the default used by <a href="#encode/2"><code class="inline">URI.encode/2</code></a> where both
+<a href="#char_reserved?/1">reserved</a> and <a href="#char_unreserved?/1">unreserved characters</a>
+are kept unescaped.</p><h2 id="char_unescaped?/1-examples" class="section-heading">
+  <a href="#char_unescaped?/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">char_unescaped?</span><span class="p" data-group-id="0031574648-1">(</span><span class="sc">?{</span><span class="p" data-group-id="0031574648-1">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="char_unreserved?/1">
+
+  <div class="detail-header">
+    <a href="#char_unreserved?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">char_unreserved?(character)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L345" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> char_unreserved?(<a href="typespecs.html#built-in-types">byte</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if <code class="inline">character</code> is an unreserved one in a URI.</p><p>As specified in <a href="https://tools.ietf.org/html/rfc3986#section-2.3">RFC 3986, section 2.3</a>,
+the following characters are unreserved:</p><ul><li>Alphanumeric characters: <code class="inline">A-Z</code>, <code class="inline">a-z</code>, <code class="inline">0-9</code></li><li><code class="inline">~</code>, <code class="inline">_</code>, <code class="inline">-</code>, <code class="inline">.</code></li></ul><h2 id="char_unreserved?/1-examples" class="section-heading">
+  <a href="#char_unreserved?/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">char_unreserved?</span><span class="p" data-group-id="1613931956-1">(</span><span class="sc">?_</span><span class="p" data-group-id="1613931956-1">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode/1">
+
+  <div class="detail-header">
+    <a href="#decode/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode(uri)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L445" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode(<a href="typespecs.html#built-in-types">binary</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Percent-unescapes a URI.</p><h2 id="decode/1-examples" class="section-heading">
+  <a href="#decode/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">decode</span><span class="p" data-group-id="8546830852-1">(</span><span class="s">&quot;https%3A%2F%2Felixir-lang.org&quot;</span><span class="p" data-group-id="8546830852-1">)</span><span class="w">
+</span><span class="s">&quot;https://elixir-lang.org&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode_query/3">
+
+    <span id="decode_query/1"></span>
+
+    <span id="decode_query/2"></span>
+
+  <div class="detail-header">
+    <a href="#decode_query/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode_query(query, map \\ %{}, encoding \\ :www_form)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L202" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode_query(<a href="typespecs.html#built-in-types">binary</a>(), %{optional(<a href="typespecs.html#built-in-types">binary</a>()) =&gt; <a href="typespecs.html#built-in-types">binary</a>()}, :rfc3986 | :www_form) ::
+  %{
+    optional(<a href="typespecs.html#built-in-types">binary</a>()) =&gt; <a href="typespecs.html#built-in-types">binary</a>()
+  }</pre>
+
+      </div>
+
+<p>Decodes <code class="inline">query</code> into a map.</p><p>Given a query string in the form of <code class="inline">key1=value1&amp;key2=value2...</code>, this
+function inserts each key-value pair in the query string as one entry in the
+given <code class="inline">map</code>. Keys and values in the resulting map will be binaries. Keys and
+values will be percent-unescaped.</p><p>You can specify one of the following <code class="inline">encoding</code> options:</p><ul><li><p><code class="inline">:www_form</code> - (default, since v1.12.0) keys and values are decoded as per
+<a href="#decode_www_form/1"><code class="inline">decode_www_form/1</code></a>. This is the format typically used by browsers on
+query strings and form data. It decodes &quot;+&quot; as &quot; &quot;.</p></li><li><p><code class="inline">:rfc3986</code> - (since v1.12.0) keys and values are decoded as per
+<a href="#decode/1"><code class="inline">decode/1</code></a>. The result is the same as <code class="inline">:www_form</code> except for leaving &quot;+&quot;
+as is in line with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>.</p></li></ul><p>Encoding defaults to <code class="inline">:www_form</code> for backward compatibility.</p><p>Use <a href="#query_decoder/1"><code class="inline">query_decoder/1</code></a> if you want to iterate over each value manually.</p><h2 id="decode_query/3-examples" class="section-heading">
+  <a href="#decode_query/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">decode_query</span><span class="p" data-group-id="3840901454-1">(</span><span class="s">&quot;foo=1&amp;bar=2&quot;</span><span class="p" data-group-id="3840901454-1">)</span><span class="w">
+</span><span class="p" data-group-id="3840901454-2">%{</span><span class="s">&quot;bar&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p" data-group-id="3840901454-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">decode_query</span><span class="p" data-group-id="3840901454-3">(</span><span class="s">&quot;percent=oh+yes%21&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3840901454-4">%{</span><span class="s">&quot;starting&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;map&quot;</span><span class="p" data-group-id="3840901454-4">}</span><span class="p" data-group-id="3840901454-3">)</span><span class="w">
+</span><span class="p" data-group-id="3840901454-5">%{</span><span class="s">&quot;percent&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;oh yes!&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;starting&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;map&quot;</span><span class="p" data-group-id="3840901454-5">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">decode_query</span><span class="p" data-group-id="3840901454-6">(</span><span class="s">&quot;percent=oh+yes%21&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3840901454-7">%{</span><span class="p" data-group-id="3840901454-7">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:rfc3986</span><span class="p" data-group-id="3840901454-6">)</span><span class="w">
+</span><span class="p" data-group-id="3840901454-8">%{</span><span class="s">&quot;percent&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;oh+yes!&quot;</span><span class="p" data-group-id="3840901454-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode_www_form/1">
+
+  <div class="detail-header">
+    <a href="#decode_www_form/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode_www_form(string)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L463" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode_www_form(<a href="typespecs.html#built-in-types">binary</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Decodes <code class="inline">string</code> as &quot;x-www-form-urlencoded&quot;.</p><p>Note &quot;x-www-form-urlencoded&quot; is not specified as part of
+RFC 3986. However, it is a commonly used format to encode
+query strings and form data by browsers.</p><h2 id="decode_www_form/1-examples" class="section-heading">
+  <a href="#decode_www_form/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">decode_www_form</span><span class="p" data-group-id="1568477479-1">(</span><span class="s">&quot;%3Call+in%2F&quot;</span><span class="p" data-group-id="1568477479-1">)</span><span class="w">
+</span><span class="s">&quot;&lt;all in/&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="default_port/1">
+
+  <div class="detail-header">
+    <a href="#default_port/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">default_port(scheme)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L80" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> default_port(<a href="typespecs.html#built-in-types">binary</a>()) :: nil | <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Returns the default port for a given <code class="inline">scheme</code>.</p><p>If the scheme is unknown to the <a href="URI.html"><code class="inline">URI</code></a> module, this function returns
+<code class="inline">nil</code>. The default port for any scheme can be configured globally
+via <a href="#default_port/2"><code class="inline">default_port/2</code></a>.</p><h2 id="default_port/1-examples" class="section-heading">
+  <a href="#default_port/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">default_port</span><span class="p" data-group-id="4838432241-1">(</span><span class="s">&quot;ftp&quot;</span><span class="p" data-group-id="4838432241-1">)</span><span class="w">
+</span><span class="mi">21</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">default_port</span><span class="p" data-group-id="4838432241-2">(</span><span class="s">&quot;ponzi&quot;</span><span class="p" data-group-id="4838432241-2">)</span><span class="w">
+</span><span class="no">nil</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="default_port/2">
+
+  <div class="detail-header">
+    <a href="#default_port/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">default_port(scheme, port)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L97" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> default_port(<a href="typespecs.html#built-in-types">binary</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Registers the default <code class="inline">port</code> for the given <code class="inline">scheme</code>.</p><p>After this function is called, <code class="inline">port</code> will be returned by
+<a href="#default_port/1"><code class="inline">default_port/1</code></a> for the given scheme <code class="inline">scheme</code>. Note that this function
+changes the default port for the given <code class="inline">scheme</code> <em>globally</em>, meaning for
+every application.</p><p>It is recommended for this function to be invoked in your
+application's start callback in case you want to register
+new URIs.</p>
+  </section>
+</section>
+<section class="detail" id="encode/2">
+
+    <span id="encode/1"></span>
+
+  <div class="detail-header">
+    <a href="#encode/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encode(string, predicate \\ &amp;char_unescaped?/1)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L396" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> encode(<a href="typespecs.html#built-in-types">binary</a>(), (<a href="typespecs.html#built-in-types">byte</a>() -&gt; <a href="typespecs.html#built-in-types">as_boolean</a>(<a href="typespecs.html#built-in-types">term</a>()))) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Percent-encodes all characters that require escaping in <code class="inline">string</code>.</p><p>By default, this function is meant to escape the whole URI, and
+therefore it will only escape characters which are foreign in
+all parts of a URI. Reserved characters (such as <code class="inline">:</code> and <code class="inline">/</code>)
+or unreserved (such as letters and numbers) are not escaped.</p><p>Because different components of a URI require different escaping
+rules, this function also accepts a <code class="inline">predicate</code> function as an optional
+argument. If passed, this function will be called with each byte
+in <code class="inline">string</code> as its argument and should return a truthy value (anything other
+than <code class="inline">false</code> or <code class="inline">nil</code>) if the given byte should be left as is, or
+return a falsy value (<code class="inline">false</code> or <code class="inline">nil</code>) if the character should be
+escaped. Defaults to <a href="#char_unescaped?/1"><code class="inline">URI.char_unescaped?/1</code></a>.</p><p>See <a href="#encode_www_form/1"><code class="inline">encode_www_form/1</code></a> if you are interested in escaping reserved
+characters too.</p><h2 id="encode/2-examples" class="section-heading">
+  <a href="#encode/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">encode</span><span class="p" data-group-id="7940471327-1">(</span><span class="s">&quot;ftp://s-ite.tld/?value=put it+й&quot;</span><span class="p" data-group-id="7940471327-1">)</span><span class="w">
+</span><span class="s">&quot;ftp://s-ite.tld/?value=put%20it+%D0%B9&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">encode</span><span class="p" data-group-id="7940471327-2">(</span><span class="s">&quot;a string&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="7940471327-3">(</span><span class="ni">&amp;1</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">?i</span><span class="p" data-group-id="7940471327-3">)</span><span class="p" data-group-id="7940471327-2">)</span><span class="w">
+</span><span class="s">&quot;a str%69ng&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="encode_query/2">
+
+    <span id="encode_query/1"></span>
+
+  <div class="detail-header">
+    <a href="#encode_query/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encode_query(enumerable, encoding \\ :www_form)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L144" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> encode_query(<a href="Enumerable.html#t:t/0">Enumerable.t</a>(), :rfc3986 | :www_form) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Encodes <code class="inline">enumerable</code> into a query string using <code class="inline">encoding</code>.</p><p>Takes an enumerable that enumerates as a list of two-element
+tuples (for instance, a map or a keyword list) and returns a string
+in the form of <code class="inline">key1=value1&amp;key2=value2...</code>.</p><p>Keys and values can be any term that implements the <a href="String.Chars.html"><code class="inline">String.Chars</code></a>
+protocol with the exception of lists, which are explicitly forbidden.</p><p>You can specify one of the following <code class="inline">encoding</code> strategies:</p><ul><li><p><code class="inline">:www_form</code> - (default, since v1.12.0) keys and values are URL encoded as
+per <a href="#encode_www_form/1"><code class="inline">encode_www_form/1</code></a>. This is the format typically used by browsers on
+query strings and form data. It encodes &quot; &quot; as &quot;+&quot;.</p></li><li><p><code class="inline">:rfc3986</code> - (since v1.12.0) the same as <code class="inline">:www_form</code> except it encodes
+&quot; &quot; as &quot;%20&quot; according <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>.
+This is the best option if you are encoding in a non-browser situation,
+since encoding spaces as &quot;+&quot; can be ambiguous to URI parsers. This can
+inadvertently lead to spaces being interpreted as literal plus signs.</p></li></ul><p>Encoding defaults to <code class="inline">:www_form</code> for backward compatibility.</p><h2 id="encode_query/2-examples" class="section-heading">
+  <a href="#encode_query/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1813327980-1">%{</span><span class="s">&quot;foo&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1813327980-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">encode_query</span><span class="p" data-group-id="1813327980-2">(</span><span class="n">query</span><span class="p" data-group-id="1813327980-2">)</span><span class="w">
+</span><span class="s">&quot;bar=2&amp;foo=1&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1813327980-3">%{</span><span class="s">&quot;key&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;value with spaces&quot;</span><span class="p" data-group-id="1813327980-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">encode_query</span><span class="p" data-group-id="1813327980-4">(</span><span class="n">query</span><span class="p" data-group-id="1813327980-4">)</span><span class="w">
+</span><span class="s">&quot;key=value+with+spaces&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1813327980-5">%{</span><span class="s">&quot;key&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;value with spaces&quot;</span><span class="p" data-group-id="1813327980-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">encode_query</span><span class="p" data-group-id="1813327980-6">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="ss">:rfc3986</span><span class="p" data-group-id="1813327980-6">)</span><span class="w">
+</span><span class="s">&quot;key=value%20with%20spaces&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">encode_query</span><span class="p" data-group-id="1813327980-7">(</span><span class="p" data-group-id="1813327980-8">%{</span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1813327980-9">[</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="ss">:list</span><span class="p" data-group-id="1813327980-9">]</span><span class="p" data-group-id="1813327980-8">}</span><span class="p" data-group-id="1813327980-7">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) encode_query/2 values cannot be lists, got: [:a, :list]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="encode_www_form/1">
+
+  <div class="detail-header">
+    <a href="#encode_www_form/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encode_www_form(string)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L415" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> encode_www_form(<a href="typespecs.html#built-in-types">binary</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Encodes <code class="inline">string</code> as &quot;x-www-form-urlencoded&quot;.</p><p>Note &quot;x-www-form-urlencoded&quot; is not specified as part of
+RFC 3986. However, it is a commonly used format to encode
+query strings and form data by browsers.</p><h2 id="encode_www_form/1-example" class="section-heading">
+  <a href="#encode_www_form/1-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">encode_www_form</span><span class="p" data-group-id="2628464415-1">(</span><span class="s">&quot;put: it+й&quot;</span><span class="p" data-group-id="2628464415-1">)</span><span class="w">
+</span><span class="s">&quot;put%3A+it%2B%D0%B9&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="merge/2">
+
+  <div class="detail-header">
+    <a href="#merge/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">merge(uri, rel)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L895" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> merge(<a href="#t:t/0">t</a>() | <a href="typespecs.html#built-in-types">binary</a>(), <a href="#t:t/0">t</a>() | <a href="typespecs.html#built-in-types">binary</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Merges two URIs.</p><p>This function merges two URIs as per
+<a href="https://tools.ietf.org/html/rfc3986#section-5.2">RFC 3986, section 5.2</a>.</p><h2 id="merge/2-examples" class="section-heading">
+  <a href="#merge/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="8551160936-1">(</span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="8551160936-2">(</span><span class="s">&quot;http://google.com&quot;</span><span class="p" data-group-id="8551160936-2">)</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/query&quot;</span><span class="p" data-group-id="8551160936-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">to_string</span><span class="p" data-group-id="8551160936-3">(</span><span class="p" data-group-id="8551160936-3">)</span><span class="w">
+</span><span class="s">&quot;http://google.com/query&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="8551160936-4">(</span><span class="s">&quot;http://example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;http://google.com&quot;</span><span class="p" data-group-id="8551160936-4">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">to_string</span><span class="p" data-group-id="8551160936-5">(</span><span class="p" data-group-id="8551160936-5">)</span><span class="w">
+</span><span class="s">&quot;http://google.com&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/1">
+
+  <div class="detail-header">
+    <a href="#new/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(uri)</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L596" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="#t:t/0">t</a>() | <a href="String.html#t:t/0">String.t</a>()) :: {:ok, <a href="#t:t/0">t</a>()} | {:error, <a href="String.html#t:t/0">String.t</a>()}</pre>
+
+      </div>
+
+<p>Creates a new URI struct from a URI or a string.</p><p>If a <code class="inline">%URI{}</code> struct is given, it returns <code class="inline">{:ok, uri}</code>. If a string is
+given, it will parse and validate it. If the string is valid, it returns
+<code class="inline">{:ok, uri}</code>, otherwise it returns <code class="inline">{:error, part}</code> with the invalid part
+of the URI. For parsing URIs without further validation, see <a href="#parse/1"><code class="inline">parse/1</code></a>.</p><p>This function can parse both absolute and relative URLs. You can check
+if a URI is absolute or relative by checking if the <code class="inline">scheme</code> field is
+<code class="inline">nil</code> or not.</p><p>When a URI is given without a port, the value returned by <a href="#default_port/1"><code class="inline">URI.default_port/1</code></a>
+for the URI's scheme is used for the <code class="inline">:port</code> field. The scheme is also
+normalized to lowercase.</p><h2 id="new/1-examples" class="section-heading">
+  <a href="#new/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2989600742-1">(</span><span class="s">&quot;https://elixir-lang.org/&quot;</span><span class="p" data-group-id="2989600742-1">)</span><span class="w">
+</span><span class="p" data-group-id="2989600742-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2989600742-3">%</span><span class="nc" data-group-id="2989600742-3">URI</span><span class="p" data-group-id="2989600742-3">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="2989600742-3">}</span><span class="p" data-group-id="2989600742-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2989600742-4">(</span><span class="s">&quot;//elixir-lang.org/&quot;</span><span class="p" data-group-id="2989600742-4">)</span><span class="w">
+</span><span class="p" data-group-id="2989600742-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2989600742-6">%</span><span class="nc" data-group-id="2989600742-6">URI</span><span class="p" data-group-id="2989600742-6">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="2989600742-6">}</span><span class="p" data-group-id="2989600742-5">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2989600742-7">(</span><span class="s">&quot;/foo/bar&quot;</span><span class="p" data-group-id="2989600742-7">)</span><span class="w">
+</span><span class="p" data-group-id="2989600742-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2989600742-9">%</span><span class="nc" data-group-id="2989600742-9">URI</span><span class="p" data-group-id="2989600742-9">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/foo/bar&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="2989600742-9">}</span><span class="p" data-group-id="2989600742-8">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2989600742-10">(</span><span class="s">&quot;foo/bar&quot;</span><span class="p" data-group-id="2989600742-10">)</span><span class="w">
+</span><span class="p" data-group-id="2989600742-11">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2989600742-12">%</span><span class="nc" data-group-id="2989600742-12">URI</span><span class="p" data-group-id="2989600742-12">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foo/bar&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="2989600742-12">}</span><span class="p" data-group-id="2989600742-11">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2989600742-13">(</span><span class="s">&quot;//[fe80::]/&quot;</span><span class="p" data-group-id="2989600742-13">)</span><span class="w">
+</span><span class="p" data-group-id="2989600742-14">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2989600742-15">%</span><span class="nc" data-group-id="2989600742-15">URI</span><span class="p" data-group-id="2989600742-15">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fe80::&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="2989600742-15">}</span><span class="p" data-group-id="2989600742-14">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2989600742-16">(</span><span class="s">&quot;https:?query&quot;</span><span class="p" data-group-id="2989600742-16">)</span><span class="w">
+</span><span class="p" data-group-id="2989600742-17">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2989600742-18">%</span><span class="nc" data-group-id="2989600742-18">URI</span><span class="p" data-group-id="2989600742-18">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;query&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="2989600742-18">}</span><span class="p" data-group-id="2989600742-17">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2989600742-19">(</span><span class="s">&quot;/invalid_greater_than_in_path/&gt;&quot;</span><span class="p" data-group-id="2989600742-19">)</span><span class="w">
+</span><span class="p" data-group-id="2989600742-20">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&gt;&quot;</span><span class="p" data-group-id="2989600742-20">}</span></code></pre><p>Giving an existing URI simply returns it wrapped in a tuple:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="7506942937-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">uri</span><span class="p" data-group-id="7506942937-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7506942937-2">(</span><span class="s">&quot;https://elixir-lang.org/&quot;</span><span class="p" data-group-id="7506942937-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7506942937-3">(</span><span class="n">uri</span><span class="p" data-group-id="7506942937-3">)</span><span class="w">
+</span><span class="p" data-group-id="7506942937-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7506942937-5">%</span><span class="nc" data-group-id="7506942937-5">URI</span><span class="p" data-group-id="7506942937-5">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="7506942937-5">}</span><span class="p" data-group-id="7506942937-4">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new!/1">
+
+  <div class="detail-header">
+    <a href="#new!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new!(uri)</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L640" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new!(<a href="#t:t/0">t</a>() | <a href="String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Similar to <a href="#new/1"><code class="inline">new/1</code></a> but raises <a href="URI.Error.html"><code class="inline">URI.Error</code></a> if an invalid string is given.</p><h2 id="new!/1-examples" class="section-heading">
+  <a href="#new!/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="1917299905-1">(</span><span class="s">&quot;https://elixir-lang.org/&quot;</span><span class="p" data-group-id="1917299905-1">)</span><span class="w">
+</span><span class="p" data-group-id="1917299905-2">%</span><span class="nc" data-group-id="1917299905-2">URI</span><span class="p" data-group-id="1917299905-2">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="1917299905-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="1917299905-3">(</span><span class="s">&quot;/invalid_greater_than_in_path/&gt;&quot;</span><span class="p" data-group-id="1917299905-3">)</span><span class="w">
+</span><span class="gt">** (URI.Error) cannot parse due to reason invalid_uri: &quot;&gt;&quot;</span></code></pre><p>Giving an existing URI simply returns it:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="1440825410-1">(</span><span class="s">&quot;https://elixir-lang.org/&quot;</span><span class="p" data-group-id="1440825410-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="1440825410-2">(</span><span class="n">uri</span><span class="p" data-group-id="1440825410-2">)</span><span class="w">
+</span><span class="p" data-group-id="1440825410-3">%</span><span class="nc" data-group-id="1440825410-3">URI</span><span class="p" data-group-id="1440825410-3">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="1440825410-3">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="parse/1">
+
+  <div class="detail-header">
+    <a href="#parse/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse(uri)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L778" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> parse(<a href="#t:t/0">t</a>() | <a href="typespecs.html#built-in-types">binary</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Parses a URI into its components, without further validation.</p><p>This function can parse both absolute and relative URLs. You can check
+if a URI is absolute or relative by checking if the <code class="inline">scheme</code> field is
+nil or not. Furthermore, this function expects both absolute and
+relative URIs to be well-formed and does not perform any validation.
+See the &quot;Examples&quot; section below. Use <a href="#new/1"><code class="inline">new/1</code></a> if you want to validate
+the URI fields after parsing.</p><p>When a URI is given without a port, the value returned by <a href="#default_port/1"><code class="inline">URI.default_port/1</code></a>
+for the URI's scheme is used for the <code class="inline">:port</code> field. The scheme is also
+normalized to lowercase.</p><p>If a <code class="inline">%URI{}</code> struct is given to this function, this function returns it
+unmodified.</p><section role="note" class="admonition info"><h4 class="admonition-title info"><code class="inline">:authority</code> field</h4><p>This function sets the field <code class="inline">:authority</code> for backwards-compatibility reasons
+but it is deprecated.</p></section><h2 id="parse/1-examples" class="section-heading">
+  <a href="#parse/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4841061382-1">(</span><span class="s">&quot;https://elixir-lang.org/&quot;</span><span class="p" data-group-id="4841061382-1">)</span><span class="w">
+</span><span class="p" data-group-id="4841061382-2">%</span><span class="nc" data-group-id="4841061382-2">URI</span><span class="p" data-group-id="4841061382-2">{</span><span class="w">
+  </span><span class="ss">authority</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="4841061382-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4841061382-3">(</span><span class="s">&quot;//elixir-lang.org/&quot;</span><span class="p" data-group-id="4841061382-3">)</span><span class="w">
+</span><span class="p" data-group-id="4841061382-4">%</span><span class="nc" data-group-id="4841061382-4">URI</span><span class="p" data-group-id="4841061382-4">{</span><span class="w">
+  </span><span class="ss">authority</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir-lang.org&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="4841061382-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4841061382-5">(</span><span class="s">&quot;/foo/bar&quot;</span><span class="p" data-group-id="4841061382-5">)</span><span class="w">
+</span><span class="p" data-group-id="4841061382-6">%</span><span class="nc" data-group-id="4841061382-6">URI</span><span class="p" data-group-id="4841061382-6">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/foo/bar&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="4841061382-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4841061382-7">(</span><span class="s">&quot;foo/bar&quot;</span><span class="p" data-group-id="4841061382-7">)</span><span class="w">
+</span><span class="p" data-group-id="4841061382-8">%</span><span class="nc" data-group-id="4841061382-8">URI</span><span class="p" data-group-id="4841061382-8">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foo/bar&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="4841061382-8">}</span></code></pre><p>In contrast to <a href="#new/1"><code class="inline">URI.new/1</code></a>, this function will parse poorly-formed
+URIs, for example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1429549770-1">(</span><span class="s">&quot;/invalid_greater_than_in_path/&gt;&quot;</span><span class="p" data-group-id="1429549770-1">)</span><span class="w">
+</span><span class="p" data-group-id="1429549770-2">%</span><span class="nc" data-group-id="1429549770-2">URI</span><span class="p" data-group-id="1429549770-2">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/invalid_greater_than_in_path/&gt;&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="1429549770-2">}</span></code></pre><p>Another example is a URI with brackets in query strings. It is accepted
+by <a href="#parse/1"><code class="inline">parse/1</code></a>, it is commonly accepted by browsers, but it will be refused
+by <a href="#new/1"><code class="inline">new/1</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="8506200988-1">(</span><span class="s">&quot;/?foo[bar]=baz&quot;</span><span class="p" data-group-id="8506200988-1">)</span><span class="w">
+</span><span class="p" data-group-id="8506200988-2">%</span><span class="nc" data-group-id="8506200988-2">URI</span><span class="p" data-group-id="8506200988-2">{</span><span class="w">
+  </span><span class="ss">fragment</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">query</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foo[bar]=baz&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
+  </span><span class="ss">userinfo</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="p" data-group-id="8506200988-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="query_decoder/2">
+
+    <span id="query_decoder/1"></span>
+
+  <div class="detail-header">
+    <a href="#query_decoder/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">query_decoder(query, encoding \\ :www_form)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L277" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> query_decoder(<a href="typespecs.html#built-in-types">binary</a>(), :rfc3986 | :www_form) :: <a href="Enumerable.html#t:t/0">Enumerable.t</a>()</pre>
+
+      </div>
+
+<p>Returns a stream of two-element tuples representing key-value pairs in the
+given <code class="inline">query</code>.</p><p>Key and value in each tuple will be binaries and will be percent-unescaped.</p><p>You can specify one of the following <code class="inline">encoding</code> options:</p><ul><li><p><code class="inline">:www_form</code> - (default, since v1.12.0) keys and values are decoded as per
+<a href="#decode_www_form/1"><code class="inline">decode_www_form/1</code></a>. This is the format typically used by browsers on
+query strings and form data. It decodes &quot;+&quot; as &quot; &quot;.</p></li><li><p><code class="inline">:rfc3986</code> - (since v1.12.0) keys and values are decoded as per
+<a href="#decode/1"><code class="inline">decode/1</code></a>. The result is the same as <code class="inline">:www_form</code> except for leaving &quot;+&quot;
+as is in line with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>.</p></li></ul><p>Encoding defaults to <code class="inline">:www_form</code> for backward compatibility.</p><h2 id="query_decoder/2-examples" class="section-heading">
+  <a href="#query_decoder/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">query_decoder</span><span class="p" data-group-id="7283997011-1">(</span><span class="s">&quot;foo=1&amp;bar=2&quot;</span><span class="p" data-group-id="7283997011-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7283997011-2">(</span><span class="p" data-group-id="7283997011-2">)</span><span class="w">
+</span><span class="p" data-group-id="7283997011-3">[</span><span class="p" data-group-id="7283997011-4">{</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p" data-group-id="7283997011-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7283997011-5">{</span><span class="s">&quot;bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p" data-group-id="7283997011-5">}</span><span class="p" data-group-id="7283997011-3">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">query_decoder</span><span class="p" data-group-id="7283997011-6">(</span><span class="s">&quot;food=bread%26butter&amp;drinks=tap%20water+please&quot;</span><span class="p" data-group-id="7283997011-6">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7283997011-7">(</span><span class="p" data-group-id="7283997011-7">)</span><span class="w">
+</span><span class="p" data-group-id="7283997011-8">[</span><span class="p" data-group-id="7283997011-9">{</span><span class="s">&quot;food&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bread&amp;butter&quot;</span><span class="p" data-group-id="7283997011-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7283997011-10">{</span><span class="s">&quot;drinks&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tap water please&quot;</span><span class="p" data-group-id="7283997011-10">}</span><span class="p" data-group-id="7283997011-8">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">query_decoder</span><span class="p" data-group-id="7283997011-11">(</span><span class="s">&quot;food=bread%26butter&amp;drinks=tap%20water+please&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:rfc3986</span><span class="p" data-group-id="7283997011-11">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7283997011-12">(</span><span class="p" data-group-id="7283997011-12">)</span><span class="w">
+</span><span class="p" data-group-id="7283997011-13">[</span><span class="p" data-group-id="7283997011-14">{</span><span class="s">&quot;food&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bread&amp;butter&quot;</span><span class="p" data-group-id="7283997011-14">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7283997011-15">{</span><span class="s">&quot;drinks&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tap water+please&quot;</span><span class="p" data-group-id="7283997011-15">}</span><span class="p" data-group-id="7283997011-13">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_string/1">
+
+  <div class="detail-header">
+    <a href="#to_string/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_string(uri)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/uri.ex#L877" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the string representation of the given <a href="#t:t/0">URI struct</a>.</p><h2 id="to_string/1-examples" class="section-heading">
+  <a href="#to_string/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="9199991888-1">(</span><span class="s">&quot;http://google.com&quot;</span><span class="p" data-group-id="9199991888-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="9199991888-2">(</span><span class="n">uri</span><span class="p" data-group-id="9199991888-2">)</span><span class="w">
+</span><span class="s">&quot;http://google.com&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="9199991888-3">(</span><span class="s">&quot;foo://bar.baz&quot;</span><span class="p" data-group-id="9199991888-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">URI</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="9199991888-4">(</span><span class="n">uri</span><span class="p" data-group-id="9199991888-4">)</span><span class="w">
+</span><span class="s">&quot;foo://bar.baz&quot;</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

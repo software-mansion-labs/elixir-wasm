@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Regex — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Regex.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Regex</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Provides regular expressions for Elixir.</p><p>Regex is based on PCRE (Perl Compatible Regular Expressions) and
+built on top of Erlang's <code class="inline">:re</code> module. More information can be found
+in the <a href="https://www.erlang.org/doc/apps/stdlib/re.html"><code class="inline">:re</code> module documentation</a>.</p><p>Regular expressions in Elixir can be created using the sigils
+<code class="inline">~r</code> (see <a href="Kernel.html#sigil_r/2"><code class="inline">sigil_r/2</code></a>):</p><pre><code class="makeup elixir" translate="no"><span class="c1"># A simple regular expression that matches foo anywhere in the string</span><span class="w">
+</span><span class="sr">~r/foo/</span><span class="w">
+
+</span><span class="c1"># A regular expression with case insensitive and Unicode options</span><span class="w">
+</span><span class="sr">~r/foo/iu</span></code></pre><p>Regular expressions created via sigils are pre-compiled and stored
+in the <code class="inline">.beam</code> file. Note that this may be a problem if you are precompiling
+Elixir, see the &quot;Precompilation&quot; section for more information.</p><p>A Regex is represented internally as the <a href="Regex.html"><code class="inline">Regex</code></a> struct. Therefore,
+<code class="inline">%Regex{}</code> can be used whenever there is a need to match on them.
+Keep in mind that all of the structs fields are private. There is
+also not guarantee two regular expressions from the same source are
+equal, for example:</p><pre><code class="makeup elixir" translate="no"><span class="sr">~r/(?&lt;foo&gt;.)(?&lt;bar&gt;.)/</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sr">~r/(?&lt;foo&gt;.)(?&lt;bar&gt;.)/</span></code></pre><p>may return <code class="inline">true</code> or <code class="inline">false</code> depending on your machine, endianness,
+available optimizations and others. You can, however, retrieve the source
+of a compiled regular expression by accessing the <code class="inline">source</code> field, and then
+compare those directly:</p><pre><code class="makeup elixir" translate="no"><span class="sr">~r/(?&lt;foo&gt;.)(?&lt;bar&gt;.)/</span><span class="o">.</span><span class="n">source</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sr">~r/(?&lt;foo&gt;.)(?&lt;bar&gt;.)/</span><span class="o">.</span><span class="n">source</span></code></pre><h2 id="module-escapes" class="section-heading">
+  <a href="#module-escapes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Escapes</span>
+</h2>
+<p>Escape sequences are split into two categories.</p><h3 id="module-non-printing-characters" class="section-heading">
+  <a href="#module-non-printing-characters" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Non-printing characters</span>
+</h3>
+<ul><li><code class="inline">\a</code> - Alarm, that is, the BEL character (hex 07)</li><li><code class="inline">\e</code> - Escape (hex 1B)</li><li><code class="inline">\f</code> - Form feed (hex 0C)</li><li><code class="inline">\n</code> - Line feed (hex 0A)</li><li><code class="inline">\r</code> - Carriage return (hex 0D)</li><li><code class="inline">\t</code> - Tab (hex 09)</li><li><code class="inline">\xhh</code> - Character with hex code hh</li><li><code class="inline">\x{hhh..}</code> - Character with hex code hhh..</li></ul><p><code class="inline">\u</code> and <code class="inline">\U</code> are not supported. Other escape sequences, such as <code class="inline">\ddd</code>
+for octals, are supported but discouraged.</p><h3 id="module-generic-character-types" class="section-heading">
+  <a href="#module-generic-character-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Generic character types</span>
+</h3>
+<ul><li><code class="inline">\d</code> - Any decimal digit</li><li><code class="inline">\D</code> - Any character that is not a decimal digit</li><li><code class="inline">\h</code> - Any horizontal whitespace character</li><li><code class="inline">\H</code> - Any character that is not a horizontal whitespace character</li><li><code class="inline">\s</code> - Any whitespace character</li><li><code class="inline">\S</code> - Any character that is not a whitespace character</li><li><code class="inline">\v</code> - Any vertical whitespace character</li><li><code class="inline">\V</code> - Any character that is not a vertical whitespace character</li><li><code class="inline">\w</code> - Any &quot;word&quot; character</li><li><code class="inline">\W</code> - Any &quot;non-word&quot; character</li></ul><h2 id="module-modifiers" class="section-heading">
+  <a href="#module-modifiers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Modifiers</span>
+</h2>
+<p>The modifiers available when creating a Regex are:</p><ul><li><p><code class="inline">:unicode</code> (u) - enables Unicode specific patterns like <code class="inline">\p</code> and causes
+character classes like <code class="inline">\w</code>, <code class="inline">\W</code>, <code class="inline">\s</code>, and the like to also match on Unicode
+(see examples below in &quot;Character classes&quot;). It expects valid Unicode
+strings to be given on match</p></li><li><p><code class="inline">:caseless</code> (i) - adds case insensitivity</p></li><li><p><code class="inline">:dotall</code> (s) - causes dot to match newlines and also set newline to
+anycrlf; the new line setting can be overridden by setting <code class="inline">(*CR)</code> or
+<code class="inline">(*LF)</code> or <code class="inline">(*CRLF)</code> or <code class="inline">(*ANY)</code> according to <code class="inline">:re</code> documentation</p></li><li><p><code class="inline">:multiline</code> (m) - causes <code class="inline">^</code> and <code class="inline">$</code> to mark the beginning and end of
+each line; use <code class="inline">\A</code> and <code class="inline">\z</code> to match the end or beginning of the string</p></li><li><p><code class="inline">:extended</code> (x) - whitespace characters are ignored except when escaped
+or within <code class="inline">[..]</code>, and allow <code class="inline">#</code> to delimit comments</p></li><li><p><code class="inline">:firstline</code> (f) - forces the unanchored pattern to match before or at the
+first newline, though the matched text may continue over the newline</p></li><li><p><code class="inline">:ungreedy</code> (U) - inverts the &quot;greediness&quot; of the regexp
+(the previous <code class="inline">r</code> option is deprecated in favor of <code class="inline">U</code>)</p></li></ul><p>The options not available are:</p><ul><li><code class="inline">:anchored</code> - not available, use <code class="inline">^</code> or <code class="inline">\A</code> instead</li><li><code class="inline">:dollar_endonly</code> - not available, use <code class="inline">\z</code> instead</li><li><code class="inline">:no_auto_capture</code> - not available, use <code class="inline">?:</code> instead</li><li><code class="inline">:newline</code> - not available, use <code class="inline">(*CR)</code> or <code class="inline">(*LF)</code> or <code class="inline">(*CRLF)</code> or
+<code class="inline">(*ANYCRLF)</code> or <code class="inline">(*ANY)</code> at the beginning of the regexp according to the
+<code class="inline">:re</code> documentation</li></ul><h2 id="module-captures" class="section-heading">
+  <a href="#module-captures" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Captures</span>
+</h2>
+<p>Many functions in this module handle what to capture in a regex
+match via the <code class="inline">:capture</code> option. The supported values are:</p><ul><li><p><code class="inline">:all</code> - all captured subpatterns including the complete matching string
+(this is the default)</p></li><li><p><code class="inline">:first</code> - only the first captured subpattern, which is always the
+complete matching part of the string; all explicitly captured subpatterns
+are discarded</p></li><li><p><code class="inline">:all_but_first</code> - all but the first matching subpattern, i.e. all
+explicitly captured subpatterns, but not the complete matching part of
+the string</p></li><li><p><code class="inline">:none</code> - does not return matching subpatterns at all</p></li><li><p><code class="inline">:all_names</code> - captures all named subpattern matches in the Regex as a list
+ordered <strong>alphabetically</strong> by the names of the subpatterns</p></li><li><p><code class="inline">list(binary | atom)</code> - a list of named captures to capture</p></li></ul><h2 id="module-character-classes" class="section-heading">
+  <a href="#module-character-classes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Character classes</span>
+</h2>
+<p>Regex supports several built in named character classes. These are used by
+enclosing the class name in <code class="inline">[: :]</code> inside a group. For example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="n">match?</span><span class="p" data-group-id="3212759738-1">(</span><span class="s">&quot;123&quot;</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/^[[:alnum:]]+$/</span><span class="p" data-group-id="3212759738-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="n">match?</span><span class="p" data-group-id="3212759738-2">(</span><span class="s">&quot;123 456&quot;</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/^[[:alnum:][:blank:]]+$/</span><span class="p" data-group-id="3212759738-2">)</span><span class="w">
+</span><span class="no">true</span></code></pre><p>The supported class names are:</p><ul><li>alnum - Letters and digits</li><li>alpha - Letters</li><li>blank - Space or tab only</li><li>cntrl - Control characters</li><li>digit - Decimal digits (same as \d)</li><li>graph - Printing characters, excluding space</li><li>lower - Lowercase letters</li><li>print - Printing characters, including space</li><li>punct - Printing characters, excluding letters, digits, and space</li><li>space - Whitespace (the same as \s from PCRE 8.34)</li><li>upper - Uppercase letters</li><li>word  - &quot;Word&quot; characters (same as \w)</li><li>xdigit - Hexadecimal digits</li></ul><p>There is another character class, <code class="inline">ascii</code>, that erroneously matches
+Latin-1 characters instead of the 0-127 range specified by POSIX. This
+cannot be fixed without altering the behavior of other classes, so we
+recommend matching the range with <code class="inline">[\\0-\x7f]</code> instead.</p><p>Note the behavior of those classes may change according to the Unicode
+and other modifiers:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="n">match?</span><span class="p" data-group-id="9583525337-1">(</span><span class="s">&quot;josé&quot;</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/^[[:lower:]]+$/</span><span class="p" data-group-id="9583525337-1">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="n">match?</span><span class="p" data-group-id="9583525337-2">(</span><span class="s">&quot;josé&quot;</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/^[[:lower:]]+$/u</span><span class="p" data-group-id="9583525337-2">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="9583525337-3">(</span><span class="sr">~r/</span><span class="se">\s</span><span class="sr">/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Unicode</span><span class="se">\u00A0</span><span class="s">spaces&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&quot;</span><span class="p" data-group-id="9583525337-3">)</span><span class="w">
+</span><span class="s">&quot;Unicode spaces&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="9583525337-4">(</span><span class="sr">~r/</span><span class="se">\s</span><span class="sr">/u</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Unicode</span><span class="se">\u00A0</span><span class="s">spaces&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-&quot;</span><span class="p" data-group-id="9583525337-4">)</span><span class="w">
+</span><span class="s">&quot;Unicode-spaces&quot;</span></code></pre><h2 id="module-precompilation" class="section-heading">
+  <a href="#module-precompilation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Precompilation</span>
+</h2>
+<p>Regular expressions built with sigil are precompiled and stored in <code class="inline">.beam</code>
+files. Precompiled regexes will be checked in runtime and may work slower
+between operating systems and OTP releases. This is rarely a problem, as most Elixir code
+shared during development is compiled on the target (such as dependencies,
+archives, and escripts) and, when running in production, the code must either
+be compiled on the target (via <a href="https://hexdocs.pm/mix/Mix.Tasks.Compile.html"><code class="inline">mix compile</code></a> or similar) or released on the
+host (via <code class="inline">mix releases</code> or similar) with a matching OTP, operating system
+and architecture as the target.</p><p>If you know you are running on a different system than the current one and
+you are doing multiple matches with the regex, you can manually invoke
+<a href="#recompile/1"><code class="inline">Regex.recompile/1</code></a> or <a href="#recompile!/1"><code class="inline">Regex.recompile!/1</code></a> to perform a runtime version
+check and recompile the regex if necessary.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile/2" data-no-tooltip="" translate="no">compile(source, opts \\ &quot;&quot;)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Compiles the regular expression.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile!/2" data-no-tooltip="" translate="no">compile!(source, options \\ &quot;&quot;)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Compiles the regular expression and raises <a href="Regex.CompileError.html"><code class="inline">Regex.CompileError</code></a> in case of errors.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#escape/1" data-no-tooltip="" translate="no">escape(string)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Escapes a string to be literally matched in a regex.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#match?/2" data-no-tooltip="" translate="no">match?(regex, string)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a boolean indicating whether there was a match or not.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#named_captures/3" data-no-tooltip="" translate="no">named_captures(regex, string, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the given captures as a map or <code class="inline">nil</code> if no captures are found.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#names/1" data-no-tooltip="" translate="no">names(regex)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a list of names in the regex.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#opts/1" data-no-tooltip="" translate="no">opts(regex)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the regex options.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#re_pattern/1" data-no-tooltip="" translate="no">re_pattern(regex)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the underlying <code class="inline">re_pattern</code> in the regular expression.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#recompile/1" data-no-tooltip="" translate="no">recompile(regex)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Recompiles the existing regular expression if necessary.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#recompile!/1" data-no-tooltip="" translate="no">recompile!(regex)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Recompiles the existing regular expression and raises <a href="Regex.CompileError.html"><code class="inline">Regex.CompileError</code></a> in case of errors.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#replace/4" data-no-tooltip="" translate="no">replace(regex, string, replacement, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a regex, a binary and a replacement, returns a new
+binary where all matches are replaced by the replacement.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#run/3" data-no-tooltip="" translate="no">run(regex, string, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Runs the regular expression against the given string until the first match.
+It returns a list with all captures or <code class="inline">nil</code> if no match occurred.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#scan/3" data-no-tooltip="" translate="no">scan(regex, string, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#run/3"><code class="inline">run/3</code></a> but returns all non-overlapping matches of the regular expression.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#source/1" data-no-tooltip="" translate="no">source(regex)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the regex source as a binary.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#split/3" data-no-tooltip="" translate="no">split(regex, string, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Splits the given target based on the given pattern and in the given number of
+parts.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#version/0" data-no-tooltip="" translate="no">version()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the version of the underlying Regex engine.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L189" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Regex{
+  opts: <a href="typespecs.html#built-in-types">binary</a>() | [<a href="typespecs.html#built-in-types">term</a>()],
+  re_pattern: <a href="typespecs.html#built-in-types">term</a>(),
+  re_version: <a href="typespecs.html#built-in-types">term</a>(),
+  source: <a href="typespecs.html#built-in-types">binary</a>()
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="compile/2">
+
+    <span id="compile/1"></span>
+
+  <div class="detail-header">
+    <a href="#compile/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compile(source, opts \\ &quot;&quot;)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L226" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compile(<a href="typespecs.html#built-in-types">binary</a>(), <a href="typespecs.html#built-in-types">binary</a>() | [<a href="typespecs.html#built-in-types">term</a>()]) :: {:ok, <a href="#t:t/0">t</a>()} | {:error, <a href="typespecs.html#basic-types">any</a>()}</pre>
+
+      </div>
+
+<p>Compiles the regular expression.</p><p>The given options can either be a binary with the characters
+representing the same regex options given to the
+<code class="inline">~r</code> (see <a href="Kernel.html#sigil_r/2"><code class="inline">sigil_r/2</code></a>) sigil, or a list of options, as
+expected by the Erlang's <a href="https://www.erlang.org/doc/apps/stdlib/re.html"><code class="inline">:re</code></a> module.</p><p>It returns <code class="inline">{:ok, regex}</code> in case of success,
+<code class="inline">{:error, reason}</code> otherwise.</p><h2 id="compile/2-examples" class="section-heading">
+  <a href="#compile/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">compile</span><span class="p" data-group-id="4247993891-1">(</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="4247993891-1">)</span><span class="w">
+</span><span class="p" data-group-id="4247993891-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/foo/</span><span class="p" data-group-id="4247993891-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">compile</span><span class="p" data-group-id="4247993891-3">(</span><span class="s">&quot;*foo&quot;</span><span class="p" data-group-id="4247993891-3">)</span><span class="w">
+</span><span class="p" data-group-id="4247993891-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4247993891-5">{</span><span class="s">~c&quot;nothing to repeat&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4247993891-5">}</span><span class="p" data-group-id="4247993891-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">compile</span><span class="p" data-group-id="4247993891-6">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;i&quot;</span><span class="p" data-group-id="4247993891-6">)</span><span class="w">
+</span><span class="p" data-group-id="4247993891-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/foo/i</span><span class="p" data-group-id="4247993891-7">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">compile</span><span class="p" data-group-id="4247993891-8">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4247993891-9">[</span><span class="ss">:caseless</span><span class="p" data-group-id="4247993891-9">]</span><span class="p" data-group-id="4247993891-8">)</span><span class="w">
+</span><span class="p" data-group-id="4247993891-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="nc">Regex</span><span class="o">.</span><span class="n">compile!</span><span class="p" data-group-id="4247993891-11">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4247993891-12">[</span><span class="ss">:caseless</span><span class="p" data-group-id="4247993891-12">]</span><span class="p" data-group-id="4247993891-11">)</span><span class="p" data-group-id="4247993891-10">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="compile!/2">
+
+    <span id="compile!/1"></span>
+
+  <div class="detail-header">
+    <a href="#compile!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compile!(source, options \\ &quot;&quot;)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L254" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compile!(<a href="typespecs.html#built-in-types">binary</a>(), <a href="typespecs.html#built-in-types">binary</a>() | [<a href="typespecs.html#built-in-types">term</a>()]) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Compiles the regular expression and raises <a href="Regex.CompileError.html"><code class="inline">Regex.CompileError</code></a> in case of errors.</p>
+  </section>
+</section>
+<section class="detail" id="escape/1">
+
+  <div class="detail-header">
+    <a href="#escape/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">escape(string)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L871" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> escape(<a href="String.html#t:t/0">String.t</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Escapes a string to be literally matched in a regex.</p><h2 id="escape/1-examples" class="section-heading">
+  <a href="#escape/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">escape</span><span class="p" data-group-id="9464583377-1">(</span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="9464583377-1">)</span><span class="w">
+</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">.&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">escape</span><span class="p" data-group-id="9464583377-2">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">what if&quot;</span><span class="p" data-group-id="9464583377-2">)</span><span class="w">
+</span><span class="s">&quot;</span><span class="se">\\</span><span class="se">\\</span><span class="s">what</span><span class="se">\\</span><span class="s"> if&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="match?/2">
+
+  <div class="detail-header">
+    <a href="#match?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">match?(regex, string)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L319" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> match?(<a href="#t:t/0">t</a>(), <a href="String.html#t:t/0">String.t</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns a boolean indicating whether there was a match or not.</p><h2 id="match?/2-examples" class="section-heading">
+  <a href="#match?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">match?</span><span class="p" data-group-id="4981477821-1">(</span><span class="sr">~r/foo/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="4981477821-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">match?</span><span class="p" data-group-id="4981477821-2">(</span><span class="sr">~r/foo/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="4981477821-2">)</span><span class="w">
+</span><span class="no">false</span></code></pre><p>Elixir also provides text-based match operator <a href="Kernel.html#=~/2"><code class="inline">=~/2</code></a> and function <a href="String.html#match?/2"><code class="inline">String.match?/2</code></a> as
+an alternative to test strings against regular expressions and
+strings.</p>
+  </section>
+</section>
+<section class="detail" id="named_captures/3">
+
+    <span id="named_captures/2"></span>
+
+  <div class="detail-header">
+    <a href="#named_captures/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">named_captures(regex, string, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L396" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> named_captures(<a href="#t:t/0">t</a>(), <a href="String.html#t:t/0">String.t</a>(), [<a href="typespecs.html#built-in-types">term</a>()]) :: <a href="typespecs.html#basic-types">map</a>() | nil</pre>
+
+      </div>
+
+<p>Returns the given captures as a map or <code class="inline">nil</code> if no captures are found.</p><h2 id="named_captures/3-options" class="section-heading">
+  <a href="#named_captures/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:return</code> - when set to <code class="inline">:index</code>, returns byte index and match length.
+Defaults to <code class="inline">:binary</code>.</li></ul><h2 id="named_captures/3-examples" class="section-heading">
+  <a href="#named_captures/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">named_captures</span><span class="p" data-group-id="2481546081-1">(</span><span class="sr">~r/c(?&lt;foo&gt;d)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p" data-group-id="2481546081-1">)</span><span class="w">
+</span><span class="p" data-group-id="2481546081-2">%{</span><span class="s">&quot;foo&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p" data-group-id="2481546081-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">named_captures</span><span class="p" data-group-id="2481546081-3">(</span><span class="sr">~r/a(?&lt;foo&gt;b)c(?&lt;bar&gt;d)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p" data-group-id="2481546081-3">)</span><span class="w">
+</span><span class="p" data-group-id="2481546081-4">%{</span><span class="s">&quot;bar&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p" data-group-id="2481546081-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">named_captures</span><span class="p" data-group-id="2481546081-5">(</span><span class="sr">~r/a(?&lt;foo&gt;b)c(?&lt;bar&gt;d)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;efgh&quot;</span><span class="p" data-group-id="2481546081-5">)</span><span class="w">
+</span><span class="no">nil</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="names/1">
+
+  <div class="detail-header">
+    <a href="#names/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">names(regex)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L454" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> names(<a href="#t:t/0">t</a>()) :: [<a href="String.html#t:t/0">String.t</a>()]</pre>
+
+      </div>
+
+<p>Returns a list of names in the regex.</p><h2 id="names/1-examples" class="section-heading">
+  <a href="#names/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">names</span><span class="p" data-group-id="5191954435-1">(</span><span class="sr">~r/(?&lt;foo&gt;bar)/</span><span class="p" data-group-id="5191954435-1">)</span><span class="w">
+</span><span class="p" data-group-id="5191954435-2">[</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="5191954435-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="opts/1">
+
+  <div class="detail-header">
+    <a href="#opts/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">opts(regex)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L440" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> opts(<a href="#t:t/0">t</a>()) :: [<a href="typespecs.html#built-in-types">term</a>()]</pre>
+
+      </div>
+
+<p>Returns the regex options.</p><p>See the documentation of <a href="#compile/2"><code class="inline">Regex.compile/2</code></a> for more information.</p><h2 id="opts/1-examples" class="section-heading">
+  <a href="#opts/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">opts</span><span class="p" data-group-id="5602206786-1">(</span><span class="sr">~r/foo/m</span><span class="p" data-group-id="5602206786-1">)</span><span class="w">
+</span><span class="p" data-group-id="5602206786-2">[</span><span class="ss">:multiline</span><span class="p" data-group-id="5602206786-2">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">opts</span><span class="p" data-group-id="5602206786-3">(</span><span class="nc">Regex</span><span class="o">.</span><span class="n">compile!</span><span class="p" data-group-id="5602206786-4">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5602206786-5">[</span><span class="ss">:caseless</span><span class="p" data-group-id="5602206786-5">]</span><span class="p" data-group-id="5602206786-4">)</span><span class="p" data-group-id="5602206786-3">)</span><span class="w">
+</span><span class="p" data-group-id="5602206786-6">[</span><span class="ss">:caseless</span><span class="p" data-group-id="5602206786-6">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="re_pattern/1">
+
+  <div class="detail-header">
+    <a href="#re_pattern/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">re_pattern(regex)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L407" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> re_pattern(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Returns the underlying <code class="inline">re_pattern</code> in the regular expression.</p>
+  </section>
+</section>
+<section class="detail" id="recompile/1">
+
+  <div class="detail-header">
+    <a href="#recompile/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">recompile(regex)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L269" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> recompile(<a href="#t:t/0">t</a>()) :: {:ok, <a href="#t:t/0">t</a>()} | {:error, <a href="typespecs.html#basic-types">any</a>()}</pre>
+
+      </div>
+
+<p>Recompiles the existing regular expression if necessary.</p><p>This checks the version stored in the regular expression
+and recompiles the regex in case of version mismatch.</p>
+  </section>
+</section>
+<section class="detail" id="recompile!/1">
+
+  <div class="detail-header">
+    <a href="#recompile!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">recompile!(regex)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L287" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> recompile!(<a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Recompiles the existing regular expression and raises <a href="Regex.CompileError.html"><code class="inline">Regex.CompileError</code></a> in case of errors.</p>
+  </section>
+</section>
+<section class="detail" id="replace/4">
+
+    <span id="replace/3"></span>
+
+  <div class="detail-header">
+    <a href="#replace/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">replace(regex, string, replacement, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L728" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> replace(<a href="#t:t/0">t</a>(), <a href="String.html#t:t/0">String.t</a>(), <a href="String.html#t:t/0">String.t</a>() | (... -&gt; <a href="String.html#t:t/0">String.t</a>()), [
+  {:global, <a href="typespecs.html#built-in-types">boolean</a>()}
+]) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Receives a regex, a binary and a replacement, returns a new
+binary where all matches are replaced by the replacement.</p><p>The replacement can be either a string or a function that returns a string.
+The resulting string is used as a replacement for every match.</p><p>When the replacement is a string, it allows specific captures of the match
+using brackets at the regex expression and accessing them in the replacement
+via <code class="inline">\N</code> or <code class="inline">\g{N}</code>, where <code class="inline">N</code> is the number of the capture. In case <code class="inline">\0</code> is
+used, the whole match is inserted. Note that in regexes the backslash needs
+to be escaped, hence in practice you'll need to use <code class="inline">\\N</code> and <code class="inline">\\g{N}</code>.</p><p>When the replacement is a function, it allows specific captures too.
+The function may have arity N where each argument maps to a capture,
+with the first argument being the whole match. If the function expects more
+arguments than captures found, the remaining arguments will receive <code class="inline">&quot;&quot;</code>.</p><h2 id="replace/4-options" class="section-heading">
+  <a href="#replace/4-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:global</code> - when <code class="inline">false</code>, replaces only the first occurrence
+(defaults to <code class="inline">true</code>)</li></ul><h2 id="replace/4-examples" class="section-heading">
+  <a href="#replace/4-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-1">(</span><span class="sr">~r/d/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p" data-group-id="2892045611-1">)</span><span class="w">
+</span><span class="s">&quot;abc&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-2">(</span><span class="sr">~r/b/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p" data-group-id="2892045611-2">)</span><span class="w">
+</span><span class="s">&quot;adc&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-3">(</span><span class="sr">~r/b/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[</span><span class="se">\\</span><span class="s">0]&quot;</span><span class="p" data-group-id="2892045611-3">)</span><span class="w">
+</span><span class="s">&quot;a[b]c&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-4">(</span><span class="sr">~r/a(b|d)c/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcadc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[</span><span class="se">\\</span><span class="s">1]&quot;</span><span class="p" data-group-id="2892045611-4">)</span><span class="w">
+</span><span class="s">&quot;[b][d]&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-5">(</span><span class="sr">~r/</span><span class="se">\.</span><span class="sr">(</span><span class="se">\d</span><span class="sr">)$/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;500.5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.</span><span class="se">\\</span><span class="s">g{1}0&quot;</span><span class="p" data-group-id="2892045611-5">)</span><span class="w">
+</span><span class="s">&quot;500.50&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-6">(</span><span class="sr">~r/a(b|d)c/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcadc&quot;</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2892045611-7">fn</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">&quot;[</span><span class="si" data-group-id="2892045611-8">#{</span><span class="n">x</span><span class="si" data-group-id="2892045611-8">}</span><span class="s">]&quot;</span><span class="w"> </span><span class="k" data-group-id="2892045611-7">end</span><span class="p" data-group-id="2892045611-6">)</span><span class="w">
+</span><span class="s">&quot;[b][d]&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-9">(</span><span class="sr">~r/(</span><span class="se">\w</span><span class="sr">+)@(</span><span class="se">\w</span><span class="sr">+).(</span><span class="se">\w</span><span class="sr">+)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc@def.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2892045611-10">fn</span><span class="w"> </span><span class="c">_full</span><span class="p">,</span><span class="w"> </span><span class="c">_c1</span><span class="p">,</span><span class="w"> </span><span class="c">_c2</span><span class="p">,</span><span class="w"> </span><span class="n">c3</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">&quot;TLD: </span><span class="si" data-group-id="2892045611-11">#{</span><span class="n">c3</span><span class="si" data-group-id="2892045611-11">}</span><span class="s">&quot;</span><span class="w"> </span><span class="k" data-group-id="2892045611-10">end</span><span class="p" data-group-id="2892045611-9">)</span><span class="w">
+</span><span class="s">&quot;TLD: com&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="2892045611-12">(</span><span class="sr">~r/a/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcadc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;A&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">global</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="2892045611-12">)</span><span class="w">
+</span><span class="s">&quot;Abcadc&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="run/3">
+
+    <span id="run/2"></span>
+
+  <div class="detail-header">
+    <a href="#run/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">run(regex, string, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L361" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> run(<a href="#t:t/0">t</a>(), <a href="typespecs.html#built-in-types">binary</a>(), [<a href="typespecs.html#built-in-types">term</a>()]) :: nil | [<a href="typespecs.html#built-in-types">binary</a>()] | [{<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">integer</a>()}]</pre>
+
+      </div>
+
+<p>Runs the regular expression against the given string until the first match.
+It returns a list with all captures or <code class="inline">nil</code> if no match occurred.</p><h2 id="run/3-options" class="section-heading">
+  <a href="#run/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:return</code> - when set to <code class="inline">:index</code>, returns byte index and match length.
+Defaults to <code class="inline">:binary</code>.</li><li><code class="inline">:capture</code> - what to capture in the result. See the <a href="#module-captures">&quot;Captures&quot; section</a>
+to see the possible capture values.</li><li><code class="inline">:offset</code> - (since v1.12.0) specifies the starting offset to match in the given string.
+Defaults to zero.</li></ul><h2 id="run/3-examples" class="section-heading">
+  <a href="#run/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="7064595800-1">(</span><span class="sr">~r/c(d)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p" data-group-id="7064595800-1">)</span><span class="w">
+</span><span class="p" data-group-id="7064595800-2">[</span><span class="s">&quot;cd&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p" data-group-id="7064595800-2">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="7064595800-3">(</span><span class="sr">~r/e/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p" data-group-id="7064595800-3">)</span><span class="w">
+</span><span class="no">nil</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="7064595800-4">(</span><span class="sr">~r/c(d)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">return</span><span class="p">:</span><span class="w"> </span><span class="ss">:index</span><span class="p" data-group-id="7064595800-4">)</span><span class="w">
+</span><span class="p" data-group-id="7064595800-5">[</span><span class="p" data-group-id="7064595800-6">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7064595800-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7064595800-7">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7064595800-7">}</span><span class="p" data-group-id="7064595800-5">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="7064595800-8">(</span><span class="sr">~r/c(d)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">capture</span><span class="p">:</span><span class="w"> </span><span class="ss">:first</span><span class="p" data-group-id="7064595800-8">)</span><span class="w">
+</span><span class="p" data-group-id="7064595800-9">[</span><span class="s">&quot;cd&quot;</span><span class="p" data-group-id="7064595800-9">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="7064595800-10">(</span><span class="sr">~r/c(?&lt;foo&gt;d)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">capture</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7064595800-11">[</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="7064595800-11">]</span><span class="p" data-group-id="7064595800-10">)</span><span class="w">
+</span><span class="p" data-group-id="7064595800-12">[</span><span class="s">&quot;d&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="7064595800-12">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="scan/3">
+
+    <span id="scan/2"></span>
+
+  <div class="detail-header">
+    <a href="#scan/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">scan(regex, string, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L512" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> scan(<a href="#t:t/0">t</a>(), <a href="String.html#t:t/0">String.t</a>(), [<a href="typespecs.html#built-in-types">term</a>()]) :: [[<a href="String.html#t:t/0">String.t</a>()]] | [[{<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">integer</a>()}]]</pre>
+
+      </div>
+
+<p>Same as <a href="#run/3"><code class="inline">run/3</code></a> but returns all non-overlapping matches of the regular expression.</p><p>A list of lists is returned, where each entry in the primary list represents a
+match and each entry in the secondary list represents the captured contents.</p><h2 id="scan/3-options" class="section-heading">
+  <a href="#scan/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:return</code> - when set to <code class="inline">:index</code>, returns byte index and match length.
+Defaults to <code class="inline">:binary</code>.</li><li><code class="inline">:capture</code> - what to capture in the result. See the <a href="#module-captures">&quot;Captures&quot; section</a>
+to see the possible capture values.</li><li><code class="inline">:offset</code> - (since v1.12.0) specifies the starting offset to match in the given string.
+Defaults to zero.</li></ul><h2 id="scan/3-examples" class="section-heading">
+  <a href="#scan/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-1">(</span><span class="sr">~r/c(d|e)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd abce&quot;</span><span class="p" data-group-id="9500338191-1">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-2">[</span><span class="p" data-group-id="9500338191-3">[</span><span class="s">&quot;cd&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p" data-group-id="9500338191-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-4">[</span><span class="s">&quot;ce&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p" data-group-id="9500338191-4">]</span><span class="p" data-group-id="9500338191-2">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-5">(</span><span class="sr">~r/c(?:d|e)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd abce&quot;</span><span class="p" data-group-id="9500338191-5">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-6">[</span><span class="p" data-group-id="9500338191-7">[</span><span class="s">&quot;cd&quot;</span><span class="p" data-group-id="9500338191-7">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-8">[</span><span class="s">&quot;ce&quot;</span><span class="p" data-group-id="9500338191-8">]</span><span class="p" data-group-id="9500338191-6">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-9">(</span><span class="sr">~r/e/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p" data-group-id="9500338191-9">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-10">[</span><span class="p" data-group-id="9500338191-10">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-11">(</span><span class="sr">~r/ab|bc|cd/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p" data-group-id="9500338191-11">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-12">[</span><span class="p" data-group-id="9500338191-13">[</span><span class="s">&quot;ab&quot;</span><span class="p" data-group-id="9500338191-13">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-14">[</span><span class="s">&quot;cd&quot;</span><span class="p" data-group-id="9500338191-14">]</span><span class="p" data-group-id="9500338191-12">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-15">(</span><span class="sr">~r/ab|bc|cd/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abbccd&quot;</span><span class="p" data-group-id="9500338191-15">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-16">[</span><span class="p" data-group-id="9500338191-17">[</span><span class="s">&quot;ab&quot;</span><span class="p" data-group-id="9500338191-17">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-18">[</span><span class="s">&quot;bc&quot;</span><span class="p" data-group-id="9500338191-18">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-19">[</span><span class="s">&quot;cd&quot;</span><span class="p" data-group-id="9500338191-19">]</span><span class="p" data-group-id="9500338191-16">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-20">(</span><span class="sr">~r/</span><span class="se">\p</span><span class="sr">{Sc}/u</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;$, £, and €&quot;</span><span class="p" data-group-id="9500338191-20">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-21">[</span><span class="p" data-group-id="9500338191-22">[</span><span class="s">&quot;$&quot;</span><span class="p" data-group-id="9500338191-22">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-23">[</span><span class="s">&quot;£&quot;</span><span class="p" data-group-id="9500338191-23">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-24">[</span><span class="s">&quot;€&quot;</span><span class="p" data-group-id="9500338191-24">]</span><span class="p" data-group-id="9500338191-21">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-25">(</span><span class="sr">~r/=+/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;=ü†ƒ8===&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">return</span><span class="p">:</span><span class="w"> </span><span class="ss">:index</span><span class="p" data-group-id="9500338191-25">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-26">[</span><span class="p" data-group-id="9500338191-27">[</span><span class="p" data-group-id="9500338191-28">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9500338191-28">}</span><span class="p" data-group-id="9500338191-27">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-29">[</span><span class="p" data-group-id="9500338191-30">{</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9500338191-30">}</span><span class="p" data-group-id="9500338191-29">]</span><span class="p" data-group-id="9500338191-26">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="9500338191-31">(</span><span class="sr">~r/c(d|e)/</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abcd abce&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">capture</span><span class="p">:</span><span class="w"> </span><span class="ss">:first</span><span class="p" data-group-id="9500338191-31">)</span><span class="w">
+</span><span class="p" data-group-id="9500338191-32">[</span><span class="p" data-group-id="9500338191-33">[</span><span class="s">&quot;cd&quot;</span><span class="p" data-group-id="9500338191-33">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9500338191-34">[</span><span class="s">&quot;ce&quot;</span><span class="p" data-group-id="9500338191-34">]</span><span class="p" data-group-id="9500338191-32">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="source/1">
+
+  <div class="detail-header">
+    <a href="#source/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">source(regex)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L421" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> source(<a href="#t:t/0">t</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Returns the regex source as a binary.</p><h2 id="source/1-examples" class="section-heading">
+  <a href="#source/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">source</span><span class="p" data-group-id="8108440710-1">(</span><span class="sr">~r/foo/</span><span class="p" data-group-id="8108440710-1">)</span><span class="w">
+</span><span class="s">&quot;foo&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="split/3">
+
+    <span id="split/2"></span>
+
+  <div class="detail-header">
+    <a href="#split/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">split(regex, string, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L599" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> split(<a href="#t:t/0">t</a>(), <a href="String.html#t:t/0">String.t</a>(), [<a href="typespecs.html#built-in-types">term</a>()]) :: [<a href="String.html#t:t/0">String.t</a>()]</pre>
+
+      </div>
+
+<p>Splits the given target based on the given pattern and in the given number of
+parts.</p><h2 id="split/3-options" class="section-heading">
+  <a href="#split/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:parts</code> - when specified, splits the string into the given number of
+parts. If not specified, <code class="inline">:parts</code> defaults to <code class="inline">:infinity</code>, which will
+split the string into the maximum number of parts possible based on the
+given pattern.</p></li><li><p><code class="inline">:trim</code> - when <code class="inline">true</code>, removes empty strings (<code class="inline">&quot;&quot;</code>) from the result.
+Defaults to <code class="inline">false</code>.</p></li><li><p><code class="inline">:on</code> - specifies which captures to split the string on, and in what
+order. Defaults to <code class="inline">:first</code> which means captures inside the regex do not
+affect the splitting process. See the <a href="#module-captures">&quot;Captures&quot; section</a>
+to see the possible capture values.</p></li><li><p><code class="inline">:include_captures</code> - when <code class="inline">true</code>, includes in the result the matches of
+the regular expression. The matches are not counted towards the maximum
+number of parts if combined with the <code class="inline">:parts</code> option. Defaults to <code class="inline">false</code>.</p></li></ul><h2 id="split/3-examples" class="section-heading">
+  <a href="#split/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-1">(</span><span class="sr">~r{-}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;a-b-c&quot;</span><span class="p" data-group-id="8823005203-1">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-2">[</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p" data-group-id="8823005203-2">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-3">(</span><span class="sr">~r{-}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;a-b-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">parts</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8823005203-3">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-4">[</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b-c&quot;</span><span class="p" data-group-id="8823005203-4">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-5">(</span><span class="sr">~r{-}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="8823005203-5">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-6">[</span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="8823005203-6">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-7">(</span><span class="sr">~r{}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="8823005203-7">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-8">[</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="8823005203-8">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-9">(</span><span class="sr">~r{a(?&lt;second&gt;b)c}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="8823005203-9">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-10">[</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="8823005203-10">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-11">(</span><span class="sr">~r{a(?&lt;second&gt;b)c}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8823005203-12">[</span><span class="ss">:second</span><span class="p" data-group-id="8823005203-12">]</span><span class="p" data-group-id="8823005203-11">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-13">[</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p" data-group-id="8823005203-13">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-14">(</span><span class="sr">~r{(x)}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Elixir&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">include_captures</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8823005203-14">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-15">[</span><span class="s">&quot;Eli&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ir&quot;</span><span class="p" data-group-id="8823005203-15">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-16">(</span><span class="sr">~r{a(?&lt;second&gt;b)c}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8823005203-17">[</span><span class="ss">:second</span><span class="p" data-group-id="8823005203-17">]</span><span class="p">,</span><span class="w"> </span><span class="ss">include_captures</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8823005203-16">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-18">[</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p" data-group-id="8823005203-18">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Regex</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8823005203-19">(</span><span class="sr">~r{-}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-a-b--c&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">trim</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8823005203-19">)</span><span class="w">
+</span><span class="p" data-group-id="8823005203-20">[</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p" data-group-id="8823005203-20">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="version/0">
+
+  <div class="detail-header">
+    <a href="#version/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">version()</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/regex.ex#L299" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> version() :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Returns the version of the underlying Regex engine.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

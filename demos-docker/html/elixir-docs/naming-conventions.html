@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Naming conventions — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/naming-conventions.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Naming conventions</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/references/naming-conventions.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This document is a reference of the naming conventions in Elixir, from casing to punctuation characters.</p><p>The naming convention is, by definition, a subset of the Elixir syntax. A convention aims to
+follow and set best practices for language and the community. If instead you want a complete reference into the Elixir syntax, beyond its conventions, see <a href="syntax-reference.html">the Syntax reference</a>.</p><h2 id="casing" class="section-heading">
+  <a href="#casing" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Casing</span>
+</h2>
+<p>Elixir developers must use <code class="inline">snake_case</code> when defining variables, function names, module attributes, and the like:</p><pre><code class="makeup elixir" translate="no"><span class="n">some_map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6983098218-1">%{</span><span class="ss">this_is_a_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;and a value&quot;</span><span class="p" data-group-id="6983098218-1">}</span><span class="w">
+</span><span class="n">is_map</span><span class="p" data-group-id="6983098218-2">(</span><span class="n">some_map</span><span class="p" data-group-id="6983098218-2">)</span></code></pre><p>Aliases, commonly used as module names, are an exception as they must be capitalized and written in <code class="inline">CamelCase</code>, like <a href="OptionParser.html"><code class="inline">OptionParser</code></a>. For aliases, capital letters are kept in acronyms, like <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureIO.html"><code class="inline">ExUnit.CaptureIO</code></a> or <a href="https://hexdocs.pm/mix/Mix.SCM.html"><code class="inline">Mix.SCM</code></a>.</p><p>Atoms can be written either in <code class="inline">:snake_case</code> or <code class="inline">:CamelCase</code>, although the convention is to use the snake case version throughout Elixir.</p><p>Generally speaking, filenames follow the <code class="inline">snake_case</code> convention of the module they define. For example, <code class="inline">MyApp</code> should be defined inside the <code class="inline">my_app.ex</code> file. However, this is only a convention. At the end of the day any filename can be used as they do not affect the compiled code in any way.</p><h2 id="underscore-_foo" class="section-heading">
+  <a href="#underscore-_foo" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Underscore (<code class="inline">_foo</code>)</span>
+</h2>
+<p>Elixir relies on underscores in different situations.</p><p>For example, a value that is not meant to be used must be assigned to <code class="inline">_</code> or to a variable starting with underscore:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="8211446367-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="c">_contents</span><span class="p" data-group-id="8211446367-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="8211446367-2">(</span><span class="s">&quot;README.md&quot;</span><span class="p" data-group-id="8211446367-2">)</span></code></pre><p>Function names may also start with an underscore. Such functions are never imported by default:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="4095185253-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">_wont_be_imported</span><span class="w"> </span><span class="k" data-group-id="4095185253-2">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="ss">:oops</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="4095185253-2">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="4095185253-1">end</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nc">Example</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="c">_wont_be_imported</span><span class="p" data-group-id="4095185253-3">(</span><span class="p" data-group-id="4095185253-3">)</span><span class="w">
+</span><span class="gt">** (CompileError) iex:1: undefined function _wont_be_imported/0</span></code></pre><p>Due to this property, Elixir relies on functions starting with underscore to attach compile-time metadata to modules. Such functions are most often in the <code class="inline">__foo__</code> format. For example, every module in Elixir has an <a href="Module.html#c:__info__/1"><code class="inline">__info__/1</code></a> function:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">String</span><span class="o">.</span><span class="c">__info__</span><span class="p" data-group-id="2042036179-1">(</span><span class="ss">:functions</span><span class="p" data-group-id="2042036179-1">)</span><span class="w">
+</span><span class="p" data-group-id="2042036179-2">[</span><span class="ss">at</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">capitalize</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">chunk</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="2042036179-2">]</span></code></pre><p>Elixir also includes five special forms that follow the double underscore format: <a href="Kernel.SpecialForms.html#__CALLER__/0"><code class="inline">__CALLER__/0</code></a>, <a href="Kernel.SpecialForms.html#__DIR__/0"><code class="inline">__DIR__/0</code></a>, <a href="Kernel.SpecialForms.html#__ENV__/0"><code class="inline">__ENV__/0</code></a>and <a href="Kernel.SpecialForms.html#__MODULE__/0"><code class="inline">__MODULE__/0</code></a> retrieve compile-time information about the current environment, while <a href="Kernel.SpecialForms.html#__STACKTRACE__/0"><code class="inline">__STACKTRACE__/0</code></a> retrieves the stacktrace for the current exception.</p><h2 id="trailing-bang-foo" class="section-heading">
+  <a href="#trailing-bang-foo" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Trailing bang (<code class="inline">foo!</code>)</span>
+</h2>
+<p>A trailing bang (exclamation mark) signifies a function or macro where failure cases raise an exception.</p><p>Many functions come in pairs, such as <a href="File.html#read/1"><code class="inline">File.read/1</code></a> and <a href="File.html#read!/1"><code class="inline">File.read!/1</code></a>. <a href="File.html#read/1"><code class="inline">File.read/1</code></a> will return a success or failure tuple, whereas <a href="File.html#read!/1"><code class="inline">File.read!/1</code></a> will return a plain value or else raise an exception:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="3392311767-1">(</span><span class="s">&quot;file.txt&quot;</span><span class="p" data-group-id="3392311767-1">)</span><span class="w">
+</span><span class="p" data-group-id="3392311767-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;file contents&quot;</span><span class="p" data-group-id="3392311767-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="3392311767-3">(</span><span class="s">&quot;no_such_file.txt&quot;</span><span class="p" data-group-id="3392311767-3">)</span><span class="w">
+</span><span class="p" data-group-id="3392311767-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:enoent</span><span class="p" data-group-id="3392311767-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="3392311767-5">(</span><span class="s">&quot;file.txt&quot;</span><span class="p" data-group-id="3392311767-5">)</span><span class="w">
+</span><span class="s">&quot;file contents&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="3392311767-6">(</span><span class="s">&quot;no_such_file.txt&quot;</span><span class="p" data-group-id="3392311767-6">)</span><span class="w">
+</span><span class="gt">** (File.Error) could not read file no_such_file.txt: no such file or directory</span></code></pre><p>The version without <code class="inline">!</code> is preferred when you want to handle different outcomes using pattern matching:</p><pre><code class="makeup elixir" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="6598465654-1">(</span><span class="n">file</span><span class="p" data-group-id="6598465654-1">)</span><span class="w"> </span><span class="k" data-group-id="6598465654-2">do</span><span class="w">
+  </span><span class="p" data-group-id="6598465654-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p" data-group-id="6598465654-3">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># do something with the `body`</span><span class="w">
+  </span><span class="p" data-group-id="6598465654-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="6598465654-4">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># handle the error caused by `reason`</span><span class="w">
+</span><span class="k" data-group-id="6598465654-2">end</span></code></pre><p>However, if you expect the outcome to always be successful (for instance, if you expect the file always to exist), the bang variation can be more convenient and will raise a more helpful error message (than a failed pattern match) on failure.</p><p>When thinking about failure cases for functions, we are thinking strictly about errors that happen within their domain, such as failing to open a file. Errors that come from invalid argument types, for example, must always raise regardless if the function has a bang or not. The exception is often an <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> or a detailed <a href="FunctionClauseError.html"><code class="inline">FunctionClauseError</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex(1)&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="0050889315-1">(</span><span class="mi">123</span><span class="p" data-group-id="0050889315-1">)</span><span class="w">
+</span><span class="gt">** (FunctionClauseError) no function clause matching in IO.chardata_to_string/1</span><span class="w">
+
+    </span><span class="nc">The</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">arguments</span><span class="w"> </span><span class="n">were</span><span class="w"> </span><span class="n">given</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">chardata_to_string</span><span class="o">/</span><span class="mi">1</span><span class="p">:</span><span class="w">
+
+        </span><span class="c1"># 1</span><span class="w">
+        </span><span class="mi">123</span><span class="w">
+
+    </span><span class="nc">Attempted</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">clauses</span><span class="w"> </span><span class="p" data-group-id="0050889315-2">(</span><span class="n">showing</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="0050889315-2">)</span><span class="p">:</span><span class="w">
+
+        </span><span class="kd">def</span><span class="w"> </span><span class="nf">chardata_to_string</span><span class="p" data-group-id="0050889315-3">(</span><span class="n">string</span><span class="p" data-group-id="0050889315-3">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="0050889315-4">(</span><span class="n">string</span><span class="p" data-group-id="0050889315-4">)</span><span class="w">
+        </span><span class="kd">def</span><span class="w"> </span><span class="nf">chardata_to_string</span><span class="p" data-group-id="0050889315-5">(</span><span class="n">list</span><span class="p" data-group-id="0050889315-5">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_list</span><span class="p" data-group-id="0050889315-6">(</span><span class="n">list</span><span class="p" data-group-id="0050889315-6">)</span></code></pre><p>More examples of paired functions: <a href="Base.html#decode16/2"><code class="inline">Base.decode16/2</code></a> and <a href="Base.html#decode16!/2"><code class="inline">Base.decode16!/2</code></a>, <a href="File.html#cwd/0"><code class="inline">File.cwd/0</code></a> and <a href="File.html#cwd!/0"><code class="inline">File.cwd!/0</code></a>.</p><p>There are also some non-paired functions, with no non-bang variant. The bang still signifies that it will raise an exception on failure. Example: <a href="Protocol.html#assert_protocol!/1"><code class="inline">Protocol.assert_protocol!/1</code></a>.</p><p>In macro code, the bang on <a href="Kernel.html#alias!/1"><code class="inline">alias!/1</code></a> and <a href="Kernel.html#var!/2"><code class="inline">var!/2</code></a> signifies that <a href="macros.html#macro-hygiene">macro hygiene</a> is set aside.</p><h2 id="trailing-question-mark-foo" class="section-heading">
+  <a href="#trailing-question-mark-foo" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Trailing question mark (<code class="inline">foo?</code>)</span>
+</h2>
+<p>Functions that return a boolean are named with a trailing question mark.</p><p>Examples: <a href="Keyword.html#keyword?/1"><code class="inline">Keyword.keyword?/1</code></a>, <a href="https://hexdocs.pm/mix/Mix.html#debug?/0"><code class="inline">Mix.debug?/0</code></a>, <a href="String.html#contains?/2"><code class="inline">String.contains?/2</code></a></p><p>However, functions that return booleans and are valid in guards follow another convention, described next.</p><h2 id="is_-prefix-is_foo" class="section-heading">
+  <a href="#is_-prefix-is_foo" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">is_</code> prefix (<code class="inline">is_foo</code>)</span>
+</h2>
+<p>Type checks and other boolean checks that are allowed in guard clauses are named with an <code class="inline">is_</code> prefix.</p><p>Examples: <a href="Integer.html#is_even/1"><code class="inline">Integer.is_even/1</code></a>, <a href="Kernel.html#is_list/1"><code class="inline">is_list/1</code></a></p><p>These functions and macros follow the Erlang convention of an <code class="inline">is_</code> prefix, instead of a trailing question mark, precisely to indicate that they are allowed in guard clauses.</p><p>Note that type checks that are not valid in guard clauses do not follow this convention. For example: <a href="Keyword.html#keyword?/1"><code class="inline">Keyword.keyword?/1</code></a>.</p><h2 id="special-names" class="section-heading">
+  <a href="#special-names" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Special names</span>
+</h2>
+<p>Some names have specific meaning in Elixir. We detail those cases below.</p><h3 id="length-and-size" class="section-heading">
+  <a href="#length-and-size" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">length and size</span>
+</h3>
+<p>When you see <code class="inline">size</code> in a function name, it means the operation runs in constant time (also written as &quot;O(1) time&quot;) because the size is stored alongside the data structure.</p><p>Examples: <a href="Kernel.html#map_size/1"><code class="inline">map_size/1</code></a>, <a href="Kernel.html#tuple_size/1"><code class="inline">tuple_size/1</code></a></p><p>When you see <code class="inline">length</code>, the operation runs in linear time (&quot;O(n) time&quot;) because the entire data structure has to be traversed.</p><p>Examples: <a href="Kernel.html#length/1"><code class="inline">length/1</code></a>, <a href="String.html#length/1"><code class="inline">String.length/1</code></a></p><p>In other words, functions using the word &quot;size&quot; in its name will take the same amount of time whether the data structure is tiny or huge. Conversely, functions having &quot;length&quot; in its name will take more time as the data structure grows in size.</p><h3 id="get-fetch-fetch" class="section-heading">
+  <a href="#get-fetch-fetch" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">get, fetch, fetch!</span>
+</h3>
+<p>When you see the functions <code class="inline">get</code>, <code class="inline">fetch</code>, and <code class="inline">fetch!</code> for key-value data structures, you can expect the following behaviours:</p><ul><li><code class="inline">get</code> returns a default value (which itself defaults to <code class="inline">nil</code>) if the key is not present, or returns the requested value.</li><li><code class="inline">fetch</code> returns <code class="inline">:error</code> if the key is not present, or returns <code class="inline">{:ok, value}</code> if it is.</li><li><code class="inline">fetch!</code> <em>raises</em> if the key is not present, or returns the requested value.</li></ul><p>Examples: <a href="Map.html#get/2"><code class="inline">Map.get/2</code></a>, <a href="Map.html#fetch/2"><code class="inline">Map.fetch/2</code></a>, <a href="Map.html#fetch!/2"><code class="inline">Map.fetch!/2</code></a>, <a href="Keyword.html#get/2"><code class="inline">Keyword.get/2</code></a>, <a href="Keyword.html#fetch/2"><code class="inline">Keyword.fetch/2</code></a>, <a href="Keyword.html#fetch!/2"><code class="inline">Keyword.fetch!/2</code></a></p><h3 id="compare" class="section-heading">
+  <a href="#compare" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">compare</span>
+</h3>
+<p>The function <code class="inline">compare/2</code> should return <code class="inline">:lt</code> if the first term is less than the second, <code class="inline">:eq</code> if the two
+terms compare as equivalent, or <code class="inline">:gt</code> if the first term is greater than the second.</p><p>Examples: <a href="DateTime.html#compare/2"><code class="inline">DateTime.compare/2</code></a></p><p>Note that this specific convention is important due to the expectations of <a href="Enum.html#sort/2"><code class="inline">Enum.sort/2</code></a></p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="library-guidelines.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Library guidelines
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="operators.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Operators reference
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

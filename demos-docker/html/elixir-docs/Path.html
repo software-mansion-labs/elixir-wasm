@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Path — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Path.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Path</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>This module provides conveniences for manipulating or
+retrieving file system paths.</p><p>The functions in this module may receive chardata as
+arguments and will always return a string encoded in UTF-8. Chardata
+is a string or a list of characters and strings, see <a href="IO.html#t:chardata/0"><code class="inline">IO.chardata/0</code></a>.
+If a binary is given, in whatever encoding, its encoding will be kept.</p><p>The majority of the functions in this module do not
+interact with the file system, except for a few functions
+that require it (like <a href="#wildcard/2"><code class="inline">wildcard/2</code></a> and <a href="#expand/1"><code class="inline">expand/1</code></a>).</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A path.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#absname/1" data-no-tooltip="" translate="no">absname(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given path to an absolute one.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#absname/2" data-no-tooltip="" translate="no">absname(path, relative_to)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds a path from <code class="inline">relative_to</code> to <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#basename/1" data-no-tooltip="" translate="no">basename(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the last component of the path or the path
+itself if it does not contain any directory separators.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#basename/2" data-no-tooltip="" translate="no">basename(path, extension)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the last component of <code class="inline">path</code> with the <code class="inline">extension</code>
+stripped.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#dirname/1" data-no-tooltip="" translate="no">dirname(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the directory component of <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#expand/1" data-no-tooltip="" translate="no">expand(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the path to an absolute one, expanding
+any <code class="inline">.</code> and <code class="inline">..</code> components and a leading <code class="inline">~</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#expand/2" data-no-tooltip="" translate="no">expand(path, relative_to)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Expands the path relative to the path given as the second argument
+expanding any <code class="inline">.</code> and <code class="inline">..</code> characters.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#extname/1" data-no-tooltip="" translate="no">extname(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the extension of the last component of <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#join/1" data-no-tooltip="" translate="no">join(list)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Joins a list of paths.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#join/2" data-no-tooltip="" translate="no">join(left, right)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Joins two paths.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#relative/1" data-no-tooltip="" translate="no">relative(name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Forces the path to be a relative path.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#relative_to/3" data-no-tooltip="" translate="no">relative_to(path, cwd, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the direct relative path from <code class="inline">path</code> in relation to <code class="inline">cwd</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#relative_to_cwd/2" data-no-tooltip="" translate="no">relative_to_cwd(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Convenience to get the path relative to the current working
+directory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rootname/1" data-no-tooltip="" translate="no">rootname(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the <code class="inline">path</code> with the <code class="inline">extension</code> stripped.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rootname/2" data-no-tooltip="" translate="no">rootname(path, extension)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the <code class="inline">path</code> with the <code class="inline">extension</code> stripped.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#safe_relative/2" data-no-tooltip="" translate="no">safe_relative(path, cwd \\ File.cwd!())</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a relative path that is protected from directory-traversal attacks.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#safe_relative_to/2" data-no-tooltip="" translate="no">safe_relative_to(path, cwd)</a>
+
+          <span class="deprecated" title="Use safe_relative/2 instead">deprecated</span>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a relative path that is protected from directory-traversal attacks.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#split/1" data-no-tooltip="" translate="no">split(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Splits the path into a list at the path separator.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#type/1" data-no-tooltip="" translate="no">type(name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the path type.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#wildcard/2" data-no-tooltip="" translate="no">wildcard(glob, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Traverses paths according to the given <code class="inline">glob</code> expression and returns a
+list of matches.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L19" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: <a href="IO.html#t:chardata/0">IO.chardata</a>()</pre>
+
+      </div>
+
+<p>A path.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="absname/1">
+
+  <div class="detail-header">
+    <a href="#absname/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">absname(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L46" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> absname(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Converts the given path to an absolute one.</p><p>Unlike <a href="#expand/1"><code class="inline">expand/1</code></a>, no attempt is made to resolve <code class="inline">..</code>, <code class="inline">.</code>, or <code class="inline">~</code>.</p><h2 id="absname/1-examples" class="section-heading">
+  <a href="#absname/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<h3 id="absname/1-unix-like-operating-systems" class="section-heading">
+  <a href="#absname/1-unix-like-operating-systems" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unix-like operating systems</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">absname</span><span class="p" data-group-id="5314963132-1">(</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="5314963132-1">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;/usr/local/foo&quot;</span><span class="w">
+
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">absname</span><span class="p" data-group-id="5314963132-2">(</span><span class="s">&quot;../x&quot;</span><span class="p" data-group-id="5314963132-2">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;/usr/local/../x&quot;</span></code></pre><h3 id="absname/1-windows" class="section-heading">
+  <a href="#absname/1-windows" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Windows</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">absname</span><span class="p" data-group-id="9680109534-1">(</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="9680109534-1">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;D:/usr/local/foo&quot;</span><span class="w">
+
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">absname</span><span class="p" data-group-id="9680109534-2">(</span><span class="s">&quot;../x&quot;</span><span class="p" data-group-id="9680109534-2">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;D:/usr/local/../x&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="absname/2">
+
+  <div class="detail-header">
+    <a href="#absname/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">absname(path, relative_to)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L72" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> absname(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>() | (-&gt; <a href="#t:t/0">t</a>())) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Builds a path from <code class="inline">relative_to</code> to <code class="inline">path</code>.</p><p>If <code class="inline">path</code> is already an absolute path, <code class="inline">relative_to</code> is ignored. See also
+<a href="#relative_to/3"><code class="inline">relative_to/3</code></a>. <code class="inline">relative_to</code> is either a path or an anonymous function,
+which is invoked only when necessary, that returns a path.</p><p>Unlike <a href="#expand/2"><code class="inline">expand/2</code></a>, no attempt is made to resolve <code class="inline">..</code>, <code class="inline">.</code> or <code class="inline">~</code>.</p><h2 id="absname/2-examples" class="section-heading">
+  <a href="#absname/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">absname</span><span class="p" data-group-id="9848748874-1">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="9848748874-1">)</span><span class="w">
+</span><span class="s">&quot;bar/foo&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">absname</span><span class="p" data-group-id="9848748874-2">(</span><span class="s">&quot;../x&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="9848748874-2">)</span><span class="w">
+</span><span class="s">&quot;bar/../x&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">absname</span><span class="p" data-group-id="9848748874-3">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9848748874-4">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">&quot;lazy&quot;</span><span class="w"> </span><span class="k" data-group-id="9848748874-4">end</span><span class="p" data-group-id="9848748874-3">)</span><span class="w">
+</span><span class="s">&quot;lazy/foo&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="basename/1">
+
+  <div class="detail-header">
+    <a href="#basename/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">basename(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L506" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> basename(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the last component of the path or the path
+itself if it does not contain any directory separators.</p><h2 id="basename/1-examples" class="section-heading">
+  <a href="#basename/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">basename</span><span class="p" data-group-id="7766980624-1">(</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="7766980624-1">)</span><span class="w">
+</span><span class="s">&quot;foo&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">basename</span><span class="p" data-group-id="7766980624-2">(</span><span class="s">&quot;foo/bar&quot;</span><span class="p" data-group-id="7766980624-2">)</span><span class="w">
+</span><span class="s">&quot;bar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">basename</span><span class="p" data-group-id="7766980624-3">(</span><span class="s">&quot;lib/module/submodule.ex&quot;</span><span class="p" data-group-id="7766980624-3">)</span><span class="w">
+</span><span class="s">&quot;submodule.ex&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">basename</span><span class="p" data-group-id="7766980624-4">(</span><span class="s">&quot;/&quot;</span><span class="p" data-group-id="7766980624-4">)</span><span class="w">
+</span><span class="s">&quot;&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="basename/2">
+
+  <div class="detail-header">
+    <a href="#basename/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">basename(path, extension)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L530" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> basename(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the last component of <code class="inline">path</code> with the <code class="inline">extension</code>
+stripped.</p><p>This function should be used to remove a specific
+extension which may or may not be there.</p><h2 id="basename/2-examples" class="section-heading">
+  <a href="#basename/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">basename</span><span class="p" data-group-id="5681071526-1">(</span><span class="s">&quot;~/foo/bar.ex&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.ex&quot;</span><span class="p" data-group-id="5681071526-1">)</span><span class="w">
+</span><span class="s">&quot;bar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">basename</span><span class="p" data-group-id="5681071526-2">(</span><span class="s">&quot;~/foo/bar.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.ex&quot;</span><span class="p" data-group-id="5681071526-2">)</span><span class="w">
+</span><span class="s">&quot;bar.exs&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">basename</span><span class="p" data-group-id="5681071526-3">(</span><span class="s">&quot;~/foo/bar.old.ex&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.ex&quot;</span><span class="p" data-group-id="5681071526-3">)</span><span class="w">
+</span><span class="s">&quot;bar.old&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="dirname/1">
+
+  <div class="detail-header">
+    <a href="#dirname/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">dirname(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L553" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> dirname(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the directory component of <code class="inline">path</code>.</p><h2 id="dirname/1-examples" class="section-heading">
+  <a href="#dirname/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">dirname</span><span class="p" data-group-id="0084516389-1">(</span><span class="s">&quot;/foo/bar.ex&quot;</span><span class="p" data-group-id="0084516389-1">)</span><span class="w">
+</span><span class="s">&quot;/foo&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">dirname</span><span class="p" data-group-id="0084516389-2">(</span><span class="s">&quot;/foo/bar/baz.ex&quot;</span><span class="p" data-group-id="0084516389-2">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">dirname</span><span class="p" data-group-id="0084516389-3">(</span><span class="s">&quot;/foo/bar/&quot;</span><span class="p" data-group-id="0084516389-3">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">dirname</span><span class="p" data-group-id="0084516389-4">(</span><span class="s">&quot;bar.ex&quot;</span><span class="p" data-group-id="0084516389-4">)</span><span class="w">
+</span><span class="s">&quot;.&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="expand/1">
+
+  <div class="detail-header">
+    <a href="#expand/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">expand(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L188" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> expand(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Converts the path to an absolute one, expanding
+any <code class="inline">.</code> and <code class="inline">..</code> components and a leading <code class="inline">~</code>.</p><p>If a relative path is provided it is expanded relatively to
+the current working directory.</p><h2 id="expand/1-examples" class="section-heading">
+  <a href="#expand/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">expand</span><span class="p" data-group-id="6728387823-1">(</span><span class="s">&quot;/foo/bar/../baz&quot;</span><span class="p" data-group-id="6728387823-1">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;/foo/baz&quot;</span><span class="w">
+
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">expand</span><span class="p" data-group-id="6728387823-2">(</span><span class="s">&quot;foo/bar/../baz&quot;</span><span class="p" data-group-id="6728387823-2">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;$PWD/foo/baz&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="expand/2">
+
+  <div class="detail-header">
+    <a href="#expand/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">expand(path, relative_to)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L217" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> expand(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Expands the path relative to the path given as the second argument
+expanding any <code class="inline">.</code> and <code class="inline">..</code> characters.</p><p>If the path is already an absolute path, <code class="inline">relative_to</code> is ignored.</p><p>Note that this function treats a <code class="inline">path</code> with a leading <code class="inline">~</code> as
+an absolute one.</p><p>The second argument is first expanded to an absolute path.</p><h2 id="expand/2-examples" class="section-heading">
+  <a href="#expand/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="c1"># Assuming that the absolute path to baz is /quux/baz</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">expand</span><span class="p" data-group-id="0615894466-1">(</span><span class="s">&quot;foo/bar/../bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;baz&quot;</span><span class="p" data-group-id="0615894466-1">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;/quux/baz/foo/bar&quot;</span><span class="w">
+
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">expand</span><span class="p" data-group-id="0615894466-2">(</span><span class="s">&quot;foo/bar/../bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/baz&quot;</span><span class="p" data-group-id="0615894466-2">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;/baz/foo/bar&quot;</span><span class="w">
+
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">expand</span><span class="p" data-group-id="0615894466-3">(</span><span class="s">&quot;/foo/bar/../bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/baz&quot;</span><span class="p" data-group-id="0615894466-3">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;/foo/bar&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="extname/1">
+
+  <div class="detail-header">
+    <a href="#extname/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">extname(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L579" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> extname(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the extension of the last component of <code class="inline">path</code>.</p><p>For filenames starting with a dot and without an extension, it returns
+an empty string.</p><p>See <a href="#basename/1"><code class="inline">basename/1</code></a> and <a href="#rootname/1"><code class="inline">rootname/1</code></a> for related functions to extract
+information from paths.</p><h2 id="extname/1-examples" class="section-heading">
+  <a href="#extname/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">extname</span><span class="p" data-group-id="4303023577-1">(</span><span class="s">&quot;foo.erl&quot;</span><span class="p" data-group-id="4303023577-1">)</span><span class="w">
+</span><span class="s">&quot;.erl&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">extname</span><span class="p" data-group-id="4303023577-2">(</span><span class="s">&quot;~/foo/bar&quot;</span><span class="p" data-group-id="4303023577-2">)</span><span class="w">
+</span><span class="s">&quot;&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">extname</span><span class="p" data-group-id="4303023577-3">(</span><span class="s">&quot;.gitignore&quot;</span><span class="p" data-group-id="4303023577-3">)</span><span class="w">
+</span><span class="s">&quot;&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="join/1">
+
+  <div class="detail-header">
+    <a href="#join/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">join(list)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L641" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> join([<a href="#t:t/0">t</a>(), ...]) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Joins a list of paths.</p><p>This function should be used to convert a list of paths to a path.
+Note that any trailing slash is removed when joining.</p><p>Raises an error if the given list of paths is empty.</p><h2 id="join/1-examples" class="section-heading">
+  <a href="#join/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="5996904954-1">(</span><span class="p" data-group-id="5996904954-2">[</span><span class="s">&quot;~&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="5996904954-2">]</span><span class="p" data-group-id="5996904954-1">)</span><span class="w">
+</span><span class="s">&quot;~/foo&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="5996904954-3">(</span><span class="p" data-group-id="5996904954-4">[</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="5996904954-4">]</span><span class="p" data-group-id="5996904954-3">)</span><span class="w">
+</span><span class="s">&quot;foo&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="5996904954-5">(</span><span class="p" data-group-id="5996904954-6">[</span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar/&quot;</span><span class="p" data-group-id="5996904954-6">]</span><span class="p" data-group-id="5996904954-5">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="join/2">
+
+  <div class="detail-header">
+    <a href="#join/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">join(left, right)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L670" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> join(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Joins two paths.</p><p>The right path will always be expanded to its relative format
+and any trailing slash will be removed when joining.</p><h2 id="join/2-examples" class="section-heading">
+  <a href="#join/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2022819771-1">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="2022819771-1">)</span><span class="w">
+</span><span class="s">&quot;foo/bar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2022819771-2">(</span><span class="s">&quot;/foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/bar/&quot;</span><span class="p" data-group-id="2022819771-2">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar&quot;</span></code></pre><p>The functions in this module support chardata, so giving a list will
+treat it as a single entity:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="7400761005-1">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7400761005-2">[</span><span class="s">&quot;bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fiz&quot;</span><span class="p" data-group-id="7400761005-2">]</span><span class="p" data-group-id="7400761005-1">)</span><span class="w">
+</span><span class="s">&quot;foo/barfiz&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="7400761005-3">(</span><span class="p" data-group-id="7400761005-4">[</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="7400761005-4">]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fiz&quot;</span><span class="p" data-group-id="7400761005-3">)</span><span class="w">
+</span><span class="s">&quot;foobar/fiz&quot;</span></code></pre><p>Use <a href="#join/1"><code class="inline">join/1</code></a> if you need to join a list of paths instead.</p>
+  </section>
+</section>
+<section class="detail" id="relative/1">
+
+  <div class="detail-header">
+    <a href="#relative/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">relative(name)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L277" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> relative(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Forces the path to be a relative path.</p><p>If an absolute path is given, it is stripped from its root component.</p><h2 id="relative/1-examples" class="section-heading">
+  <a href="#relative/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<h3 id="relative/1-unix-like-operating-systems" class="section-heading">
+  <a href="#relative/1-unix-like-operating-systems" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unix-like operating systems</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">relative</span><span class="p" data-group-id="2995548881-1">(</span><span class="s">&quot;/usr/local/bin&quot;</span><span class="p" data-group-id="2995548881-1">)</span><span class="w">   </span><span class="c1">#=&gt; &quot;usr/local/bin&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative</span><span class="p" data-group-id="2995548881-2">(</span><span class="s">&quot;usr/local/bin&quot;</span><span class="p" data-group-id="2995548881-2">)</span><span class="w">    </span><span class="c1">#=&gt; &quot;usr/local/bin&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative</span><span class="p" data-group-id="2995548881-3">(</span><span class="s">&quot;../usr/local/bin&quot;</span><span class="p" data-group-id="2995548881-3">)</span><span class="w"> </span><span class="c1">#=&gt; &quot;../usr/local/bin&quot;</span></code></pre><h3 id="relative/1-windows" class="section-heading">
+  <a href="#relative/1-windows" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Windows</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">relative</span><span class="p" data-group-id="4683519958-1">(</span><span class="s">&quot;D:/usr/local/bin&quot;</span><span class="p" data-group-id="4683519958-1">)</span><span class="w"> </span><span class="c1">#=&gt; &quot;usr/local/bin&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative</span><span class="p" data-group-id="4683519958-2">(</span><span class="s">&quot;usr/local/bin&quot;</span><span class="p" data-group-id="4683519958-2">)</span><span class="w">    </span><span class="c1">#=&gt; &quot;usr/local/bin&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative</span><span class="p" data-group-id="4683519958-3">(</span><span class="s">&quot;D:bar.ex&quot;</span><span class="p" data-group-id="4683519958-3">)</span><span class="w">         </span><span class="c1">#=&gt; &quot;bar.ex&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative</span><span class="p" data-group-id="4683519958-4">(</span><span class="s">&quot;/bar/foo.ex&quot;</span><span class="p" data-group-id="4683519958-4">)</span><span class="w">      </span><span class="c1">#=&gt; &quot;bar/foo.ex&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="relative_to/3">
+
+    <span id="relative_to/2"></span>
+
+  <div class="detail-header">
+    <a href="#relative_to/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">relative_to(path, cwd, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L401" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> relative_to(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>(), <a href="typespecs.html#built-in-types">keyword</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the direct relative path from <code class="inline">path</code> in relation to <code class="inline">cwd</code>.</p><p>In other words, this function attempts to return a path such that
+<code class="inline">Path.expand(result, cwd)</code> points to <code class="inline">path</code>. This function aims
+to return a relative path whenever possible, but that's not guaranteed:</p><ul><li><p>If both paths are relative, a relative path is always returned</p></li><li><p>If both paths are absolute, a relative path may be returned if
+they share a common prefix. You can pass the <code class="inline">:force</code> option to
+force this function to traverse up, but even then a relative
+path is not guaranteed (for example, if the absolute paths
+belong to different drives on Windows)</p></li><li><p>If a mixture of paths are given, the result will always match
+the given <code class="inline">path</code> (the first argument)</p></li></ul><p>This function expands <code class="inline">.</code> and <code class="inline">..</code> entries without traversing the
+file system, so it assumes no symlinks between the paths. See
+<a href="#safe_relative_to/2"><code class="inline">safe_relative_to/2</code></a> for a safer alternative.</p><h2 id="relative_to/3-options" class="section-heading">
+  <a href="#relative_to/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:force</code> - (boolean since v1.16.0) if <code class="inline">true</code> forces a relative
+path to be returned by traversing the path up. Except if the paths
+are in different volumes on Windows. Defaults to <code class="inline">false</code>.</li></ul><h2 id="relative_to/3-examples" class="section-heading">
+  <a href="#relative_to/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<h3 id="relative_to/3-with-relative-cwd" class="section-heading">
+  <a href="#relative_to/3-with-relative-cwd" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">With relative <code class="inline">cwd</code></span>
+</h3>
+<p>If both paths are relative, a minimum path is computed:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="6692412280-1">(</span><span class="s">&quot;tmp/foo/bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tmp&quot;</span><span class="p" data-group-id="6692412280-1">)</span><span class="w">      </span><span class="c1">#=&gt; &quot;foo/bar&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="6692412280-2">(</span><span class="s">&quot;tmp/foo/bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tmp/foo&quot;</span><span class="p" data-group-id="6692412280-2">)</span><span class="w">  </span><span class="c1">#=&gt; &quot;bar&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="6692412280-3">(</span><span class="s">&quot;tmp/foo/bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tmp/bat&quot;</span><span class="p" data-group-id="6692412280-3">)</span><span class="w">  </span><span class="c1">#=&gt; &quot;../foo/bar&quot;</span></code></pre><p>If an absolute path is given with relative <code class="inline">cwd</code>, it is returned as:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="1909581186-1">(</span><span class="s">&quot;/usr/foo/bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tmp/bat&quot;</span><span class="p" data-group-id="1909581186-1">)</span><span class="w">  </span><span class="c1">#=&gt; &quot;/usr/foo/bar&quot;</span></code></pre><h3 id="relative_to/3-with-absolute-cwd" class="section-heading">
+  <a href="#relative_to/3-with-absolute-cwd" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">With absolute <code class="inline">cwd</code></span>
+</h3>
+<p>If both paths are absolute, a relative is computed if possible,
+without traversing up:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="8037542206-1">(</span><span class="s">&quot;/usr/local/foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p" data-group-id="8037542206-1">)</span><span class="w">      </span><span class="c1">#=&gt; &quot;foo&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="8037542206-2">(</span><span class="s">&quot;/usr/local/foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p" data-group-id="8037542206-2">)</span><span class="w">               </span><span class="c1">#=&gt; &quot;usr/local/foo&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="8037542206-3">(</span><span class="s">&quot;/usr/local/foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/etc&quot;</span><span class="p" data-group-id="8037542206-3">)</span><span class="w">            </span><span class="c1">#=&gt; &quot;/usr/local/foo&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="8037542206-4">(</span><span class="s">&quot;/usr/local/foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local/foo&quot;</span><span class="p" data-group-id="8037542206-4">)</span><span class="w">  </span><span class="c1">#=&gt; &quot;.&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="8037542206-5">(</span><span class="s">&quot;/usr/local/../foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/foo&quot;</span><span class="p" data-group-id="8037542206-5">)</span><span class="w">     </span><span class="c1">#=&gt; &quot;.&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="8037542206-6">(</span><span class="s">&quot;/usr/local/../foo/bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/foo&quot;</span><span class="p" data-group-id="8037542206-6">)</span><span class="w"> </span><span class="c1">#=&gt; &quot;bar&quot;</span></code></pre><p>If <code class="inline">:force</code> is set to <code class="inline">true</code> paths are traversed up:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="2055838226-1">(</span><span class="s">&quot;/usr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">force</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2055838226-1">)</span><span class="w">          </span><span class="c1">#=&gt; &quot;..&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="2055838226-2">(</span><span class="s">&quot;/usr/foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">force</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2055838226-2">)</span><span class="w">      </span><span class="c1">#=&gt; &quot;../foo&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="2055838226-3">(</span><span class="s">&quot;/usr/../foo/bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/etc/foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">force</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2055838226-3">)</span><span class="w"> </span><span class="c1">#=&gt; &quot;../../foo/bar&quot;</span></code></pre><p>If a relative path is given, it is assumed to be relative to the
+given path, so the path is returned with &quot;.&quot; and &quot;..&quot; expanded:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="3441921557-1">(</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p" data-group-id="3441921557-1">)</span><span class="w">          </span><span class="c1">#=&gt; &quot;.&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="3441921557-2">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p" data-group-id="3441921557-2">)</span><span class="w">        </span><span class="c1">#=&gt; &quot;foo&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="3441921557-3">(</span><span class="s">&quot;foo/../bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p" data-group-id="3441921557-3">)</span><span class="w"> </span><span class="c1">#=&gt; &quot;bar&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="3441921557-4">(</span><span class="s">&quot;foo/..&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p" data-group-id="3441921557-4">)</span><span class="w">     </span><span class="c1">#=&gt; &quot;.&quot;</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">relative_to</span><span class="p" data-group-id="3441921557-5">(</span><span class="s">&quot;../foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/usr/local&quot;</span><span class="p" data-group-id="3441921557-5">)</span><span class="w">     </span><span class="c1">#=&gt; &quot;../foo&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="relative_to_cwd/2">
+
+    <span id="relative_to_cwd/1"></span>
+
+  <div class="detail-header">
+    <a href="#relative_to_cwd/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">relative_to_cwd(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L479" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> relative_to_cwd(
+  <a href="#t:t/0">t</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Convenience to get the path relative to the current working
+directory.</p><p>If, for some reason, the current working directory
+cannot be retrieved, this function returns the given <code class="inline">path</code>.</p><p>Check <a href="#relative_to/3"><code class="inline">relative_to/3</code></a> for the supported options.</p>
+  </section>
+</section>
+<section class="detail" id="rootname/1">
+
+  <div class="detail-header">
+    <a href="#rootname/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rootname(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L596" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rootname(<a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the <code class="inline">path</code> with the <code class="inline">extension</code> stripped.</p><h2 id="rootname/1-examples" class="section-heading">
+  <a href="#rootname/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">rootname</span><span class="p" data-group-id="4831755156-1">(</span><span class="s">&quot;/foo/bar&quot;</span><span class="p" data-group-id="4831755156-1">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">rootname</span><span class="p" data-group-id="4831755156-2">(</span><span class="s">&quot;/foo/bar.ex&quot;</span><span class="p" data-group-id="4831755156-2">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="rootname/2">
+
+  <div class="detail-header">
+    <a href="#rootname/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rootname(path, extension)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L616" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rootname(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns the <code class="inline">path</code> with the <code class="inline">extension</code> stripped.</p><p>This function should be used to remove a specific extension which may
+or may not be there.</p><h2 id="rootname/2-examples" class="section-heading">
+  <a href="#rootname/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">rootname</span><span class="p" data-group-id="7261598922-1">(</span><span class="s">&quot;/foo/bar.erl&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.erl&quot;</span><span class="p" data-group-id="7261598922-1">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">rootname</span><span class="p" data-group-id="7261598922-2">(</span><span class="s">&quot;/foo/bar.erl&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.ex&quot;</span><span class="p" data-group-id="7261598922-2">)</span><span class="w">
+</span><span class="s">&quot;/foo/bar.erl&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="safe_relative/2">
+
+    <span id="safe_relative/1"></span>
+
+  <div class="detail-header">
+    <a href="#safe_relative/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">safe_relative(path, cwd \\ File.cwd!())</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L909" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> safe_relative(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Returns a relative path that is protected from directory-traversal attacks.</p><p>The given relative path is sanitized by eliminating <code class="inline">..</code> and <code class="inline">.</code> components.</p><p>This function checks that, after expanding those components, the path is still &quot;safe&quot;.
+Paths are considered unsafe if either of these is true:</p><ul><li><p>The path is not relative, such as <code class="inline">&quot;/foo/bar&quot;</code>.</p></li><li><p>A <code class="inline">..</code> component would make it so that the path would traverse up above
+the root of <code class="inline">relative_to</code>.</p></li><li><p>A symbolic link in the path points to something above the root of <code class="inline">cwd</code>.</p></li></ul><h2 id="safe_relative/2-examples" class="section-heading">
+  <a href="#safe_relative/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">safe_relative</span><span class="p" data-group-id="2186155918-1">(</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="2186155918-1">)</span><span class="w">
+</span><span class="p" data-group-id="2186155918-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="2186155918-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">safe_relative</span><span class="p" data-group-id="2186155918-3">(</span><span class="s">&quot;deps/my_dep/app.beam&quot;</span><span class="p" data-group-id="2186155918-3">)</span><span class="w">
+</span><span class="p" data-group-id="2186155918-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;deps/my_dep/app.beam&quot;</span><span class="p" data-group-id="2186155918-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">safe_relative</span><span class="p" data-group-id="2186155918-5">(</span><span class="s">&quot;deps/my_dep/./build/../app.beam&quot;</span><span class="p">,</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">cwd!</span><span class="p" data-group-id="2186155918-6">(</span><span class="p" data-group-id="2186155918-6">)</span><span class="p" data-group-id="2186155918-5">)</span><span class="w">
+</span><span class="p" data-group-id="2186155918-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;deps/my_dep/app.beam&quot;</span><span class="p" data-group-id="2186155918-7">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">safe_relative</span><span class="p" data-group-id="2186155918-8">(</span><span class="s">&quot;my_dep/../..&quot;</span><span class="p" data-group-id="2186155918-8">)</span><span class="w">
+</span><span class="ss">:error</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">safe_relative</span><span class="p" data-group-id="2186155918-9">(</span><span class="s">&quot;/usr/local&quot;</span><span class="p">,</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">cwd!</span><span class="p" data-group-id="2186155918-10">(</span><span class="p" data-group-id="2186155918-10">)</span><span class="p" data-group-id="2186155918-9">)</span><span class="w">
+</span><span class="ss">:error</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="safe_relative_to/2">
+
+  <div class="detail-header">
+    <a href="#safe_relative_to/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">safe_relative_to(path, cwd)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L870" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This function is deprecated. Use safe_relative/2 instead.
+    </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> safe_relative_to(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Returns a relative path that is protected from directory-traversal attacks.</p><p>See <a href="#safe_relative/2"><code class="inline">safe_relative/2</code></a> for a non-deprecated version of this API.</p>
+  </section>
+</section>
+<section class="detail" id="split/1">
+
+  <div class="detail-header">
+    <a href="#split/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">split(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L718" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> split(<a href="#t:t/0">t</a>()) :: [<a href="typespecs.html#built-in-types">binary</a>()]</pre>
+
+      </div>
+
+<p>Splits the path into a list at the path separator.</p><p>If an empty string is given, returns an empty list.</p><p>On Windows, path is split on both <code class="inline">&quot;\&quot;</code> and <code class="inline">&quot;/&quot;</code> separators
+and the driver letter, if there is one, is always returned
+in lowercase.</p><h2 id="split/1-examples" class="section-heading">
+  <a href="#split/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="3379735549-1">(</span><span class="s">&quot;&quot;</span><span class="p" data-group-id="3379735549-1">)</span><span class="w">
+</span><span class="p" data-group-id="3379735549-2">[</span><span class="p" data-group-id="3379735549-2">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="3379735549-3">(</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="3379735549-3">)</span><span class="w">
+</span><span class="p" data-group-id="3379735549-4">[</span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="3379735549-4">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Path</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="3379735549-5">(</span><span class="s">&quot;/foo/bar&quot;</span><span class="p" data-group-id="3379735549-5">)</span><span class="w">
+</span><span class="p" data-group-id="3379735549-6">[</span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="3379735549-6">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="type/1">
+
+  <div class="detail-header">
+    <a href="#type/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">type(name)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L243" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> type(<a href="#t:t/0">t</a>()) :: :absolute | :relative | :volumerelative</pre>
+
+      </div>
+
+<p>Returns the path type.</p><h2 id="type/1-examples" class="section-heading">
+  <a href="#type/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<h3 id="type/1-unix-like-operating-systems" class="section-heading">
+  <a href="#type/1-unix-like-operating-systems" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unix-like operating systems</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4978081705-1">(</span><span class="s">&quot;/&quot;</span><span class="p" data-group-id="4978081705-1">)</span><span class="w">                </span><span class="c1">#=&gt; :absolute</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4978081705-2">(</span><span class="s">&quot;/usr/local/bin&quot;</span><span class="p" data-group-id="4978081705-2">)</span><span class="w">   </span><span class="c1">#=&gt; :absolute</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4978081705-3">(</span><span class="s">&quot;usr/local/bin&quot;</span><span class="p" data-group-id="4978081705-3">)</span><span class="w">    </span><span class="c1">#=&gt; :relative</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4978081705-4">(</span><span class="s">&quot;../usr/local/bin&quot;</span><span class="p" data-group-id="4978081705-4">)</span><span class="w"> </span><span class="c1">#=&gt; :relative</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4978081705-5">(</span><span class="s">&quot;~/file&quot;</span><span class="p" data-group-id="4978081705-5">)</span><span class="w">           </span><span class="c1">#=&gt; :relative</span></code></pre><h3 id="type/1-windows" class="section-heading">
+  <a href="#type/1-windows" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Windows</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4424739215-1">(</span><span class="s">&quot;D:/usr/local/bin&quot;</span><span class="p" data-group-id="4424739215-1">)</span><span class="w"> </span><span class="c1">#=&gt; :absolute</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4424739215-2">(</span><span class="s">&quot;usr/local/bin&quot;</span><span class="p" data-group-id="4424739215-2">)</span><span class="w">    </span><span class="c1">#=&gt; :relative</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4424739215-3">(</span><span class="s">&quot;D:bar.ex&quot;</span><span class="p" data-group-id="4424739215-3">)</span><span class="w">         </span><span class="c1">#=&gt; :volumerelative</span><span class="w">
+</span><span class="nc">Path</span><span class="o">.</span><span class="n">type</span><span class="p" data-group-id="4424739215-4">(</span><span class="s">&quot;/bar/foo.ex&quot;</span><span class="p" data-group-id="4424739215-4">)</span><span class="w">      </span><span class="c1">#=&gt; :volumerelative</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="wildcard/2">
+
+    <span id="wildcard/1"></span>
+
+  <div class="detail-header">
+    <a href="#wildcard/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">wildcard(glob, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/path.ex#L801" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> wildcard(
+  <a href="#t:t/0">t</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) :: [<a href="typespecs.html#built-in-types">binary</a>()]</pre>
+
+      </div>
+
+<p>Traverses paths according to the given <code class="inline">glob</code> expression and returns a
+list of matches.</p><p>The wildcard looks like an ordinary path, except that the following
+&quot;wildcard characters&quot; are interpreted in a special way:</p><ul><li><p><code class="inline">?</code> - matches one character.</p></li><li><p><code class="inline">*</code> - matches any number of characters up to the end of the filename, the
+next dot, or the next slash.</p></li><li><p><code class="inline">**</code> - two adjacent <code class="inline">*</code>'s used as a single pattern will match all
+files and zero or more directories and subdirectories.</p></li><li><p><code class="inline">[char1,char2,...]</code> - matches any of the characters listed; two
+characters separated by a hyphen will match a range of characters.
+Do not add spaces before and after the comma as it would then match
+paths containing the space character itself.</p></li><li><p><code class="inline">{item1,item2,...}</code> - matches one of the alternatives.
+Do not add spaces before and after the comma as it would then match
+paths containing the space character itself.</p></li></ul><p>Other characters represent themselves. Only paths that have
+exactly the same character in the same position will match. Note
+that matching is case-sensitive: <code class="inline">&quot;a&quot;</code> will not match <code class="inline">&quot;A&quot;</code>.</p><p>Directory separators must always be written as <code class="inline">/</code>, even on Windows.
+You may call <a href="#expand/1"><code class="inline">Path.expand/1</code></a> to normalize the path before invoking
+this function.</p><p>A character preceded by <code class="inline">\\</code> loses its special meaning.
+Note that <code class="inline">\\</code> must be written as <code class="inline">\\\\</code> in a string literal.
+For example, <code class="inline">&quot;\\\\?*&quot;</code> will match any filename starting with <code class="inline">?.</code>.</p><p>By default, the patterns <code class="inline">*</code> and <code class="inline">?</code> do not match files starting
+with a dot <code class="inline">.</code>. See the <code class="inline">:match_dot</code> option in the &quot;Options&quot; section
+below.</p><h2 id="wildcard/2-options" class="section-heading">
+  <a href="#wildcard/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:match_dot</code> - (boolean) if <code class="inline">false</code>, the special wildcard characters <code class="inline">*</code> and <code class="inline">?</code>
+will not match files starting with a dot (<code class="inline">.</code>). If <code class="inline">true</code>, files starting with
+a <code class="inline">.</code> will not be treated specially. Defaults to <code class="inline">false</code>.</li></ul><h2 id="wildcard/2-examples" class="section-heading">
+  <a href="#wildcard/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Imagine you have a directory called <code class="inline">projects</code> with three Elixir projects
+inside of it: <code class="inline">elixir</code>, <code class="inline">ex_doc</code>, and <code class="inline">plug</code>. You can find all <code class="inline">.beam</code> files
+inside the <code class="inline">ebin</code> directory of each project as follows:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">wildcard</span><span class="p" data-group-id="2824405948-1">(</span><span class="s">&quot;projects/*/ebin/**/*.beam&quot;</span><span class="p" data-group-id="2824405948-1">)</span></code></pre><p>If you want to search for both <code class="inline">.beam</code> and <code class="inline">.app</code> files, you could do:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Path</span><span class="o">.</span><span class="n">wildcard</span><span class="p" data-group-id="3157827949-1">(</span><span class="s">&quot;projects/*/ebin/**/*.{beam,app}&quot;</span><span class="p" data-group-id="3157827949-1">)</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

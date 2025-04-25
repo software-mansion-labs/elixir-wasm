@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Speeding up with ETS — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/erlang-term-storage.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Speeding up with ETS</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/erlang-term-storage.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Every time we need to look up a bucket, we need to send a message to the registry. In case our registry is being accessed concurrently by multiple processes, the registry may become a bottleneck!</p><p>In this chapter, we will learn about ETS (Erlang Term Storage) and how to use it as a cache mechanism.</p><blockquote><p>Warning! Don't use ETS as a cache prematurely! Log and analyze your application performance and identify which parts are bottlenecks, so you know <em>whether</em> you should cache, and <em>what</em> you should cache. This chapter is merely an example of how ETS can be used, once you've determined the need.</p></blockquote><h2 id="ets-as-a-cache" class="section-heading">
+  <a href="#ets-as-a-cache" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">ETS as a cache</span>
+</h2>
+<p>ETS allows us to store any Elixir term in an in-memory table. Working with ETS tables is done via <a href="http://www.erlang.org/doc/man/ets.html">Erlang's <code class="inline">:ets</code> module</a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:ets</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="3781070907-1">(</span><span class="ss">:buckets_registry</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3781070907-2">[</span><span class="ss">:set</span><span class="p">,</span><span class="w"> </span><span class="ss">:protected</span><span class="p" data-group-id="3781070907-2">]</span><span class="p" data-group-id="3781070907-1">)</span><span class="w">
+</span><span class="p" data-group-id="3781070907-3">#</span><span class="nc" data-group-id="3781070907-3">Reference</span><span class="p" data-group-id="3781070907-3">&lt;</span><span class="mf">0.1885502827</span><span class="o">.</span><span class="mf">460455937.234656</span><span class="p" data-group-id="3781070907-3">&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">insert</span><span class="p" data-group-id="3781070907-4">(</span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3781070907-5">{</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p" data-group-id="3781070907-6">(</span><span class="p" data-group-id="3781070907-6">)</span><span class="p" data-group-id="3781070907-5">}</span><span class="p" data-group-id="3781070907-4">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="3781070907-7">(</span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="3781070907-7">)</span><span class="w">
+</span><span class="p" data-group-id="3781070907-8">[</span><span class="p" data-group-id="3781070907-9">{</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3781070907-10">#</span><span class="nc" data-group-id="3781070907-10">PID</span><span class="p" data-group-id="3781070907-10">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">41</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="3781070907-10">&gt;</span><span class="p" data-group-id="3781070907-9">}</span><span class="p" data-group-id="3781070907-8">]</span></code></pre><p>When creating an ETS table, two arguments are required: the table name and a set of options. From the available options, we passed the table type and its access rules. We have chosen the <code class="inline">:set</code> type, which means that keys cannot be duplicated. We've also set the table's access to <code class="inline">:protected</code>, meaning only the process that created the table can write to it, but all processes can read from it. The possible access controls:</p><p>  <code class="inline">:public</code> — Read/Write available to all processes.</p><p>  <code class="inline">:protected</code> — Read available to all processes. Only writable by owner process. This is the default.</p><p>  <code class="inline">:private</code> — Read/Write limited to owner process.</p><p>Be aware that if your Read/Write call violates the access control, the operation will raise <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a>. Finally, since <code class="inline">:set</code> and <code class="inline">:protected</code> are the default values, we will skip them from now on.</p><p>ETS tables can also be named, allowing us to access them by a given name:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="3146481425-1">(</span><span class="ss">:buckets_registry</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3146481425-2">[</span><span class="ss">:named_table</span><span class="p" data-group-id="3146481425-2">]</span><span class="p" data-group-id="3146481425-1">)</span><span class="w">
+</span><span class="ss">:buckets_registry</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">insert</span><span class="p" data-group-id="3146481425-3">(</span><span class="ss">:buckets_registry</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3146481425-4">{</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p" data-group-id="3146481425-5">(</span><span class="p" data-group-id="3146481425-5">)</span><span class="p" data-group-id="3146481425-4">}</span><span class="p" data-group-id="3146481425-3">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="3146481425-6">(</span><span class="ss">:buckets_registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="3146481425-6">)</span><span class="w">
+</span><span class="p" data-group-id="3146481425-7">[</span><span class="p" data-group-id="3146481425-8">{</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3146481425-9">#</span><span class="nc" data-group-id="3146481425-9">PID</span><span class="p" data-group-id="3146481425-9">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">41</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="3146481425-9">&gt;</span><span class="p" data-group-id="3146481425-8">}</span><span class="p" data-group-id="3146481425-7">]</span></code></pre><p>Let's change the <code class="inline">KV.Registry</code> to use ETS tables. The first change is to modify our registry to require a name argument, we will use it to name the ETS table and the registry process itself. ETS names and process names are stored in different locations, so there is no chance of conflicts.</p><p>Open up <code class="inline">lib/kv/registry.ex</code>, and let's change its implementation. We've added comments to the source code to highlight the changes we've made:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="w"> </span><span class="k" data-group-id="2996049264-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="c1">## Client API</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Starts the registry with the given options.
+
+  `:name` is always required.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="2996049264-2">(</span><span class="n">opts</span><span class="p" data-group-id="2996049264-2">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-3">do</span><span class="w">
+    </span><span class="c1"># 1. Pass the name to GenServer&#39;s init</span><span class="w">
+    </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">fetch!</span><span class="p" data-group-id="2996049264-4">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="ss">:name</span><span class="p" data-group-id="2996049264-4">)</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="2996049264-5">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="2996049264-5">)</span><span class="w">
+  </span><span class="k" data-group-id="2996049264-3">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Looks up the bucket pid for `name` stored in `server`.
+
+  Returns `{:ok, pid}` if the bucket exists, `:error` otherwise.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">lookup</span><span class="p" data-group-id="2996049264-6">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-6">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-7">do</span><span class="w">
+    </span><span class="c1"># 2. Lookup is now done directly in ETS, without accessing the server</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">:ets</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="2996049264-8">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-8">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-9">do</span><span class="w">
+      </span><span class="p" data-group-id="2996049264-10">[</span><span class="p" data-group-id="2996049264-11">{</span><span class="o">^</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="2996049264-11">}</span><span class="p" data-group-id="2996049264-10">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="2996049264-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="2996049264-12">}</span><span class="w">
+      </span><span class="p" data-group-id="2996049264-13">[</span><span class="p" data-group-id="2996049264-13">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+    </span><span class="k" data-group-id="2996049264-9">end</span><span class="w">
+  </span><span class="k" data-group-id="2996049264-7">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Ensures there is a bucket associated with the given `name` in `server`.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">create</span><span class="p" data-group-id="2996049264-14">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-14">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-15">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">cast</span><span class="p" data-group-id="2996049264-16">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-17">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-17">}</span><span class="p" data-group-id="2996049264-16">)</span><span class="w">
+  </span><span class="k" data-group-id="2996049264-15">end</span><span class="w">
+
+  </span><span class="c1">## Server callbacks</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="2996049264-18">(</span><span class="n">table</span><span class="p" data-group-id="2996049264-18">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-19">do</span><span class="w">
+    </span><span class="c1"># 3. We have replaced the names map by the ETS table</span><span class="w">
+    </span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:ets</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2996049264-20">(</span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-21">[</span><span class="ss">:named_table</span><span class="p">,</span><span class="w"> </span><span class="ss">read_concurrency</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2996049264-21">]</span><span class="p" data-group-id="2996049264-20">)</span><span class="w">
+    </span><span class="n">refs</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2996049264-22">%{</span><span class="p" data-group-id="2996049264-22">}</span><span class="w">
+    </span><span class="p" data-group-id="2996049264-23">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-24">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="2996049264-24">}</span><span class="p" data-group-id="2996049264-23">}</span><span class="w">
+  </span><span class="k" data-group-id="2996049264-19">end</span><span class="w">
+
+  </span><span class="c1"># 4. The previous handle_call callback for lookup was removed</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_cast</span><span class="p" data-group-id="2996049264-25">(</span><span class="p" data-group-id="2996049264-26">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-26">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-27">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="2996049264-27">}</span><span class="p" data-group-id="2996049264-25">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-28">do</span><span class="w">
+    </span><span class="c1"># 5. Read and write to the ETS table instead of the map</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="n">lookup</span><span class="p" data-group-id="2996049264-29">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-29">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-30">do</span><span class="w">
+      </span><span class="p" data-group-id="2996049264-31">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="c">_pid</span><span class="p" data-group-id="2996049264-31">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="2996049264-32">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-33">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="2996049264-33">}</span><span class="p" data-group-id="2996049264-32">}</span><span class="w">
+
+      </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="2996049264-34">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="2996049264-34">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">DynamicSupervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p" data-group-id="2996049264-35">(</span><span class="nc">KV.BucketSupervisor</span><span class="p">,</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="p" data-group-id="2996049264-35">)</span><span class="w">
+        </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Process</span><span class="o">.</span><span class="n">monitor</span><span class="p" data-group-id="2996049264-36">(</span><span class="n">pid</span><span class="p" data-group-id="2996049264-36">)</span><span class="w">
+        </span><span class="n">refs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="2996049264-37">(</span><span class="n">refs</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-37">)</span><span class="w">
+        </span><span class="nc">:ets</span><span class="o">.</span><span class="n">insert</span><span class="p" data-group-id="2996049264-38">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-39">{</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="2996049264-39">}</span><span class="p" data-group-id="2996049264-38">)</span><span class="w">
+        </span><span class="p" data-group-id="2996049264-40">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-41">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="2996049264-41">}</span><span class="p" data-group-id="2996049264-40">}</span><span class="w">
+    </span><span class="k" data-group-id="2996049264-30">end</span><span class="w">
+  </span><span class="k" data-group-id="2996049264-28">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_info</span><span class="p" data-group-id="2996049264-42">(</span><span class="p" data-group-id="2996049264-43">{</span><span class="ss">:DOWN</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="ss">:process</span><span class="p">,</span><span class="w"> </span><span class="c">_pid</span><span class="p">,</span><span class="w"> </span><span class="c">_reason</span><span class="p" data-group-id="2996049264-43">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-44">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="2996049264-44">}</span><span class="p" data-group-id="2996049264-42">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-45">do</span><span class="w">
+    </span><span class="c1"># 6. Delete from the ETS table instead of the map</span><span class="w">
+    </span><span class="p" data-group-id="2996049264-46">{</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="2996049264-46">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">pop</span><span class="p" data-group-id="2996049264-47">(</span><span class="n">refs</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p" data-group-id="2996049264-47">)</span><span class="w">
+    </span><span class="nc">:ets</span><span class="o">.</span><span class="n">delete</span><span class="p" data-group-id="2996049264-48">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2996049264-48">)</span><span class="w">
+    </span><span class="p" data-group-id="2996049264-49">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2996049264-50">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="2996049264-50">}</span><span class="p" data-group-id="2996049264-49">}</span><span class="w">
+  </span><span class="k" data-group-id="2996049264-45">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_info</span><span class="p" data-group-id="2996049264-51">(</span><span class="c">_msg</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="2996049264-51">)</span><span class="w"> </span><span class="k" data-group-id="2996049264-52">do</span><span class="w">
+    </span><span class="p" data-group-id="2996049264-53">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="2996049264-53">}</span><span class="w">
+  </span><span class="k" data-group-id="2996049264-52">end</span><span class="w">
+</span><span class="k" data-group-id="2996049264-1">end</span></code></pre><p>Notice that before our changes <code class="inline">KV.Registry.lookup/2</code> sent requests to the server, but now it reads directly from the ETS table, which is shared across all processes. That's the main idea behind the cache mechanism we are implementing.</p><p>In order for the cache mechanism to work, the created ETS table needs to have access <code class="inline">:protected</code> (the default), so all clients can read from it, while only the <code class="inline">KV.Registry</code> process writes to it. We have also set <code class="inline">read_concurrency: true</code> when starting the table, optimizing the table for the common scenario of concurrent read operations.</p><p>The changes we have performed above have broken our tests because the registry requires the <code class="inline">:name</code> option when starting up. Furthermore, some registry operations such as <code class="inline">lookup/2</code> require the name to be given as an argument, instead of a PID, so we can do the ETS table lookup. Let's change the setup function in <code class="inline">test/kv/registry_test.exs</code> to fix both issues:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">setup</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="k" data-group-id="0443999519-1">do</span><span class="w">
+    </span><span class="bp">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start_supervised!</span><span class="p" data-group-id="0443999519-2">(</span><span class="p" data-group-id="0443999519-3">{</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">context</span><span class="o">.</span><span class="n">test</span><span class="p" data-group-id="0443999519-3">}</span><span class="p" data-group-id="0443999519-2">)</span><span class="w">
+    </span><span class="p" data-group-id="0443999519-4">%{</span><span class="ss">registry</span><span class="p">:</span><span class="w"> </span><span class="n">context</span><span class="o">.</span><span class="n">test</span><span class="p" data-group-id="0443999519-4">}</span><span class="w">
+  </span><span class="k" data-group-id="0443999519-1">end</span></code></pre><p>Since each test has a unique name, we use the test name to name our registries. This way, we no longer need to pass the registry PID around, instead we identify it by the test name. Also note we assigned the result of <code class="inline">start_supervised!</code> to underscore (<code class="inline">_</code>). This idiom is often used to signal that we are not interested in the result of <code class="inline">start_supervised!</code>.</p><p>Once we change <code class="inline">setup</code>, some tests will continue to fail. You may even notice tests pass and fail inconsistently between runs. For example, the &quot;spawns buckets&quot; test:</p><pre><code class="makeup elixir" translate="no"><span class="n">test</span><span class="w"> </span><span class="s">&quot;spawns buckets&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4869203858-1">%{</span><span class="ss">registry</span><span class="p">:</span><span class="w"> </span><span class="n">registry</span><span class="p" data-group-id="4869203858-1">}</span><span class="w"> </span><span class="k" data-group-id="4869203858-2">do</span><span class="w">
+  </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="4869203858-3">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="4869203858-3">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+
+  </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="4869203858-4">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="4869203858-4">)</span><span class="w">
+  </span><span class="n">assert</span><span class="w"> </span><span class="p" data-group-id="4869203858-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="4869203858-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="4869203858-6">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="4869203858-6">)</span><span class="w">
+
+  </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="4869203858-7">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4869203858-7">)</span><span class="w">
+  </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="4869203858-8">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p" data-group-id="4869203858-8">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="k" data-group-id="4869203858-2">end</span></code></pre><p>may be failing on this line:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9731321410-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="9731321410-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="9731321410-2">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="9731321410-2">)</span></code></pre><p>How can this line fail if we just created the bucket in the previous line?</p><p>The reason those failures are happening is because, for didactic purposes, we have made two mistakes:</p><ol><li>We are prematurely optimizing (by adding this cache layer)</li><li>We are using <code class="inline">cast/2</code> (while we should be using <code class="inline">call/2</code>)</li></ol><h2 id="race-conditions" class="section-heading">
+  <a href="#race-conditions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Race conditions?</span>
+</h2>
+<p>Developing in Elixir does not make your code free of race conditions. However, Elixir's abstractions where nothing is shared by default make it easier to spot a race condition's root cause.</p><p>What is happening in our tests is that there is a delay in between an operation and the time we can observe this change in the ETS table. Here is what we were expecting to happen:</p><ol><li>We invoke <code class="inline">KV.Registry.create(registry, &quot;shopping&quot;)</code></li><li>The registry creates the bucket and updates the cache table</li><li>We access the information from the table with <code class="inline">KV.Registry.lookup(registry, &quot;shopping&quot;)</code></li><li>The command above returns <code class="inline">{:ok, bucket}</code></li></ol><p>However, since <code class="inline">KV.Registry.create/2</code> is a cast operation, the command will return before we actually write to the table! In other words, this is happening:</p><ol><li>We invoke <code class="inline">KV.Registry.create(registry, &quot;shopping&quot;)</code></li><li>We access the information from the table with <code class="inline">KV.Registry.lookup(registry, &quot;shopping&quot;)</code></li><li>The command above returns <code class="inline">:error</code></li><li>The registry creates the bucket and updates the cache table</li></ol><p>To fix the failure we need to make <code class="inline">KV.Registry.create/2</code> synchronous by using <code class="inline">call/2</code> rather than <code class="inline">cast/2</code>. This will guarantee that the client will only continue after changes have been made to the table. Let's back to <code class="inline">lib/kv/registry.ex</code> and change the function and its callback as follows:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">create</span><span class="p" data-group-id="1722770073-1">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="1722770073-1">)</span><span class="w"> </span><span class="k" data-group-id="1722770073-2">do</span><span class="w">
+  </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="1722770073-3">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1722770073-4">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="1722770073-4">}</span><span class="p" data-group-id="1722770073-3">)</span><span class="w">
+</span><span class="k" data-group-id="1722770073-2">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="1956152089-1">(</span><span class="p" data-group-id="1956152089-2">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="1956152089-2">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1956152089-3">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="1956152089-3">}</span><span class="p" data-group-id="1956152089-1">)</span><span class="w"> </span><span class="k" data-group-id="1956152089-4">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="n">lookup</span><span class="p" data-group-id="1956152089-5">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="1956152089-5">)</span><span class="w"> </span><span class="k" data-group-id="1956152089-6">do</span><span class="w">
+    </span><span class="p" data-group-id="1956152089-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="1956152089-7">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="p" data-group-id="1956152089-8">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1956152089-9">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="1956152089-9">}</span><span class="p" data-group-id="1956152089-8">}</span><span class="w">
+
+    </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="p" data-group-id="1956152089-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="1956152089-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">DynamicSupervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p" data-group-id="1956152089-11">(</span><span class="nc">KV.BucketSupervisor</span><span class="p">,</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="p" data-group-id="1956152089-11">)</span><span class="w">
+      </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Process</span><span class="o">.</span><span class="n">monitor</span><span class="p" data-group-id="1956152089-12">(</span><span class="n">pid</span><span class="p" data-group-id="1956152089-12">)</span><span class="w">
+      </span><span class="n">refs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="1956152089-13">(</span><span class="n">refs</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="1956152089-13">)</span><span class="w">
+      </span><span class="nc">:ets</span><span class="o">.</span><span class="n">insert</span><span class="p" data-group-id="1956152089-14">(</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1956152089-15">{</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="1956152089-15">}</span><span class="p" data-group-id="1956152089-14">)</span><span class="w">
+      </span><span class="p" data-group-id="1956152089-16">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1956152089-17">{</span><span class="n">names</span><span class="p">,</span><span class="w"> </span><span class="n">refs</span><span class="p" data-group-id="1956152089-17">}</span><span class="p" data-group-id="1956152089-16">}</span><span class="w">
+  </span><span class="k" data-group-id="1956152089-6">end</span><span class="w">
+</span><span class="k" data-group-id="1956152089-4">end</span></code></pre><p>We changed the callback from <code class="inline">handle_cast/2</code> to <code class="inline">handle_call/3</code> and changed it to reply with the PID of the created bucket. Generally speaking, Elixir developers prefer to use <code class="inline">call/2</code> instead of <code class="inline">cast/2</code> as it also provides back-pressure — you block until you get a reply. Using <code class="inline">cast/2</code> when not necessary can also be considered a premature optimization.</p><p>Let's run the tests once again. This time though, we will pass the <code class="inline">--trace</code> option:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">mix test --trace
+</span></code></pre><p>The <code class="inline">--trace</code> option is useful when your tests are deadlocking or there are race conditions, as it runs all tests synchronously (<code class="inline">async: true</code> has no effect) and shows detailed information about each test. If you run the tests multiple times you may see this intermittent failure:</p><pre><code class="text">  1) test removes buckets on exit (KV.RegistryTest)
+     test/kv/registry_test.exs:19
+     Assertion with == failed
+     code:  assert KV.Registry.lookup(registry, &quot;shopping&quot;) == :error
+     left:  {:ok, #PID&lt;0.109.0&gt;}
+     right: :error
+     stacktrace:
+       test/kv/registry_test.exs:23</code></pre><p>According to the failure message, we are expecting that the bucket no longer exists on the table, but it still does! This problem is the opposite of the one we have just solved: while previously there was a delay between the command to create a bucket and updating the table, now there is a delay between the bucket process dying and its entry being removed from the table. Since this is a race condition, you may not be able to reproduce it on your machine, but it is there.</p><p>Last time we fixed the race condition by replacing the asynchronous operation, a <code class="inline">cast</code>, by a <code class="inline">call</code>, which is synchronous. Unfortunately, the <code class="inline">handle_info/2</code> callback we are using to receive the <code class="inline">:DOWN</code> message and delete the entry from the ETS table does not have a synchronous equivalent. This time, we need to find a way to guarantee the registry has processed the <code class="inline">:DOWN</code> notification sent when the bucket process terminated.</p><p>An easy way to do so is by sending a synchronous request to the registry before we do the bucket lookup. The <a href="Agent.html#stop/2"><code class="inline">Agent.stop/2</code></a> operation is synchronous and only returns after the bucket process terminates. Therefore, once <a href="Agent.html#stop/2"><code class="inline">Agent.stop/2</code></a> returns, the registry has received the <code class="inline">:DOWN</code> message but it may not have processed it yet. In order to guarantee the processing of the <code class="inline">:DOWN</code> message, we can do a synchronous request. Since messages are processed in order, once the registry replies to the synchronous request, then the <code class="inline">:DOWN</code> message will definitely have been processed.</p><p>Let's do so by creating a &quot;bogus&quot; bucket, which is a synchronous request, after <a href="Agent.html#stop/2"><code class="inline">Agent.stop/2</code></a> in both &quot;remove&quot; tests at <code class="inline">test/kv/registry_test.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;removes buckets on exit&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9361265363-1">%{</span><span class="ss">registry</span><span class="p">:</span><span class="w"> </span><span class="n">registry</span><span class="p" data-group-id="9361265363-1">}</span><span class="w"> </span><span class="k" data-group-id="9361265363-2">do</span><span class="w">
+    </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="9361265363-3">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="9361265363-3">)</span><span class="w">
+    </span><span class="p" data-group-id="9361265363-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="9361265363-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="9361265363-5">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="9361265363-5">)</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">stop</span><span class="p" data-group-id="9361265363-6">(</span><span class="n">bucket</span><span class="p" data-group-id="9361265363-6">)</span><span class="w">
+
+    </span><span class="c1"># Do a call to ensure the registry processed the DOWN message</span><span class="w">
+    </span><span class="bp">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="9361265363-7">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bogus&quot;</span><span class="p" data-group-id="9361265363-7">)</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="9361265363-8">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="9361265363-8">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+  </span><span class="k" data-group-id="9361265363-2">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;removes bucket on crash&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9361265363-9">%{</span><span class="ss">registry</span><span class="p">:</span><span class="w"> </span><span class="n">registry</span><span class="p" data-group-id="9361265363-9">}</span><span class="w"> </span><span class="k" data-group-id="9361265363-10">do</span><span class="w">
+    </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="9361265363-11">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="9361265363-11">)</span><span class="w">
+    </span><span class="p" data-group-id="9361265363-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="9361265363-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="9361265363-13">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="9361265363-13">)</span><span class="w">
+
+    </span><span class="c1"># Stop the bucket with non-normal reason</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">stop</span><span class="p" data-group-id="9361265363-14">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="ss">:shutdown</span><span class="p" data-group-id="9361265363-14">)</span><span class="w">
+
+    </span><span class="c1"># Do a call to ensure the registry processed the DOWN message</span><span class="w">
+    </span><span class="bp">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="9361265363-15">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bogus&quot;</span><span class="p" data-group-id="9361265363-15">)</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="9361265363-16">(</span><span class="n">registry</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;shopping&quot;</span><span class="p" data-group-id="9361265363-16">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:error</span><span class="w">
+  </span><span class="k" data-group-id="9361265363-10">end</span></code></pre><p>Our tests should now (always) pass!</p><p>This concludes our optimization chapter. We have used ETS as a cache mechanism where reads can happen from any processes but writes are still serialized through a single process. More importantly, we have also learned that once data can be read asynchronously, we need to be aware of the race conditions it might introduce.</p><p>In practice, if you find yourself in a position where you need a registry for dynamic processes, you should use the <a href="Registry.html"><code class="inline">Registry</code></a> module provided as part of Elixir. It provides functionality similar to the one we have built using a GenServer + <code class="inline">:ets</code> while also being able to perform both writes and reads concurrently. <a href="https://elixir-lang.org/blog/2017/01/05/elixir-v1-4-0-released/">It has been benchmarked to scale across all cores even on machines with 40 cores</a>.</p><p>Next, let's discuss external and internal dependencies and how Mix helps us manage large codebases.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="dynamic-supervisor.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Supervising dynamic children
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="dependencies-and-umbrella-projects.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Dependencies and umbrella projects
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

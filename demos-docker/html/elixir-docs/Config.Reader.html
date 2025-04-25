@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Config.Reader — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Config.Reader.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Config.Reader</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/reader.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>API for reading config files defined with <a href="Config.html"><code class="inline">Config</code></a>.</p><h2 id="module-as-a-provider" class="section-heading">
+  <a href="#module-as-a-provider" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">As a provider</span>
+</h2>
+<p><a href="Config.Reader.html"><code class="inline">Config.Reader</code></a> can also be used as a <a href="Config.Provider.html"><code class="inline">Config.Provider</code></a>. A config
+provider is used during releases to customize how applications are
+configured. When used as a provider, it expects a single argument:
+the configuration path (as outlined in <a href="Config.Provider.html#t:config_path/0"><code class="inline">Config.Provider.config_path/0</code></a>)
+for the file to be read and loaded during the system boot.</p><p>For example, if you expect the target system to have a config file
+in an absolute path, you can add this inside the <code class="inline">def project</code> portion
+of  your <code class="inline">mix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">releases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2636093922-1">[</span><span class="w">
+  </span><span class="ss">demo</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2636093922-2">[</span><span class="w">
+    </span><span class="ss">config_providers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2636093922-3">[</span><span class="w">
+      </span><span class="p" data-group-id="2636093922-4">{</span><span class="nc">Config.Reader</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/etc/config.exs&quot;</span><span class="p" data-group-id="2636093922-4">}</span><span class="w">
+    </span><span class="p" data-group-id="2636093922-3">]</span><span class="w">
+  </span><span class="p" data-group-id="2636093922-2">]</span><span class="w">
+</span><span class="p" data-group-id="2636093922-1">]</span></code></pre><p>Or if you want to read a custom path inside the release:</p><pre><code class="makeup elixir" translate="no"><span class="ss">config_providers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8667845317-1">[</span><span class="p" data-group-id="8667845317-2">{</span><span class="nc">Config.Reader</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8667845317-3">{</span><span class="ss">:system</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RELEASE_ROOT&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/config.exs&quot;</span><span class="p" data-group-id="8667845317-3">}</span><span class="p" data-group-id="8667845317-2">}</span><span class="p" data-group-id="8667845317-1">]</span></code></pre><p>You can also pass a keyword list of options to the reader,
+where the <code class="inline">:path</code> is a required key:</p><pre><code class="makeup elixir" translate="no"><span class="ss">config_providers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4329956395-1">[</span><span class="w">
+  </span><span class="p" data-group-id="4329956395-2">{</span><span class="nc">Config.Reader</span><span class="p">,</span><span class="w">
+   </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/config.exs&quot;</span><span class="p">,</span><span class="w">
+   </span><span class="ss">env</span><span class="p">:</span><span class="w"> </span><span class="ss">:prod</span><span class="p">,</span><span class="w">
+   </span><span class="ss">imports</span><span class="p">:</span><span class="w"> </span><span class="ss">:disabled</span><span class="p" data-group-id="4329956395-2">}</span><span class="w">
+</span><span class="p" data-group-id="4329956395-1">]</span></code></pre><p>Remember Mix already loads <code class="inline">config/runtime.exs</code> by default.
+For more examples and scenarios, see the <a href="Config.Provider.html"><code class="inline">Config.Provider</code></a> module.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#eval!/3" data-no-tooltip="" translate="no">eval!(file, contents, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Evaluates the configuration <code class="inline">contents</code> for the given <code class="inline">file</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#merge/2" data-no-tooltip="" translate="no">merge(config1, config2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Merges two configurations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read!/2" data-no-tooltip="" translate="no">read!(file, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads the configuration file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_imports!/2" data-no-tooltip="" translate="no">read_imports!(file, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads the given configuration file and returns the configuration
+with its imports.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="eval!/3">
+
+    <span id="eval!/2"></span>
+
+  <div class="detail-header">
+    <a href="#eval!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">eval!(file, contents, opts \\ [])</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/reader.ex#L68" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> eval!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#built-in-types">binary</a>(), <a href="typespecs.html#built-in-types">keyword</a>()) :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+      </div>
+
+<p>Evaluates the configuration <code class="inline">contents</code> for the given <code class="inline">file</code>.</p><p>Accepts the same options as <a href="#read!/2"><code class="inline">read!/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="merge/2">
+
+  <div class="detail-header">
+    <a href="#merge/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">merge(config1, config2)</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/reader.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> merge(<a href="typespecs.html#built-in-types">keyword</a>(), <a href="typespecs.html#built-in-types">keyword</a>()) :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+      </div>
+
+<p>Merges two configurations.</p><p>The configurations are merged together with the values in
+the second one having higher preference than the first in
+case of conflicts. In case both values are set to keyword
+lists, it deep merges them.</p><h2 id="merge/2-examples" class="section-heading">
+  <a href="#merge/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Config.Reader</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="9004445587-1">(</span><span class="p" data-group-id="9004445587-2">[</span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-3">[</span><span class="ss">k</span><span class="p">:</span><span class="w"> </span><span class="ss">:v1</span><span class="p" data-group-id="9004445587-3">]</span><span class="p" data-group-id="9004445587-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9004445587-4">[</span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-5">[</span><span class="ss">k</span><span class="p">:</span><span class="w"> </span><span class="ss">:v2</span><span class="p" data-group-id="9004445587-5">]</span><span class="p" data-group-id="9004445587-4">]</span><span class="p" data-group-id="9004445587-1">)</span><span class="w">
+</span><span class="p" data-group-id="9004445587-6">[</span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-7">[</span><span class="ss">k</span><span class="p">:</span><span class="w"> </span><span class="ss">:v2</span><span class="p" data-group-id="9004445587-7">]</span><span class="p" data-group-id="9004445587-6">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Config.Reader</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="9004445587-8">(</span><span class="p" data-group-id="9004445587-9">[</span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-10">[</span><span class="ss">k</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-11">[</span><span class="ss">v1</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">v2</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9004445587-11">]</span><span class="p" data-group-id="9004445587-10">]</span><span class="p" data-group-id="9004445587-9">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9004445587-12">[</span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-13">[</span><span class="ss">k</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-14">[</span><span class="ss">v2</span><span class="p">:</span><span class="w"> </span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="ss">v3</span><span class="p">:</span><span class="w"> </span><span class="ss">:b</span><span class="p" data-group-id="9004445587-14">]</span><span class="p" data-group-id="9004445587-13">]</span><span class="p" data-group-id="9004445587-12">]</span><span class="p" data-group-id="9004445587-8">)</span><span class="w">
+</span><span class="p" data-group-id="9004445587-15">[</span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-16">[</span><span class="ss">k</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-17">[</span><span class="ss">v1</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">v2</span><span class="p">:</span><span class="w"> </span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="ss">v3</span><span class="p">:</span><span class="w"> </span><span class="ss">:b</span><span class="p" data-group-id="9004445587-17">]</span><span class="p" data-group-id="9004445587-16">]</span><span class="p" data-group-id="9004445587-15">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Config.Reader</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="9004445587-18">(</span><span class="p" data-group-id="9004445587-19">[</span><span class="ss">app1</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-20">[</span><span class="p" data-group-id="9004445587-20">]</span><span class="p" data-group-id="9004445587-19">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9004445587-21">[</span><span class="ss">app2</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-22">[</span><span class="p" data-group-id="9004445587-22">]</span><span class="p" data-group-id="9004445587-21">]</span><span class="p" data-group-id="9004445587-18">)</span><span class="w">
+</span><span class="p" data-group-id="9004445587-23">[</span><span class="ss">app1</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-24">[</span><span class="p" data-group-id="9004445587-24">]</span><span class="p">,</span><span class="w"> </span><span class="ss">app2</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9004445587-25">[</span><span class="p" data-group-id="9004445587-25">]</span><span class="p" data-group-id="9004445587-23">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="read!/2">
+
+    <span id="read!/1"></span>
+
+  <div class="detail-header">
+    <a href="#read!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read!(file, opts \\ [])</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/reader.ex#L90" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read!(
+  <a href="Path.html#t:t/0">Path.t</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+      </div>
+
+<p>Reads the configuration file.</p><h2 id="read!/2-options" class="section-heading">
+  <a href="#read!/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:imports</code> - a list of already imported paths or <code class="inline">:disabled</code>
+to disable imports</p></li><li><p><code class="inline">:env</code> - the environment the configuration file runs on.
+See <a href="Config.html#config_env/0"><code class="inline">Config.config_env/0</code></a> for sample usage</p></li><li><p><code class="inline">:target</code> - the target the configuration file runs on.
+See <a href="Config.html#config_target/0"><code class="inline">Config.config_target/0</code></a> for sample usage</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="read_imports!/2">
+
+    <span id="read_imports!/1"></span>
+
+  <div class="detail-header">
+    <a href="#read_imports!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_imports!(file, opts \\ [])</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/reader.ex#L104" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_imports!(
+  <a href="Path.html#t:t/0">Path.t</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) :: {<a href="typespecs.html#built-in-types">keyword</a>(), [<a href="Path.html#t:t/0">Path.t</a>()]}</pre>
+
+      </div>
+
+<p>Reads the given configuration file and returns the configuration
+with its imports.</p><p>Accepts the same options as <a href="#read!/2"><code class="inline">read!/2</code></a>. Although note the <code class="inline">:imports</code>
+option cannot be disabled in <a href="#read_imports!/2"><code class="inline">read_imports!/2</code></a>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

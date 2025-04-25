@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Supervisor — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Supervisor.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Supervisor</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A behaviour module for implementing supervisors.</p><p>A supervisor is a process which supervises other processes, which we
+refer to as <em>child processes</em>. Supervisors are used to build a hierarchical
+process structure called a <em>supervision tree</em>. Supervision trees provide
+fault-tolerance and encapsulate how our applications start and shutdown.</p><p>A supervisor may be started directly with a list of child specifications via
+<a href="#start_link/2"><code class="inline">start_link/2</code></a> or you may define a module-based supervisor that implements
+the required callbacks. The sections below use <a href="#start_link/2"><code class="inline">start_link/2</code></a> to start
+supervisors in most examples, but it also includes a specific section
+on module-based ones.</p><h2 id="module-examples" class="section-heading">
+  <a href="#module-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>In order to start a supervisor, we need to first define a child process
+that will be supervised. As an example, we will define a <a href="GenServer.html"><code class="inline">GenServer</code></a>,
+a generic server, that keeps a counter. Other processes can then send
+messages to this process to read the counter and bump its value.</p><section role="note" class="admonition neutral"><h4 class="admonition-title neutral">Disclaimer</h4><p>In practice you would not define a counter as a GenServer. Instead,
+if you need a counter, you would pass it around as inputs and outputs to
+the functions that need it. The reason we picked a counter in this example
+is due to its simplicity, as it allows us to focus on how supervisors work.</p></section><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Counter</span><span class="w"> </span><span class="k" data-group-id="0272440886-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="0272440886-2">(</span><span class="n">arg</span><span class="p" data-group-id="0272440886-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="0272440886-3">(</span><span class="n">arg</span><span class="p" data-group-id="0272440886-3">)</span><span class="w"> </span><span class="k" data-group-id="0272440886-4">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="0272440886-5">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="p" data-group-id="0272440886-5">)</span><span class="w">
+  </span><span class="k" data-group-id="0272440886-4">end</span><span class="w">
+
+  </span><span class="c1">## Callbacks</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="0272440886-6">(</span><span class="n">counter</span><span class="p" data-group-id="0272440886-6">)</span><span class="w"> </span><span class="k" data-group-id="0272440886-7">do</span><span class="w">
+    </span><span class="p" data-group-id="0272440886-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="0272440886-8">}</span><span class="w">
+  </span><span class="k" data-group-id="0272440886-7">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="0272440886-9">(</span><span class="ss">:get</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="0272440886-9">)</span><span class="w"> </span><span class="k" data-group-id="0272440886-10">do</span><span class="w">
+    </span><span class="p" data-group-id="0272440886-11">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="0272440886-11">}</span><span class="w">
+  </span><span class="k" data-group-id="0272440886-10">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="0272440886-12">(</span><span class="p" data-group-id="0272440886-13">{</span><span class="ss">:bump</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="0272440886-13">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="0272440886-12">)</span><span class="w"> </span><span class="k" data-group-id="0272440886-14">do</span><span class="w">
+    </span><span class="p" data-group-id="0272440886-15">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="0272440886-15">}</span><span class="w">
+  </span><span class="k" data-group-id="0272440886-14">end</span><span class="w">
+</span><span class="k" data-group-id="0272440886-1">end</span></code></pre><p>The <code class="inline">Counter</code> receives an argument on <code class="inline">start_link</code>. This argument
+is passed to the <code class="inline">init/1</code> callback which becomes the initial value
+of the counter. Our counter handles two operations (known as calls):
+<code class="inline">:get</code>, to get the current counter value, and <code class="inline">:bump</code>, that bumps
+the counter by the given <code class="inline">value</code> and returns the old counter.</p><p>We can now start a supervisor that will start and supervise our
+counter process. The first step is to define a list of <strong>child
+specifications</strong> that control how each child behaves. Each child
+specification is a map, as shown below:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8142028778-1">[</span><span class="w">
+  </span><span class="c1"># The Counter is a child started via Counter.start_link(0)</span><span class="w">
+  </span><span class="p" data-group-id="8142028778-2">%{</span><span class="w">
+    </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="nc">Counter</span><span class="p">,</span><span class="w">
+    </span><span class="ss">start</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8142028778-3">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="ss">:start_link</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8142028778-4">[</span><span class="mi">0</span><span class="p" data-group-id="8142028778-4">]</span><span class="p" data-group-id="8142028778-3">}</span><span class="w">
+  </span><span class="p" data-group-id="8142028778-2">}</span><span class="w">
+</span><span class="p" data-group-id="8142028778-1">]</span><span class="w">
+
+</span><span class="c1"># Now we start the supervisor with the children and a strategy</span><span class="w">
+</span><span class="p" data-group-id="8142028778-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="8142028778-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="8142028778-6">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="8142028778-6">)</span><span class="w">
+
+</span><span class="c1"># After started, we can query the supervisor for information</span><span class="w">
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">count_children</span><span class="p" data-group-id="8142028778-7">(</span><span class="n">pid</span><span class="p" data-group-id="8142028778-7">)</span><span class="w">
+</span><span class="c1">#=&gt; %{active: 1, specs: 1, supervisors: 0, workers: 1}</span></code></pre><p>Note that when starting the GenServer, we are registering it
+with name <code class="inline">Counter</code> via the <code class="inline">name: __MODULE__</code> option. This allows
+us to call it directly and get its value:</p><pre><code class="makeup elixir" translate="no"><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="6138149092-1">(</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="ss">:get</span><span class="p" data-group-id="6138149092-1">)</span><span class="w">
+</span><span class="c1">#=&gt; 0</span><span class="w">
+
+</span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="6138149092-2">(</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6138149092-3">{</span><span class="ss">:bump</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6138149092-3">}</span><span class="p" data-group-id="6138149092-2">)</span><span class="w">
+</span><span class="c1">#=&gt; 0</span><span class="w">
+
+</span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="6138149092-4">(</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="ss">:get</span><span class="p" data-group-id="6138149092-4">)</span><span class="w">
+</span><span class="c1">#=&gt; 3</span></code></pre><p>However, there is a bug in our counter server. If we call <code class="inline">:bump</code> with
+a non-numeric value, it is going to crash:</p><pre><code class="makeup elixir" translate="no"><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="6777661843-1">(</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6777661843-2">{</span><span class="ss">:bump</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;oops&quot;</span><span class="p" data-group-id="6777661843-2">}</span><span class="p" data-group-id="6777661843-1">)</span><span class="w">
+</span><span class="gt">** (exit) exited in: GenServer.call(Counter, {:bump, &quot;oops&quot;}, 5000)</span></code></pre><p>Luckily, since the server is being supervised by a supervisor, the
+supervisor will automatically start a new one, reset back to its initial
+value of <code class="inline">0</code>:</p><pre><code class="makeup elixir" translate="no"><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="4877519087-1">(</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="ss">:get</span><span class="p" data-group-id="4877519087-1">)</span><span class="w">
+</span><span class="c1">#=&gt; 0</span></code></pre><p>Supervisors support different strategies; in the example above, we
+have chosen <code class="inline">:one_for_one</code>. Furthermore, each supervisor can have many
+workers and/or supervisors as children, with each one having its own
+configuration (as outlined in the &quot;Child specification&quot; section).</p><p>The rest of this document will cover how child processes are specified,
+how they can be started and stopped, different supervision strategies
+and more.</p><h2 id="module-child-specification" class="section-heading">
+  <a href="#module-child-specification" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Child specification</span>
+</h2>
+<p>The child specification describes how the supervisor starts, shuts down,
+and restarts child processes.</p><p>The child specification is a map containing up to 6 elements. The first two keys
+in the following list are required, and the remaining ones are optional:</p><ul><li><p><code class="inline">:id</code> - any term used to identify the child specification internally by
+the supervisor; defaults to the given module. This key is required.
+For supervisors, in the case of conflicting <code class="inline">:id</code> values, the supervisor
+will refuse to initialize and require explicit IDs. This is not the case
+for <a href="DynamicSupervisor.html">dynamic supervisors</a> though.</p></li><li><p><code class="inline">:start</code> - a tuple with the module-function-args to be invoked
+to start the child process. This key is required.</p></li><li><p><code class="inline">:restart</code> - an atom that defines when a terminated child process
+ should be restarted (see the &quot;Restart values&quot; section below).
+ This key is optional and defaults to <code class="inline">:permanent</code>.</p></li><li><p><code class="inline">:shutdown</code> - an integer or atom that defines how a child process should
+be terminated (see the &quot;Shutdown values&quot; section below). This key
+is optional and defaults to <code class="inline">5_000</code> if the type is <code class="inline">:worker</code> or
+<code class="inline">:infinity</code> if the type is <code class="inline">:supervisor</code>.</p></li><li><p><code class="inline">:type</code> - specifies that the child process is a <code class="inline">:worker</code> or a
+<code class="inline">:supervisor</code>. This key is optional and defaults to <code class="inline">:worker</code>.</p></li><li><p><code class="inline">:modules</code> - a list of modules used by hot code upgrade mechanisms
+to determine which processes are using certain modules. It is typically
+set to the callback module of behaviours like <a href="GenServer.html"><code class="inline">GenServer</code></a>, <a href="Supervisor.html"><code class="inline">Supervisor</code></a>,
+and such. It is set automatically based on the <code class="inline">:start</code> value and it is rarely
+changed in practice.</p></li><li><p><code class="inline">:significant</code> - a boolean indicating if the child process should be
+considered significant with regard to automatic shutdown.  Only <code class="inline">:transient</code>
+and <code class="inline">:temporary</code> child processes can be marked as significant. This key is
+optional and defaults to <code class="inline">false</code>. See section &quot;Automatic shutdown&quot; below
+for more details.</p></li></ul><p>Let's understand what the <code class="inline">:shutdown</code> and <code class="inline">:restart</code> options control.</p><h3 id="module-shutdown-values-shutdown" class="section-heading">
+  <a href="#module-shutdown-values-shutdown" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Shutdown values (:shutdown)</span>
+</h3>
+<p>The following shutdown values are supported in the <code class="inline">:shutdown</code> option:</p><ul><li><p><code class="inline">:brutal_kill</code> - the child process is unconditionally and immediately
+terminated using <code class="inline">Process.exit(child, :kill)</code>.</p></li><li><p>any integer &gt;= 0 - the amount of time in milliseconds that the
+supervisor will wait for its children to terminate after emitting a
+<code class="inline">Process.exit(child, :shutdown)</code> signal. If the child process is
+not trapping exits, the initial <code class="inline">:shutdown</code> signal will terminate
+the child process immediately. If the child process is trapping
+exits, it has the given amount of time to terminate.
+If it doesn't terminate within the specified time, the child process
+is unconditionally terminated by the supervisor via
+<code class="inline">Process.exit(child, :kill)</code>.</p></li><li><p><code class="inline">:infinity</code> - works as an integer except the supervisor will wait
+indefinitely for the child to terminate. If the child process is a
+supervisor, the recommended value is <code class="inline">:infinity</code> to give the supervisor
+and its children enough time to shut down. This option can be used with
+regular workers but doing so is discouraged and requires extreme care.
+If not used carefully, the child process will never terminate,
+preventing your application from terminating as well.</p></li></ul><h3 id="module-restart-values-restart" class="section-heading">
+  <a href="#module-restart-values-restart" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Restart values (:restart)</span>
+</h3>
+<p>The <code class="inline">:restart</code> option controls what the supervisor should consider to
+be a successful termination or not. If the termination is successful,
+the supervisor won't restart the child. If the child process crashed,
+the supervisor will start a new one.</p><p>The following restart values are supported in the <code class="inline">:restart</code> option:</p><ul><li><p><code class="inline">:permanent</code> - the child process is always restarted.</p></li><li><p><code class="inline">:temporary</code> - the child process is never restarted, regardless
+of the supervision strategy: any termination (even abnormal) is
+considered successful.</p></li><li><p><code class="inline">:transient</code> - the child process is restarted only if it
+terminates abnormally, i.e., with an exit reason other than
+<code class="inline">:normal</code>, <code class="inline">:shutdown</code>, or <code class="inline">{:shutdown, term}</code>.</p></li></ul><p>For a more complete understanding of the exit reasons and their
+impact, see the &quot;Exit reasons and restarts&quot; section.</p><h2 id="module-child_spec-1-function" class="section-heading">
+  <a href="#module-child_spec-1-function" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">child_spec/1</code> function</span>
+</h2>
+<p>When starting a supervisor, we may pass a list of child specifications. Those
+specifications are maps that tell how the supervisor should start, stop and
+restart each of its children:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="5268236203-1">%{</span><span class="w">
+  </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="nc">Counter</span><span class="p">,</span><span class="w">
+  </span><span class="ss">start</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5268236203-2">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="ss">:start_link</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5268236203-3">[</span><span class="mi">0</span><span class="p" data-group-id="5268236203-3">]</span><span class="p" data-group-id="5268236203-2">}</span><span class="w">
+</span><span class="p" data-group-id="5268236203-1">}</span></code></pre><p>The map above defines a child with <code class="inline">:id</code> of <code class="inline">Counter</code> that is started
+by calling <code class="inline">Counter.start_link(0)</code>.</p><p>However, defining the child specification for each child as a map can be
+quite error prone, as we may change the <code class="inline">Counter</code> implementation and forget
+to update its specification. That's why Elixir allows you to pass a tuple with
+the module name and the <code class="inline">start_link</code> argument instead of the specification:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2683763582-1">[</span><span class="w">
+  </span><span class="p" data-group-id="2683763582-2">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2683763582-2">}</span><span class="w">
+</span><span class="p" data-group-id="2683763582-1">]</span></code></pre><p>The supervisor will then invoke <code class="inline">Counter.child_spec(0)</code> to retrieve a child
+specification. Now the <code class="inline">Counter</code> module is responsible for building its own
+specification, for example, we could write:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">child_spec</span><span class="p" data-group-id="8931762664-1">(</span><span class="n">arg</span><span class="p" data-group-id="8931762664-1">)</span><span class="w"> </span><span class="k" data-group-id="8931762664-2">do</span><span class="w">
+  </span><span class="p" data-group-id="8931762664-3">%{</span><span class="w">
+    </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="nc">Counter</span><span class="p">,</span><span class="w">
+    </span><span class="ss">start</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8931762664-4">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="ss">:start_link</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8931762664-5">[</span><span class="n">arg</span><span class="p" data-group-id="8931762664-5">]</span><span class="p" data-group-id="8931762664-4">}</span><span class="w">
+  </span><span class="p" data-group-id="8931762664-3">}</span><span class="w">
+</span><span class="k" data-group-id="8931762664-2">end</span></code></pre><p>Then the supervisor will call <code class="inline">Counter.start_link(arg)</code> to start the child
+process. This flow is summarized in the diagram below. Caller is a process
+which spawns the Supervisor process. The Supervisor then proceeds to call
+your code (Module) to spawn its child process:</p><pre><code class="mermaid">sequenceDiagram
+    participant C as Caller (Process)
+    participant S as Supervisor (Process)
+    participant M as Module (Code)
+
+    note right of C: child is a {module, arg} specification
+    C-&gt;&gt;+S: Supervisor.start_link([child])
+    S--&gt;&gt;+M: module.child_spec(arg)
+    M--&gt;&gt;-S: %{id: term, start: {module, :start_link, [arg]}}
+    S--&gt;&gt;+M: module.start_link(arg)
+    M-&gt;&gt;M: Spawns child process (child_pid)
+    M--&gt;&gt;-S: {:ok, child_pid} | :ignore | {:error, reason}
+    S-&gt;&gt;-C: {:ok, supervisor_pid} | {:error, reason}</code></pre><p>Luckily for us, <code class="inline">use GenServer</code> already defines a <code class="inline">Counter.child_spec/1</code>
+exactly like above, so you don't need to write the definition above yourself.
+If you want to customize the automatically generated <code class="inline">child_spec/1</code> function,
+you can pass the options directly to <code class="inline">use GenServer</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="p">,</span><span class="w"> </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:transient</span></code></pre><p>Finally, note it is also possible to simply pass the <code class="inline">Counter</code> module as
+a child:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7087671048-1">[</span><span class="w">
+  </span><span class="nc">Counter</span><span class="w">
+</span><span class="p" data-group-id="7087671048-1">]</span></code></pre><p>When only the module name is given, it is equivalent to <code class="inline">{Counter, []}</code>,
+which in our case would be invalid, which is why we always pass the initial
+counter explicitly.</p><p>By replacing the child specification with <code class="inline">{Counter, 0}</code>, we keep it
+encapsulated in the <code class="inline">Counter</code> module. We could now share our
+<code class="inline">Counter</code> implementation with other developers and they can add it directly
+to their supervision tree without worrying about the low-level details of
+the counter.</p><p>Overall, a child specification can be one of the following:</p><ul><li><p>a map representing the child specification itself - as outlined in the
+&quot;Child specification&quot; section</p></li><li><p>a tuple with a module as first element and the start argument as second -
+such as <code class="inline">{Counter, 0}</code>. In this case, <code class="inline">Counter.child_spec(0)</code> is called
+to retrieve the child specification</p></li><li><p>a module - such as <code class="inline">Counter</code>. In this case, <code class="inline">Counter.child_spec([])</code>
+would be called, which is invalid for the counter, but it is useful in
+many other cases, especially when you want to pass a list of options
+to the child process</p></li></ul><p>If you need to convert a <code class="inline">{module, arg}</code> tuple or a module child specification to a
+<a href="#t:child_spec/0">child specification</a> or modify a child specification itself,
+you can use the <a href="#child_spec/2"><code class="inline">Supervisor.child_spec/2</code></a> function.
+For example, to run the counter with a different <code class="inline">:id</code> and a <code class="inline">:shutdown</code> value of
+10 seconds (10_000 milliseconds):</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0436679583-1">[</span><span class="w">
+  </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">child_spec</span><span class="p" data-group-id="0436679583-2">(</span><span class="p" data-group-id="0436679583-3">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0436679583-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="nc">MyCounter</span><span class="p">,</span><span class="w"> </span><span class="ss">shutdown</span><span class="p">:</span><span class="w"> </span><span class="mi">10_000</span><span class="p" data-group-id="0436679583-2">)</span><span class="w">
+</span><span class="p" data-group-id="0436679583-1">]</span></code></pre><h2 id="module-supervisor-strategies-and-options" class="section-heading">
+  <a href="#module-supervisor-strategies-and-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Supervisor strategies and options</span>
+</h2>
+<p>So far we have started the supervisor passing a single child as a tuple
+as well as a strategy called <code class="inline">:one_for_one</code>:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2859411709-1">[</span><span class="w">
+  </span><span class="p" data-group-id="2859411709-2">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2859411709-2">}</span><span class="w">
+</span><span class="p" data-group-id="2859411709-1">]</span><span class="w">
+
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="2859411709-3">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="2859411709-3">)</span></code></pre><p>The first argument given to <a href="#start_link/2"><code class="inline">start_link/2</code></a> is a list of child
+specifications as defined in the &quot;child_spec/1&quot; section above.</p><p>The second argument is a keyword list of options:</p><ul><li><p><code class="inline">:strategy</code> - the supervision strategy option. It can be either
+<code class="inline">:one_for_one</code>, <code class="inline">:rest_for_one</code> or <code class="inline">:one_for_all</code>. Required.
+See the &quot;Strategies&quot; section.</p></li><li><p><code class="inline">:max_restarts</code> - the maximum number of restarts allowed in
+a time frame. Defaults to <code class="inline">3</code>.</p></li><li><p><code class="inline">:max_seconds</code> - the time frame in which <code class="inline">:max_restarts</code> applies.
+Defaults to <code class="inline">5</code>.</p></li><li><p><code class="inline">:auto_shutdown</code> - the automatic shutdown option. It can be
+<code class="inline">:never</code>, <code class="inline">:any_significant</code>, or <code class="inline">:all_significant</code>. Optional.
+See the &quot;Automatic shutdown&quot; section.</p></li><li><p><code class="inline">:name</code> - a name to register the supervisor process. Supported values are
+explained in the &quot;Name registration&quot; section in the documentation for
+<a href="GenServer.html"><code class="inline">GenServer</code></a>. Optional.</p></li></ul><h3 id="module-strategies" class="section-heading">
+  <a href="#module-strategies" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Strategies</span>
+</h3>
+<p>Supervisors support different supervision strategies (through the
+<code class="inline">:strategy</code> option, as seen above):</p><ul><li><p><code class="inline">:one_for_one</code> - if a child process terminates, only that
+process is restarted.</p></li><li><p><code class="inline">:one_for_all</code> - if a child process terminates, all other child
+processes are terminated and then all child processes (including
+the terminated one) are restarted.</p></li><li><p><code class="inline">:rest_for_one</code> - if a child process terminates, the terminated child
+process and the rest of the children started after it, are terminated and
+restarted.</p></li></ul><p>In the above, process termination refers to unsuccessful termination, which
+is determined by the <code class="inline">:restart</code> option.</p><p>To efficiently supervise children started dynamically, see <a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a>.</p><h3 id="module-automatic-shutdown" class="section-heading">
+  <a href="#module-automatic-shutdown" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Automatic shutdown</span>
+</h3>
+<p>Supervisors have the ability to automatically shut themselves down when child
+processes marked as <code class="inline">:significant</code> exit.</p><p>Supervisors support different automatic shutdown options (through
+the <code class="inline">:auto_shutdown</code> option, as seen above):</p><ul><li><p><code class="inline">:never</code> - this is the default, automatic shutdown is disabled.</p></li><li><p><code class="inline">:any_significant</code> - if any significant child process exits, the supervisor
+will automatically shut down its children, then itself.</p></li><li><p><code class="inline">:all_significant</code> - when all significant child processes have exited,
+the supervisor will automatically shut down its children, then itself.</p></li></ul><p>Only <code class="inline">:transient</code> and <code class="inline">:temporary</code> child processes can be marked as significant,
+and this configuration affects the behavior. Significant <code class="inline">:transient</code> child
+processes must exit normally for automatic shutdown to be considered, where
+<code class="inline">:temporary</code> child processes may exit for any reason.</p><h3 id="module-name-registration" class="section-heading">
+  <a href="#module-name-registration" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Name registration</span>
+</h3>
+<p>A supervisor is bound to the same name registration rules as a <a href="GenServer.html"><code class="inline">GenServer</code></a>.
+Read more about these rules in the documentation for <a href="GenServer.html"><code class="inline">GenServer</code></a>.</p><h2 id="module-module-based-supervisors" class="section-heading">
+  <a href="#module-module-based-supervisors" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Module-based supervisors</span>
+</h2>
+<p>In the example so far, the supervisor was started by passing the supervision
+structure to <a href="#start_link/2"><code class="inline">start_link/2</code></a>. However, supervisors can also be created by
+explicitly defining a supervision module:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Supervisor</span><span class="w"> </span><span class="k" data-group-id="8117970842-1">do</span><span class="w">
+  </span><span class="c1"># Automatically defines child_spec/1</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Supervisor</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="8117970842-2">(</span><span class="n">init_arg</span><span class="p" data-group-id="8117970842-2">)</span><span class="w"> </span><span class="k" data-group-id="8117970842-3">do</span><span class="w">
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="8117970842-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">init_arg</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="p" data-group-id="8117970842-4">)</span><span class="w">
+  </span><span class="k" data-group-id="8117970842-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="8117970842-5">(</span><span class="c">_init_arg</span><span class="p" data-group-id="8117970842-5">)</span><span class="w"> </span><span class="k" data-group-id="8117970842-6">do</span><span class="w">
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8117970842-7">[</span><span class="w">
+      </span><span class="p" data-group-id="8117970842-8">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8117970842-8">}</span><span class="w">
+    </span><span class="p" data-group-id="8117970842-7">]</span><span class="w">
+
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">init</span><span class="p" data-group-id="8117970842-9">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="8117970842-9">)</span><span class="w">
+  </span><span class="k" data-group-id="8117970842-6">end</span><span class="w">
+</span><span class="k" data-group-id="8117970842-1">end</span></code></pre><p>The difference between the two approaches is that a module-based
+supervisor gives you more direct control over how the supervisor
+is initialized. Instead of calling <a href="#start_link/2"><code class="inline">Supervisor.start_link/2</code></a> with
+a list of child specifications that are implicitly initialized for us,
+we must explicitly initialize the children by calling <a href="#init/2"><code class="inline">Supervisor.init/2</code></a>
+inside its <a href="#c:init/1"><code class="inline">init/1</code></a> callback. <a href="#init/2"><code class="inline">Supervisor.init/2</code></a> accepts the same
+<code class="inline">:strategy</code>, <code class="inline">:max_restarts</code>, and <code class="inline">:max_seconds</code> options as <a href="#start_link/2"><code class="inline">start_link/2</code></a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info"><code class="inline">use Supervisor</code></h4><p>When you <code class="inline">use Supervisor</code>, the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module will
+set <code class="inline">@behaviour Supervisor</code> and define a <code class="inline">child_spec/1</code>
+function, so your module can be used as a child
+in a supervision tree.</p></section><p><code class="inline">use Supervisor</code> also defines a <code class="inline">child_spec/1</code> function which allows
+us to run <code class="inline">MyApp.Supervisor</code> as a child of another supervisor or
+at the top of your supervision tree as:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3484150141-1">[</span><span class="w">
+  </span><span class="nc">MyApp.Supervisor</span><span class="w">
+</span><span class="p" data-group-id="3484150141-1">]</span><span class="w">
+
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="3484150141-2">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="3484150141-2">)</span></code></pre><p>A general guideline is to use the supervisor without a callback
+module only at the top of your supervision tree, generally in the
+<a href="Application.html#c:start/2"><code class="inline">Application.start/2</code></a> callback. We recommend using module-based
+supervisors for any other supervisor in your application, so they
+can run as a child of another supervisor in the tree. The <code class="inline">child_spec/1</code>
+generated automatically by <a href="Supervisor.html"><code class="inline">Supervisor</code></a> can be customized with the
+following options:</p><ul><li><code class="inline">:id</code> - the child specification identifier, defaults to the current module</li><li><code class="inline">:restart</code> - when the supervisor should be restarted, defaults to <code class="inline">:permanent</code></li></ul><p>The <code class="inline">@doc</code> annotation immediately preceding <code class="inline">use Supervisor</code> will be
+attached to the generated <code class="inline">child_spec/1</code> function.</p><h2 id="module-start-and-shutdown" class="section-heading">
+  <a href="#module-start-and-shutdown" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Start and shutdown</span>
+</h2>
+<p>When the supervisor starts, it traverses all child specifications and
+then starts each child in the order they are defined. This is done by
+calling the function defined under the <code class="inline">:start</code> key in the child
+specification and typically defaults to <code class="inline">start_link/1</code>.</p><p>The <code class="inline">start_link/1</code> (or a custom) is then called for each child process.
+The <code class="inline">start_link/1</code> function must return <code class="inline">{:ok, pid}</code> where <code class="inline">pid</code> is the
+process identifier of a new process that is linked to the supervisor.
+The child process usually starts its work by executing the <a href="#c:init/1"><code class="inline">init/1</code></a>
+callback. Generally speaking, the <code class="inline">init</code> callback is where we initialize
+and configure the child process.</p><p>The shutdown process happens in reverse order.</p><p>When a supervisor shuts down, it terminates all children in the opposite
+order they are listed. The termination happens by sending a shutdown exit
+signal, via <code class="inline">Process.exit(child_pid, :shutdown)</code>, to the child process and
+then awaiting for a time interval for the child process to terminate. This
+interval defaults to 5000 milliseconds. If the child process does not
+terminate in this interval, the supervisor abruptly terminates the child
+with reason <code class="inline">:kill</code>. The shutdown time can be configured in the child
+specification which is fully detailed in the next section.</p><p>If the child process is not trapping exits, it will shutdown immediately
+when it receives the first exit signal. If the child process is trapping
+exits, then the <code class="inline">terminate</code> callback is invoked, and the child process
+must terminate in a reasonable time interval before being abruptly
+terminated by the supervisor.</p><p>In other words, if it is important that a process cleans after itself
+when your application or the supervision tree is shutting down, then
+this process must trap exits and its child specification should specify
+the proper <code class="inline">:shutdown</code> value, ensuring it terminates within a reasonable
+interval.</p><h2 id="module-exit-reasons-and-restarts" class="section-heading">
+  <a href="#module-exit-reasons-and-restarts" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Exit reasons and restarts</span>
+</h2>
+<p>A supervisor restarts a child process depending on its <code class="inline">:restart</code> configuration.
+For example, when <code class="inline">:restart</code> is set to <code class="inline">:transient</code>, the supervisor does not
+restart the child in case it exits with reason <code class="inline">:normal</code>, <code class="inline">:shutdown</code> or
+<code class="inline">{:shutdown, term}</code>.</p><p>Those exits also impact logging. By default, behaviours such as GenServers
+do not emit error logs when the exit reason is <code class="inline">:normal</code>, <code class="inline">:shutdown</code> or
+<code class="inline">{:shutdown, term}</code>.</p><p>So one may ask: which exit reason should I choose? There are three options:</p><ul><li><p><code class="inline">:normal</code> - in such cases, the exit won't be logged, there is no restart
+in transient mode, and linked processes do not exit</p></li><li><p><code class="inline">:shutdown</code> or <code class="inline">{:shutdown, term}</code> - in such cases, the exit won't be
+logged, there is no restart in transient mode, and linked processes exit
+with the same reason unless they're trapping exits</p></li><li><p>any other term - in such cases, the exit will be logged, there are
+restarts in transient mode, and linked processes exit with the same
+reason unless they're trapping exits</p></li></ul><p>Generally speaking, if you are exiting for expected reasons, you want to use
+<code class="inline">:shutdown</code> or <code class="inline">{:shutdown, term}</code>.</p><p>Note that the supervisor that reaches maximum restart intensity will exit with
+<code class="inline">:shutdown</code> reason. In this case the supervisor will only be restarted if its
+child specification was defined with the <code class="inline">:restart</code> option set to <code class="inline">:permanent</code>
+(the default).</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:auto_shutdown/0" data-no-tooltip="" translate="no">auto_shutdown()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported automatic shutdown options.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:child/0" data-no-tooltip="" translate="no">child()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A child process.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:child_spec/0" data-no-tooltip="" translate="no">child_spec()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The supervisor child specification.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:init_option/0" data-no-tooltip="" translate="no">init_option()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Options given to <a href="#start_link/2"><code class="inline">start_link/2</code></a> and <a href="#c:init/1"><code class="inline">init/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:module_spec/0" data-no-tooltip="" translate="no">module_spec()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A module-based child spec.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:name/0" data-no-tooltip="" translate="no">name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The supervisor name.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:on_start/0" data-no-tooltip="" translate="no">on_start()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Return values of <a href="#start_link/2"><code class="inline">start_link/2</code></a> and <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:on_start_child/0" data-no-tooltip="" translate="no">on_start_child()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Return values of <a href="#start_child/2"><code class="inline">start_child/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:option/0" data-no-tooltip="" translate="no">option()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Option values used by the <a href="#start_link/2"><code class="inline">start_link/2</code></a> and <a href="#start_link/3"><code class="inline">start_link/3</code></a> functions.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:restart/0" data-no-tooltip="" translate="no">restart()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported restart options.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:shutdown/0" data-no-tooltip="" translate="no">shutdown()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported shutdown options.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:strategy/0" data-no-tooltip="" translate="no">strategy()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported strategies.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:sup_flags/0" data-no-tooltip="" translate="no">sup_flags()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The supervisor flags returned on init.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:supervisor/0" data-no-tooltip="" translate="no">supervisor()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The supervisor reference.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:type/0" data-no-tooltip="" translate="no">type()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Type of a supervised child.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:init/1" data-no-tooltip="" translate="no">init(init_arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback invoked to start the supervisor and during hot code upgrades.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#child_spec/2" data-no-tooltip="" translate="no">child_spec(module_or_map, overrides)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds and overrides a child specification.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#count_children/1" data-no-tooltip="" translate="no">count_children(supervisor)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a map containing count values for the given supervisor.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_child/2" data-no-tooltip="" translate="no">delete_child(supervisor, child_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes the child specification identified by <code class="inline">child_id</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#init/2" data-no-tooltip="" translate="no">init(children, options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a list of child specifications to initialize and a set of <code class="inline">options</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#restart_child/2" data-no-tooltip="" translate="no">restart_child(supervisor, child_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Restarts a child process identified by <code class="inline">child_id</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_child/2" data-no-tooltip="" translate="no">start_child(supervisor, child_spec)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a child specification to <code class="inline">supervisor</code> and starts that child.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_link/2" data-no-tooltip="" translate="no">start_link(children, options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a supervisor with the given children.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_link/3" data-no-tooltip="" translate="no">start_link(module, init_arg, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a module-based supervisor process with the given <code class="inline">module</code> and <code class="inline">init_arg</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stop/3" data-no-tooltip="" translate="no">stop(supervisor, reason \\ :normal, timeout \\ :infinity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Synchronously stops the given supervisor with the given <code class="inline">reason</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#terminate_child/2" data-no-tooltip="" translate="no">terminate_child(supervisor, child_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Terminates the given child identified by <code class="inline">child_id</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#which_children/1" data-no-tooltip="" translate="no">which_children(supervisor)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a list with information about all children of the given supervisor.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:auto_shutdown/0">
+
+  <div class="detail-header">
+    <a href="#t:auto_shutdown/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">auto_shutdown()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L615" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> auto_shutdown() :: :never | :any_significant | :all_significant</pre>
+
+      </div>
+
+<p>Supported automatic shutdown options.</p>
+  </section>
+</section>
+<section class="detail" id="t:child/0">
+
+  <div class="detail-header">
+    <a href="#t:child/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">child()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L579" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> child() :: <a href="typespecs.html#basic-types">pid</a>() | :undefined</pre>
+
+      </div>
+
+<p>A child process.</p><p>It can be a PID when the child process was started, or <code class="inline">:undefined</code> when
+the child was created by a <a href="DynamicSupervisor.html">dynamic supervisor</a>.</p>
+  </section>
+</section>
+<section class="detail" id="t:child_spec/0">
+
+  <div class="detail-header">
+    <a href="#t:child_spec/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">child_spec()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L630" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> child_spec() :: %{
+  :id =&gt; <a href="typespecs.html#basic-types">atom</a>() | <a href="typespecs.html#built-in-types">term</a>(),
+  :start =&gt; {<a href="typespecs.html#built-in-types">module</a>(), function_name :: <a href="typespecs.html#basic-types">atom</a>(), args :: [<a href="typespecs.html#built-in-types">term</a>()]},
+  optional(:restart) =&gt; <a href="#t:restart/0">restart</a>(),
+  optional(:shutdown) =&gt; <a href="#t:shutdown/0">shutdown</a>(),
+  optional(:type) =&gt; <a href="#t:type/0">type</a>(),
+  optional(:modules) =&gt; [<a href="typespecs.html#built-in-types">module</a>()] | :dynamic,
+  optional(:significant) =&gt; <a href="typespecs.html#built-in-types">boolean</a>()
+}</pre>
+
+      </div>
+
+<p>The supervisor child specification.</p><p>It defines how the supervisor should start, stop and restart each of its children.</p>
+  </section>
+</section>
+<section class="detail" id="t:init_option/0">
+
+  <div class="detail-header">
+    <a href="#t:init_option/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">init_option()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L599" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> init_option() ::
+  {:strategy, <a href="#t:strategy/0">strategy</a>()}
+  | {:max_restarts, <a href="typespecs.html#basic-types">non_neg_integer</a>()}
+  | {:max_seconds, <a href="typespecs.html#basic-types">pos_integer</a>()}
+  | {:auto_shutdown, <a href="#t:auto_shutdown/0">auto_shutdown</a>()}</pre>
+
+      </div>
+
+<p>Options given to <a href="#start_link/2"><code class="inline">start_link/2</code></a> and <a href="#c:init/1"><code class="inline">init/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="t:module_spec/0">
+
+  <div class="detail-header">
+    <a href="#t:module_spec/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">module_spec()</h1>
+
+        <span class="note">(since 1.16.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L656" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> module_spec() :: {<a href="typespecs.html#built-in-types">module</a>(), args :: <a href="typespecs.html#built-in-types">term</a>()} | <a href="typespecs.html#built-in-types">module</a>()</pre>
+
+      </div>
+
+<p>A module-based child spec.</p><p>This is a form of child spec that you can pass to functions such as <a href="#child_spec/2"><code class="inline">child_spec/2</code></a>,
+<a href="#start_child/2"><code class="inline">start_child/2</code></a>, and <a href="#start_link/2"><code class="inline">start_link/2</code></a>, in addition to the normalized <a href="#t:child_spec/0"><code class="inline">child_spec/0</code></a>.</p><p>A module-based child spec can be:</p><ul><li><p>a <strong>module</strong> — the supervisor calls <code class="inline">module.child_spec([])</code> to retrieve the
+child specification</p></li><li><p>a <strong>two-element tuple</strong> in the shape of <code class="inline">{module, arg}</code> — the supervisor
+calls <code class="inline">module.child_spec(arg)</code> to retrieve the child specification</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="t:name/0">
+
+  <div class="detail-header">
+    <a href="#t:name/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">name()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L582" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> name() :: <a href="typespecs.html#basic-types">atom</a>() | {:global, <a href="typespecs.html#built-in-types">term</a>()} | {:via, <a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>The supervisor name.</p>
+  </section>
+</section>
+<section class="detail" id="t:on_start/0">
+
+  <div class="detail-header">
+    <a href="#t:on_start/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_start()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L562" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> on_start() ::
+  {:ok, <a href="typespecs.html#basic-types">pid</a>()}
+  | :ignore
+  | {:error, {:already_started, <a href="typespecs.html#basic-types">pid</a>()} | {:shutdown, <a href="typespecs.html#built-in-types">term</a>()} | <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Return values of <a href="#start_link/2"><code class="inline">start_link/2</code></a> and <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="t:on_start_child/0">
+
+  <div class="detail-header">
+    <a href="#t:on_start_child/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_start_child()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L568" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> on_start_child() ::
+  {:ok, <a href="#t:child/0">child</a>()}
+  | {:ok, <a href="#t:child/0">child</a>(), info :: <a href="typespecs.html#built-in-types">term</a>()}
+  | {:error, {:already_started, <a href="#t:child/0">child</a>()} | :already_present | <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Return values of <a href="#start_child/2"><code class="inline">start_child/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="t:option/0">
+
+  <div class="detail-header">
+    <a href="#t:option/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">option()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L585" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> option() :: {:name, <a href="#t:name/0">name</a>()}</pre>
+
+      </div>
+
+<p>Option values used by the <a href="#start_link/2"><code class="inline">start_link/2</code></a> and <a href="#start_link/3"><code class="inline">start_link/3</code></a> functions.</p>
+  </section>
+</section>
+<section class="detail" id="t:restart/0">
+
+  <div class="detail-header">
+    <a href="#t:restart/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">restart()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L606" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> restart() :: :permanent | :transient | :temporary</pre>
+
+      </div>
+
+<p>Supported restart options.</p>
+  </section>
+</section>
+<section class="detail" id="t:shutdown/0">
+
+  <div class="detail-header">
+    <a href="#t:shutdown/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shutdown()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L609" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> shutdown() :: <a href="typespecs.html#built-in-types">timeout</a>() | :brutal_kill</pre>
+
+      </div>
+
+<p>Supported shutdown options.</p>
+  </section>
+</section>
+<section class="detail" id="t:strategy/0">
+
+  <div class="detail-header">
+    <a href="#t:strategy/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">strategy()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L612" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> strategy() :: :one_for_one | :one_for_all | :rest_for_one</pre>
+
+      </div>
+
+<p>Supported strategies.</p>
+  </section>
+</section>
+<section class="detail" id="t:sup_flags/0">
+
+  <div class="detail-header">
+    <a href="#t:sup_flags/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sup_flags()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L588" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> sup_flags() :: %{
+  strategy: <a href="#t:strategy/0">strategy</a>(),
+  intensity: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  period: <a href="typespecs.html#basic-types">pos_integer</a>(),
+  auto_shutdown: <a href="#t:auto_shutdown/0">auto_shutdown</a>()
+}</pre>
+
+      </div>
+
+<p>The supervisor flags returned on init.</p>
+  </section>
+</section>
+<section class="detail" id="t:supervisor/0">
+
+  <div class="detail-header">
+    <a href="#t:supervisor/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">supervisor()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L596" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> supervisor() :: <a href="typespecs.html#basic-types">pid</a>() | <a href="#t:name/0">name</a>() | {<a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">node</a>()}</pre>
+
+      </div>
+
+<p>The supervisor reference.</p>
+  </section>
+</section>
+<section class="detail" id="t:type/0">
+
+  <div class="detail-header">
+    <a href="#t:type/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">type()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L622" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> type() :: :worker | :supervisor</pre>
+
+      </div>
+
+<p>Type of a supervised child.</p><p>Whether the supervised child is a worker or a supervisor.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:init/1">
+
+  <div class="detail-header">
+    <a href="#c:init/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">init(init_arg)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L556" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> init(init_arg :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:ok,
+   {<a href="#t:sup_flags/0">sup_flags</a>(),
+    [<a href="#t:child_spec/0">child_spec</a>() | (old_erlang_child_spec :: <a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html#t:child_spec/0">:supervisor.child_spec</a>())]}}
+  | :ignore</pre>
+
+      </div>
+
+<p>Callback invoked to start the supervisor and during hot code upgrades.</p><p>Developers typically invoke <a href="#init/2"><code class="inline">Supervisor.init/2</code></a> at the end of their
+init callback to return the proper supervision flags.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="child_spec/2">
+
+  <div class="detail-header">
+    <a href="#child_spec/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">child_spec(module_or_map, overrides)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L896" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> child_spec(
+  <a href="#t:child_spec/0">child_spec</a>() | <a href="#t:module_spec/0">module_spec</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) :: <a href="#t:child_spec/0">child_spec</a>()</pre>
+
+      </div>
+
+<p>Builds and overrides a child specification.</p><p>Similar to <a href="#start_link/2"><code class="inline">start_link/2</code></a> and <a href="#init/2"><code class="inline">init/2</code></a>, it expects a module, <code class="inline">{module, arg}</code>,
+or a <a href="#t:child_spec/0">child specification</a>.</p><p>If a two-element tuple in the shape of <code class="inline">{module, arg}</code> is given,
+the child specification is retrieved by calling <code class="inline">module.child_spec(arg)</code>.</p><p>If a module is given, the child specification is retrieved by calling
+<code class="inline">module.child_spec([])</code>.</p><p>After the child specification is retrieved, the fields on <code class="inline">overrides</code>
+are directly applied to the child spec. If <code class="inline">overrides</code> has keys that
+do not map to any child specification field, an error is raised.</p><p>See the &quot;Child specification&quot; section in the module documentation
+for all of the available keys for overriding.</p><h2 id="child_spec/2-examples" class="section-heading">
+  <a href="#child_spec/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>This function is often used to set an <code class="inline">:id</code> option when
+the same module needs to be started multiple times in the
+supervision tree:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Supervisor</span><span class="o">.</span><span class="n">child_spec</span><span class="p" data-group-id="4668082866-1">(</span><span class="p" data-group-id="4668082866-2">{</span><span class="nc">Agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4668082866-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:ok</span><span class="w"> </span><span class="k" data-group-id="4668082866-3">end</span><span class="p" data-group-id="4668082866-2">}</span><span class="p">,</span><span class="w"> </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4668082866-4">{</span><span class="nc">Agent</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4668082866-4">}</span><span class="p" data-group-id="4668082866-1">)</span><span class="w">
+</span><span class="c1">#=&gt; %{id: {Agent, 1},</span><span class="w">
+</span><span class="c1">#=&gt;   start: {Agent, :start_link, [fn -&gt; :ok end]}}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="count_children/1">
+
+  <div class="detail-header">
+    <a href="#count_children/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">count_children(supervisor)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L1137" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> count_children(<a href="#t:supervisor/0">supervisor</a>()) :: %{
+  specs: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  active: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  supervisors: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  workers: <a href="typespecs.html#basic-types">non_neg_integer</a>()
+}</pre>
+
+      </div>
+
+<p>Returns a map containing count values for the given supervisor.</p><p>The map contains the following keys:</p><ul><li><p><code class="inline">:specs</code> - the total count of children, dead or alive</p></li><li><p><code class="inline">:active</code> - the count of all actively running child processes managed by
+this supervisor</p></li><li><p><code class="inline">:supervisors</code> - the count of all supervisors whether or not these
+child supervisors are still alive</p></li><li><p><code class="inline">:workers</code> - the count of all workers, whether or not these child workers
+are still alive</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="delete_child/2">
+
+  <div class="detail-header">
+    <a href="#delete_child/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_child(supervisor, child_id)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L1055" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> delete_child(<a href="#t:supervisor/0">supervisor</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: :ok | {:error, error}
+when error: :not_found | :running | :restarting</pre>
+
+      </div>
+
+<p>Deletes the child specification identified by <code class="inline">child_id</code>.</p><p>The corresponding child process must not be running; use <a href="#terminate_child/2"><code class="inline">terminate_child/2</code></a>
+to terminate it if it's running.</p><p>If successful, this function returns <code class="inline">:ok</code>. This function may return an error
+with an appropriate error tuple if the <code class="inline">child_id</code> is not found, or if the
+current process is running or being restarted.</p>
+  </section>
+</section>
+<section class="detail" id="init/2">
+
+  <div class="detail-header">
+    <a href="#init/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">init(children, options)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L755" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> init(
+  [
+    <a href="#t:child_spec/0">child_spec</a>()
+    | <a href="#t:module_spec/0">module_spec</a>()
+    | (old_erlang_child_spec :: <a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html#t:child_spec/0">:supervisor.child_spec</a>())
+  ],
+  [
+    <a href="#t:init_option/0">init_option</a>()
+  ]
+) ::
+  {:ok,
+   {<a href="#t:sup_flags/0">sup_flags</a>(),
+    [<a href="#t:child_spec/0">child_spec</a>() | (old_erlang_child_spec :: <a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html#t:child_spec/0">:supervisor.child_spec</a>())]}}</pre>
+
+      </div>
+
+<p>Receives a list of child specifications to initialize and a set of <code class="inline">options</code>.</p><p>This is typically invoked at the end of the <a href="#c:init/1"><code class="inline">init/1</code></a> callback of
+module-based supervisors. See the sections &quot;Supervisor strategies and options&quot; and
+&quot;Module-based supervisors&quot; in the module documentation for more information.</p><p>This function returns a tuple containing the supervisor
+flags and child specifications.</p><h2 id="init/2-examples" class="section-heading">
+  <a href="#init/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="9382896689-1">(</span><span class="c">_init_arg</span><span class="p" data-group-id="9382896689-1">)</span><span class="w"> </span><span class="k" data-group-id="9382896689-2">do</span><span class="w">
+  </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9382896689-3">[</span><span class="w">
+    </span><span class="p" data-group-id="9382896689-4">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9382896689-4">}</span><span class="w">
+  </span><span class="p" data-group-id="9382896689-3">]</span><span class="w">
+
+  </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">init</span><span class="p" data-group-id="9382896689-5">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="9382896689-5">)</span><span class="w">
+</span><span class="k" data-group-id="9382896689-2">end</span></code></pre><h2 id="init/2-options" class="section-heading">
+  <a href="#init/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:strategy</code> - the supervision strategy option. It can be either
+<code class="inline">:one_for_one</code>, <code class="inline">:rest_for_one</code>, or <code class="inline">:one_for_all</code></p></li><li><p><code class="inline">:max_restarts</code> - the maximum number of restarts allowed in
+a time frame. Defaults to <code class="inline">3</code>.</p></li><li><p><code class="inline">:max_seconds</code> - the time frame in seconds in which <code class="inline">:max_restarts</code>
+applies. Defaults to <code class="inline">5</code>.</p></li><li><p><code class="inline">:auto_shutdown</code> - the automatic shutdown option. It can be either
+<code class="inline">:never</code>, <code class="inline">:any_significant</code>, or <code class="inline">:all_significant</code></p></li></ul><p>The <code class="inline">:strategy</code> option is required and by default a maximum of 3 restarts
+is allowed within 5 seconds. Check the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module for a detailed
+description of the available strategies.</p>
+  </section>
+</section>
+<section class="detail" id="restart_child/2">
+
+  <div class="detail-header">
+    <a href="#restart_child/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">restart_child(supervisor, child_id)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L1083" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> restart_child(<a href="#t:supervisor/0">supervisor</a>(), <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:ok, <a href="#t:child/0">child</a>()} | {:ok, <a href="#t:child/0">child</a>(), <a href="typespecs.html#built-in-types">term</a>()} | {:error, error}
+when error: :not_found | :running | :restarting | <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Restarts a child process identified by <code class="inline">child_id</code>.</p><p>The child specification must exist and the corresponding child process must not
+be running.</p><p>Note that for temporary children, the child specification is automatically deleted
+when the child terminates, and thus it is not possible to restart such children.</p><p>If the child process start function returns <code class="inline">{:ok, child}</code> or <code class="inline">{:ok, child, info}</code>,
+the PID is added to the supervisor and this function returns the same value.</p><p>If the child process start function returns <code class="inline">:ignore</code>, the PID remains set to
+<code class="inline">:undefined</code> and this function returns <code class="inline">{:ok, :undefined}</code>.</p><p>This function may return an error with an appropriate error tuple if the
+<code class="inline">child_id</code> is not found, or if the current process is running or being
+restarted.</p><p>If the child process start function returns an error tuple or an erroneous value,
+or if it fails, this function returns <code class="inline">{:error, error}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="start_child/2">
+
+  <div class="detail-header">
+    <a href="#start_child/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_child(supervisor, child_spec)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L994" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_child(
+  <a href="#t:supervisor/0">supervisor</a>(),
+  <a href="#t:child_spec/0">child_spec</a>()
+  | <a href="#t:module_spec/0">module_spec</a>()
+  | (old_erlang_child_spec :: <a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html#t:child_spec/0">:supervisor.child_spec</a>())
+) :: <a href="#t:on_start_child/0">on_start_child</a>()</pre>
+
+      </div>
+
+<p>Adds a child specification to <code class="inline">supervisor</code> and starts that child.</p><p><code class="inline">child_spec</code> should be a valid child specification. The child process will
+be started as defined in the child specification.</p><p>If a child specification with the specified ID already exists, <code class="inline">child_spec</code> is
+discarded and this function returns an error with <code class="inline">:already_started</code> or
+<code class="inline">:already_present</code> if the corresponding child process is running or not,
+respectively.</p><p>If the child process start function returns <code class="inline">{:ok, child}</code> or <code class="inline">{:ok, child, info}</code>, then child specification and PID are added to the supervisor and
+this function returns the same value.</p><p>If the child process start function returns <code class="inline">:ignore</code>, the child specification
+is added to the supervisor, the PID is set to <code class="inline">:undefined</code> and this function
+returns <code class="inline">{:ok, :undefined}</code>.</p><p>If the child process start function returns an error tuple or an erroneous
+value, or if it fails, the child specification is discarded and this function
+returns <code class="inline">{:error, error}</code> where <code class="inline">error</code> is a term containing information about
+the error and child specification.</p>
+  </section>
+</section>
+<section class="detail" id="start_link/2">
+
+  <div class="detail-header">
+    <a href="#start_link/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_link(children, options)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L703" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_link(
+  [
+    <a href="#t:child_spec/0">child_spec</a>()
+    | <a href="#t:module_spec/0">module_spec</a>()
+    | (old_erlang_child_spec :: <a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html#t:child_spec/0">:supervisor.child_spec</a>())
+  ],
+  [
+    <a href="#t:option/0">option</a>() | <a href="#t:init_option/0">init_option</a>()
+  ]
+) ::
+  {:ok, <a href="typespecs.html#basic-types">pid</a>()}
+  | {:error, {:already_started, <a href="typespecs.html#basic-types">pid</a>()} | {:shutdown, <a href="typespecs.html#built-in-types">term</a>()} | <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+          <pre translate="no"><span class="attribute">@spec</span> start_link(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: <a href="#t:on_start/0">on_start</a>()</pre>
+
+      </div>
+
+<p>Starts a supervisor with the given children.</p><p><code class="inline">children</code> is a list of the following forms:</p><ul><li><p>a child specification (see <a href="#t:child_spec/0"><code class="inline">child_spec/0</code></a>)</p></li><li><p>a module, where the supervisor calls <code class="inline">module.child_spec([])</code>
+to retrieve the child specification (see <a href="#t:module_spec/0"><code class="inline">module_spec/0</code></a>)</p></li><li><p>a <code class="inline">{module, arg}</code> tuple, where the supervisor calls <code class="inline">module.child_spec(arg)</code>
+to retrieve the child specification (see <a href="#t:module_spec/0"><code class="inline">module_spec/0</code></a>)</p></li><li><p>a (old) Erlang-style child specification (see
+<a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html#t:child_spec/0"><code class="inline">:supervisor.child_spec()</code></a>)</p></li></ul><p>A strategy is required to be provided through the <code class="inline">:strategy</code> option. See
+&quot;Supervisor strategies and options&quot; for examples and other options.</p><p>The options can also be used to register a supervisor name.
+The supported values are described under the &quot;Name registration&quot;
+section in the <a href="GenServer.html"><code class="inline">GenServer</code></a> module docs.</p><p>If the supervisor and all child processes are successfully spawned
+(if the start function of each child process returns <code class="inline">{:ok, child}</code>,
+<code class="inline">{:ok, child, info}</code>, or <code class="inline">:ignore</code>), this function returns
+<code class="inline">{:ok, pid}</code>, where <code class="inline">pid</code> is the PID of the supervisor. If the supervisor
+is given a name and a process with the specified name already exists,
+the function returns <code class="inline">{:error, {:already_started, pid}}</code>, where <code class="inline">pid</code>
+is the PID of that process.</p><p>If the start function of any of the child processes fails or returns an error
+tuple or an erroneous value, the supervisor first terminates with reason
+<code class="inline">:shutdown</code> all the child processes that have already been started, and then
+terminates itself and returns <code class="inline">{:error, {:shutdown, reason}}</code>.</p><p>Note that a supervisor started with this function is linked to the parent
+process and exits not only on crashes but also if the parent process exits
+with <code class="inline">:normal</code> reason.</p>
+  </section>
+</section>
+<section class="detail" id="start_link/3">
+
+  <div class="detail-header">
+    <a href="#start_link/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_link(module, init_arg, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L938" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_link(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#built-in-types">term</a>(), [<a href="#t:option/0">option</a>()]) :: <a href="#t:on_start/0">on_start</a>()</pre>
+
+      </div>
+
+<p>Starts a module-based supervisor process with the given <code class="inline">module</code> and <code class="inline">init_arg</code>.</p><p>To start the supervisor, the <a href="#c:init/1"><code class="inline">init/1</code></a> callback will be invoked in the given
+<code class="inline">module</code>, with <code class="inline">init_arg</code> as its argument. The <a href="#c:init/1"><code class="inline">init/1</code></a> callback must return a
+supervisor specification which can be created with the help of the <a href="#init/2"><code class="inline">init/2</code></a>
+function.</p><p>If the <a href="#c:init/1"><code class="inline">init/1</code></a> callback returns <code class="inline">:ignore</code>, this function returns
+<code class="inline">:ignore</code> as well and the supervisor terminates with reason <code class="inline">:normal</code>.
+If it fails or returns an incorrect value, this function returns
+<code class="inline">{:error, term}</code> where <code class="inline">term</code> is a term with information about the
+error, and the supervisor terminates with reason <code class="inline">term</code>.</p><p>The <code class="inline">:name</code> option can also be given in order to register a supervisor
+name, the supported values are described in the &quot;Name registration&quot;
+section in the <a href="GenServer.html"><code class="inline">GenServer</code></a> module docs.</p>
+  </section>
+</section>
+<section class="detail" id="stop/3">
+
+    <span id="stop/1"></span>
+
+    <span id="stop/2"></span>
+
+  <div class="detail-header">
+    <a href="#stop/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stop(supervisor, reason \\ :normal, timeout \\ :infinity)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L1152" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stop(<a href="#t:supervisor/0">supervisor</a>(), reason :: <a href="typespecs.html#built-in-types">term</a>(), <a href="typespecs.html#built-in-types">timeout</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Synchronously stops the given supervisor with the given <code class="inline">reason</code>.</p><p>It returns <code class="inline">:ok</code> if the supervisor terminates with the given
+reason. If it terminates with another reason, the call exits.</p><p>This function keeps OTP semantics regarding error reporting.
+If the reason is any other than <code class="inline">:normal</code>, <code class="inline">:shutdown</code> or
+<code class="inline">{:shutdown, _}</code>, an error report is logged.</p>
+  </section>
+</section>
+<section class="detail" id="terminate_child/2">
+
+  <div class="detail-header">
+    <a href="#terminate_child/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">terminate_child(supervisor, child_id)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L1029" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> terminate_child(<a href="#t:supervisor/0">supervisor</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: :ok | {:error, :not_found}</pre>
+
+      </div>
+
+<p>Terminates the given child identified by <code class="inline">child_id</code>.</p><p>The process is terminated, if there's one. The child specification is
+kept unless the child is temporary.</p><p>A non-temporary child process may later be restarted by the supervisor.
+The child process can also be restarted explicitly by calling <a href="#restart_child/2"><code class="inline">restart_child/2</code></a>.
+Use <a href="#delete_child/2"><code class="inline">delete_child/2</code></a> to remove the child specification.</p><p>If successful, this function returns <code class="inline">:ok</code>. If there is no child
+specification for the given child ID, this function returns
+<code class="inline">{:error, :not_found}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="which_children/1">
+
+  <div class="detail-header">
+    <a href="#which_children/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">which_children(supervisor)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor.ex#L1110" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> which_children(<a href="#t:supervisor/0">supervisor</a>()) :: [
+  {<a href="typespecs.html#built-in-types">term</a>() | :undefined, <a href="#t:child/0">child</a>() | :restarting, :worker | :supervisor,
+   [<a href="typespecs.html#built-in-types">module</a>()] | :dynamic}
+]</pre>
+
+      </div>
+
+<p>Returns a list with information about all children of the given supervisor.</p><p>Note that calling this function when supervising a large number of children
+under low memory conditions can cause an out of memory exception.</p><p>This function returns a list of <code class="inline">{id, child, type, modules}</code> tuples, where:</p><ul><li><p><code class="inline">id</code> - as defined in the child specification</p></li><li><p><code class="inline">child</code> - the PID of the corresponding child process, <code class="inline">:restarting</code> if the
+process is about to be restarted, or <code class="inline">:undefined</code> if there is no such
+process</p></li><li><p><code class="inline">type</code> - <code class="inline">:worker</code> or <code class="inline">:supervisor</code>, as specified by the child specification</p></li><li><p><code class="inline">modules</code> - as specified by the child specification</p></li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

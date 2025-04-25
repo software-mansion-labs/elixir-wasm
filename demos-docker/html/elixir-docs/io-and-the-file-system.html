@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>IO and the file system — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/io-and-the-file-system.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>IO and the file system</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/io-and-the-file-system.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This chapter introduces the input/output mechanisms, file-system-related tasks, and related modules such as <a href="IO.html"><code class="inline">IO</code></a>, <a href="File.html"><code class="inline">File</code></a>, and <a href="Path.html"><code class="inline">Path</code></a>. The IO system provides a great opportunity to shed some light on some philosophies and curiosities of Elixir and the Erlang VM.</p><h2 id="the-io-module" class="section-heading">
+  <a href="#the-io-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The <a href="IO.html"><code class="inline">IO</code></a> module</span>
+</h2>
+<p>The <a href="IO.html"><code class="inline">IO</code></a> module is the main mechanism in Elixir for reading and writing to standard input/output (<code class="inline">:stdio</code>), standard error (<code class="inline">:stderr</code>), files, and other IO devices. Usage of the module is pretty straightforward:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6394370756-1">(</span><span class="s">&quot;hello world&quot;</span><span class="p" data-group-id="6394370756-1">)</span><span class="w">
+</span><span class="n">hello</span><span class="w"> </span><span class="n">world</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">gets</span><span class="p" data-group-id="6394370756-2">(</span><span class="s">&quot;yes or no? &quot;</span><span class="p" data-group-id="6394370756-2">)</span><span class="w">
+</span><span class="n">yes</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">no?</span><span class="w"> </span><span class="n">yes</span><span class="w">
+</span><span class="s">&quot;yes</span><span class="se">\n</span><span class="s">&quot;</span></code></pre><p>By default, functions in the <a href="IO.html"><code class="inline">IO</code></a> module read from the standard input and write to the standard output. We can change that by passing, for example, <code class="inline">:stderr</code> as an argument (in order to write to the standard error device):</p><pre class="elixir" data-code-id="31363638"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">IO.puts(:stderr, &quot;hello world&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># hello world</p><p class="output output-initial" data-code-type="output"># :ok</p></pre><h2 id="the-file-module" class="section-heading">
+  <a href="#the-file-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The <a href="File.html"><code class="inline">File</code></a> module</span>
+</h2>
+<p>The <a href="File.html"><code class="inline">File</code></a> module contains functions that allow us to open files as IO devices. By default, files are opened in binary mode, which requires developers to use the specific <a href="IO.html#binread/2"><code class="inline">IO.binread/2</code></a> and <a href="IO.html#binwrite/2"><code class="inline">IO.binwrite/2</code></a> functions from the <a href="IO.html"><code class="inline">IO</code></a> module:</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Potential data loss warning</h4><p>The following code opens a file for writing. If an existing file is available at the given path, its contents will be deleted.</p></section><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="7195986641-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="p" data-group-id="7195986641-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="7195986641-2">(</span><span class="s">&quot;path/to/file/hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7195986641-3">[</span><span class="ss">:write</span><span class="p" data-group-id="7195986641-3">]</span><span class="p" data-group-id="7195986641-2">)</span><span class="w">
+</span><span class="p" data-group-id="7195986641-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7195986641-5">#</span><span class="nc" data-group-id="7195986641-5">PID</span><span class="p" data-group-id="7195986641-5">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">47</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="7195986641-5">&gt;</span><span class="p" data-group-id="7195986641-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">binwrite</span><span class="p" data-group-id="7195986641-6">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p" data-group-id="7195986641-6">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">close</span><span class="p" data-group-id="7195986641-7">(</span><span class="n">file</span><span class="p" data-group-id="7195986641-7">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="7195986641-8">(</span><span class="s">&quot;path/to/file/hello&quot;</span><span class="p" data-group-id="7195986641-8">)</span><span class="w">
+</span><span class="p" data-group-id="7195986641-9">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p" data-group-id="7195986641-9">}</span></code></pre><p>The file could be opened with the <code class="inline">:append</code> option, instead of <code class="inline">:write</code>, to preserve its contents. You may also pass the <code class="inline">:utf8</code> option, which tells the <a href="File.html"><code class="inline">File</code></a> module to interpret the bytes read from the file as UTF-8-encoded bytes.</p><p>Besides functions for opening, reading and writing files, the <a href="File.html"><code class="inline">File</code></a> module has many functions to work with the file system. Those functions are named after their UNIX equivalents. For example, <a href="File.html#rm/1"><code class="inline">File.rm/1</code></a> can be used to remove files, <a href="File.html#mkdir/1"><code class="inline">File.mkdir/1</code></a> to create directories, <a href="File.html#mkdir_p/1"><code class="inline">File.mkdir_p/1</code></a> to create directories and all their parent chain. There are even <a href="File.html#cp_r/2"><code class="inline">File.cp_r/2</code></a> and <a href="File.html#rm_rf/1"><code class="inline">File.rm_rf/1</code></a> to respectively copy and remove files and directories recursively (i.e., copying and removing the contents of the directories too).</p><p>You will also notice that functions in the <a href="File.html"><code class="inline">File</code></a> module have two variants: one &quot;regular&quot; variant and another variant with a trailing bang (<code class="inline">!</code>). For example, when we read the <code class="inline">&quot;hello&quot;</code> file in the example above, we use <a href="File.html#read/1"><code class="inline">File.read/1</code></a>. Alternatively, we can use <a href="File.html#read!/1"><code class="inline">File.read!/1</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="7366755405-1">(</span><span class="s">&quot;path/to/file/hello&quot;</span><span class="p" data-group-id="7366755405-1">)</span><span class="w">
+</span><span class="p" data-group-id="7366755405-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p" data-group-id="7366755405-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="7366755405-3">(</span><span class="s">&quot;path/to/file/hello&quot;</span><span class="p" data-group-id="7366755405-3">)</span><span class="w">
+</span><span class="s">&quot;world&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="7366755405-4">(</span><span class="s">&quot;path/to/file/unknown&quot;</span><span class="p" data-group-id="7366755405-4">)</span><span class="w">
+</span><span class="p" data-group-id="7366755405-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:enoent</span><span class="p" data-group-id="7366755405-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="7366755405-6">(</span><span class="s">&quot;path/to/file/unknown&quot;</span><span class="p" data-group-id="7366755405-6">)</span><span class="w">
+</span><span class="gt">** (File.Error) could not read file &quot;path/to/file/unknown&quot;: no such file or directory</span></code></pre><p>Notice that the version with <code class="inline">!</code> returns the contents of the file instead of a tuple, and if anything goes wrong the function raises an error.</p><p>The version without <code class="inline">!</code> is preferred when you want to handle different outcomes using pattern matching:</p><pre><code class="makeup elixir" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="7992080553-1">(</span><span class="s">&quot;path/to/file/hello&quot;</span><span class="p" data-group-id="7992080553-1">)</span><span class="w"> </span><span class="k" data-group-id="7992080553-2">do</span><span class="w">
+  </span><span class="p" data-group-id="7992080553-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p" data-group-id="7992080553-3">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># do something with the `body`</span><span class="w">
+  </span><span class="p" data-group-id="7992080553-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="7992080553-4">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># handle the error caused by `reason`</span><span class="w">
+</span><span class="k" data-group-id="7992080553-2">end</span></code></pre><p>However, if you expect the file to be there, the bang variation is more useful as it raises a meaningful error message. Avoid writing:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1574598578-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p" data-group-id="1574598578-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="1574598578-2">(</span><span class="s">&quot;path/to/file/unknown&quot;</span><span class="p" data-group-id="1574598578-2">)</span></code></pre><p>as, in case of an error, <a href="File.html#read/1"><code class="inline">File.read/1</code></a> will return <code class="inline">{:error, reason}</code> and the pattern matching will fail. You will still get the desired result (a raised error), but the message will be about the pattern which doesn't match (thus being cryptic in respect to what the error actually is about).</p><p>Therefore, if you don't want to handle the error outcomes, prefer to use the functions ending with an exclamation mark, such as <a href="File.html#read!/1"><code class="inline">File.read!/1</code></a>.</p><h2 id="the-path-module" class="section-heading">
+  <a href="#the-path-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The <a href="Path.html"><code class="inline">Path</code></a> module</span>
+</h2>
+<p>The majority of the functions in the <a href="File.html"><code class="inline">File</code></a> module expect paths as arguments. Most commonly, those paths will be regular binaries. The <a href="Path.html"><code class="inline">Path</code></a> module provides facilities for working with such paths:</p><pre class="elixir" data-code-id="31373332"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Path.join(&quot;foo&quot;, &quot;bar&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;foo/bar&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Path.expand(&quot;~/hello&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;/Users/jose/hello&quot;</p></pre><p>Using functions from the <a href="Path.html"><code class="inline">Path</code></a> module as opposed to directly manipulating strings is preferred since the <a href="Path.html"><code class="inline">Path</code></a> module takes care of different operating systems transparently. Finally, keep in mind that Elixir will automatically convert slashes (<code class="inline">/</code>) into backslashes (<code class="inline">\</code>) on Windows when performing file operations.</p><p>With this, we have covered the main modules that Elixir provides for dealing with IO and interacting with the file system. In the next section, we will peek a bit under the covers and learn how the IO system is implemented in the VM.</p><h2 id="processes" class="section-heading">
+  <a href="#processes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Processes</span>
+</h2>
+<p>You may have noticed that <a href="File.html#open/2"><code class="inline">File.open/2</code></a> returns a tuple like <code class="inline">{:ok, pid}</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="1231448287-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="p" data-group-id="1231448287-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="1231448287-2">(</span><span class="s">&quot;hello&quot;</span><span class="p" data-group-id="1231448287-2">)</span><span class="w">
+</span><span class="p" data-group-id="1231448287-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1231448287-4">#</span><span class="nc" data-group-id="1231448287-4">PID</span><span class="p" data-group-id="1231448287-4">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">47</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="1231448287-4">&gt;</span><span class="p" data-group-id="1231448287-3">}</span></code></pre><p>This happens because the <a href="IO.html"><code class="inline">IO</code></a> module actually works with processes (see <a href="processes.html">the previous chapter</a>). Given a file is a process, when you write to a file that has been closed, you are actually sending a message to a process which has been terminated:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">close</span><span class="p" data-group-id="4521998723-1">(</span><span class="n">file</span><span class="p" data-group-id="4521998723-1">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">write</span><span class="p" data-group-id="4521998723-2">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;is anybody out there&quot;</span><span class="p" data-group-id="4521998723-2">)</span><span class="w">
+</span><span class="gt">** (ErlangError) Erlang error: :terminated:</span><span class="w">
+
+  </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="n">st</span><span class="w"> </span><span class="ss">argument</span><span class="p">:</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">terminated</span><span class="w">
+
+    </span><span class="p" data-group-id="4521998723-3">(</span><span class="n">stdlib</span><span class="w"> </span><span class="mf">5.0</span><span class="p" data-group-id="4521998723-3">)</span><span class="w"> </span><span class="n">io</span><span class="o">.</span><span class="n">erl</span><span class="p">:</span><span class="mi">94</span><span class="p">:</span><span class="w"> </span><span class="nc">:io</span><span class="o">.</span><span class="n">put_chars</span><span class="p" data-group-id="4521998723-4">(</span><span class="p" data-group-id="4521998723-5">#</span><span class="nc" data-group-id="4521998723-5">PID</span><span class="p" data-group-id="4521998723-5">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">114</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="4521998723-5">&gt;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;is anybody out there&quot;</span><span class="p" data-group-id="4521998723-4">)</span><span class="w">
+    </span><span class="n">iex</span><span class="p">:</span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4521998723-6">(</span><span class="n">file</span><span class="p" data-group-id="4521998723-6">)</span></code></pre><p>Let's see in more detail what happens when you request <code class="inline">IO.write(pid, binary)</code>. The <a href="IO.html"><code class="inline">IO</code></a> module sends a message to the process identified by <code class="inline">pid</code> with the desired operation. A small ad-hoc process can help us see it:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spawn</span><span class="p" data-group-id="8611107274-1">(</span><span class="k" data-group-id="8611107274-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="k">receive</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8611107274-3">(</span><span class="n">msg</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="8611107274-4">(</span><span class="n">msg</span><span class="p" data-group-id="8611107274-4">)</span><span class="p" data-group-id="8611107274-3">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="8611107274-2">end</span><span class="p" data-group-id="8611107274-1">)</span><span class="w">
+</span><span class="p" data-group-id="8611107274-5">#</span><span class="nc" data-group-id="8611107274-5">PID</span><span class="p" data-group-id="8611107274-5">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">57</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="8611107274-5">&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">write</span><span class="p" data-group-id="8611107274-6">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p" data-group-id="8611107274-6">)</span><span class="w">
+</span><span class="p" data-group-id="8611107274-7">{</span><span class="ss">:io_request</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8611107274-8">#</span><span class="nc" data-group-id="8611107274-8">PID</span><span class="p" data-group-id="8611107274-8">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">41</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="8611107274-8">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8611107274-9">#</span><span class="nc" data-group-id="8611107274-9">Reference</span><span class="p" data-group-id="8611107274-9">&lt;</span><span class="mf">0.0</span><span class="o">.</span><span class="mf">8.91</span><span class="p" data-group-id="8611107274-9">&gt;</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="8611107274-10">{</span><span class="ss">:put_chars</span><span class="p">,</span><span class="w"> </span><span class="ss">:unicode</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p" data-group-id="8611107274-10">}</span><span class="p" data-group-id="8611107274-7">}</span><span class="w">
+</span><span class="gt">** (ErlangError) erlang error: :terminated</span></code></pre><p>After <a href="IO.html#write/2"><code class="inline">IO.write/2</code></a>, we can see the request sent by the <a href="IO.html"><code class="inline">IO</code></a> module printed out (a four-elements tuple). Soon after that, we see that it fails since the <a href="IO.html"><code class="inline">IO</code></a> module expected some kind of result, which we did not supply.</p><p>By modeling IO devices with processes, the Erlang VM allows us to even read and write to files across nodes. Neat!</p><h2 id="iodata-and-chardata" class="section-heading">
+  <a href="#iodata-and-chardata" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">iodata</code> and <code class="inline">chardata</code></span>
+</h2>
+<p>In all of the examples above, we used binaries when writing to files. However, most of the IO functions in Elixir also accept either &quot;iodata&quot; or &quot;chardata&quot;.</p><p>One of the main reasons for using &quot;iodata&quot; and &quot;chardata&quot; is for performance. For example,
+imagine you need to greet someone in your application:</p><pre class="elixir" data-code-id="31373936"><p class="output output-initial" data-code-type="output"># name = &quot;Mary&quot;</p><p class="output output-initial" data-code-type="output"># IO.puts(&quot;Hello &quot; &lt;&gt; name &lt;&gt; &quot;!&quot;)</p></pre><p>Given strings in Elixir are immutable, as most data structures, the example above will copy the string &quot;Mary&quot; into the new &quot;Hello Mary!&quot; string. While this is unlikely to matter for the short string as above, copying can be quite expensive for large strings! For this reason, the IO functions in Elixir allow you to pass instead a list of strings:</p><pre class="elixir" data-code-id="31383630"><p class="output output-initial" data-code-type="output"># name = &quot;Mary&quot;</p><p class="output output-initial" data-code-type="output"># IO.puts([&quot;Hello &quot;, name, &quot;!&quot;])</p></pre><p>In the example above, there is no copying. Instead we create a list that contains the original name. We call such lists either &quot;iodata&quot; or &quot;chardata&quot; and we will learn the precise difference between them soon.</p><p>Those lists are very useful because it can actually simplify the processing strings in several scenarios. For example, imagine you have a list of values, such as <code class="inline">[&quot;apple&quot;, &quot;banana&quot;, &quot;lemon&quot;]</code> that you want to write to disk separated by commas. How can you achieve this?</p><p>One option is to use <a href="Enum.html#join/2"><code class="inline">Enum.join/2</code></a> and convert the values to a string:</p><pre class="elixir" data-code-id="31393234"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.join([&quot;apple&quot;, &quot;banana&quot;, &quot;lemon&quot;], &quot;,&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;apple,banana,lemon&quot;</p></pre><p>The above returns a new string by copying each value into the new string. However, with the knowledge in this section, we know that we can pass a list of strings to the IO/File functions. So instead we can do:</p><pre class="elixir" data-code-id="31393838"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.intersperse([&quot;apple&quot;, &quot;banana&quot;, &quot;lemon&quot;], &quot;,&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;apple&quot;, &quot;,&quot;, &quot;banana&quot;, &quot;,&quot;, &quot;lemon&quot;]</p></pre><p>&quot;iodata&quot; and &quot;chardata&quot; do not only contain strings, but they may contain arbitrary nested lists of strings too:</p><pre class="elixir" data-code-id="32303532"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">IO.puts([&quot;apple&quot;, [&quot;,&quot;, &quot;banana&quot;, [&quot;,&quot;, &quot;lemon&quot;]]])</span><span class="info"></span></div></pre><p>&quot;iodata&quot; and &quot;chardata&quot; may also contain integers. For example, we could print our comma separated list of values by using <code class="inline">?,</code> as separator, which is the integer representing a comma (<code class="inline">44</code>):</p><pre class="elixir" data-code-id="32313136"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">IO.puts([&quot;apple&quot;, ?,, &quot;banana&quot;, ?,, &quot;lemon&quot;])</span><span class="info"></span></div></pre><p>The difference between &quot;iodata&quot; and &quot;chardata&quot; is precisely what said integer represents. For iodata, the integers represent bytes. For chardata, the integers represent Unicode codepoints. For ASCII characters, the byte representation is the same as the codepoint representation, so it fits both classifications. However, the default IO device works with chardata, which means we can do:</p><pre class="elixir" data-code-id="32313830"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">IO.puts([?O, ?l, ?á, ?\s, &quot;Mary&quot;, ?!])</span><span class="info"></span></div></pre><p>Overall, integers in a list may represent either a bunch of bytes or a bunch of characters and which one to use depends on the encoding of the IO device. If the file is opened without encoding, the file is expected to be in raw mode, and the functions in the <a href="IO.html"><code class="inline">IO</code></a> module starting with <code class="inline">bin*</code> must be used. Those functions expect an <code class="inline">iodata</code> as an argument, where integers in the list would represent bytes.</p><p>On the other hand, the default IO device (<code class="inline">:stdio</code>) and files opened with <code class="inline">:utf8</code> encoding work with the remaining functions in the <a href="IO.html"><code class="inline">IO</code></a> module. Those functions expect a <code class="inline">chardata</code> as an argument, where integers represent codepoints.</p><p>Although this is a subtle difference, you only need to worry about these details if you intend to pass lists containing integers to those functions. If you pass binaries, or list of binaries, then there is no ambiguity.</p><p>Finally, there is one last construct called charlist, which <a href="binaries-strings-and-charlists.html">we discussed in earlier chapters</a>. Charlists are a special case of chardata where all values are integers representing Unicode codepoints. They can be created with the <code class="inline">~c</code> sigil:</p><pre class="elixir" data-code-id="32323434"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~c&quot;hello&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;hello&quot;</p></pre><p>Charlists mostly show up when interfacing with Erlang, as some Erlang APIs use charlist as their representation for strings. For this reason, any list containing printable ASCII codepoints will be printed as a charlist:</p><pre class="elixir" data-code-id="32333038"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[?a, ?b, ?c]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;abc&quot;</p></pre><p>We packed a lot into this small section, so let's break it down:</p><ul><li><p>iodata and chardata are lists of binaries and integers. Those binaries and integers can be arbitrarily nested inside lists. Their goal is to give flexibility and performance when working with IO devices and files;</p></li><li><p>the choice between iodata and chardata depends on the encoding of the IO device. If the file is opened without encoding, the file expects iodata, and the functions in the <a href="IO.html"><code class="inline">IO</code></a> module starting with <code class="inline">bin*</code> must be used. The default IO device (<code class="inline">:stdio</code>) and files opened with <code class="inline">:utf8</code> encoding expect chardata and work with the remaining functions in the <a href="IO.html"><code class="inline">IO</code></a> module;</p></li><li><p>charlists are a special case of chardata, where it exclusively uses a list of integers Unicode codepoints. They can be created with the <code class="inline">~c</code> sigil. Lists of integers are automatically printed using the <code class="inline">~c</code> sigil if all integers in a list represent printable ASCII codepoints.</p></li></ul><p>This finishes our tour of IO devices and IO related functionality. We have learned about three Elixir modules - <a href="IO.html"><code class="inline">IO</code></a>, <a href="File.html"><code class="inline">File</code></a>, and <a href="Path.html"><code class="inline">Path</code></a> - as well as how the VM uses processes for the underlying IO mechanisms and how to use <code class="inline">chardata</code> and <code class="inline">iodata</code> for IO operations.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="processes.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Processes
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="alias-require-and-import.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+alias, require, import, and use
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

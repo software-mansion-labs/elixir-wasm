@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Duration — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Duration.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Duration</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Struct and functions for handling durations.</p><p>A <a href="Duration.html"><code class="inline">Duration</code></a> struct represents a collection of time scale units,
+allowing for manipulation and calculation of durations.</p><p>Date and time scale units are represented as integers, allowing for
+both positive and negative values.</p><p>Microseconds are represented using a tuple <code class="inline">{microsecond, precision}</code>.
+This ensures compatibility with other calendar types implementing time,
+such as <a href="Time.html"><code class="inline">Time</code></a>, <a href="DateTime.html"><code class="inline">DateTime</code></a>, and <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>.</p><h2 id="module-shifting" class="section-heading">
+  <a href="#module-shifting" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Shifting</span>
+</h2>
+<p>The most common use of durations in Elixir's standard library is to
+&quot;shift&quot; the calendar types.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="0962539104-1">(</span><span class="ld">~D[2016-01-03]</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="0962539104-1">)</span><span class="w">
+</span><span class="ld">~D[2016-03-03]</span></code></pre><p>In the example above, <a href="Date.html#shift/2"><code class="inline">Date.shift/2</code></a> automatically converts the units
+into a <a href="Duration.html"><code class="inline">Duration</code></a> struct, although one can also be given directly:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1114011336-1">(</span><span class="ld">~D[2016-01-03]</span><span class="p">,</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="1114011336-2">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1114011336-2">)</span><span class="p" data-group-id="1114011336-1">)</span><span class="w">
+</span><span class="ld">~D[2016-03-03]</span></code></pre><p>It is important to note that shifting is not an arithmetic operation.
+For example, adding <code class="inline">date + 1 month + 1 month</code> does not yield the same
+result as <code class="inline">date + 2 months</code>. Let's see an example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="ld">~D[2016-01-31]</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="6615914075-1">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6615914075-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="6615914075-2">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6615914075-2">)</span><span class="w">
+</span><span class="ld">~D[2016-03-29]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="ld">~D[2016-01-31]</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="6615914075-3">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6615914075-3">)</span><span class="w">
+</span><span class="ld">~D[2016-03-31]</span></code></pre><p>As you can see above, the results differ, which explains why operations
+with durations are called &quot;shift&quot; rather than &quot;add&quot;. This happens because,
+once we add one month to <code class="inline">2016-01-31</code>, we get <code class="inline">2016-02-29</code>. Then adding
+one extra month gives us <code class="inline">2016-03-29</code> instead of <code class="inline">2016-03-31</code>.</p><p>In particular, when applying durations to <a href="Calendar.ISO.html"><code class="inline">Calendar.ISO</code></a> types:</p><ul><li><p>larger units (such as years and months) are applied before
+smaller ones (such as weeks, hours, days, and so on)</p></li><li><p>units are collapsed into months (<code class="inline">:year</code> and <code class="inline">:month</code>),
+seconds (<code class="inline">:week</code>, <code class="inline">:day</code>, <code class="inline">:hour</code>, <code class="inline">:minute</code>, <code class="inline">:second</code>)
+and microseconds (<code class="inline">:microsecond</code>) before they are applied</p></li><li><p>1 year is equivalent to 12 months, 1 week is equivalent to 7 days.
+Therefore, 4 weeks <em>are not</em> equivalent to 1 month</p></li><li><p>in case of non-existing dates, the results are rounded down to the
+nearest valid date</p></li></ul><p>As the <code class="inline">shift/2</code> functions are calendar aware, they are guaranteed to return
+valid date/times, considering leap years as well as DST in applicable time zones.</p><h2 id="module-intervals" class="section-heading">
+  <a href="#module-intervals" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Intervals</span>
+</h2>
+<p>Durations in Elixir can be combined with stream operations to build intervals.
+For example, to retrieve the next three Wednesdays starting from 17th April, 2024:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="ld">~D[2024-04-17]</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Stream</span><span class="o">.</span><span class="n">iterate</span><span class="p" data-group-id="7381832115-1">(</span><span class="o">&amp;</span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="7381832115-2">(</span><span class="ni">&amp;1</span><span class="p">,</span><span class="w"> </span><span class="ss">week</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7381832115-2">)</span><span class="p" data-group-id="7381832115-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take</span><span class="p" data-group-id="7381832115-3">(</span><span class="mi">3</span><span class="p" data-group-id="7381832115-3">)</span><span class="w">
+</span><span class="p" data-group-id="7381832115-4">[</span><span class="ld">~D[2024-04-17]</span><span class="p">,</span><span class="w"> </span><span class="ld">~D[2024-04-24]</span><span class="p">,</span><span class="w"> </span><span class="ld">~D[2024-05-01]</span><span class="p" data-group-id="7381832115-4">]</span></code></pre><p>However, once again, it is important to remember that shifting a duration is not
+arithmetic, so you may want to use the functions in this module depending on what
+you to achieve. Compare the results of both examples below:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Adding one month after the other</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ld">~D[2016-01-31]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="6992666562-1">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6992666562-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="o">.</span><span class="n">iterate</span><span class="p" data-group-id="6992666562-2">(</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6992666562-3">fn</span><span class="w"> </span><span class="n">prev_date</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="6992666562-4">(</span><span class="n">prev_date</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p" data-group-id="6992666562-4">)</span><span class="w"> </span><span class="k" data-group-id="6992666562-3">end</span><span class="p" data-group-id="6992666562-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take</span><span class="p" data-group-id="6992666562-5">(</span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6992666562-5">)</span><span class="w">
+</span><span class="p" data-group-id="6992666562-6">[</span><span class="ld">~D[2016-01-31]</span><span class="p">,</span><span class="w"> </span><span class="ld">~D[2016-02-29]</span><span class="p">,</span><span class="w"> </span><span class="ld">~D[2016-03-29]</span><span class="p" data-group-id="6992666562-6">]</span><span class="w">
+
+</span><span class="c1"># Multiplying durations by an index</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ld">~D[2016-01-31]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="6992666562-7">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6992666562-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Stream</span><span class="o">.</span><span class="n">from_index</span><span class="p" data-group-id="6992666562-8">(</span><span class="k" data-group-id="6992666562-9">fn</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="6992666562-10">(</span><span class="n">date</span><span class="p">,</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">multiply</span><span class="p" data-group-id="6992666562-11">(</span><span class="n">duration</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p" data-group-id="6992666562-11">)</span><span class="p" data-group-id="6992666562-10">)</span><span class="w"> </span><span class="k" data-group-id="6992666562-9">end</span><span class="p" data-group-id="6992666562-8">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take</span><span class="p" data-group-id="6992666562-12">(</span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6992666562-12">)</span><span class="w">
+</span><span class="p" data-group-id="6992666562-13">[</span><span class="ld">~D[2016-01-31]</span><span class="p">,</span><span class="w"> </span><span class="ld">~D[2016-02-29]</span><span class="p">,</span><span class="w"> </span><span class="ld">~D[2016-03-31]</span><span class="p" data-group-id="6992666562-13">]</span></code></pre><p>The second example consistently points to the last day of the month,
+as it performs operations on the duration, rather than shifting date
+after date.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:duration/0" data-no-tooltip="" translate="no">duration()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The duration type specifies a <code class="inline">%Duration{}</code> struct or a keyword list of valid duration unit pairs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The duration struct type.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:unit_pair/0" data-no-tooltip="" translate="no">unit_pair()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The unit pair type specifies a pair of a valid duration unit key and value.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add/2" data-no-tooltip="" translate="no">add(d1, d2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds units of given durations <code class="inline">d1</code> and <code class="inline">d2</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_iso8601/1" data-no-tooltip="" translate="no">from_iso8601(string)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601</a> formatted duration string to a <a href="Duration.html"><code class="inline">Duration</code></a> struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_iso8601!/1" data-no-tooltip="" translate="no">from_iso8601!(string)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#from_iso8601/1"><code class="inline">from_iso8601/1</code></a> but raises an <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#multiply/2" data-no-tooltip="" translate="no">multiply(duration, integer)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Multiplies <code class="inline">duration</code> units by given <code class="inline">integer</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#negate/1" data-no-tooltip="" translate="no">negate(duration)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Negates <code class="inline">duration</code> units.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new!/1" data-no-tooltip="" translate="no">new!(duration)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a new <a href="Duration.html"><code class="inline">Duration</code></a> struct from given <code class="inline">unit_pairs</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#subtract/2" data-no-tooltip="" translate="no">subtract(d1, d2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Subtracts units of given durations <code class="inline">d1</code> and <code class="inline">d2</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_iso8601/1" data-no-tooltip="" translate="no">to_iso8601(duration)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given <code class="inline">duration</code> to an <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601-2:2019</a> formatted string.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:duration/0">
+
+  <div class="detail-header">
+    <a href="#t:duration/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">duration()</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> duration() :: <a href="#t:t/0">t</a>() | [<a href="#t:unit_pair/0">unit_pair</a>()]</pre>
+
+      </div>
+
+<p>The duration type specifies a <code class="inline">%Duration{}</code> struct or a keyword list of valid duration unit pairs.</p>
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L108" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Duration{
+  day: <a href="typespecs.html#basic-types">integer</a>(),
+  hour: <a href="typespecs.html#basic-types">integer</a>(),
+  microsecond: {<a href="typespecs.html#basic-types">integer</a>(), 0..6},
+  minute: <a href="typespecs.html#basic-types">integer</a>(),
+  month: <a href="typespecs.html#basic-types">integer</a>(),
+  second: <a href="typespecs.html#basic-types">integer</a>(),
+  week: <a href="typespecs.html#basic-types">integer</a>(),
+  year: <a href="typespecs.html#basic-types">integer</a>()
+}</pre>
+
+      </div>
+
+<p>The duration struct type.</p>
+  </section>
+</section>
+<section class="detail" id="t:unit_pair/0">
+
+  <div class="detail-header">
+    <a href="#t:unit_pair/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">unit_pair()</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L122" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> unit_pair() ::
+  {:year, <a href="typespecs.html#basic-types">integer</a>()}
+  | {:month, <a href="typespecs.html#basic-types">integer</a>()}
+  | {:week, <a href="typespecs.html#basic-types">integer</a>()}
+  | {:day, <a href="typespecs.html#basic-types">integer</a>()}
+  | {:hour, <a href="typespecs.html#basic-types">integer</a>()}
+  | {:minute, <a href="typespecs.html#basic-types">integer</a>()}
+  | {:second, <a href="typespecs.html#basic-types">integer</a>()}
+  | {:microsecond, {<a href="typespecs.html#basic-types">integer</a>(), 0..6}}</pre>
+
+      </div>
+
+<p>The unit pair type specifies a pair of a valid duration unit key and value.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="add/2">
+
+  <div class="detail-header">
+    <a href="#add/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add(d1, d2)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L203" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> add(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds units of given durations <code class="inline">d1</code> and <code class="inline">d2</code>.</p><p>Respects the the highest microsecond precision of the two.</p><h2 id="add/2-examples" class="section-heading">
+  <a href="#add/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="9563240137-1">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="9563240137-2">(</span><span class="ss">week</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9563240137-2">)</span><span class="p">,</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="9563240137-3">(</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9563240137-3">)</span><span class="p" data-group-id="9563240137-1">)</span><span class="w">
+</span><span class="p" data-group-id="9563240137-4">%</span><span class="nc" data-group-id="9563240137-4">Duration</span><span class="p" data-group-id="9563240137-4">{</span><span class="ss">week</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9563240137-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="9563240137-5">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="9563240137-6">(</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9563240137-7">{</span><span class="mi">400</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9563240137-7">}</span><span class="p" data-group-id="9563240137-6">)</span><span class="p">,</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="9563240137-8">(</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9563240137-9">{</span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9563240137-9">}</span><span class="p" data-group-id="9563240137-8">)</span><span class="p" data-group-id="9563240137-5">)</span><span class="w">
+</span><span class="p" data-group-id="9563240137-10">%</span><span class="nc" data-group-id="9563240137-10">Duration</span><span class="p" data-group-id="9563240137-10">{</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9563240137-11">{</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9563240137-11">}</span><span class="p" data-group-id="9563240137-10">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_iso8601/1">
+
+  <div class="detail-header">
+    <a href="#from_iso8601/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_iso8601(string)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L326" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_iso8601(<a href="String.html#t:t/0">String.t</a>()) :: {:ok, <a href="#t:t/0">t</a>()} | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Parses an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601</a> formatted duration string to a <a href="Duration.html"><code class="inline">Duration</code></a> struct.</p><p>Duration strings, as well as individual units, may be prefixed with plus/minus signs so that:</p><ul><li><code class="inline">-PT6H3M</code> parses as <code class="inline">%Duration{hour: -6, minute: -3}</code></li><li><code class="inline">-PT6H-3M</code> parses as <code class="inline">%Duration{hour: -6, minute: 3}</code></li><li><code class="inline">+PT6H3M</code> parses as <code class="inline">%Duration{hour: 6, minute: 3}</code></li><li><code class="inline">+PT6H-3M</code> parses as <code class="inline">%Duration{hour: 6, minute: -3}</code></li></ul><p>Duration designators must be provided in order of magnitude: <code class="inline">P[n]Y[n]M[n]W[n]DT[n]H[n]M[n]S</code>.</p><p>Only seconds may be specified with a decimal fraction, using either a comma or a full stop: <code class="inline">P1DT4,5S</code>.</p><h2 id="from_iso8601/1-examples" class="section-heading">
+  <a href="#from_iso8601/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="9940432143-1">(</span><span class="s">&quot;P1Y2M3DT4H5M6S&quot;</span><span class="p" data-group-id="9940432143-1">)</span><span class="w">
+</span><span class="p" data-group-id="9940432143-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9940432143-3">%</span><span class="nc" data-group-id="9940432143-3">Duration</span><span class="p" data-group-id="9940432143-3">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9940432143-3">}</span><span class="p" data-group-id="9940432143-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="9940432143-4">(</span><span class="s">&quot;P3Y-2MT3H&quot;</span><span class="p" data-group-id="9940432143-4">)</span><span class="w">
+</span><span class="p" data-group-id="9940432143-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9940432143-6">%</span><span class="nc" data-group-id="9940432143-6">Duration</span><span class="p" data-group-id="9940432143-6">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9940432143-6">}</span><span class="p" data-group-id="9940432143-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="9940432143-7">(</span><span class="s">&quot;-PT10H-30M&quot;</span><span class="p" data-group-id="9940432143-7">)</span><span class="w">
+</span><span class="p" data-group-id="9940432143-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9940432143-9">%</span><span class="nc" data-group-id="9940432143-9">Duration</span><span class="p" data-group-id="9940432143-9">{</span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="9940432143-9">}</span><span class="p" data-group-id="9940432143-8">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="9940432143-10">(</span><span class="s">&quot;PT4.650S&quot;</span><span class="p" data-group-id="9940432143-10">)</span><span class="w">
+</span><span class="p" data-group-id="9940432143-11">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9940432143-12">%</span><span class="nc" data-group-id="9940432143-12">Duration</span><span class="p" data-group-id="9940432143-12">{</span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9940432143-13">{</span><span class="mi">650000</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9940432143-13">}</span><span class="p" data-group-id="9940432143-12">}</span><span class="p" data-group-id="9940432143-11">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_iso8601!/1">
+
+  <div class="detail-header">
+    <a href="#from_iso8601!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_iso8601!(string)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L348" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_iso8601!(<a href="String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Same as <a href="#from_iso8601/1"><code class="inline">from_iso8601/1</code></a> but raises an <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a>.</p><h2 id="from_iso8601!/1-examples" class="section-heading">
+  <a href="#from_iso8601!/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">from_iso8601!</span><span class="p" data-group-id="9968876895-1">(</span><span class="s">&quot;P1Y2M3DT4H5M6S&quot;</span><span class="p" data-group-id="9968876895-1">)</span><span class="w">
+</span><span class="p" data-group-id="9968876895-2">%</span><span class="nc" data-group-id="9968876895-2">Duration</span><span class="p" data-group-id="9968876895-2">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9968876895-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">from_iso8601!</span><span class="p" data-group-id="9968876895-3">(</span><span class="s">&quot;P10D&quot;</span><span class="p" data-group-id="9968876895-3">)</span><span class="w">
+</span><span class="p" data-group-id="9968876895-4">%</span><span class="nc" data-group-id="9968876895-4">Duration</span><span class="p" data-group-id="9968876895-4">{</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="9968876895-4">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="multiply/2">
+
+  <div class="detail-header">
+    <a href="#multiply/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">multiply(duration, integer)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L261" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> multiply(<a href="#t:t/0">t</a>(), <a href="typespecs.html#basic-types">integer</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Multiplies <code class="inline">duration</code> units by given <code class="inline">integer</code>.</p><h2 id="multiply/2-examples" class="section-heading">
+  <a href="#multiply/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">multiply</span><span class="p" data-group-id="7933163642-1">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="7933163642-2">(</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p" data-group-id="7933163642-2">)</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7933163642-1">)</span><span class="w">
+</span><span class="p" data-group-id="7933163642-3">%</span><span class="nc" data-group-id="7933163642-3">Duration</span><span class="p" data-group-id="7933163642-3">{</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">30</span><span class="p" data-group-id="7933163642-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">multiply</span><span class="p" data-group-id="7933163642-4">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="7933163642-5">(</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7933163642-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="7933163642-6">}</span><span class="p" data-group-id="7933163642-5">)</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7933163642-4">)</span><span class="w">
+</span><span class="p" data-group-id="7933163642-7">%</span><span class="nc" data-group-id="7933163642-7">Duration</span><span class="p" data-group-id="7933163642-7">{</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7933163642-8">{</span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="7933163642-8">}</span><span class="p" data-group-id="7933163642-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="negate/1">
+
+  <div class="detail-header">
+    <a href="#negate/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">negate(duration)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L286" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> negate(<a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Negates <code class="inline">duration</code> units.</p><h2 id="negate/1-examples" class="section-heading">
+  <a href="#negate/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">negate</span><span class="p" data-group-id="7896077245-1">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="7896077245-2">(</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p" data-group-id="7896077245-2">)</span><span class="p" data-group-id="7896077245-1">)</span><span class="w">
+</span><span class="p" data-group-id="7896077245-3">%</span><span class="nc" data-group-id="7896077245-3">Duration</span><span class="p" data-group-id="7896077245-3">{</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="7896077245-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">negate</span><span class="p" data-group-id="7896077245-4">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="7896077245-5">(</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7896077245-6">{</span><span class="mi">500000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="7896077245-6">}</span><span class="p" data-group-id="7896077245-5">)</span><span class="p" data-group-id="7896077245-4">)</span><span class="w">
+</span><span class="p" data-group-id="7896077245-7">%</span><span class="nc" data-group-id="7896077245-7">Duration</span><span class="p" data-group-id="7896077245-7">{</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7896077245-8">{</span><span class="o">-</span><span class="mi">500000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="7896077245-8">}</span><span class="p" data-group-id="7896077245-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new!/1">
+
+  <div class="detail-header">
+    <a href="#new!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new!(duration)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L155" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new!(<a href="#t:duration/0">duration</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Creates a new <a href="Duration.html"><code class="inline">Duration</code></a> struct from given <code class="inline">unit_pairs</code>.</p><p>Raises an <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> when called with invalid unit pairs.</p><h2 id="new!/1-examples" class="section-heading">
+  <a href="#new!/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="7269222466-1">(</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">week</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7269222466-1">)</span><span class="w">
+</span><span class="p" data-group-id="7269222466-2">%</span><span class="nc" data-group-id="7269222466-2">Duration</span><span class="p" data-group-id="7269222466-2">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">week</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7269222466-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="7269222466-3">(</span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7269222466-4">{</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7269222466-4">}</span><span class="p" data-group-id="7269222466-3">)</span><span class="w">
+</span><span class="p" data-group-id="7269222466-5">%</span><span class="nc" data-group-id="7269222466-5">Duration</span><span class="p" data-group-id="7269222466-5">{</span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7269222466-6">{</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7269222466-6">}</span><span class="p" data-group-id="7269222466-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="7269222466-7">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7269222466-7">)</span><span class="w">
+</span><span class="p" data-group-id="7269222466-8">%</span><span class="nc" data-group-id="7269222466-8">Duration</span><span class="p" data-group-id="7269222466-8">{</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7269222466-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="subtract/2">
+
+  <div class="detail-header">
+    <a href="#subtract/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">subtract(d1, d2)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L233" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> subtract(<a href="#t:t/0">t</a>(), <a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Subtracts units of given durations <code class="inline">d1</code> and <code class="inline">d2</code>.</p><p>Respects the the highest microsecond precision of the two.</p><h2 id="subtract/2-examples" class="section-heading">
+  <a href="#subtract/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">subtract</span><span class="p" data-group-id="4411449261-1">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="4411449261-2">(</span><span class="ss">week</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4411449261-2">)</span><span class="p">,</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="4411449261-3">(</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="4411449261-3">)</span><span class="p" data-group-id="4411449261-1">)</span><span class="w">
+</span><span class="p" data-group-id="4411449261-4">%</span><span class="nc" data-group-id="4411449261-4">Duration</span><span class="p" data-group-id="4411449261-4">{</span><span class="ss">week</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="4411449261-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">subtract</span><span class="p" data-group-id="4411449261-5">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="4411449261-6">(</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4411449261-7">{</span><span class="mi">400</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="4411449261-7">}</span><span class="p" data-group-id="4411449261-6">)</span><span class="p">,</span><span class="w"> </span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="4411449261-8">(</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4411449261-9">{</span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="4411449261-9">}</span><span class="p" data-group-id="4411449261-8">)</span><span class="p" data-group-id="4411449261-5">)</span><span class="w">
+</span><span class="p" data-group-id="4411449261-10">%</span><span class="nc" data-group-id="4411449261-10">Duration</span><span class="p" data-group-id="4411449261-10">{</span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4411449261-11">{</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="4411449261-11">}</span><span class="p" data-group-id="4411449261-10">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_iso8601/1">
+
+  <div class="detail-header">
+    <a href="#to_iso8601/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_iso8601(duration)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/duration.ex#L383" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_iso8601(<a href="#t:t/0">t</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the given <code class="inline">duration</code> to an <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601-2:2019</a> formatted string.</p><p>Note this function implements the <em>extension</em> of ISO 8601:2019. This extensions allows weeks to
+appear between months and days: <code class="inline">P3M3W3D</code>, making it fully compatible with any <a href="Duration.html"><code class="inline">Duration</code></a> struct.</p><h2 id="to_iso8601/1-examples" class="section-heading">
+  <a href="#to_iso8601/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="5220804127-1">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="5220804127-2">(</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="5220804127-2">)</span><span class="p" data-group-id="5220804127-1">)</span><span class="w">
+</span><span class="s">&quot;P3Y&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="5220804127-3">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="5220804127-4">(</span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="5220804127-4">)</span><span class="p" data-group-id="5220804127-3">)</span><span class="w">
+</span><span class="s">&quot;P40DT12H42M12S&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="5220804127-5">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="5220804127-6">(</span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="5220804127-6">)</span><span class="p" data-group-id="5220804127-5">)</span><span class="w">
+</span><span class="s">&quot;PT30S&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="5220804127-7">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="5220804127-8">(</span><span class="p" data-group-id="5220804127-9">[</span><span class="p" data-group-id="5220804127-9">]</span><span class="p" data-group-id="5220804127-8">)</span><span class="p" data-group-id="5220804127-7">)</span><span class="w">
+</span><span class="s">&quot;PT0S&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="5220804127-10">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="5220804127-11">(</span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5220804127-12">{</span><span class="mi">2_200</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="5220804127-12">}</span><span class="p" data-group-id="5220804127-11">)</span><span class="p" data-group-id="5220804127-10">)</span><span class="w">
+</span><span class="s">&quot;PT1.002S&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Duration</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="5220804127-13">(</span><span class="nc">Duration</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="5220804127-14">(</span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5220804127-15">{</span><span class="o">-</span><span class="mi">1_200_000</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="5220804127-15">}</span><span class="p" data-group-id="5220804127-14">)</span><span class="p" data-group-id="5220804127-13">)</span><span class="w">
+</span><span class="s">&quot;PT-0.2000S&quot;</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

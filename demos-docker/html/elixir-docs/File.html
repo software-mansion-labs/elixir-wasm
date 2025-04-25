@@ -1,0 +1,3511 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>File — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/File.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">File</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>This module contains functions to manipulate files.</p><p>Some of those functions are low-level, allowing the user
+to interact with files or IO devices, like <a href="#open/2"><code class="inline">open/2</code></a>,
+<a href="#copy/3"><code class="inline">copy/3</code></a> and others. This module also provides higher
+level functions that work with filenames and have their naming
+based on Unix variants. For example, one can copy a file
+via <a href="#cp/3"><code class="inline">cp/3</code></a> and remove files and directories recursively
+via <a href="#rm_rf/1"><code class="inline">rm_rf/1</code></a>.</p><p>Paths given to functions in this module can be either relative to the
+current working directory (as returned by <a href="#cwd/0"><code class="inline">File.cwd/0</code></a>), or absolute
+paths. Shell conventions like <code class="inline">~</code> are not expanded automatically.
+To use paths like <code class="inline">~/Downloads</code>, you can use <a href="Path.html#expand/1"><code class="inline">Path.expand/1</code></a> or
+<a href="Path.html#expand/2"><code class="inline">Path.expand/2</code></a> to expand your path to an absolute path.</p><h2 id="module-encoding" class="section-heading">
+  <a href="#module-encoding" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Encoding</span>
+</h2>
+<p>In order to write and read files, one must use the functions
+in the <a href="IO.html"><code class="inline">IO</code></a> module. By default, a file is opened in binary mode,
+which requires the functions <a href="IO.html#binread/2"><code class="inline">IO.binread/2</code></a> and <a href="IO.html#binwrite/2"><code class="inline">IO.binwrite/2</code></a>
+to interact with the file. A developer may pass <code class="inline">:utf8</code> as an
+option when opening the file, then the slower <a href="IO.html#read/2"><code class="inline">IO.read/2</code></a> and
+<a href="IO.html#write/2"><code class="inline">IO.write/2</code></a> functions must be used as they are responsible for
+doing the proper conversions and providing the proper data guarantees.</p><p>Note that filenames when given as charlists in Elixir are
+always treated as UTF-8. In particular, we expect that the
+shell and the operating system are configured to use UTF-8
+encoding. Binary filenames are considered raw and passed
+to the operating system as is.</p><h2 id="module-api" class="section-heading">
+  <a href="#module-api" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">API</span>
+</h2>
+<p>Most of the functions in this module return <code class="inline">:ok</code> or
+<code class="inline">{:ok, result}</code> in case of success, <code class="inline">{:error, reason}</code>
+otherwise. Those functions also have a variant
+that ends with <code class="inline">!</code> which returns the result (instead of the
+<code class="inline">{:ok, result}</code> tuple) in case of success or raises an
+exception in case it fails. For example:</p><pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="3339256095-1">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p" data-group-id="3339256095-1">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, &quot;World&quot;}</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="3339256095-2">(</span><span class="s">&quot;invalid.txt&quot;</span><span class="p" data-group-id="3339256095-2">)</span><span class="w">
+</span><span class="c1">#=&gt; {:error, :enoent}</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="3339256095-3">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p" data-group-id="3339256095-3">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;World&quot;</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="3339256095-4">(</span><span class="s">&quot;invalid.txt&quot;</span><span class="p" data-group-id="3339256095-4">)</span><span class="w">
+</span><span class="c1">#=&gt; raises File.Error</span></code></pre><p>In general, a developer should use the former in case they want
+to react if the file does not exist. The latter should be used
+when the developer expects their software to fail in case the
+file cannot be read (i.e. it is literally an exception).</p><h2 id="module-processes-and-raw-files" class="section-heading">
+  <a href="#module-processes-and-raw-files" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Processes and raw files</span>
+</h2>
+<p>Every time a file is opened, Elixir spawns a new process. Writing
+to a file is equivalent to sending messages to the process that
+writes to the file descriptor.</p><p>This means files can be passed between nodes and message passing
+guarantees they can write to the same file in a network.</p><p>However, you may not always want to pay the price for this abstraction.
+In such cases, a file can be opened in <code class="inline">:raw</code> mode. The options <code class="inline">:read_ahead</code>
+and <code class="inline">:delayed_write</code> are also useful when operating on large files or
+working with files in tight loops.</p><p>Check <a href="https://www.erlang.org/doc/apps/kernel/file.html#open/2"><code class="inline">:file.open/2</code></a> for more information about such options and
+other performance considerations.</p><h2 id="module-seeking-within-a-file" class="section-heading">
+  <a href="#module-seeking-within-a-file" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Seeking within a file</span>
+</h2>
+<p>You may also use any of the functions from the <a href="https://www.erlang.org/doc/apps/kernel/file.html"><code class="inline">:file</code></a>
+module to interact with files returned by Elixir. For example,
+to read from a specific position in a file, use <a href="https://www.erlang.org/doc/apps/kernel/file.html#pread/3"><code class="inline">:file.pread/3</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">write!</span><span class="p" data-group-id="0274832961-1">(</span><span class="s">&quot;example.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Eats, Shoots &amp; Leaves&quot;</span><span class="p" data-group-id="0274832961-1">)</span><span class="w">
+</span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">open!</span><span class="p" data-group-id="0274832961-2">(</span><span class="s">&quot;example.txt&quot;</span><span class="p" data-group-id="0274832961-2">)</span><span class="w">
+</span><span class="nc">:file</span><span class="o">.</span><span class="n">pread</span><span class="p" data-group-id="0274832961-3">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="0274832961-3">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, &quot;Leaves&quot;}</span></code></pre><p>Alternatively, if you need to keep track of the current position,
+use <a href="https://www.erlang.org/doc/apps/kernel/file.html#position/2"><code class="inline">:file.position/2</code></a> and <a href="https://www.erlang.org/doc/apps/kernel/file.html#read/2"><code class="inline">:file.read/2</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="nc">:file</span><span class="o">.</span><span class="n">position</span><span class="p" data-group-id="8757802679-1">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8757802679-1">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, 6}</span><span class="w">
+</span><span class="nc">:file</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="8757802679-2">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8757802679-2">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, &quot;Shoots&quot;}</span><span class="w">
+</span><span class="nc">:file</span><span class="o">.</span><span class="n">position</span><span class="p" data-group-id="8757802679-3">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8757802679-4">{</span><span class="ss">:cur</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">12</span><span class="p" data-group-id="8757802679-4">}</span><span class="p" data-group-id="8757802679-3">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, 0}</span><span class="w">
+</span><span class="nc">:file</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="8757802679-5">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="8757802679-5">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, &quot;Eats&quot;}</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:encoding_mode/0" data-no-tooltip="" translate="no">encoding_mode()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:erlang_time/0" data-no-tooltip="" translate="no">erlang_time()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:file_descriptor/0" data-no-tooltip="" translate="no">file_descriptor()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:io_device/0" data-no-tooltip="" translate="no">io_device()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:mode/0" data-no-tooltip="" translate="no">mode()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:on_conflict_callback/0" data-no-tooltip="" translate="no">on_conflict_callback()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:posix/0" data-no-tooltip="" translate="no">posix()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:posix_time/0" data-no-tooltip="" translate="no">posix_time()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:read_offset_mode/0" data-no-tooltip="" translate="no">read_offset_mode()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:stat_options/0" data-no-tooltip="" translate="no">stat_options()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:stream_mode/0" data-no-tooltip="" translate="no">stream_mode()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cd/1" data-no-tooltip="" translate="no">cd(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the current working directory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cd!/1" data-no-tooltip="" translate="no">cd!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#cd/1"><code class="inline">cd/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cd!/2" data-no-tooltip="" translate="no">cd!(path, function)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Changes the current directory to the given <code class="inline">path</code>,
+executes the given function and then reverts back
+to the previous path regardless of whether there is an exception.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#chgrp/2" data-no-tooltip="" translate="no">chgrp(path, gid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Changes the group given by the group ID <code class="inline">gid</code>
+for a given <code class="inline">file</code>. Returns <code class="inline">:ok</code> on success, or
+<code class="inline">{:error, reason}</code> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#chgrp!/2" data-no-tooltip="" translate="no">chgrp!(path, gid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#chgrp/2"><code class="inline">chgrp/2</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#chmod/2" data-no-tooltip="" translate="no">chmod(path, mode)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Changes the <code class="inline">mode</code> for a given <code class="inline">file</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#chmod!/2" data-no-tooltip="" translate="no">chmod!(path, mode)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#chmod/2"><code class="inline">chmod/2</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#chown/2" data-no-tooltip="" translate="no">chown(path, uid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Changes the owner given by the user ID <code class="inline">uid</code>
+for a given <code class="inline">file</code>. Returns <code class="inline">:ok</code> on success,
+or <code class="inline">{:error, reason}</code> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#chown!/2" data-no-tooltip="" translate="no">chown!(path, uid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#chown/2"><code class="inline">chown/2</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#close/1" data-no-tooltip="" translate="no">close(io_device)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Closes the file referenced by <code class="inline">io_device</code>. It mostly returns <code class="inline">:ok</code>, except
+for some severe errors such as out of memory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#copy/3" data-no-tooltip="" translate="no">copy(source, destination, bytes_count \\ :infinity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Copies the contents of <code class="inline">source</code> to <code class="inline">destination</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#copy!/3" data-no-tooltip="" translate="no">copy!(source, destination, bytes_count \\ :infinity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#copy/3"><code class="inline">copy/3</code></a> but raises a <a href="File.CopyError.html"><code class="inline">File.CopyError</code></a> exception if it fails.
+Returns the <code class="inline">bytes_copied</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cp/3" data-no-tooltip="" translate="no">cp(source_file, destination_file, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Copies the contents of <code class="inline">source_file</code> to <code class="inline">destination_file</code> preserving its modes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cp!/3" data-no-tooltip="" translate="no">cp!(source_file, destination_file, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#cp/3"><code class="inline">cp/3</code></a>, but raises a <a href="File.CopyError.html"><code class="inline">File.CopyError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cp_r/3" data-no-tooltip="" translate="no">cp_r(source, destination, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Copies the contents in <code class="inline">source</code> to <code class="inline">destination</code> recursively, maintaining the
+source directory structure and modes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cp_r!/3" data-no-tooltip="" translate="no">cp_r!(source, destination, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#cp_r/3"><code class="inline">cp_r/3</code></a>, but raises a <a href="File.CopyError.html"><code class="inline">File.CopyError</code></a> exception if it fails.
+Returns the list of copied files otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cwd/0" data-no-tooltip="" translate="no">cwd()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the current working directory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cwd!/0" data-no-tooltip="" translate="no">cwd!()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#cwd/0"><code class="inline">cwd/0</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#dir?/2" data-no-tooltip="" translate="no">dir?(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the given path is a directory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#exists?/2" data-no-tooltip="" translate="no">exists?(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the given path exists.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ln/2" data-no-tooltip="" translate="no">ln(existing, new)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a hard link <code class="inline">new</code> to the file <code class="inline">existing</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ln!/2" data-no-tooltip="" translate="no">ln!(existing, new)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#ln/2"><code class="inline">ln/2</code></a> but raises a <a href="File.LinkError.html"><code class="inline">File.LinkError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ln_s/2" data-no-tooltip="" translate="no">ln_s(existing, new)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a symbolic link <code class="inline">new</code> to the file or directory <code class="inline">existing</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ln_s!/2" data-no-tooltip="" translate="no">ln_s!(existing, new)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#ln_s/2"><code class="inline">ln_s/2</code></a> but raises a <a href="File.LinkError.html"><code class="inline">File.LinkError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ls/1" data-no-tooltip="" translate="no">ls(path \\ &quot;.&quot;)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the list of files in the given directory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ls!/1" data-no-tooltip="" translate="no">ls!(path \\ &quot;.&quot;)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#ls/1"><code class="inline">ls/1</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of an error.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#lstat/2" data-no-tooltip="" translate="no">lstat(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns information about the <code class="inline">path</code>. If the file is a symlink, sets
+the <code class="inline">type</code> to <code class="inline">:symlink</code> and returns a <a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct for the link. For any
+other file, returns exactly the same values as <a href="#stat/2"><code class="inline">stat/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#lstat!/2" data-no-tooltip="" translate="no">lstat!(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#lstat/2"><code class="inline">lstat/2</code></a> but returns the <a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct directly,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error is returned.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mkdir/1" data-no-tooltip="" translate="no">mkdir(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Tries to create the directory <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mkdir!/1" data-no-tooltip="" translate="no">mkdir!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#mkdir/1"><code class="inline">mkdir/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mkdir_p/1" data-no-tooltip="" translate="no">mkdir_p(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Tries to create the directory <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mkdir_p!/1" data-no-tooltip="" translate="no">mkdir_p!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#mkdir_p/1"><code class="inline">mkdir_p/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open/2" data-no-tooltip="" translate="no">open(path, modes_or_function \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Opens the given <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open/3" data-no-tooltip="" translate="no">open(path, modes, function)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Similar to <a href="#open/2"><code class="inline">open/2</code></a> but expects a function as its last argument.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open!/2" data-no-tooltip="" translate="no">open!(path, modes_or_function \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Similar to <a href="#open/2"><code class="inline">open/2</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if the file
+could not be opened. Returns the IO device otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open!/3" data-no-tooltip="" translate="no">open!(path, modes, function)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Similar to <a href="#open/3"><code class="inline">open/3</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if the file
+could not be opened.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read/1" data-no-tooltip="" translate="no">read(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">{:ok, binary}</code>, where <code class="inline">binary</code> is a binary data object that contains the contents
+of <code class="inline">path</code>, or <code class="inline">{:error, reason}</code> if an error occurs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read!/1" data-no-tooltip="" translate="no">read!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a binary with the contents of the given filename,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error occurs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_link/1" data-no-tooltip="" translate="no">read_link(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads the symbolic link at <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_link!/1" data-no-tooltip="" translate="no">read_link!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#read_link/1"><code class="inline">read_link/1</code></a> but returns the target directly,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error is returned.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#regular?/2" data-no-tooltip="" translate="no">regular?(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the path is a regular file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rename/2" data-no-tooltip="" translate="no">rename(source, destination)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Renames the <code class="inline">source</code> file to <code class="inline">destination</code> file.  It can be used to move files
+(and directories) between directories.  If moving a file, you must fully
+specify the <code class="inline">destination</code> filename, it is not sufficient to simply specify
+its directory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rename!/2" data-no-tooltip="" translate="no">rename!(source, destination)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#rename/2"><code class="inline">rename/2</code></a> but raises a <a href="File.RenameError.html"><code class="inline">File.RenameError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rm/1" data-no-tooltip="" translate="no">rm(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Tries to delete the file <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rm!/1" data-no-tooltip="" translate="no">rm!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#rm/1"><code class="inline">rm/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rm_rf/1" data-no-tooltip="" translate="no">rm_rf(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Removes files and directories recursively at the given <code class="inline">path</code>.
+Symlinks are not followed but simply removed, non-existing
+files are simply ignored (i.e. doesn't make this function fail).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rm_rf!/1" data-no-tooltip="" translate="no">rm_rf!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#rm_rf/1"><code class="inline">rm_rf/1</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failures,
+otherwise the list of files or directories removed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rmdir/1" data-no-tooltip="" translate="no">rmdir(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Tries to delete the dir at <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rmdir!/1" data-no-tooltip="" translate="no">rmdir!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#rmdir/1"><code class="inline">rmdir/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stat/2" data-no-tooltip="" translate="no">stat(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns information about the <code class="inline">path</code>. If it exists, it
+returns a <code class="inline">{:ok, info}</code> tuple, where info is a
+<a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct. Returns <code class="inline">{:error, reason}</code> with
+the same reasons as <a href="#read/1"><code class="inline">read/1</code></a> if a failure occurs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stat!/2" data-no-tooltip="" translate="no">stat!(path, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#stat/2"><code class="inline">stat/2</code></a> but returns the <a href="File.Stat.html"><code class="inline">File.Stat</code></a> directly,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error is returned.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stream!/2" data-no-tooltip="" translate="no">stream!(path, line_or_bytes_modes \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Shortcut for <a href="#stream!/3"><code class="inline">File.stream!/3</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stream!/3" data-no-tooltip="" translate="no">stream!(path, line_or_bytes, modes)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a <a href="File.Stream.html"><code class="inline">File.Stream</code></a> for the given <code class="inline">path</code> with the given <code class="inline">modes</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#touch/2" data-no-tooltip="" translate="no">touch(path, time \\ System.os_time(:second))</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Updates modification time (mtime) and access time (atime) of
+the given file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#touch!/2" data-no-tooltip="" translate="no">touch!(path, time \\ System.os_time(:second))</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#touch/2"><code class="inline">touch/2</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write/3" data-no-tooltip="" translate="no">write(path, content, modes \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes <code class="inline">content</code> to the file <code class="inline">path</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write!/3" data-no-tooltip="" translate="no">write!(path, content, modes \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#write/3"><code class="inline">write/3</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_stat/3" data-no-tooltip="" translate="no">write_stat(path, stat, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes the given <a href="File.Stat.html"><code class="inline">File.Stat</code></a> back to the file system at the given
+path. Returns <code class="inline">:ok</code> or <code class="inline">{:error, reason}</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_stat!/3" data-no-tooltip="" translate="no">write_stat!(path, stat, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#write_stat/3"><code class="inline">write_stat/3</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:encoding_mode/0">
+
+  <div class="detail-header">
+    <a href="#t:encoding_mode/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encoding_mode()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L122" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> encoding_mode() ::
+  :utf8
+  | {:encoding,
+     :latin1
+     | :unicode
+     | :utf8
+     | :utf16
+     | :utf32
+     | {:utf16, :big | :little}
+     | {:utf32, :big | :little}}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:erlang_time/0">
+
+  <div class="detail-header">
+    <a href="#t:erlang_time/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">erlang_time()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L147" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> erlang_time() ::
+  {{year :: <a href="typespecs.html#basic-types">non_neg_integer</a>(), month :: 1..12, day :: 1..31},
+   {hour :: 0..23, minute :: 0..59, second :: 0..59}}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:file_descriptor/0">
+
+  <div class="detail-header">
+    <a href="#t:file_descriptor/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">file_descriptor()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L104" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> file_descriptor() :: <a href="https://www.erlang.org/doc/apps/kernel/file.html#t:fd/0">:file.fd</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:io_device/0">
+
+  <div class="detail-header">
+    <a href="#t:io_device/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">io_device()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L103" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> io_device() :: <a href="https://www.erlang.org/doc/apps/kernel/file.html#t:io_device/0">:file.io_device</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:mode/0">
+
+  <div class="detail-header">
+    <a href="#t:mode/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mode()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L106" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> mode() ::
+  :append
+  | :binary
+  | :charlist
+  | :compressed
+  | :delayed_write
+  | :exclusive
+  | :raw
+  | :read
+  | :read_ahead
+  | :sync
+  | :write
+  | {:read_ahead, <a href="typespecs.html#basic-types">pos_integer</a>()}
+  | {:delayed_write, <a href="typespecs.html#basic-types">non_neg_integer</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()}
+  | <a href="#t:encoding_mode/0">encoding_mode</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:on_conflict_callback/0">
+
+  <div class="detail-header">
+    <a href="#t:on_conflict_callback/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_conflict_callback()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> on_conflict_callback() :: (<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>() -&gt; <a href="typespecs.html#built-in-types">boolean</a>())</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:posix/0">
+
+  <div class="detail-header">
+    <a href="#t:posix/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">posix()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L102" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> posix() :: <a href="https://www.erlang.org/doc/apps/kernel/file.html#t:posix/0">:file.posix</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:posix_time/0">
+
+  <div class="detail-header">
+    <a href="#t:posix_time/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">posix_time()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L151" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> posix_time() :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:read_offset_mode/0">
+
+  <div class="detail-header">
+    <a href="#t:read_offset_mode/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_offset_mode()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L145" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> read_offset_mode() :: {:read_offset, <a href="typespecs.html#basic-types">non_neg_integer</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:stat_options/0">
+
+  <div class="detail-header">
+    <a href="#t:stat_options/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stat_options()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L105" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> stat_options() :: [{:time, :local | :universal | :posix}]</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:stream_mode/0">
+
+  <div class="detail-header">
+    <a href="#t:stream_mode/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stream_mode()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> stream_mode() ::
+  <a href="#t:encoding_mode/0">encoding_mode</a>()
+  | <a href="#t:read_offset_mode/0">read_offset_mode</a>()
+  | :append
+  | :compressed
+  | :delayed_write
+  | :trim_bom
+  | {:read_ahead, <a href="typespecs.html#basic-types">pos_integer</a>() | false}
+  | {:delayed_write, <a href="typespecs.html#basic-types">non_neg_integer</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="cd/1">
+
+  <div class="detail-header">
+    <a href="#cd/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cd(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1624" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cd(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Sets the current working directory.</p><p>The current working directory is set for the BEAM globally. This can lead to
+race conditions if multiple processes are changing the current working
+directory concurrently. To run an external command in a given directory
+without changing the global current working directory, use the <code class="inline">:cd</code> option
+of <a href="System.html#cmd/3"><code class="inline">System.cmd/3</code></a> and <a href="Port.html#open/2"><code class="inline">Port.open/2</code></a>.</p><p>Returns <code class="inline">:ok</code> if successful, <code class="inline">{:error, reason}</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="cd!/1">
+
+  <div class="detail-header">
+    <a href="#cd!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cd!(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1632" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cd!(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>The same as <a href="#cd/1"><code class="inline">cd/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.</p>
+  </section>
+</section>
+<section class="detail" id="cd!/2">
+
+  <div class="detail-header">
+    <a href="#cd!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cd!(path, function)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1660" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cd!(<a href="Path.html#t:t/0">Path.t</a>(), (-&gt; res)) :: res when res: var</pre>
+
+      </div>
+
+<p>Changes the current directory to the given <code class="inline">path</code>,
+executes the given function and then reverts back
+to the previous path regardless of whether there is an exception.</p><p>The current working directory is temporarily set for the BEAM globally. This
+can lead to race conditions if multiple processes are changing the current
+working directory concurrently. To run an external command in a given
+directory without changing the global current working directory, use the
+<code class="inline">:cd</code> option of <a href="System.html#cmd/3"><code class="inline">System.cmd/3</code></a> and <a href="Port.html#open/2"><code class="inline">Port.open/2</code></a>.</p><p>Raises an error if retrieving or changing the current
+directory fails.</p>
+  </section>
+</section>
+<section class="detail" id="chgrp/2">
+
+  <div class="detail-header">
+    <a href="#chgrp/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chgrp(path, gid)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1857" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> chgrp(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Changes the group given by the group ID <code class="inline">gid</code>
+for a given <code class="inline">file</code>. Returns <code class="inline">:ok</code> on success, or
+<code class="inline">{:error, reason}</code> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="chgrp!/2">
+
+  <div class="detail-header">
+    <a href="#chgrp!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chgrp!(path, gid)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1866" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> chgrp!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#chgrp/2"><code class="inline">chgrp/2</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="chmod/2">
+
+  <div class="detail-header">
+    <a href="#chmod/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chmod(path, mode)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1829" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> chmod(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Changes the <code class="inline">mode</code> for a given <code class="inline">file</code>.</p><p>Returns <code class="inline">:ok</code> on success, or <code class="inline">{:error, reason}</code> on failure.</p><h2 id="chmod/2-permissions" class="section-heading">
+  <a href="#chmod/2-permissions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Permissions</span>
+</h2>
+<p>File permissions are specified by adding together the following octal modes:</p><ul><li><p><code class="inline">0o400</code> - read permission: owner</p></li><li><p><code class="inline">0o200</code> - write permission: owner</p></li><li><p><code class="inline">0o100</code> - execute permission: owner</p></li><li><p><code class="inline">0o040</code> - read permission: group</p></li><li><p><code class="inline">0o020</code> - write permission: group</p></li><li><p><code class="inline">0o010</code> - execute permission: group</p></li><li><p><code class="inline">0o004</code> - read permission: other</p></li><li><p><code class="inline">0o002</code> - write permission: other</p></li><li><p><code class="inline">0o001</code> - execute permission: other</p></li></ul><p>For example, setting the mode <code class="inline">0o755</code> gives it
+write, read and execute permission to the owner
+and both read and execute permission to group
+and others.</p>
+  </section>
+</section>
+<section class="detail" id="chmod!/2">
+
+  <div class="detail-header">
+    <a href="#chmod!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chmod!(path, mode)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1838" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> chmod!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#chmod/2"><code class="inline">chmod/2</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="chown/2">
+
+  <div class="detail-header">
+    <a href="#chown/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chown(path, uid)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1885" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> chown(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Changes the owner given by the user ID <code class="inline">uid</code>
+for a given <code class="inline">file</code>. Returns <code class="inline">:ok</code> on success,
+or <code class="inline">{:error, reason}</code> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="chown!/2">
+
+  <div class="detail-header">
+    <a href="#chown!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chown!(path, uid)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1894" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> chown!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#chown/2"><code class="inline">chown/2</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="close/1">
+
+  <div class="detail-header">
+    <a href="#close/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">close(io_device)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1716" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> close(<a href="#t:io_device/0">io_device</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>() | :badarg | :terminated}</pre>
+
+      </div>
+
+<p>Closes the file referenced by <code class="inline">io_device</code>. It mostly returns <code class="inline">:ok</code>, except
+for some severe errors such as out of memory.</p><p>Note that if the option <code class="inline">:delayed_write</code> was used when opening the file,
+<a href="#close/1"><code class="inline">close/1</code></a> might return an old write error and not even try to close the file.
+See <a href="#open/2"><code class="inline">open/2</code></a> for more information.</p>
+  </section>
+</section>
+<section class="detail" id="copy/3">
+
+    <span id="copy/2"></span>
+
+  <div class="detail-header">
+    <a href="#copy/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">copy(source, destination, bytes_count \\ :infinity)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L725" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> copy(<a href="Path.html#t:t/0">Path.t</a>() | <a href="#t:io_device/0">io_device</a>(), <a href="Path.html#t:t/0">Path.t</a>() | <a href="#t:io_device/0">io_device</a>(), <a href="typespecs.html#basic-types">pos_integer</a>() | :infinity) ::
+  {:ok, <a href="typespecs.html#basic-types">non_neg_integer</a>()} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Copies the contents of <code class="inline">source</code> to <code class="inline">destination</code>.</p><p>Both parameters can be a filename or an IO device opened
+with <a href="#open/2"><code class="inline">open/2</code></a>. <code class="inline">bytes_count</code> specifies the number of
+bytes to copy, the default being <code class="inline">:infinity</code>.</p><p>If file <code class="inline">destination</code> already exists, it is overwritten
+by the contents in <code class="inline">source</code>.</p><p>Returns <code class="inline">{:ok, bytes_copied}</code> if successful,
+<code class="inline">{:error, reason}</code> otherwise.</p><p>Compared to the <a href="#cp/3"><code class="inline">cp/3</code></a>, this function is more low-level,
+allowing a copy from device to device limited by a number of
+bytes. On the other hand, <a href="#cp/3"><code class="inline">cp/3</code></a> performs more extensive
+checks on both source and destination and it also preserves
+the file mode after copy.</p><p>Typical error reasons are the same as in <a href="#open/2"><code class="inline">open/2</code></a>,
+<a href="#read/1"><code class="inline">read/1</code></a> and <a href="#write/3"><code class="inline">write/3</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="copy!/3">
+
+    <span id="copy!/2"></span>
+
+  <div class="detail-header">
+    <a href="#copy!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">copy!(source, destination, bytes_count \\ :infinity)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L738" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> copy!(<a href="Path.html#t:t/0">Path.t</a>() | <a href="#t:io_device/0">io_device</a>(), <a href="Path.html#t:t/0">Path.t</a>() | <a href="#t:io_device/0">io_device</a>(), <a href="typespecs.html#basic-types">pos_integer</a>() | :infinity) ::
+  <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>The same as <a href="#copy/3"><code class="inline">copy/3</code></a> but raises a <a href="File.CopyError.html"><code class="inline">File.CopyError</code></a> exception if it fails.
+Returns the <code class="inline">bytes_copied</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="cp/3">
+
+    <span id="cp/2"></span>
+
+  <div class="detail-header">
+    <a href="#cp/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cp(source_file, destination_file, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L830" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cp(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>(), [{:on_conflict, <a href="#t:on_conflict_callback/0">on_conflict_callback</a>()}]) ::
+  :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Copies the contents of <code class="inline">source_file</code> to <code class="inline">destination_file</code> preserving its modes.</p><p><code class="inline">source_file</code> must be a file or a symbolic link to one. <code class="inline">destination_file</code> must
+be a path to a non-existent file. If either is a directory, <code class="inline">{:error, :eisdir}</code>
+will be returned.</p><p>The function returns <code class="inline">:ok</code> in case of success. Otherwise, it returns
+<code class="inline">{:error, reason}</code>.</p><p>If you want to copy contents from an IO device to another device
+or do a straight copy from a source to a destination without
+preserving modes, check <a href="#copy/3"><code class="inline">copy/3</code></a> instead.</p><p>Note: The command <code class="inline">cp</code> in Unix-like systems behaves differently depending on
+whether the destination is an existing directory or not. We have chosen to
+explicitly disallow copying to a destination which is a directory,
+and an error will be returned if tried.</p><h2 id="cp/3-options" class="section-heading">
+  <a href="#cp/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:on_conflict</code> - (since v1.14.0) Invoked when a file already exists in the destination.
+The function receives arguments for <code class="inline">source_file</code> and <code class="inline">destination_file</code>. It should
+return <code class="inline">true</code> if the existing file should be overwritten, <code class="inline">false</code> if otherwise.
+The default callback returns <code class="inline">true</code>. On earlier versions, this callback could be
+given as third argument, but such behavior is now deprecated.</li></ul>
+  </section>
+</section>
+<section class="detail" id="cp!/3">
+
+    <span id="cp!/2"></span>
+
+  <div class="detail-header">
+    <a href="#cp!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cp!(source_file, destination_file, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L859" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cp!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>(), [{:on_conflict, <a href="#t:on_conflict_callback/0">on_conflict_callback</a>()}]) :: :ok</pre>
+
+      </div>
+
+<p>The same as <a href="#cp/3"><code class="inline">cp/3</code></a>, but raises a <a href="File.CopyError.html"><code class="inline">File.CopyError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="cp_r/3">
+
+    <span id="cp_r/2"></span>
+
+  <div class="detail-header">
+    <a href="#cp_r/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cp_r(source, destination, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L935" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cp_r(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>(),
+  on_conflict: <a href="#t:on_conflict_callback/0">on_conflict_callback</a>(),
+  dereference_symlinks: <a href="typespecs.html#built-in-types">boolean</a>()
+) ::
+  {:ok, [<a href="typespecs.html#built-in-types">binary</a>()]} | {:error, <a href="#t:posix/0">posix</a>(), <a href="typespecs.html#built-in-types">binary</a>()}</pre>
+
+      </div>
+
+<p>Copies the contents in <code class="inline">source</code> to <code class="inline">destination</code> recursively, maintaining the
+source directory structure and modes.</p><p>If <code class="inline">source</code> is a file or a symbolic link to it, <code class="inline">destination</code> must be a path
+to an existent file, a symbolic link to one, or a path to a non-existent file.</p><p>If <code class="inline">source</code> is a directory, or a symbolic link to it, then <code class="inline">destination</code> must
+be an existent <code class="inline">directory</code> or a symbolic link to one, or a path to a non-existent directory.</p><p>If the source is a file, it copies <code class="inline">source</code> to <code class="inline">destination</code>. If the <code class="inline">source</code>
+is a directory, it copies the contents inside source into the <code class="inline">destination</code> directory.</p><p>If a file already exists in the destination, it invokes the optional <code class="inline">on_conflict</code>
+callback given as an option. See &quot;Options&quot; for more information.</p><p>This function may fail while copying files, in such cases, it will leave the
+destination directory in a dirty state, where file which have already been
+copied won't be removed.</p><p>The function returns <code class="inline">{:ok, files_and_directories}</code> in case of
+success, <code class="inline">files_and_directories</code> lists all files and directories copied in no
+specific order. It returns <code class="inline">{:error, reason, file}</code> otherwise.</p><p>Note: The command <code class="inline">cp</code> in Unix-like systems behaves differently depending on
+whether <code class="inline">destination</code> is an existing directory or not. We have chosen to
+explicitly disallow this behavior. If <code class="inline">source</code> is a <code class="inline">file</code> and <code class="inline">destination</code>
+is a directory, <code class="inline">{:error, :eisdir}</code> will be returned.</p><h2 id="cp_r/3-options" class="section-heading">
+  <a href="#cp_r/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:on_conflict</code> - (since v1.14.0) Invoked when a file already exists in the destination.
+The function receives arguments for <code class="inline">source</code> and <code class="inline">destination</code>. It should return
+<code class="inline">true</code> if the existing file should be overwritten, <code class="inline">false</code> if otherwise. The default
+callback returns <code class="inline">true</code>. On earlier versions, this callback could be given as third
+argument, but such behavior is now deprecated.</p></li><li><p><code class="inline">:dereference_symlinks</code> - (since v1.14.0) By default, this function will copy symlinks
+by creating symlinks that point to the same location. This option forces symlinks to be
+dereferenced and have their contents copied instead when set to <code class="inline">true</code>. If the dereferenced
+files do not exist, than the operation fails. The default is <code class="inline">false</code>.</p></li></ul><h2 id="cp_r/3-examples" class="section-heading">
+  <a href="#cp_r/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="c1"># Copies file &quot;a.txt&quot; to &quot;b.txt&quot;</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">cp_r</span><span class="p" data-group-id="6712366056-1">(</span><span class="s">&quot;a.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b.txt&quot;</span><span class="p" data-group-id="6712366056-1">)</span><span class="w">
+
+</span><span class="c1"># Copies all files in &quot;samples&quot; to &quot;tmp&quot;</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">cp_r</span><span class="p" data-group-id="6712366056-2">(</span><span class="s">&quot;samples&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tmp&quot;</span><span class="p" data-group-id="6712366056-2">)</span><span class="w">
+
+</span><span class="c1"># Same as before, but asks the user how to proceed in case of conflicts</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">cp_r</span><span class="p" data-group-id="6712366056-3">(</span><span class="s">&quot;samples&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tmp&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">on_conflict</span><span class="p">:</span><span class="w"> </span><span class="k" data-group-id="6712366056-4">fn</span><span class="w"> </span><span class="n">source</span><span class="p">,</span><span class="w"> </span><span class="n">destination</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">IO</span><span class="o">.</span><span class="n">gets</span><span class="p" data-group-id="6712366056-5">(</span><span class="s">&quot;Overwriting </span><span class="si" data-group-id="6712366056-6">#{</span><span class="n">destination</span><span class="si" data-group-id="6712366056-6">}</span><span class="s"> by </span><span class="si" data-group-id="6712366056-7">#{</span><span class="n">source</span><span class="si" data-group-id="6712366056-7">}</span><span class="s">. Type y to confirm. &quot;</span><span class="p" data-group-id="6712366056-5">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;y</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+</span><span class="k" data-group-id="6712366056-4">end</span><span class="p" data-group-id="6712366056-3">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="cp_r!/3">
+
+    <span id="cp_r!/2"></span>
+
+  <div class="detail-header">
+    <a href="#cp_r!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cp_r!(source, destination, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L970" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cp_r!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>(),
+  on_conflict: <a href="#t:on_conflict_callback/0">on_conflict_callback</a>(),
+  dereference_symlinks: <a href="typespecs.html#built-in-types">boolean</a>()
+) ::
+  [<a href="typespecs.html#built-in-types">binary</a>()]</pre>
+
+      </div>
+
+<p>The same as <a href="#cp_r/3"><code class="inline">cp_r/3</code></a>, but raises a <a href="File.CopyError.html"><code class="inline">File.CopyError</code></a> exception if it fails.
+Returns the list of copied files otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="cwd/0">
+
+  <div class="detail-header">
+    <a href="#cwd/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cwd()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1582" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cwd() :: {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Gets the current working directory.</p><p>In rare circumstances, this function can fail on Unix-like systems. It may happen
+if read permissions do not exist for the parent directories of the
+current directory. For this reason, returns <code class="inline">{:ok, cwd}</code> in case
+of success, <code class="inline">{:error, reason}</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="cwd!/0">
+
+  <div class="detail-header">
+    <a href="#cwd!/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cwd!()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1602" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cwd!() :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>The same as <a href="#cwd/0"><code class="inline">cwd/0</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.</p>
+  </section>
+</section>
+<section class="detail" id="dir?/2">
+
+    <span id="dir?/1"></span>
+
+  <div class="detail-header">
+    <a href="#dir?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">dir?(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L213" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> dir?(<a href="Path.html#t:t/0">Path.t</a>(), [dir_option]) :: <a href="typespecs.html#built-in-types">boolean</a>() when dir_option: :raw</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if the given path is a directory.</p><p>This function follows symbolic links, so if a symbolic link points to a
+directory, <code class="inline">true</code> is returned.</p><h2 id="dir?/2-options" class="section-heading">
+  <a href="#dir?/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The supported options are:</p><ul><li><code class="inline">:raw</code> - a single atom to bypass the file server and only check
+for the file locally</li></ul><h2 id="dir?/2-examples" class="section-heading">
+  <a href="#dir?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">dir?</span><span class="p" data-group-id="8504170153-1">(</span><span class="s">&quot;./test&quot;</span><span class="p" data-group-id="8504170153-1">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">dir?</span><span class="p" data-group-id="8504170153-2">(</span><span class="s">&quot;test&quot;</span><span class="p" data-group-id="8504170153-2">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">dir?</span><span class="p" data-group-id="8504170153-3">(</span><span class="s">&quot;/usr/bin&quot;</span><span class="p" data-group-id="8504170153-3">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">dir?</span><span class="p" data-group-id="8504170153-4">(</span><span class="s">&quot;~/Downloads&quot;</span><span class="p" data-group-id="8504170153-4">)</span><span class="w">
+</span><span class="c1">#=&gt; false</span><span class="w">
+
+</span><span class="s">&quot;~/Downloads&quot;</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">expand</span><span class="p" data-group-id="8504170153-5">(</span><span class="p" data-group-id="8504170153-5">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">dir?</span><span class="p" data-group-id="8504170153-6">(</span><span class="p" data-group-id="8504170153-6">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="exists?/2">
+
+    <span id="exists?/1"></span>
+
+  <div class="detail-header">
+    <a href="#exists?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">exists?(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L244" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> exists?(<a href="Path.html#t:t/0">Path.t</a>(), [exists_option]) :: <a href="typespecs.html#built-in-types">boolean</a>() when exists_option: :raw</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if the given path exists.</p><p>It can be a regular file, directory, socket, symbolic link, named pipe, or device file.
+Returns <code class="inline">false</code> for symbolic links pointing to non-existing targets.</p><h2 id="exists?/2-options" class="section-heading">
+  <a href="#exists?/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The supported options are:</p><ul><li><code class="inline">:raw</code> - a single atom to bypass the file server and only check
+for the file locally</li></ul><h2 id="exists?/2-examples" class="section-heading">
+  <a href="#exists?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">exists?</span><span class="p" data-group-id="2530370009-1">(</span><span class="s">&quot;test/&quot;</span><span class="p" data-group-id="2530370009-1">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">exists?</span><span class="p" data-group-id="2530370009-2">(</span><span class="s">&quot;missing.txt&quot;</span><span class="p" data-group-id="2530370009-2">)</span><span class="w">
+</span><span class="c1">#=&gt; false</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">exists?</span><span class="p" data-group-id="2530370009-3">(</span><span class="s">&quot;/dev/null&quot;</span><span class="p" data-group-id="2530370009-3">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="ln/2">
+
+  <div class="detail-header">
+    <a href="#ln/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ln(existing, new)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L645" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ln(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Creates a hard link <code class="inline">new</code> to the file <code class="inline">existing</code>.</p><p>Returns <code class="inline">:ok</code> if successful, <code class="inline">{:error, reason}</code> otherwise.
+If the operating system does not support hard links, returns
+<code class="inline">{:error, :enotsup}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="ln!/2">
+
+  <div class="detail-header">
+    <a href="#ln!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ln!(existing, new)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L655" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ln!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#ln/2"><code class="inline">ln/2</code></a> but raises a <a href="File.LinkError.html"><code class="inline">File.LinkError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="ln_s/2">
+
+  <div class="detail-header">
+    <a href="#ln_s/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ln_s(existing, new)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L678" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ln_s(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Creates a symbolic link <code class="inline">new</code> to the file or directory <code class="inline">existing</code>.</p><p>Returns <code class="inline">:ok</code> if successful, <code class="inline">{:error, reason}</code> otherwise.
+If the operating system does not support symlinks, returns
+<code class="inline">{:error, :enotsup}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="ln_s!/2">
+
+  <div class="detail-header">
+    <a href="#ln_s!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ln_s!(existing, new)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L687" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ln_s!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#ln_s/2"><code class="inline">ln_s/2</code></a> but raises a <a href="File.LinkError.html"><code class="inline">File.LinkError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="ls/1">
+
+    <span id="ls/0"></span>
+
+  <div class="detail-header">
+    <a href="#ls/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ls(path \\ &quot;.&quot;)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1683" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ls(<a href="Path.html#t:t/0">Path.t</a>()) :: {:ok, [<a href="typespecs.html#built-in-types">binary</a>()]} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Returns the list of files in the given directory.</p><p>Hidden files are not ignored and the results are <em>not</em> sorted.</p><p>Since directories are considered files by the file system,
+they are also included in the returned value.</p><p>Returns <code class="inline">{:ok, files}</code> in case of success,
+<code class="inline">{:error, reason}</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="ls!/1">
+
+    <span id="ls!/0"></span>
+
+  <div class="detail-header">
+    <a href="#ls!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ls!(path \\ &quot;.&quot;)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1694" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ls!(<a href="Path.html#t:t/0">Path.t</a>()) :: [<a href="typespecs.html#built-in-types">binary</a>()]</pre>
+
+      </div>
+
+<p>The same as <a href="#ls/1"><code class="inline">ls/1</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of an error.</p>
+  </section>
+</section>
+<section class="detail" id="lstat/2">
+
+    <span id="lstat/1"></span>
+
+  <div class="detail-header">
+    <a href="#lstat/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">lstat(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L465" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> lstat(<a href="Path.html#t:t/0">Path.t</a>(), <a href="#t:stat_options/0">stat_options</a>()) :: {:ok, <a href="File.Stat.html#t:t/0">File.Stat.t</a>()} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Returns information about the <code class="inline">path</code>. If the file is a symlink, sets
+the <code class="inline">type</code> to <code class="inline">:symlink</code> and returns a <a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct for the link. For any
+other file, returns exactly the same values as <a href="#stat/2"><code class="inline">stat/2</code></a>.</p><p>For more details, see <a href="https://www.erlang.org/doc/apps/kernel/file.html#read_link_info/2"><code class="inline">:file.read_link_info/2</code></a>.</p><h2 id="lstat/2-options" class="section-heading">
+  <a href="#lstat/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:time</code> - configures how the file timestamps are returned</li></ul><p>The values for <code class="inline">:time</code> can be:</p><ul><li><code class="inline">:universal</code> - returns a <code class="inline">{date, time}</code> tuple in UTC (default)</li><li><code class="inline">:local</code> - returns a <code class="inline">{date, time}</code> tuple using the machine time</li><li><code class="inline">:posix</code> - returns the time as integer seconds since epoch</li></ul><p>Note: Since file times are stored in POSIX time format on most operating systems,
+it is faster to retrieve file information with the <code class="inline">time: :posix</code> option.</p>
+  </section>
+</section>
+<section class="detail" id="lstat!/2">
+
+    <span id="lstat!/1"></span>
+
+  <div class="detail-header">
+    <a href="#lstat!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">lstat!(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L482" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> lstat!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="#t:stat_options/0">stat_options</a>()) :: <a href="File.Stat.html#t:t/0">File.Stat.t</a>()</pre>
+
+      </div>
+
+<p>Same as <a href="#lstat/2"><code class="inline">lstat/2</code></a> but returns the <a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct directly,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error is returned.</p>
+  </section>
+</section>
+<section class="detail" id="mkdir/1">
+
+  <div class="detail-header">
+    <a href="#mkdir/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mkdir(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L267" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> mkdir(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Tries to create the directory <code class="inline">path</code>.</p><p>Missing parent directories are not created.
+Returns <code class="inline">:ok</code> if successful, or <code class="inline">{:error, reason}</code> if an error occurs.</p><p>Typical error reasons are:</p><ul><li><code class="inline">:eacces</code>  - missing search or write permissions for the parent
+directories of <code class="inline">path</code></li><li><code class="inline">:eexist</code>  - there is already a file or directory named <code class="inline">path</code></li><li><code class="inline">:enoent</code>  - a component of <code class="inline">path</code> does not exist</li><li><code class="inline">:enospc</code>  - there is no space left on the device</li><li><code class="inline">:enotdir</code> - a component of <code class="inline">path</code> is not a directory;
+on some platforms, <code class="inline">:enoent</code> is returned instead</li></ul>
+  </section>
+</section>
+<section class="detail" id="mkdir!/1">
+
+  <div class="detail-header">
+    <a href="#mkdir!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mkdir!(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L276" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> mkdir!(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#mkdir/1"><code class="inline">mkdir/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="mkdir_p/1">
+
+  <div class="detail-header">
+    <a href="#mkdir_p/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mkdir_p(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L304" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> mkdir_p(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Tries to create the directory <code class="inline">path</code>.</p><p>Missing parent directories are created. Returns <code class="inline">:ok</code> if successful, or
+<code class="inline">{:error, reason}</code> if an error occurs.</p><p>Typical error reasons are:</p><ul><li><code class="inline">:eacces</code>  - missing search or write permissions for the parent
+directories of <code class="inline">path</code></li><li><code class="inline">:enospc</code>  - there is no space left on the device</li><li><code class="inline">:enotdir</code> - a component of <code class="inline">path</code> is not a directory</li></ul>
+  </section>
+</section>
+<section class="detail" id="mkdir_p!/1">
+
+  <div class="detail-header">
+    <a href="#mkdir_p!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mkdir_p!(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L340" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> mkdir_p!(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#mkdir_p/1"><code class="inline">mkdir_p/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="open/2">
+
+    <span id="open/1"></span>
+
+  <div class="detail-header">
+    <a href="#open/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open(path, modes_or_function \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1486" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> open(<a href="Path.html#t:t/0">Path.t</a>(), [<a href="#t:mode/0">mode</a>() | :ram]) ::
+  {:ok, <a href="#t:io_device/0">io_device</a>() | <a href="#t:file_descriptor/0">file_descriptor</a>()} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+          <pre translate="no"><span class="attribute">@spec</span> open(<a href="Path.html#t:t/0">Path.t</a>(), (<a href="#t:io_device/0">io_device</a>() | <a href="#t:file_descriptor/0">file_descriptor</a>() -&gt; res)) ::
+  {:ok, res} | {:error, <a href="#t:posix/0">posix</a>()}
+when res: var</pre>
+
+      </div>
+
+<p>Opens the given <code class="inline">path</code>.</p><p><code class="inline">modes_or_function</code> can either be a list of modes or a function. If it's a
+list, it's considered to be a list of modes (that are documented below). If
+it's a function, then it's equivalent to calling <code class="inline">open(path, [], modes_or_function)</code>. See the documentation for <a href="#open/3"><code class="inline">open/3</code></a> for more information
+on this function.</p><p>The allowed modes:</p><ul><li><p><code class="inline">:binary</code> - opens the file in binary mode, disabling special handling of
+Unicode sequences (default mode).</p></li><li><p><code class="inline">:read</code> - the file, which must exist, is opened for reading.</p></li><li><p><code class="inline">:write</code> - the file is opened for writing. It is created if it does not
+exist.</p><p>If the file does exist, and if write is not combined with read, the file
+will be truncated.</p></li><li><p><code class="inline">:append</code> - the file will be opened for writing, and it will be created
+if it does not exist. Every write operation to a file opened with append
+will take place at the end of the file.</p></li><li><p><code class="inline">:exclusive</code> - the file, when opened for writing, is created if it does
+not exist. If the file exists, open will return <code class="inline">{:error, :eexist}</code>.</p></li><li><p><code class="inline">:charlist</code> - when this term is given, read operations on the file will
+return charlists rather than binaries.</p></li><li><p><code class="inline">:compressed</code> - makes it possible to read or write gzip compressed files.</p><p>The compressed option must be combined with either read or write, but not
+both. Note that the file size obtained with <a href="#stat/1"><code class="inline">stat/1</code></a> will most probably
+not match the number of bytes that can be read from a compressed file.</p></li><li><p><code class="inline">:utf8</code> - this option denotes how data is actually stored in the disk
+file and makes the file perform automatic translation of characters to
+and from UTF-8.</p><p>If data is sent to a file in a format that cannot be converted to the
+UTF-8 or if data is read by a function that returns data in a format that
+cannot cope with the character range of the data, an error occurs and the
+file will be closed.</p></li><li><p><code class="inline">:delayed_write</code>, <code class="inline">:raw</code>, <code class="inline">:ram</code>, <code class="inline">:read_ahead</code>, <code class="inline">:sync</code>, <code class="inline">{:encoding, ...}</code>,
+<code class="inline">{:read_ahead, pos_integer}</code>, <code class="inline">{:delayed_write, non_neg_integer, non_neg_integer}</code> -
+for more information about these options see <a href="https://www.erlang.org/doc/apps/kernel/file.html#open/2"><code class="inline">:file.open/2</code></a>.</p></li></ul><p>This function returns:</p><ul><li><p><code class="inline">{:ok, io_device | file_descriptor}</code> - the file has been opened in
+the requested mode. We explore the differences between these two results
+in the following section</p></li><li><p><code class="inline">{:error, reason}</code> - the file could not be opened due to <code class="inline">reason</code>.</p></li></ul><h2 id="open/2-io-devices" class="section-heading">
+  <a href="#open/2-io-devices" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">IO devices</span>
+</h2>
+<p>By default, this function returns an IO device. An <code class="inline">io_device</code> is
+a process which handles the file and you can interact with it using
+the functions in the <a href="IO.html"><code class="inline">IO</code></a> module. By default, a file is opened in
+<code class="inline">:binary</code> mode, which requires the functions <a href="IO.html#binread/2"><code class="inline">IO.binread/2</code></a> and
+<a href="IO.html#binwrite/2"><code class="inline">IO.binwrite/2</code></a> to interact with the file. A developer may pass <code class="inline">:utf8</code>
+as a mode when opening the file and then all other functions from
+<a href="IO.html"><code class="inline">IO</code></a> are available, since they work directly with Unicode data.</p><p>Given the IO device is a file, if the owner process terminates,
+the file is closed and the process itself terminates too. If any
+process to which the <code class="inline">io_device</code> is linked terminates, the file
+will be closed and the process itself will be terminated.</p><h2 id="open/2-file-descriptors" class="section-heading">
+  <a href="#open/2-file-descriptors" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">File descriptors</span>
+</h2>
+<p>When the <code class="inline">:raw</code> or <code class="inline">:ram</code> modes are given, this function returns
+a low-level file descriptors. This avoids creating a process but
+requires using the functions in the <a href="https://www.erlang.org/doc/apps/kernel/file.html"><code class="inline">:file</code></a> module to
+interact with it.</p><h2 id="open/2-examples" class="section-heading">
+  <a href="#open/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7212273280-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="p" data-group-id="7212273280-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="7212273280-2">(</span><span class="s">&quot;foo.tar.gz&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7212273280-3">[</span><span class="ss">:read</span><span class="p">,</span><span class="w"> </span><span class="ss">:compressed</span><span class="p" data-group-id="7212273280-3">]</span><span class="p" data-group-id="7212273280-2">)</span><span class="w">
+</span><span class="nc">IO</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="7212273280-4">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="ss">:line</span><span class="p" data-group-id="7212273280-4">)</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">close</span><span class="p" data-group-id="7212273280-5">(</span><span class="n">file</span><span class="p" data-group-id="7212273280-5">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="open/3">
+
+  <div class="detail-header">
+    <a href="#open/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open(path, modes, function)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1522" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> open(<a href="Path.html#t:t/0">Path.t</a>(), [<a href="#t:mode/0">mode</a>() | :ram], (<a href="#t:io_device/0">io_device</a>() | <a href="#t:file_descriptor/0">file_descriptor</a>() -&gt; res)) ::
+  {:ok, res} | {:error, <a href="#t:posix/0">posix</a>()}
+when res: var</pre>
+
+      </div>
+
+<p>Similar to <a href="#open/2"><code class="inline">open/2</code></a> but expects a function as its last argument.</p><p>The file is opened, given to the function as an argument and
+automatically closed after the function returns, regardless
+if there was an error when executing the function.</p><p>Returns <code class="inline">{:ok, function_result}</code> in case of success,
+<code class="inline">{:error, reason}</code> otherwise.</p><p>This function expects the file to be closed with success,
+which is usually the case unless the <code class="inline">:delayed_write</code> option
+is given. For this reason, we do not recommend passing
+<code class="inline">:delayed_write</code> to this function.</p><h2 id="open/3-examples" class="section-heading">
+  <a href="#open/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="9347096908-1">(</span><span class="s">&quot;file.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9347096908-2">[</span><span class="ss">:read</span><span class="p">,</span><span class="w"> </span><span class="ss">:write</span><span class="p" data-group-id="9347096908-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9347096908-3">fn</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">IO</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="9347096908-4">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="ss">:line</span><span class="p" data-group-id="9347096908-4">)</span><span class="w">
+</span><span class="k" data-group-id="9347096908-3">end</span><span class="p" data-group-id="9347096908-1">)</span></code></pre><p>See <a href="#open/2"><code class="inline">open/2</code></a> for the list of available <code class="inline">modes</code>.</p>
+  </section>
+</section>
+<section class="detail" id="open!/2">
+
+    <span id="open!/1"></span>
+
+  <div class="detail-header">
+    <a href="#open!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open!(path, modes_or_function \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1544" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> open!(<a href="Path.html#t:t/0">Path.t</a>(), [<a href="#t:mode/0">mode</a>() | :ram]) :: <a href="#t:io_device/0">io_device</a>() | <a href="#t:file_descriptor/0">file_descriptor</a>()</pre>
+
+          <pre translate="no"><span class="attribute">@spec</span> open!(<a href="Path.html#t:t/0">Path.t</a>(), (<a href="#t:io_device/0">io_device</a>() | <a href="#t:file_descriptor/0">file_descriptor</a>() -&gt; res)) :: res when res: var</pre>
+
+      </div>
+
+<p>Similar to <a href="#open/2"><code class="inline">open/2</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if the file
+could not be opened. Returns the IO device otherwise.</p><p>See <a href="#open/2"><code class="inline">open/2</code></a> for the list of available modes.</p>
+  </section>
+</section>
+<section class="detail" id="open!/3">
+
+  <div class="detail-header">
+    <a href="#open!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open!(path, modes, function)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1563" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> open!(<a href="Path.html#t:t/0">Path.t</a>(), [<a href="#t:mode/0">mode</a>() | :ram], (<a href="#t:io_device/0">io_device</a>() | <a href="#t:file_descriptor/0">file_descriptor</a>() -&gt; res)) ::
+  res
+when res: var</pre>
+
+      </div>
+
+<p>Similar to <a href="#open/3"><code class="inline">open/3</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if the file
+could not be opened.</p><p>If it succeeds opening the file, it returns the <code class="inline">function</code> result on the IO device.</p><p>See <a href="#open/2"><code class="inline">open/2</code></a> for the list of available <code class="inline">modes</code>.</p>
+  </section>
+</section>
+<section class="detail" id="read/1">
+
+  <div class="detail-header">
+    <a href="#read/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L370" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read(<a href="Path.html#t:t/0">Path.t</a>()) :: {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Returns <code class="inline">{:ok, binary}</code>, where <code class="inline">binary</code> is a binary data object that contains the contents
+of <code class="inline">path</code>, or <code class="inline">{:error, reason}</code> if an error occurs.</p><p>Typical error reasons:</p><ul><li><code class="inline">:enoent</code>  - the file does not exist</li><li><code class="inline">:eacces</code>  - missing permission for reading the file,
+or for searching one of the parent directories</li><li><code class="inline">:eisdir</code>  - the named file is a directory</li><li><code class="inline">:enotdir</code> - a component of the file name is not a directory;
+on some platforms, <code class="inline">:enoent</code> is returned instead</li><li><code class="inline">:enomem</code>  - there is not enough memory for the contents of the file</li></ul><p>You can use <a href="https://www.erlang.org/doc/apps/kernel/file.html#format_error/1"><code class="inline">:file.format_error/1</code></a> to get a descriptive string of the error.</p>
+  </section>
+</section>
+<section class="detail" id="read!/1">
+
+  <div class="detail-header">
+    <a href="#read!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read!(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L379" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read!(<a href="Path.html#t:t/0">Path.t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Returns a binary with the contents of the given filename,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error occurs.</p>
+  </section>
+</section>
+<section class="detail" id="read_link/1">
+
+  <div class="detail-header">
+    <a href="#read_link/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_link(path)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L512" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_link(<a href="Path.html#t:t/0">Path.t</a>()) :: {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Reads the symbolic link at <code class="inline">path</code>.</p><p>If <code class="inline">path</code> exists and is a symlink, returns <code class="inline">{:ok, target}</code>, otherwise returns
+<code class="inline">{:error, reason}</code>.</p><p>For more details, see <a href="https://www.erlang.org/doc/apps/kernel/file.html#read_link/1"><code class="inline">:file.read_link/1</code></a>.</p><p>Typical error reasons are:</p><ul><li><code class="inline">:einval</code> - path is not a symbolic link</li><li><code class="inline">:enoent</code> - path does not exist</li><li><code class="inline">:enotsup</code> - symbolic links are not supported on the current platform</li></ul>
+  </section>
+</section>
+<section class="detail" id="read_link!/1">
+
+  <div class="detail-header">
+    <a href="#read_link!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_link!(path)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L525" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_link!(<a href="Path.html#t:t/0">Path.t</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Same as <a href="#read_link/1"><code class="inline">read_link/1</code></a> but returns the target directly,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error is returned.</p>
+  </section>
+</section>
+<section class="detail" id="regular?/2">
+
+    <span id="regular?/1"></span>
+
+  <div class="detail-header">
+    <a href="#regular?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">regular?(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L176" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> regular?(<a href="Path.html#t:t/0">Path.t</a>(), [regular_option]) :: <a href="typespecs.html#built-in-types">boolean</a>() when regular_option: :raw</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if the path is a regular file.</p><p>This function follows symbolic links, so if a symbolic link points to a
+regular file, <code class="inline">true</code> is returned.</p><h2 id="regular?/2-options" class="section-heading">
+  <a href="#regular?/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The supported options are:</p><ul><li><code class="inline">:raw</code> - a single atom to bypass the file server and only check
+for the file locally</li></ul><h2 id="regular?/2-examples" class="section-heading">
+  <a href="#regular?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">regular?</span><span class="p" data-group-id="2436740583-1">(</span><span class="bp">__ENV__</span><span class="o">.</span><span class="n">file</span><span class="p" data-group-id="2436740583-1">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="rename/2">
+
+  <div class="detail-header">
+    <a href="#rename/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rename(source, destination)</h1>
+
+        <span class="note">(since 1.1.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L775" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rename(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Renames the <code class="inline">source</code> file to <code class="inline">destination</code> file.  It can be used to move files
+(and directories) between directories.  If moving a file, you must fully
+specify the <code class="inline">destination</code> filename, it is not sufficient to simply specify
+its directory.</p><p>Returns <code class="inline">:ok</code> in case of success, <code class="inline">{:error, reason}</code> otherwise.</p><p>Note: The command <code class="inline">mv</code> in Unix-like systems behaves differently depending on
+whether <code class="inline">source</code> is a file and the <code class="inline">destination</code> is an existing directory.
+We have chosen to explicitly disallow this behavior.</p><h2 id="rename/2-examples" class="section-heading">
+  <a href="#rename/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="c1"># Rename file &quot;a.txt&quot; to &quot;b.txt&quot;</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">rename</span><span class="p" data-group-id="7111243821-1">(</span><span class="s">&quot;a.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b.txt&quot;</span><span class="p" data-group-id="7111243821-1">)</span><span class="w">
+
+</span><span class="c1"># Rename directory &quot;samples&quot; to &quot;tmp&quot;</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">rename</span><span class="p" data-group-id="7111243821-2">(</span><span class="s">&quot;samples&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tmp&quot;</span><span class="p" data-group-id="7111243821-2">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="rename!/2">
+
+  <div class="detail-header">
+    <a href="#rename!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rename!(source, destination)</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L787" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rename!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="Path.html#t:t/0">Path.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>The same as <a href="#rename/2"><code class="inline">rename/2</code></a> but raises a <a href="File.RenameError.html"><code class="inline">File.RenameError</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="rm/1">
+
+  <div class="detail-header">
+    <a href="#rm/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rm(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1177" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rm(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Tries to delete the file <code class="inline">path</code>.</p><p>Returns <code class="inline">:ok</code> if successful, or <code class="inline">{:error, reason}</code> if an error occurs.</p><p>Note the file is deleted even if in read-only mode.</p><p>Typical error reasons are:</p><ul><li><code class="inline">:enoent</code>  - the file does not exist</li><li><code class="inline">:eacces</code>  - missing permission for the file or one of its parents</li><li><code class="inline">:eperm</code>   - the file is a directory and user is not super-user</li><li><code class="inline">:enotdir</code> - a component of the file name is not a directory;
+on some platforms, <code class="inline">:enoent</code> is returned instead</li><li><code class="inline">:einval</code>  - filename had an improper type, such as tuple</li></ul><h2 id="rm/1-examples" class="section-heading">
+  <a href="#rm/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">rm</span><span class="p" data-group-id="5001489470-1">(</span><span class="s">&quot;file.txt&quot;</span><span class="p" data-group-id="5001489470-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">rm</span><span class="p" data-group-id="5001489470-2">(</span><span class="s">&quot;tmp_dir/&quot;</span><span class="p" data-group-id="5001489470-2">)</span><span class="w">
+</span><span class="c1">#=&gt; {:error, :eperm}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="rm!/1">
+
+  <div class="detail-header">
+    <a href="#rm!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rm!(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1216" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rm!(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#rm/1"><code class="inline">rm/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="rm_rf/1">
+
+  <div class="detail-header">
+    <a href="#rm_rf/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rm_rf(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1286" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rm_rf(<a href="Path.html#t:t/0">Path.t</a>()) :: {:ok, [<a href="typespecs.html#built-in-types">binary</a>()]} | {:error, <a href="#t:posix/0">posix</a>(), <a href="typespecs.html#built-in-types">binary</a>()}</pre>
+
+      </div>
+
+<p>Removes files and directories recursively at the given <code class="inline">path</code>.
+Symlinks are not followed but simply removed, non-existing
+files are simply ignored (i.e. doesn't make this function fail).</p><p>Returns <code class="inline">{:ok, files_and_directories}</code> with all files and
+directories removed in no specific order, <code class="inline">{:error, reason, file}</code>
+otherwise.</p><h2 id="rm_rf/1-examples" class="section-heading">
+  <a href="#rm_rf/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">rm_rf</span><span class="p" data-group-id="3525817939-1">(</span><span class="s">&quot;samples&quot;</span><span class="p" data-group-id="3525817939-1">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, [&quot;samples&quot;, &quot;samples/1.txt&quot;]}</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">rm_rf</span><span class="p" data-group-id="3525817939-2">(</span><span class="s">&quot;unknown&quot;</span><span class="p" data-group-id="3525817939-2">)</span><span class="w">
+</span><span class="c1">#=&gt; {:ok, []}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="rm_rf!/1">
+
+  <div class="detail-header">
+    <a href="#rm_rf!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rm_rf!(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1382" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rm_rf!(<a href="Path.html#t:t/0">Path.t</a>()) :: [<a href="typespecs.html#built-in-types">binary</a>()]</pre>
+
+      </div>
+
+<p>Same as <a href="#rm_rf/1"><code class="inline">rm_rf/1</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failures,
+otherwise the list of files or directories removed.</p>
+  </section>
+</section>
+<section class="detail" id="rmdir/1">
+
+  <div class="detail-header">
+    <a href="#rmdir/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rmdir(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1245" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rmdir(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Tries to delete the dir at <code class="inline">path</code>.</p><p>Returns <code class="inline">:ok</code> if successful, or <code class="inline">{:error, reason}</code> if an error occurs.
+It returns <code class="inline">{:error, :eexist}</code> if the directory is not empty.</p><h2 id="rmdir/1-examples" class="section-heading">
+  <a href="#rmdir/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">rmdir</span><span class="p" data-group-id="0379865545-1">(</span><span class="s">&quot;tmp_dir&quot;</span><span class="p" data-group-id="0379865545-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">rmdir</span><span class="p" data-group-id="0379865545-2">(</span><span class="s">&quot;non_empty_dir&quot;</span><span class="p" data-group-id="0379865545-2">)</span><span class="w">
+</span><span class="c1">#=&gt; {:error, :eexist}</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">rmdir</span><span class="p" data-group-id="0379865545-3">(</span><span class="s">&quot;file.txt&quot;</span><span class="p" data-group-id="0379865545-3">)</span><span class="w">
+</span><span class="c1">#=&gt; {:error, :enotdir}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="rmdir!/1">
+
+  <div class="detail-header">
+    <a href="#rmdir!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rmdir!(path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1254" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rmdir!(<a href="Path.html#t:t/0">Path.t</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Same as <a href="#rmdir/1"><code class="inline">rmdir/1</code></a>, but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception in case of failure.
+Otherwise <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="stat/2">
+
+    <span id="stat/1"></span>
+
+  <div class="detail-header">
+    <a href="#stat/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stat(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L412" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stat(<a href="Path.html#t:t/0">Path.t</a>(), <a href="#t:stat_options/0">stat_options</a>()) :: {:ok, <a href="File.Stat.html#t:t/0">File.Stat.t</a>()} | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Returns information about the <code class="inline">path</code>. If it exists, it
+returns a <code class="inline">{:ok, info}</code> tuple, where info is a
+<a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct. Returns <code class="inline">{:error, reason}</code> with
+the same reasons as <a href="#read/1"><code class="inline">read/1</code></a> if a failure occurs.</p><h2 id="stat/2-options" class="section-heading">
+  <a href="#stat/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:time</code> - configures how the file timestamps are returned</li></ul><p>The values for <code class="inline">:time</code> can be:</p><ul><li><code class="inline">:universal</code> - returns a <code class="inline">{date, time}</code> tuple in UTC (default)</li><li><code class="inline">:local</code> - returns a <code class="inline">{date, time}</code> tuple using the same time zone as the
+machine</li><li><code class="inline">:posix</code> - returns the time as integer seconds since epoch</li></ul><p>Note: Since file times are stored in POSIX time format on most operating systems,
+it is faster to retrieve file information with the <code class="inline">time: :posix</code> option.</p>
+  </section>
+</section>
+<section class="detail" id="stat!/2">
+
+    <span id="stat!/1"></span>
+
+  <div class="detail-header">
+    <a href="#stat!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stat!(path, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L429" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stat!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="#t:stat_options/0">stat_options</a>()) :: <a href="File.Stat.html#t:t/0">File.Stat.t</a>()</pre>
+
+      </div>
+
+<p>Same as <a href="#stat/2"><code class="inline">stat/2</code></a> but returns the <a href="File.Stat.html"><code class="inline">File.Stat</code></a> directly,
+or raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if an error is returned.</p>
+  </section>
+</section>
+<section class="detail" id="stream!/2">
+
+    <span id="stream!/1"></span>
+
+  <div class="detail-header">
+    <a href="#stream!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stream!(path, line_or_bytes_modes \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1724" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stream!(<a href="Path.html#t:t/0">Path.t</a>(), :line | <a href="typespecs.html#basic-types">pos_integer</a>() | [<a href="#t:stream_mode/0">stream_mode</a>()]) :: <a href="File.Stream.html#t:t/0">File.Stream.t</a>()</pre>
+
+      </div>
+
+<p>Shortcut for <a href="#stream!/3"><code class="inline">File.stream!/3</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="stream!/3">
+
+  <div class="detail-header">
+    <a href="#stream!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stream!(path, line_or_bytes, modes)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1790" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stream!(<a href="Path.html#t:t/0">Path.t</a>(), :line | <a href="typespecs.html#basic-types">pos_integer</a>(), [<a href="#t:stream_mode/0">stream_mode</a>()]) :: <a href="File.Stream.html#t:t/0">File.Stream.t</a>()</pre>
+
+      </div>
+
+<p>Returns a <a href="File.Stream.html"><code class="inline">File.Stream</code></a> for the given <code class="inline">path</code> with the given <code class="inline">modes</code>.</p><p>The stream implements both <a href="Enumerable.html"><code class="inline">Enumerable</code></a> and <a href="Collectable.html"><code class="inline">Collectable</code></a> protocols,
+which means it can be used both for read and write.</p><p>The <code class="inline">line_or_bytes</code> argument configures how the file is read when
+streaming, by <code class="inline">:line</code> (default) or by a given number of bytes. When
+using the <code class="inline">:line</code> option, CRLF line breaks (<code class="inline">&quot;\r\n&quot;</code>) are normalized
+to LF (<code class="inline">&quot;\n&quot;</code>).</p><p>Similar to other file operations, a stream can be created in one node
+and forwarded to another node. Once the stream is opened in another node,
+a request will be sent to the creator node to spawn a process for file
+streaming.</p><p>Operating the stream can fail on open for the same reasons as
+<a href="#open!/2"><code class="inline">File.open!/2</code></a>. Note that the file is automatically opened each time streaming
+begins. There is no need to pass <code class="inline">:read</code> and <code class="inline">:write</code> modes, as those are
+automatically set by Elixir.</p><h2 id="stream!/3-raw-files" class="section-heading">
+  <a href="#stream!/3-raw-files" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Raw files</span>
+</h2>
+<p>Since Elixir controls when the streamed file is opened, the underlying
+device cannot be shared and as such it is convenient to open the file
+in raw mode for performance reasons. Therefore, Elixir <strong>will</strong> open
+streams in <code class="inline">:raw</code> mode with the <code class="inline">:read_ahead</code> option if the stream is
+open in the same node as it is created and no encoding has been specified.
+This means any data streamed into the file must be converted to <a href="typespecs.html#built-in-types"><code class="inline">iodata/0</code></a>
+type. If you pass, for example, <code class="inline">[encoding: :utf8]</code> or
+<code class="inline">[encoding: {:utf16, :little}]</code> in the modes parameter, the underlying stream
+will use <a href="IO.html#write/2"><code class="inline">IO.write/2</code></a> and the <a href="String.Chars.html"><code class="inline">String.Chars</code></a> protocol to convert the data.
+See <a href="IO.html#binwrite/2"><code class="inline">IO.binwrite/2</code></a> and <a href="IO.html#write/2"><code class="inline">IO.write/2</code></a> .</p><p>One may also consider passing the <code class="inline">:delayed_write</code> option if the stream
+is meant to be written to under a tight loop.</p><h2 id="stream!/3-byte-order-marks-and-read-offset" class="section-heading">
+  <a href="#stream!/3-byte-order-marks-and-read-offset" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Byte order marks and read offset</span>
+</h2>
+<p>If you pass <code class="inline">:trim_bom</code> in the modes parameter, the stream will
+trim UTF-8, UTF-16 and UTF-32 byte order marks when reading from file.</p><p>Note that this function does not try to discover the file encoding
+based on BOM. From Elixir v1.16.0, you may also pass a <code class="inline">:read_offset</code>
+that is skipped whenever enumerating the stream (if both <code class="inline">:read_offset</code>
+and <code class="inline">:trim_bom</code> are given, the offset is skipped after the BOM).</p><h2 id="stream!/3-examples" class="section-heading">
+  <a href="#stream!/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="c1"># Read a utf8 text file which may include BOM</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">stream!</span><span class="p" data-group-id="4328210697-1">(</span><span class="s">&quot;./test/test.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4328210697-2">[</span><span class="ss">:trim_bom</span><span class="p">,</span><span class="w"> </span><span class="ss">encoding</span><span class="p">:</span><span class="w"> </span><span class="ss">:utf8</span><span class="p" data-group-id="4328210697-2">]</span><span class="p" data-group-id="4328210697-1">)</span><span class="w">
+
+</span><span class="c1"># Read in 2048 byte chunks rather than lines</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">stream!</span><span class="p" data-group-id="4328210697-3">(</span><span class="s">&quot;./test/test.data&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">2048</span><span class="p" data-group-id="4328210697-3">)</span></code></pre><p>See <a href="Stream.html#run/1"><code class="inline">Stream.run/1</code></a> for an example of streaming into a file.</p>
+  </section>
+</section>
+<section class="detail" id="touch/2">
+
+    <span id="touch/1"></span>
+
+  <div class="detail-header">
+    <a href="#touch/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">touch(path, time \\ System.os_time(:second))</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L589" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> touch(<a href="Path.html#t:t/0">Path.t</a>(), <a href="#t:erlang_time/0">erlang_time</a>() | <a href="#t:posix_time/0">posix_time</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Updates modification time (mtime) and access time (atime) of
+the given file.</p><p>The file is created if it doesn't exist. Requires datetime in UTC
+(as returned by <code class="inline">:erlang.universaltime()</code>) or an integer
+representing the POSIX timestamp (as returned by <code class="inline">System.os_time(:second)</code>).</p><p>In Unix-like systems, changing the modification time may require
+you to be either <code class="inline">root</code> or the owner of the file. Having write
+access may not be enough. In those cases, touching the file the
+first time (to create it) will succeed, but touching an existing
+file with fail with <code class="inline">{:error, :eperm}</code>.</p><h2 id="touch/2-examples" class="section-heading">
+  <a href="#touch/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">touch</span><span class="p" data-group-id="3264117213-1">(</span><span class="s">&quot;/tmp/a.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3264117213-2">{</span><span class="p" data-group-id="3264117213-3">{</span><span class="mi">2018</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="3264117213-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3264117213-4">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p" data-group-id="3264117213-4">}</span><span class="p" data-group-id="3264117213-2">}</span><span class="p" data-group-id="3264117213-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">touch</span><span class="p" data-group-id="3264117213-5">(</span><span class="s">&quot;/fakedir/b.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3264117213-6">{</span><span class="p" data-group-id="3264117213-7">{</span><span class="mi">2018</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="3264117213-7">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3264117213-8">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p" data-group-id="3264117213-8">}</span><span class="p" data-group-id="3264117213-6">}</span><span class="p" data-group-id="3264117213-5">)</span><span class="w">
+</span><span class="p" data-group-id="3264117213-9">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:enoent</span><span class="p" data-group-id="3264117213-9">}</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">touch</span><span class="p" data-group-id="3264117213-10">(</span><span class="s">&quot;/tmp/a.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1544519753</span><span class="p" data-group-id="3264117213-10">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="touch!/2">
+
+    <span id="touch!/1"></span>
+
+  <div class="detail-header">
+    <a href="#touch!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">touch!(path, time \\ System.os_time(:second))</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L626" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> touch!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="#t:erlang_time/0">erlang_time</a>() | <a href="#t:posix_time/0">posix_time</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#touch/2"><code class="inline">touch/2</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p><p>The file is created if it doesn't exist. Requires datetime in UTC
+(as returned by <code class="inline">:erlang.universaltime()</code>) or an integer
+representing the POSIX timestamp (as returned by <code class="inline">System.os_time(:second)</code>).</p><h2 id="touch!/2-examples" class="section-heading">
+  <a href="#touch!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">touch!</span><span class="p" data-group-id="5831702241-1">(</span><span class="s">&quot;/tmp/a.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5831702241-2">{</span><span class="p" data-group-id="5831702241-3">{</span><span class="mi">2018</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="5831702241-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5831702241-4">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p" data-group-id="5831702241-4">}</span><span class="p" data-group-id="5831702241-2">}</span><span class="p" data-group-id="5831702241-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span><span class="w">
+</span><span class="nc">File</span><span class="o">.</span><span class="n">touch!</span><span class="p" data-group-id="5831702241-5">(</span><span class="s">&quot;/fakedir/b.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5831702241-6">{</span><span class="p" data-group-id="5831702241-7">{</span><span class="mi">2018</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="5831702241-7">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5831702241-8">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p" data-group-id="5831702241-8">}</span><span class="p" data-group-id="5831702241-6">}</span><span class="p" data-group-id="5831702241-5">)</span><span class="w">
+</span><span class="gt">** (File.Error) could not touch &quot;/fakedir/b.txt&quot;: no such file or directory</span><span class="w">
+
+</span><span class="nc">File</span><span class="o">.</span><span class="n">touch!</span><span class="p" data-group-id="5831702241-9">(</span><span class="s">&quot;/tmp/a.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1544519753</span><span class="p" data-group-id="5831702241-9">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="write/3">
+
+    <span id="write/2"></span>
+
+  <div class="detail-header">
+    <a href="#write/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">write(path, content, modes \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1128" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> write(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#built-in-types">iodata</a>(), [<a href="#t:mode/0">mode</a>()]) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Writes <code class="inline">content</code> to the file <code class="inline">path</code>.</p><p>The file is created if it does not exist. If it exists, the previous
+contents are overwritten. Returns <code class="inline">:ok</code> if successful, or <code class="inline">{:error, reason}</code>
+if an error occurs.</p><p><code class="inline">content</code> must be <code class="inline">iodata</code> (a list of bytes or a binary). Setting the
+encoding for this function has no effect.</p><p><strong>Warning:</strong> Every time this function is invoked, a file descriptor is opened
+and a new process is spawned to write to the file. For this reason, if you are
+doing multiple writes in a loop, opening the file via <a href="#open/2"><code class="inline">File.open/2</code></a> and using
+the functions in <a href="IO.html"><code class="inline">IO</code></a> to write to the file will yield much better performance
+than calling this function multiple times.</p><p>Typical error reasons are:</p><ul><li><code class="inline">:enoent</code>  - a component of the file name does not exist</li><li><code class="inline">:enotdir</code> - a component of the file name is not a directory;
+on some platforms, <code class="inline">:enoent</code> is returned instead</li><li><code class="inline">:enospc</code>  - there is no space left on the device</li><li><code class="inline">:eacces</code>  - missing permission for writing the file or searching one of
+the parent directories</li><li><code class="inline">:eisdir</code>  - the named file is a directory</li></ul><p>Check <a href="#open/2"><code class="inline">File.open/2</code></a> for other available options.</p>
+  </section>
+</section>
+<section class="detail" id="write!/3">
+
+    <span id="write!/2"></span>
+
+  <div class="detail-header">
+    <a href="#write!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">write!(path, content, modes \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L1138" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> write!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="typespecs.html#built-in-types">iodata</a>(), [<a href="#t:mode/0">mode</a>()]) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#write/3"><code class="inline">write/3</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="write_stat/3">
+
+    <span id="write_stat/2"></span>
+
+  <div class="detail-header">
+    <a href="#write_stat/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">write_stat(path, stat, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L540" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> write_stat(<a href="Path.html#t:t/0">Path.t</a>(), <a href="File.Stat.html#t:t/0">File.Stat.t</a>(), <a href="#t:stat_options/0">stat_options</a>()) :: :ok | {:error, <a href="#t:posix/0">posix</a>()}</pre>
+
+      </div>
+
+<p>Writes the given <a href="File.Stat.html"><code class="inline">File.Stat</code></a> back to the file system at the given
+path. Returns <code class="inline">:ok</code> or <code class="inline">{:error, reason}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="write_stat!/3">
+
+    <span id="write_stat!/2"></span>
+
+  <div class="detail-header">
+    <a href="#write_stat!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">write_stat!(path, stat, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file.ex#L550" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> write_stat!(<a href="Path.html#t:t/0">Path.t</a>(), <a href="File.Stat.html#t:t/0">File.Stat.t</a>(), <a href="#t:stat_options/0">stat_options</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Same as <a href="#write_stat/3"><code class="inline">write_stat/3</code></a> but raises a <a href="File.Error.html"><code class="inline">File.Error</code></a> exception if it fails.
+Returns <code class="inline">:ok</code> otherwise.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

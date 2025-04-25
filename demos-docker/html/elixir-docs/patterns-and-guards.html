@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Patterns and guards — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/patterns-and-guards.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Patterns and guards</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/references/patterns-and-guards.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir provides pattern matching, which allows us to assert on the shape or extract values from data structures. Patterns are often augmented with guards, which give developers the ability to perform more complex checks, albeit limited.</p><p>This document provides a complete reference on patterns and guards, their semantics, where they are allowed, and how to extend them.</p><h2 id="patterns" class="section-heading">
+  <a href="#patterns" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Patterns</span>
+</h2>
+<p>Patterns in Elixir are made of variables, literals, and data structure specific syntax. One of the most used constructs to perform pattern matching is the match operator (<a href="Kernel.SpecialForms.html#=/2"><code class="inline">=</code></a>):</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w">
+</span><span class="mi">1</span></code></pre><p>In the example above, <code class="inline">x</code> starts without a value and has <code class="inline">1</code> assigned to it. Then, we compare the value of <code class="inline">x</code> to the literal <code class="inline">1</code>, which succeeds as they are both <code class="inline">1</code>.</p><p>Matching <code class="inline">x</code> against 2 would raise:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: 1</span></code></pre><p>Patterns are not bidirectional. If you have a variable <code class="inline">y</code> that was never assigned to (often called an unbound variable) and you write <code class="inline">1 = y</code>, an error will be raised:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w">
+</span><span class="gt">** (CompileError) iex:2: undefined variable &quot;y&quot;</span></code></pre><p>In other words, patterns are allowed only on the left side of <code class="inline">=</code>. The right side of <code class="inline">=</code> follows the regular evaluation semantics of the language.</p><p>Now let's cover the pattern matching rules for each construct and then for each relevant data types.</p><h3 id="variables" class="section-heading">
+  <a href="#variables" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Variables</span>
+</h3>
+<p>Variables in patterns are always assigned to:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">x</span><span class="w">
+</span><span class="mi">2</span></code></pre><p>In other words, Elixir supports rebinding. In case you don't want the value of a variable to change, you can use the pin operator (<code class="inline">^</code>):</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="o">^</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: 2</span></code></pre><p>If the same variable appears multiple times in the same pattern, then all of them must be bound to the same value:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="5923359888-1">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p" data-group-id="5923359888-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5923359888-2">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="5923359888-2">}</span><span class="w">
+</span><span class="p" data-group-id="5923359888-3">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="5923359888-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="5923359888-4">{</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p" data-group-id="5923359888-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5923359888-5">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5923359888-5">}</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: {1, 2}</span></code></pre><p>The underscore variable (<code class="inline">_</code>) has a special meaning as it can never be bound to any value. It is especially useful when you don't care about certain value in a pattern:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="8760305372-1">{</span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="8760305372-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8760305372-2">{</span><span class="ss">:not_important</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8760305372-2">}</span><span class="w">
+</span><span class="p" data-group-id="8760305372-3">{</span><span class="ss">:not_important</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8760305372-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">integer</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="bp">_</span><span class="w">
+</span><span class="gt">** (CompileError) iex:3: invalid use of _</span></code></pre><h3 id="literals-numbers-and-atoms" class="section-heading">
+  <a href="#literals-numbers-and-atoms" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Literals (numbers and atoms)</span>
+</h3>
+<p>Atoms and numbers (integers and floats) can appear in patterns and they are always represented as is. For example, an atom will only match an atom if they are the same atom:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="ss">:atom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">:atom</span><span class="w">
+</span><span class="ss">:atom</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="ss">:atom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">:another_atom</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: :another_atom</span></code></pre><p>Similar rule applies to numbers. Finally, note that numbers in patterns perform strict comparison. In other words, integers to do not match floats:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: 1.0</span></code></pre><h3 id="tuples" class="section-heading">
+  <a href="#tuples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Tuples</span>
+</h3>
+<p>Tuples may appear in patterns using the curly brackets syntax (<code class="inline">{}</code>). A tuple in a pattern will match only tuples of the same size, where each individual tuple element must also match:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="7507560568-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="7507560568-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7507560568-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="7507560568-2">}</span><span class="w">
+</span><span class="p" data-group-id="7507560568-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="7507560568-3">}</span><span class="w">
+
+</span><span class="c1"># won&#39;t match due to different size</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="7507560568-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="7507560568-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7507560568-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="7507560568-5">}</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: {:ok, 11, 13}</span><span class="w">
+
+</span><span class="c1"># won&#39;t match due to mismatch on first element</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="7507560568-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="7507560568-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7507560568-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:enoent</span><span class="p" data-group-id="7507560568-7">}</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: {:error, :enoent}</span></code></pre><h3 id="lists" class="section-heading">
+  <a href="#lists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Lists</span>
+</h3>
+<p>Lists may appear in patterns using the square brackets syntax (<code class="inline">[]</code>). A list in a pattern will match only lists of the same size, where each individual list element must also match:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2803055172-1">[</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="2803055172-1">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2803055172-2">[</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="2803055172-2">]</span><span class="w">
+</span><span class="p" data-group-id="2803055172-3">[</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="2803055172-3">]</span><span class="w">
+
+</span><span class="c1"># won&#39;t match due to different size</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2803055172-4">[</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="2803055172-4">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2803055172-5">[</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="2803055172-5">]</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: [:ok, 11, 13]</span><span class="w">
+
+</span><span class="c1"># won&#39;t match due to mismatch on first element</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2803055172-6">[</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="2803055172-6">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2803055172-7">[</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:enoent</span><span class="p" data-group-id="2803055172-7">]</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: [:error, :enoent]</span></code></pre><p>Opposite to tuples, lists also allow matching on non-empty lists by using the <code class="inline">[head | tail]</code> notation, which matches on the <code class="inline">head</code> and <code class="inline">tail</code> of a list:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="9066829946-1">[</span><span class="n">head</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tail</span><span class="p" data-group-id="9066829946-1">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9066829946-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9066829946-2">]</span><span class="w">
+</span><span class="p" data-group-id="9066829946-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9066829946-3">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">head</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">tail</span><span class="w">
+</span><span class="p" data-group-id="9066829946-4">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9066829946-4">]</span></code></pre><p>Multiple elements may prefix the <code class="inline">| tail</code> construct:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="9725723073-1">[</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tail</span><span class="p" data-group-id="9725723073-1">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9725723073-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9725723073-2">]</span><span class="w">
+</span><span class="p" data-group-id="9725723073-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9725723073-3">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">tail</span><span class="w">
+</span><span class="p" data-group-id="9725723073-4">[</span><span class="mi">3</span><span class="p" data-group-id="9725723073-4">]</span></code></pre><p>Note <code class="inline">[head | tail]</code> does not match empty lists:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="1408220855-1">[</span><span class="n">head</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tail</span><span class="p" data-group-id="1408220855-1">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1408220855-2">[</span><span class="p" data-group-id="1408220855-2">]</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: []</span></code></pre><p>Given charlists are represented as a list of integers, one can also perform prefix matches on charlists using the list concatenation operator (<a href="Kernel.html#++/2"><code class="inline">++</code></a>):</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="s">~c&quot;hello &quot;</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="n">world</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">~c&quot;hello world&quot;</span><span class="w">
+</span><span class="s">~c&quot;hello world&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">world</span><span class="w">
+</span><span class="s">~c&quot;world&quot;</span></code></pre><p>Which is equivalent to matching on <code class="inline">[?h, ?e, ?l, ?l, ?o, ?\s | world]</code>. Suffix matches (<code class="inline">hello ++ ~c&quot; world&quot;</code>) are not valid patterns.</p><h3 id="maps" class="section-heading">
+  <a href="#maps" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Maps</span>
+</h3>
+<p>Maps may appear in patterns using the percentage sign followed by the curly brackets syntax (<code class="inline">%{}</code>). Opposite to lists and tuples, maps perform a subset match. This means a map pattern will match any other map that has at least all of the keys in the pattern.</p><p>Here is an example where all keys match:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="0395154898-1">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="0395154898-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0395154898-2">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="0395154898-2">}</span><span class="w">
+</span><span class="p" data-group-id="0395154898-3">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="0395154898-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">name</span><span class="w">
+</span><span class="s">&quot;meg&quot;</span></code></pre><p>Here is when a subset of the keys match:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2961860343-1">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2961860343-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2961860343-2">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p" data-group-id="2961860343-2">}</span><span class="w">
+</span><span class="p" data-group-id="2961860343-3">%{</span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="2961860343-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">name</span><span class="w">
+</span><span class="s">&quot;meg&quot;</span></code></pre><p>If a key in the pattern is not available in the map, then they won't match:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="4783113312-1">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="n">age</span><span class="p" data-group-id="4783113312-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4783113312-2">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="4783113312-2">}</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: %{name: &quot;meg&quot;}</span></code></pre><p>Note that the empty map will match all maps, which is a contrast to tuples and lists, where an empty tuple or an empty list will only match empty tuples and empty lists respectively:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2264209605-1">%{</span><span class="p" data-group-id="2264209605-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2264209605-2">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="2264209605-2">}</span><span class="w">
+</span><span class="p" data-group-id="2264209605-3">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="2264209605-3">}</span></code></pre><p>Finally, note map keys in patterns must always be literals or previously bound variables matched with the pin operator.</p><h3 id="structs" class="section-heading">
+  <a href="#structs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Structs</span>
+</h3>
+<p>Structs may appear in patterns using the percentage sign, the struct module name or a variable followed by the curly brackets syntax (<code class="inline">%{}</code>).</p><p>Given the following struct:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">User</span><span class="w"> </span><span class="k" data-group-id="8304612614-1">do</span><span class="w">
+  </span><span class="kd">defstruct</span><span class="w"> </span><span class="p" data-group-id="8304612614-2">[</span><span class="ss">:name</span><span class="p" data-group-id="8304612614-2">]</span><span class="w">
+</span><span class="k" data-group-id="8304612614-1">end</span></code></pre><p>Here is an example where all keys match:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="8926832007-1">%</span><span class="nc" data-group-id="8926832007-1">User</span><span class="p" data-group-id="8926832007-1">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="8926832007-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8926832007-2">%</span><span class="nc" data-group-id="8926832007-2">User</span><span class="p" data-group-id="8926832007-2">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="8926832007-2">}</span><span class="w">
+</span><span class="p" data-group-id="8926832007-3">%</span><span class="nc" data-group-id="8926832007-3">User</span><span class="p" data-group-id="8926832007-3">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="8926832007-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">name</span><span class="w">
+</span><span class="s">&quot;meg&quot;</span></code></pre><p>If an unknown key is given, the compiler will raise an error:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2807735268-1">%</span><span class="nc" data-group-id="2807735268-1">User</span><span class="p" data-group-id="2807735268-1">{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="n">type</span><span class="p" data-group-id="2807735268-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2807735268-2">%</span><span class="nc" data-group-id="2807735268-2">User</span><span class="p" data-group-id="2807735268-2">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="2807735268-2">}</span><span class="w">
+</span><span class="gt">** (CompileError) iex: unknown key :type for struct User</span></code></pre><p>The struct name can be extracted when putting a variable instead of a module name:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p">%</span><span class="n">struct_name</span><span class="p" data-group-id="1153657936-1">{</span><span class="p" data-group-id="1153657936-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1153657936-2">%</span><span class="nc" data-group-id="1153657936-2">User</span><span class="p" data-group-id="1153657936-2">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="1153657936-2">}</span><span class="w">
+</span><span class="p" data-group-id="1153657936-3">%</span><span class="nc" data-group-id="1153657936-3">User</span><span class="p" data-group-id="1153657936-3">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p" data-group-id="1153657936-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">struct_name</span><span class="w">
+</span><span class="nc">User</span></code></pre><h3 id="binaries" class="section-heading">
+  <a href="#binaries" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Binaries</span>
+</h3>
+<p>Binaries may appear in patterns using the double less-than/greater-than syntax (<a href="Kernel.SpecialForms.html#%3C%3C%3E%3E/1"><code class="inline">&lt;&lt;&gt;&gt;</code></a>). A binary in a pattern can match multiple segments at the same time, each with different type, size, and unit:</p><pre><code class="makeup iex" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="7095986485-1">&lt;&lt;</span><span class="n">val</span><span class="o">::</span><span class="n">unit</span><span class="p" data-group-id="7095986485-2">(</span><span class="mi">8</span><span class="p" data-group-id="7095986485-2">)</span><span class="o">-</span><span class="n">size</span><span class="p" data-group-id="7095986485-3">(</span><span class="mi">2</span><span class="p" data-group-id="7095986485-3">)</span><span class="o">-</span><span class="n">integer</span><span class="p" data-group-id="7095986485-1">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7095986485-4">&lt;&lt;</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">56</span><span class="p" data-group-id="7095986485-4">&gt;&gt;</span><span class="w">
+</span><span class="s">&quot;{8&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">val</span><span class="w">
+</span><span class="mi">31544</span></code></pre><p>See the documentation for <a href="Kernel.SpecialForms.html#%3C%3C%3E%3E/1"><code class="inline">&lt;&lt;&gt;&gt;</code></a> for a complete definition of pattern matching for binaries.</p><p>Finally, remember that strings in Elixir are UTF-8 encoded binaries. This means that, similar to charlists, prefix matches on strings are also possible with the binary concatenation operator (<a href="Kernel.html#%3C%3E/2"><code class="inline">&lt;&gt;</code></a>):</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="s">&quot;hello &quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">world</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;hello world&quot;</span><span class="w">
+</span><span class="s">&quot;hello world&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">world</span><span class="w">
+</span><span class="s">&quot;world&quot;</span></code></pre><p>Suffix matches (<code class="inline">hello &lt;&gt; &quot; world&quot;</code>) are not valid patterns.</p><h2 id="guards" class="section-heading">
+  <a href="#guards" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Guards</span>
+</h2>
+<p>Guards are a way to augment pattern matching with more complex checks. They are allowed in a predefined set of constructs where pattern matching is allowed, such as function definitions, case clauses, and others.</p><p>Not all expressions are allowed in guard clauses, but only a handful of them. This is a deliberate choice. This way, Elixir (through Erlang) ensures that all guards are predictable (no mutations or other side-effects) and they can be optimized and performed efficiently.</p><h3 id="list-of-allowed-functions-and-operators" class="section-heading">
+  <a href="#list-of-allowed-functions-and-operators" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">List of allowed functions and operators</span>
+</h3>
+<p>You can find the built-in list of guards <a href="Kernel.html#guards">in the <code class="inline">Kernel</code> module</a>. Here is an overview:</p><ul><li>comparison operators (<a href="Kernel.html#==/2"><code class="inline">==</code></a>, <a href="Kernel.html#!=/2"><code class="inline">!=</code></a>, <a href="Kernel.html#===/2"><code class="inline">===</code></a>, <a href="Kernel.html#!==/2"><code class="inline">!==</code></a>,
+<a href="Kernel.html#%3C/2"><code class="inline">&lt;</code></a>, <a href="Kernel.html#%3C=/2"><code class="inline">&lt;=</code></a>, <a href="Kernel.html#%3E/2"><code class="inline">&gt;</code></a>, <a href="Kernel.html#%3E=/2"><code class="inline">&gt;=</code></a>)</li><li>strictly boolean operators (<a href="Kernel.html#and/2"><code class="inline">and</code></a>, <a href="Kernel.html#or/2"><code class="inline">or</code></a>, <a href="Kernel.html#not/1"><code class="inline">not</code></a>). Note <a href="Kernel.html#&&/2"><code class="inline">&amp;&amp;</code></a>, <a href="Kernel.html#%7C%7C/2"><code class="inline">||</code></a>, and <a href="Kernel.html#!/1"><code class="inline">!</code></a> sibling operators are <strong>not allowed</strong> as they're not <em>strictly</em> boolean - meaning they don't require arguments to be booleans</li><li>arithmetic unary operators (<a href="Kernel.html#+/1"><code class="inline">+</code></a>, <a href="Kernel.html#-/1"><code class="inline">-</code></a>)</li><li>arithmetic binary operators (<a href="Kernel.html#+/2"><code class="inline">+</code></a>, <a href="Kernel.html#-/2"><code class="inline">-</code></a>, <a href="Kernel.html#*/2"><code class="inline">*</code></a>, <a href="Kernel.html#//2"><code class="inline">/</code></a>)</li><li><a href="Kernel.html#in/2"><code class="inline">in</code></a> and <a href="Kernel.html#in/2"><code class="inline">not in</code></a> operators (as long as the right-hand side is a list or a range)</li><li>&quot;type-check&quot; functions (<a href="Kernel.html#is_list/1"><code class="inline">is_list/1</code></a>, <a href="Kernel.html#is_number/1"><code class="inline">is_number/1</code></a>, and the like)</li><li>functions that work on built-in data types (<a href="Kernel.html#abs/1"><code class="inline">abs/1</code></a>, <a href="Kernel.html#hd/1"><code class="inline">hd/1</code></a>, <a href="Kernel.html#map_size/1"><code class="inline">map_size/1</code></a>, and others)</li><li>the <code class="inline">map.field</code> syntax</li></ul><p>The module <a href="Bitwise.html"><code class="inline">Bitwise</code></a> also includes a handful of <a href="Bitwise.html#guards">Erlang bitwise operations as guards</a>.</p><p>Macros constructed out of any combination of the above guards are also valid guards - for example, <a href="Integer.html#is_even/1"><code class="inline">Integer.is_even/1</code></a>. For more information, see the &quot;Custom patterns and guards expressions&quot; section shown below.</p><h3 id="why-guards" class="section-heading">
+  <a href="#why-guards" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Why guards</span>
+</h3>
+<p>Let's see an example of a guard used in a function clause:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">empty_map?</span><span class="p" data-group-id="2546505236-1">(</span><span class="n">map</span><span class="p" data-group-id="2546505236-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">map_size</span><span class="p" data-group-id="2546505236-2">(</span><span class="n">map</span><span class="p" data-group-id="2546505236-2">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">empty_map?</span><span class="p" data-group-id="2546505236-3">(</span><span class="n">map</span><span class="p" data-group-id="2546505236-3">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_map</span><span class="p" data-group-id="2546505236-4">(</span><span class="n">map</span><span class="p" data-group-id="2546505236-4">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">false</span></code></pre><p>Guards start with the <code class="inline">when</code> operator, followed by a guard expression. The clause will be executed if and only if the guard expression returns <code class="inline">true</code>. Multiple boolean conditions can be combined with the <a href="Kernel.html#and/2"><code class="inline">and</code></a> and <a href="Kernel.html#or/2"><code class="inline">or</code></a> operators.</p><p>Writing the <code class="inline">empty_map?/1</code> function by only using pattern matching would not be possible (as pattern matching on <code class="inline">%{}</code> would match <em>any</em> map, not only the empty ones).</p><h3 id="non-passing-guards" class="section-heading">
+  <a href="#non-passing-guards" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Non-passing guards</span>
+</h3>
+<p>A function clause will be executed if and only if its guard expression evaluates to <code class="inline">true</code>. If any other value is returned, the function clause will be skipped. In particular, guards have no concept of &quot;truthy&quot; or &quot;falsy&quot;.</p><p>For example, imagine a function that checks that the head of a list is not <code class="inline">nil</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">not_nil_head?</span><span class="p" data-group-id="5653865787-1">(</span><span class="p" data-group-id="5653865787-2">[</span><span class="n">head</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5653865787-2">]</span><span class="p" data-group-id="5653865787-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">head</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">not_nil_head?</span><span class="p" data-group-id="5653865787-3">(</span><span class="bp">_</span><span class="p" data-group-id="5653865787-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+
+</span><span class="n">not_nil_head?</span><span class="p" data-group-id="5653865787-4">(</span><span class="p" data-group-id="5653865787-5">[</span><span class="s">&quot;some_value&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;another_value&quot;</span><span class="p" data-group-id="5653865787-5">]</span><span class="p" data-group-id="5653865787-4">)</span><span class="w">
+</span><span class="c1">#=&gt; false</span></code></pre><p>Even though the head of the list is not <code class="inline">nil</code>, the first clause for <code class="inline">not_nil_head?/1</code> fails because the expression does not evaluate to <code class="inline">true</code>, but to <code class="inline">&quot;some_value&quot;</code>, therefore triggering the second clause which returns <code class="inline">false</code>. To make the guard behave correctly, you must ensure that the guard evaluates to <code class="inline">true</code>, like so:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">not_nil_head?</span><span class="p" data-group-id="8035351153-1">(</span><span class="p" data-group-id="8035351153-2">[</span><span class="n">head</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="8035351153-2">]</span><span class="p" data-group-id="8035351153-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">not_nil_head?</span><span class="p" data-group-id="8035351153-3">(</span><span class="bp">_</span><span class="p" data-group-id="8035351153-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+
+</span><span class="n">not_nil_head?</span><span class="p" data-group-id="8035351153-4">(</span><span class="p" data-group-id="8035351153-5">[</span><span class="s">&quot;some_value&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;another_value&quot;</span><span class="p" data-group-id="8035351153-5">]</span><span class="p" data-group-id="8035351153-4">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span></code></pre><h3 id="errors-in-guards" class="section-heading">
+  <a href="#errors-in-guards" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Errors in guards</span>
+</h3>
+<p>In guards, when functions would normally raise exceptions, they cause the guard to fail instead.</p><p>For example, the <a href="Kernel.html#tuple_size/1"><code class="inline">tuple_size/1</code></a> function only works with tuples. If we use it with anything else, an argument error is raised:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">tuple_size</span><span class="p" data-group-id="2157051045-1">(</span><span class="s">&quot;hello&quot;</span><span class="p" data-group-id="2157051045-1">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) argument error</span></code></pre><p>However, when used in guards, the corresponding clause will fail to match instead of raising an error:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">case</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="w"> </span><span class="k" data-group-id="3737101669-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">something</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">tuple_size</span><span class="p" data-group-id="3737101669-2">(</span><span class="n">something</span><span class="p" data-group-id="3737101669-2">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="ss">:worked</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="c">_anything_else</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="ss">:failed</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="3737101669-1">end</span><span class="w">
+</span><span class="ss">:failed</span></code></pre><p>In many cases, we can take advantage of this. In the code above, we used <a href="Kernel.html#tuple_size/1"><code class="inline">tuple_size/1</code></a> to both check that the given value is a tuple <em>and</em> check its size (instead of using <code class="inline">is_tuple(something) and tuple_size(something) == 2</code>).</p><p>However, if your guard has multiple conditions, such as checking for tuples or maps, it is best to call type-check functions like <a href="Kernel.html#is_tuple/1"><code class="inline">is_tuple/1</code></a> before <a href="Kernel.html#tuple_size/1"><code class="inline">tuple_size/1</code></a>, otherwise the whole guard will fail if a tuple is not given. Alternatively, your function clause can use multiple guards as shown in the following section.</p><h3 id="multiple-guards-in-the-same-clause" class="section-heading">
+  <a href="#multiple-guards-in-the-same-clause" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Multiple guards in the same clause</span>
+</h3>
+<p>There exists an additional way to simplify a chain of <code class="inline">or</code> expressions in guards: Elixir supports writing &quot;multiple guards&quot; in the same clause. The following code:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">is_number_or_nil</span><span class="p" data-group-id="1674835073-1">(</span><span class="n">term</span><span class="p" data-group-id="1674835073-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="1674835073-2">(</span><span class="n">term</span><span class="p" data-group-id="1674835073-2">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">is_float</span><span class="p" data-group-id="1674835073-3">(</span><span class="n">term</span><span class="p" data-group-id="1674835073-3">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">is_nil</span><span class="p" data-group-id="1674835073-4">(</span><span class="n">term</span><span class="p" data-group-id="1674835073-4">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:maybe_number</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">is_number_or_nil</span><span class="p" data-group-id="1674835073-5">(</span><span class="c">_other</span><span class="p" data-group-id="1674835073-5">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:something_else</span></code></pre><p>can be alternatively written as:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">is_number_or_nil</span><span class="p" data-group-id="6521418227-1">(</span><span class="n">term</span><span class="p" data-group-id="6521418227-1">)</span><span class="w">
+    </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="6521418227-2">(</span><span class="n">term</span><span class="p" data-group-id="6521418227-2">)</span><span class="w">
+    </span><span class="ow">when</span><span class="w"> </span><span class="n">is_float</span><span class="p" data-group-id="6521418227-3">(</span><span class="n">term</span><span class="p" data-group-id="6521418227-3">)</span><span class="w">
+    </span><span class="ow">when</span><span class="w"> </span><span class="n">is_nil</span><span class="p" data-group-id="6521418227-4">(</span><span class="n">term</span><span class="p" data-group-id="6521418227-4">)</span><span class="w"> </span><span class="k" data-group-id="6521418227-5">do</span><span class="w">
+  </span><span class="ss">:maybe_number</span><span class="w">
+</span><span class="k" data-group-id="6521418227-5">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">is_number_or_nil</span><span class="p" data-group-id="6521418227-6">(</span><span class="c">_other</span><span class="p" data-group-id="6521418227-6">)</span><span class="w"> </span><span class="k" data-group-id="6521418227-7">do</span><span class="w">
+  </span><span class="ss">:something_else</span><span class="w">
+</span><span class="k" data-group-id="6521418227-7">end</span></code></pre><p>If each guard expression always returns a boolean, the two forms are equivalent. However, recall that if any function call in a guard raises an exception, the entire guard fails. To illustrate this, the following function will not detect empty tuples:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Check</span><span class="w"> </span><span class="k" data-group-id="2863726414-1">do</span><span class="w">
+  </span><span class="c1"># If given a tuple, map_size/1 will raise, and tuple_size/1 will not be evaluated</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">empty?</span><span class="p" data-group-id="2863726414-2">(</span><span class="n">val</span><span class="p" data-group-id="2863726414-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">map_size</span><span class="p" data-group-id="2863726414-3">(</span><span class="n">val</span><span class="p" data-group-id="2863726414-3">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">tuple_size</span><span class="p" data-group-id="2863726414-4">(</span><span class="n">val</span><span class="p" data-group-id="2863726414-4">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">empty?</span><span class="p" data-group-id="2863726414-5">(</span><span class="c">_val</span><span class="p" data-group-id="2863726414-5">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+</span><span class="k" data-group-id="2863726414-1">end</span><span class="w">
+
+</span><span class="nc">Check</span><span class="o">.</span><span class="n">empty?</span><span class="p" data-group-id="2863726414-6">(</span><span class="p" data-group-id="2863726414-7">%{</span><span class="p" data-group-id="2863726414-7">}</span><span class="p" data-group-id="2863726414-6">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="nc">Check</span><span class="o">.</span><span class="n">empty?</span><span class="p" data-group-id="2863726414-8">(</span><span class="p" data-group-id="2863726414-9">{</span><span class="p" data-group-id="2863726414-9">}</span><span class="p" data-group-id="2863726414-8">)</span><span class="w">
+</span><span class="c1">#=&gt; false # true was expected!</span></code></pre><p>This could be corrected by ensuring that no exception is raised, either via type checks like <code class="inline">is_map(val) and map_size(val) == 0</code>, or by using multiple guards, so that if an exception causes one guard to fail, the next one is evaluated.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Check</span><span class="w"> </span><span class="k" data-group-id="0548113387-1">do</span><span class="w">
+  </span><span class="c1"># If given a tuple, map_size/1 will raise, and the second guard will be evaluated</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">empty?</span><span class="p" data-group-id="0548113387-2">(</span><span class="n">val</span><span class="p" data-group-id="0548113387-2">)</span><span class="w">
+      </span><span class="ow">when</span><span class="w"> </span><span class="n">map_size</span><span class="p" data-group-id="0548113387-3">(</span><span class="n">val</span><span class="p" data-group-id="0548113387-3">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w">
+      </span><span class="ow">when</span><span class="w"> </span><span class="n">tuple_size</span><span class="p" data-group-id="0548113387-4">(</span><span class="n">val</span><span class="p" data-group-id="0548113387-4">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">empty?</span><span class="p" data-group-id="0548113387-5">(</span><span class="c">_val</span><span class="p" data-group-id="0548113387-5">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">
+</span><span class="k" data-group-id="0548113387-1">end</span><span class="w">
+
+</span><span class="nc">Check</span><span class="o">.</span><span class="n">empty?</span><span class="p" data-group-id="0548113387-6">(</span><span class="p" data-group-id="0548113387-7">%{</span><span class="p" data-group-id="0548113387-7">}</span><span class="p" data-group-id="0548113387-6">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="nc">Check</span><span class="o">.</span><span class="n">empty?</span><span class="p" data-group-id="0548113387-8">(</span><span class="p" data-group-id="0548113387-9">{</span><span class="p" data-group-id="0548113387-9">}</span><span class="p" data-group-id="0548113387-8">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span></code></pre><h2 id="where-patterns-and-guards-can-be-used" class="section-heading">
+  <a href="#where-patterns-and-guards-can-be-used" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Where patterns and guards can be used</span>
+</h2>
+<p>In the examples above, we have used the match operator (<a href="Kernel.SpecialForms.html#=/2"><code class="inline">=</code></a>) and function clauses to showcase patterns and guards respectively. Here is the list of the built-in constructs in Elixir that support patterns and guards.</p><ul><li><p><a href="Kernel.html#match?/2"><code class="inline">match?/2</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="n">match?</span><span class="p" data-group-id="4397546688-1">(</span><span class="p" data-group-id="4397546688-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4397546688-2">}</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4397546688-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="4397546688-3">}</span><span class="p" data-group-id="4397546688-1">)</span></code></pre></li><li><p>function clauses:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">type</span><span class="p" data-group-id="7774793809-1">(</span><span class="n">term</span><span class="p" data-group-id="7774793809-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="7774793809-2">(</span><span class="n">term</span><span class="p" data-group-id="7774793809-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">type</span><span class="p" data-group-id="7774793809-3">(</span><span class="n">term</span><span class="p" data-group-id="7774793809-3">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_float</span><span class="p" data-group-id="7774793809-4">(</span><span class="n">term</span><span class="p" data-group-id="7774793809-4">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:float</span></code></pre></li><li><p><a href="Kernel.SpecialForms.html#case/2"><code class="inline">case</code></a> expressions:</p><pre><code class="makeup elixir" translate="no"><span class="k">case</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k" data-group-id="5446190159-1">do</span><span class="w">
+  </span><span class="mi">1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:one</span><span class="w">
+  </span><span class="mi">2</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:two</span><span class="w">
+  </span><span class="n">n</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="5446190159-2">(</span><span class="n">n</span><span class="p" data-group-id="5446190159-2">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:larger_than_two</span><span class="w">
+</span><span class="k" data-group-id="5446190159-1">end</span></code></pre></li><li><p>anonymous functions (<code class="inline">fn/1</code>):</p><pre><code class="makeup elixir" translate="no"><span class="n">larger_than_two?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k" data-group-id="7261068224-1">fn</span><span class="w">
+  </span><span class="n">n</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="7261068224-2">(</span><span class="n">n</span><span class="p" data-group-id="7261068224-2">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="n">n</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="7261068224-3">(</span><span class="n">n</span><span class="p" data-group-id="7261068224-3">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="no">false</span><span class="w">
+</span><span class="k" data-group-id="7261068224-1">end</span></code></pre></li><li><p><a href="Kernel.SpecialForms.html#for/1"><code class="inline">for</code></a> and <a href="Kernel.SpecialForms.html#with/1"><code class="inline">with</code></a> support patterns and guards on the left side of <code class="inline">&lt;-</code>:</p><pre><code class="makeup elixir" translate="no"><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p" data-group-id="1053753914-1">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">4</span><span class="p" data-group-id="1053753914-1">]</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">x</span></code></pre><p><code class="inline">with</code> also supports the <code class="inline">else</code> keyword, which supports patterns matching and guards.</p></li><li><p><a href="Kernel.SpecialForms.html#try/1"><code class="inline">try</code></a> supports patterns and guards on <code class="inline">catch</code> and <code class="inline">else</code></p></li><li><p><a href="Kernel.SpecialForms.html#receive/1"><code class="inline">receive</code></a> supports patterns and guards to match on the received messages.</p></li><li><p>custom guards can also be defined with <a href="Kernel.html#defguard/1"><code class="inline">defguard/1</code></a> and <a href="Kernel.html#defguardp/1"><code class="inline">defguardp/1</code></a>. A custom guard can only be defined based on existing guards.</p></li></ul><p>Note that the match operator (<a href="Kernel.SpecialForms.html#=/2"><code class="inline">=</code></a>) does <em>not</em> support guards:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="8158523992-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="8158523992-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="8158523992-2">(</span><span class="s">&quot;some/file&quot;</span><span class="p" data-group-id="8158523992-2">)</span></code></pre><h2 id="custom-patterns-and-guards-expressions" class="section-heading">
+  <a href="#custom-patterns-and-guards-expressions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Custom patterns and guards expressions</span>
+</h2>
+<p>Only the constructs listed in this page are allowed in patterns and guards. However, we can take advantage of macros to write custom patterns guards that can simplify our programs or make them more domain-specific. At the end of the day, what matters is that the <em>output</em> of the macros boils down to a combination of the constructs above.</p><p>For example, the <a href="Record.html"><code class="inline">Record</code></a> module in Elixir provides a series of macros to be used in patterns and guards that allows tuples to have named fields during compilation.</p><p>For defining your own guards, Elixir even provides conveniences in <code class="inline">defguard</code> and <code class="inline">defguardp</code>. Let's look at a quick case study: we want to check whether an argument is an even or an odd integer. With pattern matching this is impossible because there is an infinite number of integers, and therefore we can't pattern match on every single one of them. Therefore we must use guards. We will just focus on checking for even numbers since checking for the odd ones is almost identical.</p><p>Such a guard would look like this:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p" data-group-id="1793538121-1">(</span><span class="n">number</span><span class="p" data-group-id="1793538121-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="1793538121-2">(</span><span class="n">number</span><span class="p" data-group-id="1793538121-2">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">rem</span><span class="p" data-group-id="1793538121-3">(</span><span class="n">number</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1793538121-3">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k" data-group-id="1793538121-4">do</span><span class="w">
+  </span><span class="c1"># do stuff</span><span class="w">
+</span><span class="k" data-group-id="1793538121-4">end</span></code></pre><p>It would be repetitive to write every time we need this check. Instead, you can use <a href="Kernel.html#defguard/1"><code class="inline">defguard/1</code></a> and <a href="Kernel.html#defguardp/1"><code class="inline">defguardp/1</code></a> to create guard macros. Here's an example how:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyInteger</span><span class="w"> </span><span class="k" data-group-id="2927547528-1">do</span><span class="w">
+  </span><span class="kd">defguard</span><span class="w"> </span><span class="nf">is_even</span><span class="p" data-group-id="2927547528-2">(</span><span class="n">term</span><span class="p" data-group-id="2927547528-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="2927547528-3">(</span><span class="n">term</span><span class="p" data-group-id="2927547528-3">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">rem</span><span class="p" data-group-id="2927547528-4">(</span><span class="n">term</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="2927547528-4">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="k" data-group-id="2927547528-1">end</span></code></pre><p>and then:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">MyInteger</span><span class="p">,</span><span class="w"> </span><span class="ss">only</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1511640365-1">[</span><span class="ss">is_even</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1511640365-1">]</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p" data-group-id="1511640365-2">(</span><span class="n">number</span><span class="p" data-group-id="1511640365-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_even</span><span class="p" data-group-id="1511640365-3">(</span><span class="n">number</span><span class="p" data-group-id="1511640365-3">)</span><span class="w"> </span><span class="k" data-group-id="1511640365-4">do</span><span class="w">
+  </span><span class="c1"># do stuff</span><span class="w">
+</span><span class="k" data-group-id="1511640365-4">end</span></code></pre><p>While it's possible to create custom guards with macros, it's recommended to define them using <a href="Kernel.html#defguard/1"><code class="inline">defguard/1</code></a> and <a href="Kernel.html#defguardp/1"><code class="inline">defguardp/1</code></a> which perform additional compile-time checks.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="operators.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Operators reference
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="syntax-reference.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Syntax reference
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

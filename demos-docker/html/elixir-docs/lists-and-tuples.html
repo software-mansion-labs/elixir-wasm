@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Lists and tuples — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/lists-and-tuples.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Lists and tuples</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/lists-and-tuples.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter we will learn two of the most used collection data-types in Elixir: lists and tuples.</p><h2 id="linked-lists" class="section-heading">
+  <a href="#linked-lists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">(Linked) Lists</span>
+</h2>
+<p>Elixir uses square brackets to specify a list of values. Values can be of any type:</p><pre class="elixir" data-code-id="373132"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[1, 2, true, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, true, 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">length([1, 2, 3])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p></pre><p>Two lists can be concatenated or subtracted using the <a href="Kernel.html#++/2"><code class="inline">++/2</code></a> and <a href="Kernel.html#--/2"><code class="inline">--/2</code></a> operators respectively:</p><pre class="elixir" data-code-id="373736"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[1, 2, 3] ++ [4, 5, 6]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3, 4, 5, 6]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[1, true, 2, false, 3, true] -- [true, false]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3, true]</p></pre><p>List operators never modify the existing list. Concatenating to or removing elements from a list returns a new list. We say that Elixir data structures are <em>immutable</em>. One advantage of immutability is that it leads to clearer code. You can freely pass the data around with the guarantee no one will mutate it in memory - only transform it.</p><p>Throughout the tutorial, we will talk a lot about the head and tail of a list. The head is the first element of a list and the tail is the remainder of the list. They can be retrieved with the functions <a href="Kernel.html#hd/1"><code class="inline">hd/1</code></a> and <a href="Kernel.html#tl/1"><code class="inline">tl/1</code></a>. Let's assign a list to a variable and retrieve its head and tail:</p><pre class="elixir" data-code-id="383430"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list = [1, 2, 3]</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">hd(list)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tl(list)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [2, 3]</p></pre><p>Getting the head or the tail of an empty list throws an error:</p><pre class="elixir" data-code-id="393034"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">hd([])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (ArgumentError) argument error</p></pre><p>Sometimes you will create a list and it will return a quoted value preceded by <code class="inline">~c</code>. For example:</p><pre class="elixir" data-code-id="393638"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[11, 12, 13]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;\v\f\r&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[104, 101, 108, 108, 111]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;hello&quot;</p></pre><p>When Elixir sees a list of printable ASCII numbers, Elixir will print that as a charlist (literally a list of characters). Charlists are quite common when interfacing with existing Erlang code. Whenever you see a value in IEx and you are not quite sure what it is, you can use the <code class="inline">i/1</code> to retrieve information about it:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">i</span><span class="w"> </span><span class="s">~c&quot;hello&quot;</span><span class="w">
+</span><span class="nc">Term</span><span class="w">
+  </span><span class="n">i</span><span class="w"> </span><span class="s">~c&quot;hello&quot;</span><span class="w">
+</span><span class="nc">Data</span><span class="w"> </span><span class="n">type</span><span class="w">
+  </span><span class="nc">List</span><span class="w">
+</span><span class="nc">Description</span><span class="w">
+  </span><span class="n">...</span><span class="w">
+</span><span class="nc">Raw</span><span class="w"> </span><span class="n">representation</span><span class="w">
+  </span><span class="p" data-group-id="3881049669-1">[</span><span class="mi">104</span><span class="p">,</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="mi">108</span><span class="p">,</span><span class="w"> </span><span class="mi">108</span><span class="p">,</span><span class="w"> </span><span class="mi">111</span><span class="p" data-group-id="3881049669-1">]</span><span class="w">
+</span><span class="nc">Reference</span><span class="w"> </span><span class="n">modules</span><span class="w">
+  </span><span class="nc">List</span><span class="w">
+</span><span class="nc">Implemented</span><span class="w"> </span><span class="n">protocols</span><span class="w">
+  </span><span class="n">...</span></code></pre><p>We will talk more about charlists in the <a href="binaries-strings-and-charlists.html">&quot;Binaries, strings, and charlists&quot;</a> chapter.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Single-quoted strings</h4><p>In Elixir, you can also use <code class="inline">'hello'</code> to build charlists, but this notation has been soft-deprecated in Elixir v1.15 and will emit warnings in future versions. Prefer to write <code class="inline">~c&quot;hello&quot;</code> instead.</p></section><h2 id="tuples" class="section-heading">
+  <a href="#tuples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Tuples</span>
+</h2>
+<p>Elixir uses curly brackets to define tuples. Like lists, tuples can hold any value:</p><pre class="elixir" data-code-id="31303332"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{:ok, &quot;hello&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:ok, &quot;hello&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple_size({:ok, &quot;hello&quot;})</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p></pre><p>Tuples store elements contiguously in memory. This means accessing a tuple element by index or getting the tuple size is a fast operation. Indexes start from zero:</p><pre class="elixir" data-code-id="31303936"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple = {:ok, &quot;hello&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:ok, &quot;hello&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">elem(tuple, 1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple_size(tuple)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p></pre><p>It is also possible to put an element at a particular index in a tuple with <a href="Kernel.html#put_elem/3"><code class="inline">put_elem/3</code></a>:</p><pre class="elixir" data-code-id="31313630"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple = {:ok, &quot;hello&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:ok, &quot;hello&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">put_elem(tuple, 1, &quot;world&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:ok, &quot;world&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:ok, &quot;hello&quot;}</p></pre><p>Notice that <a href="Kernel.html#put_elem/3"><code class="inline">put_elem/3</code></a> returned a new tuple. The original tuple stored in the <code class="inline">tuple</code> variable was not modified. Like lists, tuples are also immutable. Every operation on a tuple returns a new tuple, it never changes the given one.</p><h2 id="lists-or-tuples" class="section-heading">
+  <a href="#lists-or-tuples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Lists or tuples?</span>
+</h2>
+<p>What is the difference between lists and tuples?</p><p>Lists are stored in memory as linked lists, meaning that each element in a list holds its value and points to the following element until the end of the list is reached. This means accessing the length of a list is a linear operation: we need to traverse the whole list in order to figure out its size.</p><p>Similarly, the performance of list concatenation depends on the length of the left-hand list:</p><pre class="elixir" data-code-id="31323234"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list = [1, 2, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><p class="comment" data-code-type="comment"># This is fast as we only need to traverse `[0]` to prepend to `list`</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[0] ++ list</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [0, 1, 2, 3]</p><p class="comment" data-code-type="comment"># This is slow as we need to traverse `list` to append 4</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list ++ [4]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3, 4]</p></pre><p>Tuples, on the other hand, are stored contiguously in memory. This means getting the tuple size or accessing an element by index is fast. On the other hand, updating or adding elements to tuples is expensive because it requires creating a new tuple in memory:</p><pre class="elixir" data-code-id="31323838"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple = {:a, :b, :c, :d}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:a, :b, :c, :d}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">put_elem(tuple, 2, :e)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:a, :b, :e, :d}</p></pre><p>Note, however, the elements themselves are not copied. When you update a tuple, all entries are shared between the old and the new tuple, except for the entry that has been replaced. This rule applies to most data structures in Elixir. This reduces the amount of memory allocation the language needs to perform and is only possible thanks to the immutable semantics of the language.</p><p>Those performance characteristics dictate the usage of those data structures. In a nutshell, lists are used when the number of elements returned may vary. Tuples have a fixed size. Let's see two examples from the <a href="String.html"><code class="inline">String</code></a> module:</p><pre class="elixir" data-code-id="31333532"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split(&quot;hello world&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;hello&quot;, &quot;world&quot;]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split(&quot;hello beautiful world&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;hello&quot;, &quot;beautiful&quot;, &quot;world&quot;]</p></pre><p>The <a href="String.html#split/1"><code class="inline">String.split/1</code></a> function breaks a string into a list of strings on every whitespace character. Since the amount of elements returned depends on the input, we use a list.</p><p>On the other hand, <a href="String.html#split_at/2"><code class="inline">String.split_at/2</code></a> splits a string in two parts at a given position. Since it always returns two entries, regardless of the input size, it returns tuples:</p><pre class="elixir" data-code-id="31343136"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split_at(&quot;hello world&quot;, 3)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {&quot;hel&quot;, &quot;lo world&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split_at(&quot;hello world&quot;, -4)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {&quot;hello w&quot;, &quot;orld&quot;}</p></pre><p>It is also very common to use tuples and atoms to create &quot;tagged tuples&quot;, which is a handy return value when an operation may succeed or fail. For example, <a href="File.html#read/1"><code class="inline">File.read/1</code></a> reads the contents of a file at a given path, which may or may not exist. It returns tagged tuples:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="8032813126-1">(</span><span class="s">&quot;path/to/existing/file&quot;</span><span class="p" data-group-id="8032813126-1">)</span><span class="w">
+</span><span class="p" data-group-id="8032813126-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;... contents ...&quot;</span><span class="p" data-group-id="8032813126-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">File</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="8032813126-3">(</span><span class="s">&quot;path/to/unknown/file&quot;</span><span class="p" data-group-id="8032813126-3">)</span><span class="w">
+</span><span class="p" data-group-id="8032813126-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:enoent</span><span class="p" data-group-id="8032813126-4">}</span></code></pre><p>If the path given to <a href="File.html#read/1"><code class="inline">File.read/1</code></a> exists, it returns a tuple with the atom <code class="inline">:ok</code> as the first element and the file contents as the second. Otherwise, it returns a tuple with <code class="inline">:error</code> and the error description. As we will soon learn, Elixir allows us to <em>pattern match</em> on tagged tuples and effortlessly handle both success and failure cases.</p><p>Given Elixir consistently follows those rules, the choice between lists and tuples get clearer as you learn and use the language. Elixir often guides you to do the right thing. For example, there is an <a href="Kernel.html#elem/2"><code class="inline">elem/2</code></a> function to access a tuple item:</p><pre class="elixir" data-code-id="31343830"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple = {:ok, &quot;hello&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:ok, &quot;hello&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">elem(tuple, 1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p></pre><p>However, given you often don't know the number of elements in a list, there is no built-in equivalent for accessing arbitrary entries in a lists, apart from its head.</p><h2 id="size-or-length" class="section-heading">
+  <a href="#size-or-length" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Size or length?</span>
+</h2>
+<p>When counting the elements in a data structure, Elixir also abides by a simple rule: the function is named <code class="inline">size</code> if the operation is in constant time (the value is pre-calculated) or <code class="inline">length</code> if the operation is linear (calculating the length gets slower as the input grows). As a mnemonic, both &quot;length&quot; and &quot;linear&quot; start with &quot;l&quot;.</p><p>For example, we have used 4 counting functions so far: <a href="Kernel.html#byte_size/1"><code class="inline">byte_size/1</code></a> (for the number of bytes in a string), <a href="Kernel.html#tuple_size/1"><code class="inline">tuple_size/1</code></a> (for tuple size), <a href="Kernel.html#length/1"><code class="inline">length/1</code></a> (for list length) and <a href="String.html#length/1"><code class="inline">String.length/1</code></a> (for the number of graphemes in a string). We use <code class="inline">byte_size</code> to get the number of bytes in a string, which is a cheap operation. Retrieving the number of Unicode graphemes, on the other hand, uses <a href="String.html#length/1"><code class="inline">String.length/1</code></a>, and may be expensive as it relies on a traversal of the entire string.</p><p>Now that we are familiar with the basic data-types in the language, let's learn important constructs for writing code, before we discuss more complex data structures.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="basic-types.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Basic types
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="pattern-matching.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Pattern matching
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

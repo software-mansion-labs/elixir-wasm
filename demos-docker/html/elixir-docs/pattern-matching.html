@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Pattern matching — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/pattern-matching.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Pattern matching</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/pattern-matching.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter, we will learn why the <code class="inline">=</code> operator in Elixir is called the match operator and how to use it to pattern match inside data structures. We will learn about the pin operator <code class="inline">^</code> used to access previously bound values.</p><h2 id="the-match-operator" class="section-heading">
+  <a href="#the-match-operator" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The match operator</span>
+</h2>
+<p>We have used the <code class="inline">=</code> operator a couple times to assign variables in Elixir:</p><pre class="elixir" data-code-id="333838"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p></pre><p>In Elixir, the <code class="inline">=</code> operator is actually called <em>the match operator</em>. Let's see why:</p><pre class="elixir" data-code-id="343532"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 = x</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">2 = x</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: 1</p></pre><p>Notice that <code class="inline">1 = x</code> is a valid expression, and it matched because both the left and right side are equal to 1. When the sides do not match, a <a href="MatchError.html"><code class="inline">MatchError</code></a> is raised.</p><p>A variable can only be assigned on the left side of <code class="inline">=</code>:</p><pre class="elixir" data-code-id="353136"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 = unknown</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (CompileError) iex:1: undefined variable &quot;unknown&quot;</p></pre><h2 id="pattern-matching" class="section-heading">
+  <a href="#pattern-matching" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pattern matching</span>
+</h2>
+<p>The match operator is not only used to match against simple values, but it is also useful for destructuring more complex data types. For example, we can pattern match on tuples:</p><pre class="elixir" data-code-id="353830"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{a, b, c} = {:hello, &quot;world&quot;, 42}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:hello, &quot;world&quot;, 42}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">a</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># :hello</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">b</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;world&quot;</p></pre><p>A pattern match error will occur if the sides can't be matched, for example if the tuples have different sizes:</p><pre class="elixir" data-code-id="363434"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{a, b, c} = {:hello, &quot;world&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: {:hello, &quot;world&quot;}</p></pre><p>And also when comparing different types, for example if matching a tuple on the left side with a list on the right side:</p><pre class="elixir" data-code-id="373038"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{a, b, c} = [:hello, &quot;world&quot;, 42]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: [:hello, &quot;world&quot;, 42]</p></pre><p>More interestingly, we can match on specific values. The example below asserts that the left side will only match the right side when the right side is a tuple that starts with the atom <code class="inline">:ok</code>:</p><pre class="elixir" data-code-id="373732"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{:ok, result} = {:ok, 13}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {:ok, 13}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">result</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 13</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{:ok, result} = {:error, :oops}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: {:error, :oops}</p></pre><p>We can pattern match on lists:</p><pre class="elixir" data-code-id="383336"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[a, b, c] = [1, 2, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">a</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p></pre><p>A list also supports matching on its own head and tail:</p><pre class="elixir" data-code-id="393030"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[head | tail] = [1, 2, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">head</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tail</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [2, 3]</p></pre><p>Similar to the <a href="Kernel.html#hd/1"><code class="inline">hd/1</code></a> and <a href="Kernel.html#tl/1"><code class="inline">tl/1</code></a> functions, we can't match an empty list with a head and tail pattern:</p><pre class="elixir" data-code-id="393634"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[head | tail] = []</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: []</p></pre><p>The <code class="inline">[head | tail]</code> format is not only used on pattern matching but also for prepending items to a list:</p><pre class="elixir" data-code-id="31303238"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list = [1, 2, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[0 | list]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [0, 1, 2, 3]</p></pre><p>Pattern matching allows developers to easily destructure data types such as tuples and lists. As we will see in the following chapters, it is one of the foundations of recursion in Elixir and applies to other types as well, like maps and binaries.</p><h2 id="the-pin-operator" class="section-heading">
+  <a href="#the-pin-operator" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The pin operator</span>
+</h2>
+<p>Variables in Elixir can be rebound:</p><pre class="elixir" data-code-id="31303932"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p></pre><p>However, there are times when we don't want variables to be rebound.</p><p>Use the pin operator <code class="inline">^</code> when you want to pattern match against a variable's <em>existing value</em> rather than rebinding the variable.</p><pre class="elixir" data-code-id="31313536"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">^x = 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: 2</p></pre><p>Because we have pinned <code class="inline">x</code> when it was bound to the value of <code class="inline">1</code>, it is equivalent to the following:</p><pre class="elixir" data-code-id="31323230"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 = 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: 2</p></pre><p>Notice that we even see the exact same error message.</p><p>We can use the pin operator inside other pattern matches, such as tuples or lists:</p><pre class="elixir" data-code-id="31323834"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[^x, 2, 3] = [1, 2, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{y, ^x} = {2, 1}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {2, 1}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">y</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{y, ^x} = {2, 2}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: {2, 2}</p></pre><p>Because <code class="inline">x</code> was bound to the value of <code class="inline">1</code> when it was pinned, this last example could have been written as:</p><pre class="elixir" data-code-id="31333438"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{y, 1} = {2, 2}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: {2, 2}</p></pre><p>If a variable is mentioned more than once in a pattern, all references must bind to the same value:</p><pre class="elixir" data-code-id="31343132"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{x, x} = {1, 1}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {1, 1}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{x, x} = {1, 2}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: {1, 2}</p></pre><p>In some cases, you don't care about a particular value in a pattern. It is a common practice to bind those values to the underscore, <code class="inline">_</code>. For example, if only the head of the list matters to us, we can assign the tail to underscore:</p><pre class="elixir" data-code-id="31343736"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[head | _] = [1, 2, 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">head</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p></pre><p>The variable <code class="inline">_</code> is special in that it can never be read from. Trying to read from it gives a compile error:</p><pre class="elixir" data-code-id="31353430"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">_</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (CompileError) iex:1: invalid use of _. &quot;_&quot; represents a value to be ignored in a pattern and cannot be used in expressions</p></pre><p>Although pattern matching allows us to build powerful constructs, its usage is limited. For instance, you cannot make function calls on the left side of a match. The following example is invalid:</p><pre class="elixir" data-code-id="31363034"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">length([1, [2], 3]) = 3</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (CompileError) iex:1: cannot invoke remote function :erlang.length/1 inside match</p></pre><p>This finishes our introduction to pattern matching. As we will see in the next chapter, pattern matching is very common in many language constructs and they can be further augmented with guards.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="lists-and-tuples.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Lists and tuples
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="case-cond-and-if.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+case, cond, and if
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

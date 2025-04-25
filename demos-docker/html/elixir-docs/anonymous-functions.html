@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Anonymous functions — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/anonymous-functions.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Anonymous functions</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/anonymous-functions.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Anonymous functions allow us to store and pass executable code around as if it was an integer or a string. Let's learn more.</p><h2 id="defining-anonymous-functions" class="section-heading">
+  <a href="#defining-anonymous-functions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Defining anonymous functions</span>
+</h2>
+<p>Anonymous functions in Elixir are delimited by the keywords <code class="inline">fn</code> and <code class="inline">end</code>:</p><pre class="elixir" data-code-id="363437"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">add = fn a, b -&gt; a + b end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># #Function&lt;12.71889879/2 in :erl_eval.expr/5&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">add.(1, 2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_function(add)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>In the example above, we defined an anonymous function that receives two arguments, <code class="inline">a</code> and <code class="inline">b</code>, and returns the result of <code class="inline">a + b</code>. The arguments are always on the left-hand side of <code class="inline">-&gt;</code> and the code to be executed on the right-hand side. The anonymous function is stored in the variable <code class="inline">add</code>.</p><p>We can invoke anonymous functions by passing arguments to it. Note that a dot (<code class="inline">.</code>) between the variable and parentheses is required to invoke an anonymous function. The dot makes it clear when you are calling an anonymous function, stored in the variable <code class="inline">add</code>, opposed to a function named <code class="inline">add/2</code>. For example, if you have an anonymous function stored in the variable <code class="inline">is_atom</code>, there is no ambiguity between <code class="inline">is_atom.(:foo)</code> and <code class="inline">is_atom(:foo)</code>. If both used the same <code class="inline">is_atom(:foo)</code> syntax, the only way to know the actual behavior of <code class="inline">is_atom(:foo)</code> would be by scanning all code thus far for a possible definition of the <code class="inline">is_atom</code> variable. This scanning hurts maintainability as it requires developers to track additional context in their head when reading and writing code.</p><p>Anonymous functions in Elixir are also identified by the number of arguments they receive. We can check if a function is of any given arity by using <a href="Kernel.html#is_function/2"><code class="inline">is_function/2</code></a>:</p><pre class="elixir" data-code-id="373131"><p class="comment" data-code-type="comment"># check if add is a function that expects exactly 2 arguments</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_function(add, 2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><p class="comment" data-code-type="comment"># check if add is a function that expects exactly 1 argument</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_function(add, 1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><h2 id="closures" class="section-heading">
+  <a href="#closures" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Closures</span>
+</h2>
+<p>Anonymous functions can also access variables that are in scope when the function is defined. This is typically referred to as closures, as they close over their scope. Let's define a new anonymous function that uses the <code class="inline">add</code> anonymous function we have previously defined:</p><pre class="elixir" data-code-id="373735"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">double = fn a -&gt; add.(a, a) end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># #Function&lt;6.71889879/1 in :erl_eval.expr/5&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">double.(2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 4</p></pre><p>A variable assigned inside a function does not affect its surrounding environment:</p><pre class="elixir" data-code-id="383339"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 42</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 42</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">(fn -&gt; x = 0 end).()</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 0</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 42</p></pre><h2 id="clauses-and-guards" class="section-heading">
+  <a href="#clauses-and-guards" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Clauses and guards</span>
+</h2>
+<p>Similar to <a href="Kernel.SpecialForms.html#case/2"><code class="inline">case/2</code></a>, we can pattern match on the arguments of anonymous functions as well as define multiple clauses and guards:</p><pre class="elixir" data-code-id="393033"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">f = fn
+  x, y when x &gt; 0 -&gt; x + y
+  x, y -&gt; x * y
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># #Function&lt;12.71889879/2 in :erl_eval.expr/5&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">f.(1, 3)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 4</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">f.(-1, 3)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># -3</p></pre><p>The number of arguments in each anonymous function clause needs to be the same, otherwise an error is raised.</p><pre class="elixir" data-code-id="393637"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">f2 = fn
+  x, y when x &gt; 0 -&gt; x + y
+  x, y, z -&gt; x * y + z
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (CompileError) iex:1: cannot mix clauses with different arities in anonymous functions</p></pre><h2 id="the-capture-operator" class="section-heading">
+  <a href="#the-capture-operator" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The capture operator</span>
+</h2>
+<p>Throughout this guide, we have been using the notation <code class="inline">name/arity</code> to refer to functions. It happens that this notation can actually be used to capture an existing function into a data-type we can pass around, similar to how anonymous functions behave.</p><pre class="elixir" data-code-id="31303331"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun = &amp;is_atom/1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &amp;:erlang.is_atom/1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_function(fun)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun.(:hello)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun.(123)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>As you can see, once a function is captured, we can pass it as argument or invoke it using the anonymous function notation. The returned value above also hints we can capture functions defined in modules:</p><pre class="elixir" data-code-id="31303935"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun = &amp;String.length/1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &amp;String.length/1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun.(&quot;hello&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 5</p></pre><p>You can also capture operators:</p><pre class="elixir" data-code-id="31313539"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">add = &amp;+/2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &amp;:erlang.+/2</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">add.(1, 2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p></pre><p>The capture syntax can also be used as a shortcut for creating functions. This is handy when you want to create functions that are mostly wrapping existing functions or operators:</p><pre class="elixir" data-code-id="31323233"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun = &amp;(&amp;1 + 1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># #Function&lt;6.71889879/1 in :erl_eval.expr/5&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun.(1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun2 = &amp;&quot;Good #{&amp;1}&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># #Function&lt;6.127694169/1 in :erl_eval.expr/5&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">fun2.(&quot;morning&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;Good morning&quot;</p></pre><p>The <code class="inline">&amp;1</code> represents the first argument passed into the function. <code class="inline">&amp;(&amp;1 + 1)</code> above is exactly the same as <code class="inline">fn x -&gt; x + 1 end</code>. You can read more about the capture operator <code class="inline">&amp;</code> in <a href="Kernel.SpecialForms.html#&/1">its documentation</a>.</p><p>Next let's revisit some of the data-types we learned in the past and dig deeper into how they work.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="case-cond-and-if.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+case, cond, and if
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="binaries-strings-and-charlists.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Binaries, strings, and charlists
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

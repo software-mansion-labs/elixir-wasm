@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Protocols — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/protocols.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Protocols</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/protocols.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Protocols are a mechanism to achieve polymorphism in Elixir where you want the behavior to vary depending on the data type. We are already familiar with one way of solving this type of problem: via pattern matching and guard clauses. Consider a simple utility module that would tell us the type of input variable:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Utility</span><span class="w"> </span><span class="k" data-group-id="5456672744-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">type</span><span class="p" data-group-id="5456672744-2">(</span><span class="n">value</span><span class="p" data-group-id="5456672744-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="5456672744-3">(</span><span class="n">value</span><span class="p" data-group-id="5456672744-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">type</span><span class="p" data-group-id="5456672744-4">(</span><span class="n">value</span><span class="p" data-group-id="5456672744-4">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="5456672744-5">(</span><span class="n">value</span><span class="p" data-group-id="5456672744-5">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;integer&quot;</span><span class="w">
+  </span><span class="c1"># ... other implementations ...</span><span class="w">
+</span><span class="k" data-group-id="5456672744-1">end</span></code></pre><p>If the use of this module were confined to your own project, you would be able to keep defining new <code class="inline">type/1</code> functions for each new data type. However, this code could be problematic if it was shared as a dependency by multiple apps because there would be no easy way to extend its functionality.</p><p>This is where protocols can help us: protocols allow us to extend the original behavior for as many data types as we need. That's because <strong>dispatching on a protocol is available to any data type that has implemented the protocol</strong> and a protocol can be implemented by anyone, at any time.</p><p>Here's how we could write the same <code class="inline">Utility.type/1</code> functionality as a protocol:</p><pre class="elixir" data-code-id="31333531"><p class="output output-initial" data-code-type="output"># defprotocol Utility do</p><p class="output output-initial" data-code-type="output">#   @spec type(t) :: String.t()</p><p class="output output-initial" data-code-type="output">#   def type(value)</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># defimpl Utility, for: BitString do</p><p class="output output-initial" data-code-type="output">#   def type(_value), do: &quot;string&quot;</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># defimpl Utility, for: Integer do</p><p class="output output-initial" data-code-type="output">#   def type(_value), do: &quot;integer&quot;</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>We define the protocol using <a href="Kernel.html#defprotocol/2"><code class="inline">defprotocol/2</code></a> - its functions and specs may look similar to interfaces or abstract base classes in other languages. We can add as many implementations as we like using <a href="Kernel.html#defimpl/2"><code class="inline">defimpl/2</code></a>. The output is exactly the same as if we had a single module with multiple functions:</p><pre class="elixir" data-code-id="31343135"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Utility.type(&quot;foo&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;string&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Utility.type(123)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;integer&quot;</p></pre><p>With protocols, however, we are no longer stuck having to continuously modify the same module to support more and more data types. For example, we could spread the <code class="inline">defimpl</code> calls above over multiple files and Elixir will dispatch the execution to the appropriate implementation based on the data type. Functions defined in a protocol may have more than one input, but the <strong>dispatching will always be based on the data type of the first input</strong>.</p><p>One of the most common protocols you may encounter is the <a href="String.Chars.html"><code class="inline">String.Chars</code></a> protocol: implementing its <a href="Kernel.html#to_string/1"><code class="inline">to_string/1</code></a> function for your custom structs will tell the Elixir kernel how to represent them as strings. We will explore all built-in protocols later. For now, let's implement our own.</p><h2 id="example" class="section-heading">
+  <a href="#example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<p>Now that you have seen an example of the type of problem protocols help solve and how they solve them, let's look at a more in-depth example.</p><p>In Elixir, we have two idioms for checking how many items there are in a data structure: <code class="inline">length</code> and <code class="inline">size</code>. <code class="inline">length</code> means the information must be computed. For example, <code class="inline">length(list)</code> needs to traverse the whole list to calculate its length. On the other hand, <code class="inline">tuple_size(tuple)</code> and <code class="inline">byte_size(binary)</code> do not depend on the tuple and binary size as the size information is pre-computed in the data structure.</p><p>Even if we have type-specific functions for getting the size built into Elixir (such as <a href="Kernel.html#tuple_size/1"><code class="inline">tuple_size/1</code></a>), we could implement a generic <code class="inline">Size</code> protocol that all data structures for which size is pre-computed would implement.</p><p>The protocol definition would look like this:</p><pre class="elixir" data-code-id="31343739"><p class="output output-initial" data-code-type="output"># defprotocol Size do</p><p class="output output-initial" data-code-type="output">#   @doc &quot;Calculates the size (and not the length!) of a data structure&quot;</p><p class="output output-initial" data-code-type="output">#   def size(data)</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>The <code class="inline">Size</code> protocol expects a function called <code class="inline">size</code> that receives one argument (the data structure we want to know the size of) to be implemented. We can now implement this protocol for the data structures that would have a compliant implementation:</p><pre class="elixir" data-code-id="31353433"><p class="output output-initial" data-code-type="output"># defimpl Size, for: BitString do</p><p class="output output-initial" data-code-type="output">#   def size(string), do: byte_size(string)</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># defimpl Size, for: Map do</p><p class="output output-initial" data-code-type="output">#   def size(map), do: map_size(map)</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># defimpl Size, for: Tuple do</p><p class="output output-initial" data-code-type="output">#   def size(tuple), do: tuple_size(tuple)</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>We didn't implement the <code class="inline">Size</code> protocol for lists as there is no &quot;size&quot; information pre-computed for lists, and the length of a list has to be computed (with <a href="Kernel.html#length/1"><code class="inline">length/1</code></a>).</p><p>Now with the protocol defined and implementations in hand, we can start using it:</p><pre class="elixir" data-code-id="31363037"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Size.size(&quot;foo&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Size.size({:ok, &quot;hello&quot;})</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Size.size(%{label: &quot;some label&quot;})</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p></pre><p>Passing a data type that doesn't implement the protocol raises an error:</p><pre class="elixir" data-code-id="31363731"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Size.size([1, 2, 3])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (Protocol.UndefinedError) protocol Size not implemented for [1, 2, 3] of type List</p></pre><p>It's possible to implement protocols for all Elixir data types:</p><ul><li><a href="Atom.html"><code class="inline">Atom</code></a></li><li><code class="inline">BitString</code></li><li><a href="Float.html"><code class="inline">Float</code></a></li><li><a href="Function.html"><code class="inline">Function</code></a></li><li><a href="Integer.html"><code class="inline">Integer</code></a></li><li><a href="List.html"><code class="inline">List</code></a></li><li><a href="Map.html"><code class="inline">Map</code></a></li><li><code class="inline">PID</code></li><li><a href="Port.html"><code class="inline">Port</code></a></li><li><code class="inline">Reference</code></li><li><a href="Tuple.html"><code class="inline">Tuple</code></a></li></ul><h2 id="protocols-and-structs" class="section-heading">
+  <a href="#protocols-and-structs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Protocols and structs</span>
+</h2>
+<p>The power of Elixir's extensibility comes when protocols and structs are used together.</p><p>In the <a href="structs.html">previous chapter</a>, we have learned that although structs are maps, they do not share protocol implementations with maps. For example, <a href="MapSet.html"><code class="inline">MapSet</code></a>s (sets based on maps) are implemented as structs. Let's try to use the <code class="inline">Size</code> protocol with a <a href="MapSet.html"><code class="inline">MapSet</code></a>:</p><pre class="elixir" data-code-id="31373335"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Size.size(%{})</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 0</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">set = %MapSet{} = MapSet.new</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># MapSet.new([])</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Size.size(set)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (Protocol.UndefinedError) protocol Size not implemented for MapSet.new([]) of type MapSet (a struct)</p></pre><p>Instead of sharing protocol implementation with maps, structs require their own protocol implementation. Since a <a href="MapSet.html"><code class="inline">MapSet</code></a> has its size precomputed and accessible through <a href="MapSet.html#size/1"><code class="inline">MapSet.size/1</code></a>, we can define a <code class="inline">Size</code> implementation for it:</p><pre class="elixir" data-code-id="31373939"><p class="output output-initial" data-code-type="output"># defimpl Size, for: MapSet do</p><p class="output output-initial" data-code-type="output">#   def size(set), do: MapSet.size(set)</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>If desired, you could come up with your own semantics for the size of your struct. Not only that, you could use structs to build more robust data types, like queues, and implement all relevant protocols, such as <a href="Enumerable.html"><code class="inline">Enumerable</code></a> and possibly <code class="inline">Size</code>, for this data type.</p><pre class="elixir" data-code-id="31383633"><p class="output output-initial" data-code-type="output"># defmodule User do</p><p class="output output-initial" data-code-type="output">#   defstruct [:name, :age]</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># defimpl Size, for: User do</p><p class="output output-initial" data-code-type="output">#   def size(_user), do: 2</p><p class="output output-initial" data-code-type="output"># end</p></pre><h2 id="implementing-any" class="section-heading">
+  <a href="#implementing-any" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Implementing <code class="inline">Any</code></span>
+</h2>
+<p>Manually implementing protocols for all types can quickly become repetitive and tedious. In such cases, Elixir provides two options: we can explicitly derive the protocol implementation for our types or automatically implement the protocol for all types. In both cases, we need to implement the protocol for <code class="inline">Any</code>.</p><h3 id="deriving" class="section-heading">
+  <a href="#deriving" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Deriving</span>
+</h3>
+<p>Elixir allows us to derive a protocol implementation based on the <code class="inline">Any</code> implementation. Let's first implement <code class="inline">Any</code> as follows:</p><pre class="elixir" data-code-id="31393237"><p class="output output-initial" data-code-type="output"># defimpl Size, for: Any do</p><p class="output output-initial" data-code-type="output">#   def size(_), do: 0</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>The implementation above is arguably not a reasonable one. For example, it makes no sense to say that the size of a <code class="inline">PID</code> or an <a href="Integer.html"><code class="inline">Integer</code></a> is <code class="inline">0</code>.</p><p>However, should we be fine with the implementation for <code class="inline">Any</code>, in order to use such implementation we would need to tell our struct to explicitly derive the <code class="inline">Size</code> protocol:</p><pre class="elixir" data-code-id="31393931"><p class="output output-initial" data-code-type="output"># defmodule OtherUser do</p><p class="output output-initial" data-code-type="output">#   @derive [Size]</p><p class="output output-initial" data-code-type="output">#   defstruct [:name, :age]</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>When deriving, Elixir will implement the <code class="inline">Size</code> protocol for <code class="inline">OtherUser</code> based on the implementation provided for <code class="inline">Any</code>.</p><h3 id="fallback-to-any" class="section-heading">
+  <a href="#fallback-to-any" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Fallback to <code class="inline">Any</code></span>
+</h3>
+<p>Another alternative to <code class="inline">@derive</code> is to explicitly tell the protocol to fallback to <code class="inline">Any</code> when an implementation cannot be found. This can be achieved by setting <code class="inline">@fallback_to_any</code> to <code class="inline">true</code> in the protocol definition:</p><pre class="elixir" data-code-id="32303535"><p class="output output-initial" data-code-type="output"># defprotocol Size do</p><p class="output output-initial" data-code-type="output">#   @fallback_to_any true</p><p class="output output-initial" data-code-type="output">#   def size(data)</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>As we said in the previous section, the implementation of <code class="inline">Size</code> for <code class="inline">Any</code> is not one that can apply to any data type. That's one of the reasons why <code class="inline">@fallback_to_any</code> is an opt-in behavior. For the majority of protocols, raising an error when a protocol is not implemented is the proper behavior. That said, assuming we have implemented <code class="inline">Any</code> as in the previous section:</p><pre class="elixir" data-code-id="32313139"><p class="output output-initial" data-code-type="output"># defimpl Size, for: Any do</p><p class="output output-initial" data-code-type="output">#   def size(_), do: 0</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>Now all data types (including structs) that have not implemented the <code class="inline">Size</code> protocol will be considered to have a size of <code class="inline">0</code>.</p><p>Which technique is best between deriving and falling back to <code class="inline">Any</code> depends on the use case but, given Elixir developers prefer explicit over implicit, you may see many libraries pushing towards the <code class="inline">@derive</code> approach.</p><h2 id="built-in-protocols" class="section-heading">
+  <a href="#built-in-protocols" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Built-in protocols</span>
+</h2>
+<p>Elixir ships with some built-in protocols. In previous chapters, we have discussed the <a href="Enum.html"><code class="inline">Enum</code></a> module which provides many functions that work with any data structure that implements the <a href="Enumerable.html"><code class="inline">Enumerable</code></a> protocol:</p><pre class="elixir" data-code-id="32313833"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.map([1, 2, 3], fn x -&gt; x * 2 end)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [2, 4, 6]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.reduce(1..3, 0, fn x, acc -&gt; x + acc end)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 6</p></pre><p>Another useful example is the <a href="String.Chars.html"><code class="inline">String.Chars</code></a> protocol, which specifies how to convert a data structure to its human representation as a string. It's exposed via the <code class="inline">to_string</code> function:</p><pre class="elixir" data-code-id="32323437"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">to_string(:hello)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p></pre><p>Notice that string interpolation in Elixir calls the <code class="inline">to_string</code> function:</p><pre class="elixir" data-code-id="32333131"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;age: #{25}&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;age: 25&quot;</p></pre><p>The snippet above only works because numbers implement the <a href="String.Chars.html"><code class="inline">String.Chars</code></a> protocol. Passing a tuple, for example, will lead to an error:</p><pre class="elixir" data-code-id="32333735"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">tuple = {1, 2, 3}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {1, 2, 3}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;tuple: #{tuple}&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (Protocol.UndefinedError) protocol String.Chars not implemented for {1, 2, 3} of type Tuple</p></pre><p>When there is a need to &quot;print&quot; a more complex data structure, one can use the <code class="inline">inspect</code> function, based on the <a href="Inspect.html"><code class="inline">Inspect</code></a> protocol:</p><pre class="elixir" data-code-id="32343339"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;tuple: #{inspect(tuple)}&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;tuple: {1, 2, 3}&quot;</p></pre><p>The <a href="Inspect.html"><code class="inline">Inspect</code></a> protocol is the protocol used to transform any data structure into a readable textual representation. This is what tools like IEx use to print results:</p><pre class="elixir" data-code-id="32353033"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{1, 2, 3}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># {1, 2, 3}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%User{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{name: &quot;john&quot;, age: 27}</p></pre><p>Keep in mind that, by convention, whenever the inspected value starts with <code class="inline">#</code>, it is representing a data structure in non-valid Elixir syntax. This means the inspect protocol is not reversible as information may be lost along the way:</p><pre class="elixir" data-code-id="32353637"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">inspect &amp;(&amp;1+2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;#Function&lt;6.71889879/1 in :erl_eval.expr/5&gt;&quot;</p></pre><p>There are other protocols in Elixir but this covers the most common ones. You can learn more about protocols and implementations in the <a href="Protocol.html"><code class="inline">Protocol</code></a> module.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="structs.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Structs
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="comprehensions.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Comprehensions
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Calendar — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Calendar.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Calendar</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>This module defines the responsibilities for working with
+calendars, dates, times and datetimes in Elixir.</p><p>It defines types and the minimal implementation
+for a calendar behaviour in Elixir. The goal of the calendar
+features in Elixir is to provide a base for interoperability
+rather than a full-featured datetime API.</p><p>For the actual date, time and datetime structs, see <a href="Date.html"><code class="inline">Date</code></a>,
+<a href="Time.html"><code class="inline">Time</code></a>, <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>, and <a href="DateTime.html"><code class="inline">DateTime</code></a>.</p><p>Types for year, month, day, and more are <em>overspecified</em>.
+For example, the <a href="#t:month/0"><code class="inline">month/0</code></a> type is specified as an integer
+instead of <code class="inline">1..12</code>. This is because different calendars may
+have a different number of days per month.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:calendar/0" data-no-tooltip="" translate="no">calendar()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A calendar implementation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:date/0" data-no-tooltip="" translate="no">date()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Any map or struct that contains the date fields.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:datetime/0" data-no-tooltip="" translate="no">datetime()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Any map or struct that contains the datetime fields.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:day/0" data-no-tooltip="" translate="no">day()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:day_fraction/0" data-no-tooltip="" translate="no">day_fraction()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The internal time format is used when converting between calendars.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:day_of_era/0" data-no-tooltip="" translate="no">day_of_era()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A tuple representing the <code class="inline">day</code> and the <code class="inline">era</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:day_of_week/0" data-no-tooltip="" translate="no">day_of_week()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:era/0" data-no-tooltip="" translate="no">era()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:hour/0" data-no-tooltip="" translate="no">hour()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:iso_days/0" data-no-tooltip="" translate="no">iso_days()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The internal date format that is used when converting between calendars.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:microsecond/0" data-no-tooltip="" translate="no">microsecond()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Microseconds with stored precision.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:minute/0" data-no-tooltip="" translate="no">minute()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:month/0" data-no-tooltip="" translate="no">month()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:naive_datetime/0" data-no-tooltip="" translate="no">naive_datetime()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Any map or struct that contains the naive datetime fields.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:second/0" data-no-tooltip="" translate="no">second()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:std_offset/0" data-no-tooltip="" translate="no">std_offset()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The time zone standard offset in ISO seconds (typically not zero in summer times).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:time/0" data-no-tooltip="" translate="no">time()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Any map or struct that contains the time fields.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:time_zone/0" data-no-tooltip="" translate="no">time_zone()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The time zone ID according to the IANA tz database (for example, <code class="inline">Europe/Zurich</code>).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:time_zone_database/0" data-no-tooltip="" translate="no">time_zone_database()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Specifies the time zone database for calendar operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:utc_offset/0" data-no-tooltip="" translate="no">utc_offset()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The time zone UTC offset in ISO seconds for standard time.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:week/0" data-no-tooltip="" translate="no">week()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:year/0" data-no-tooltip="" translate="no">year()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:zone_abbr/0" data-no-tooltip="" translate="no">zone_abbr()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The time zone abbreviation (for example, <code class="inline">CET</code> or <code class="inline">CEST</code> or <code class="inline">BST</code>).</p></div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:date_to_string/3" data-no-tooltip="" translate="no">date_to_string(year, month, day)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the date into a string according to the calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:datetime_to_string/11" data-no-tooltip="" translate="no">datetime_to_string(
+  year,
+  month,
+  day,
+  hour,
+  minute,
+  second,
+  microsecond,
+  time_zone,
+  zone_abbr,
+  utc_offset,
+  std_offset
+)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the datetime (with time zone) into a string according to the calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:day_of_era/3" data-no-tooltip="" translate="no">day_of_era(year, month, day)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calculates the day and era from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:day_of_week/4" data-no-tooltip="" translate="no">day_of_week(year, month, day, starting_on)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calculates the day of the week from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:day_of_year/3" data-no-tooltip="" translate="no">day_of_year(year, month, day)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calculates the day of the year from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:day_rollover_relative_to_midnight_utc/0" data-no-tooltip="" translate="no">day_rollover_relative_to_midnight_utc()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Define the rollover moment for the calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:days_in_month/2" data-no-tooltip="" translate="no">days_in_month(year, month)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns how many days there are in the given month of the given year.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:iso_days_to_beginning_of_day/1" data-no-tooltip="" translate="no">iso_days_to_beginning_of_day(iso_days)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> to the first moment of the day.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:iso_days_to_end_of_day/1" data-no-tooltip="" translate="no">iso_days_to_end_of_day(iso_days)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> to the last moment of the day.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:leap_year?/1" data-no-tooltip="" translate="no">leap_year?(year)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the given year is a leap year.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:months_in_year/1" data-no-tooltip="" translate="no">months_in_year(year)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns how many months there are in the given year.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:naive_datetime_from_iso_days/1" data-no-tooltip="" translate="no">naive_datetime_from_iso_days(iso_days)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> to the calendar's datetime format.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:naive_datetime_to_iso_days/7" data-no-tooltip="" translate="no">naive_datetime_to_iso_days(year, month, day, hour, minute, second, microsecond)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the datetime (without time zone) into the <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> format.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:naive_datetime_to_string/7" data-no-tooltip="" translate="no">naive_datetime_to_string(year, month, day, hour, minute, second, microsecond)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the naive datetime (without time zone) into a string according to the calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:parse_date/1" data-no-tooltip="" translate="no">parse_date(t)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses the string representation for a date returned by <a href="#c:date_to_string/3"><code class="inline">date_to_string/3</code></a>
+into a date tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:parse_naive_datetime/1" data-no-tooltip="" translate="no">parse_naive_datetime(t)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses the string representation for a naive datetime returned by
+<a href="#c:naive_datetime_to_string/7"><code class="inline">naive_datetime_to_string/7</code></a> into a naive datetime tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:parse_time/1" data-no-tooltip="" translate="no">parse_time(t)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses the string representation for a time returned by <a href="#c:time_to_string/4"><code class="inline">time_to_string/4</code></a>
+into a time tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:parse_utc_datetime/1" data-no-tooltip="" translate="no">parse_utc_datetime(t)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses the string representation for a datetime returned by
+<a href="#c:datetime_to_string/11"><code class="inline">datetime_to_string/11</code></a> into a datetime tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:quarter_of_year/3" data-no-tooltip="" translate="no">quarter_of_year(year, month, day)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calculates the quarter of the year from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:shift_date/4" data-no-tooltip="" translate="no">shift_date(year, month, day, t)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Shifts date by given duration according to its calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:shift_naive_datetime/8" data-no-tooltip="" translate="no">shift_naive_datetime(year, month, day, hour, minute, second, microsecond, t)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Shifts naive datetime by given duration according to its calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:shift_time/5" data-no-tooltip="" translate="no">shift_time(hour, minute, second, microsecond, t)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Shifts time by given duration according to its calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:time_from_day_fraction/1" data-no-tooltip="" translate="no">time_from_day_fraction(day_fraction)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts <a href="#t:day_fraction/0"><code class="inline">day_fraction/0</code></a> to the calendar's time format.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:time_to_day_fraction/4" data-no-tooltip="" translate="no">time_to_day_fraction(hour, minute, second, microsecond)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given time to the <a href="#t:day_fraction/0"><code class="inline">day_fraction/0</code></a> format.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:time_to_string/4" data-no-tooltip="" translate="no">time_to_string(hour, minute, second, microsecond)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the time into a string according to the calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:valid_date?/3" data-no-tooltip="" translate="no">valid_date?(year, month, day)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Should return <code class="inline">true</code> if the given date describes a proper date in the calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:valid_time?/4" data-no-tooltip="" translate="no">valid_time?(hour, minute, second, microsecond)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Should return <code class="inline">true</code> if the given time describes a proper time in the calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:year_of_era/3" data-no-tooltip="" translate="no">year_of_era(year, month, day)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calculates the year and era from the given <code class="inline">year</code>.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compatible_calendars?/2" data-no-tooltip="" translate="no">compatible_calendars?(calendar, calendar)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if two calendars have the same moment of starting a new day,
+<code class="inline">false</code> otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_time_zone_database/0" data-no-tooltip="" translate="no">get_time_zone_database()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the current time zone database.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_time_zone_database/1" data-no-tooltip="" translate="no">put_time_zone_database(database)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the current time zone database.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#strftime/3" data-no-tooltip="" translate="no">strftime(date_or_time_or_datetime, string_format, user_options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Formats the given date, time, or datetime into a string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#truncate/2" data-no-tooltip="" translate="no">truncate(microsecond_tuple, atom)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a microsecond tuple truncated to a given precision (<code class="inline">:microsecond</code>,
+<code class="inline">:millisecond</code>, or <code class="inline">:second</code>).</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:calendar/0">
+
+  <div class="detail-header">
+    <a href="#t:calendar/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">calendar()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L64" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> calendar() :: <a href="typespecs.html#built-in-types">module</a>()</pre>
+
+      </div>
+
+<p>A calendar implementation.</p>
+  </section>
+</section>
+<section class="detail" id="t:date/0">
+
+  <div class="detail-header">
+    <a href="#t:date/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">date()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L87" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> date() :: %{
+  optional(<a href="typespecs.html#basic-types">any</a>()) =&gt; <a href="typespecs.html#basic-types">any</a>(),
+  calendar: <a href="#t:calendar/0">calendar</a>(),
+  year: <a href="#t:year/0">year</a>(),
+  month: <a href="#t:month/0">month</a>(),
+  day: <a href="#t:day/0">day</a>()
+}</pre>
+
+      </div>
+
+<p>Any map or struct that contains the date fields.</p>
+  </section>
+</section>
+<section class="detail" id="t:datetime/0">
+
+  <div class="detail-header">
+    <a href="#t:datetime/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">datetime()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L112" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> datetime() :: %{
+  optional(<a href="typespecs.html#basic-types">any</a>()) =&gt; <a href="typespecs.html#basic-types">any</a>(),
+  calendar: <a href="#t:calendar/0">calendar</a>(),
+  year: <a href="#t:year/0">year</a>(),
+  month: <a href="#t:month/0">month</a>(),
+  day: <a href="#t:day/0">day</a>(),
+  hour: <a href="#t:hour/0">hour</a>(),
+  minute: <a href="#t:minute/0">minute</a>(),
+  second: <a href="#t:second/0">second</a>(),
+  microsecond: <a href="#t:microsecond/0">microsecond</a>(),
+  time_zone: <a href="#t:time_zone/0">time_zone</a>(),
+  zone_abbr: <a href="#t:zone_abbr/0">zone_abbr</a>(),
+  utc_offset: <a href="#t:utc_offset/0">utc_offset</a>(),
+  std_offset: <a href="#t:std_offset/0">std_offset</a>()
+}</pre>
+
+      </div>
+
+<p>Any map or struct that contains the datetime fields.</p>
+  </section>
+</section>
+<section class="detail" id="t:day/0">
+
+  <div class="detail-header">
+    <a href="#t:day/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L22" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> day() :: <a href="typespecs.html#basic-types">pos_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:day_fraction/0">
+
+  <div class="detail-header">
+    <a href="#t:day_fraction/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day_fraction()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L43" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> day_fraction() ::
+  {parts_in_day :: <a href="typespecs.html#basic-types">non_neg_integer</a>(), parts_per_day :: <a href="typespecs.html#basic-types">pos_integer</a>()}</pre>
+
+      </div>
+
+<p>The internal time format is used when converting between calendars.</p><p>It represents time as a fraction of a day (starting from midnight).
+<code class="inline">parts_in_day</code> specifies how much of the day is already passed,
+while <code class="inline">parts_per_day</code> signifies how many parts are there in a day.</p>
+  </section>
+</section>
+<section class="detail" id="t:day_of_era/0">
+
+  <div class="detail-header">
+    <a href="#t:day_of_era/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day_of_era()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L30" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> day_of_era() :: {day :: <a href="typespecs.html#basic-types">non_neg_integer</a>(), <a href="#t:era/0">era</a>()}</pre>
+
+      </div>
+
+<p>A tuple representing the <code class="inline">day</code> and the <code class="inline">era</code>.</p>
+  </section>
+</section>
+<section class="detail" id="t:day_of_week/0">
+
+  <div class="detail-header">
+    <a href="#t:day_of_week/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day_of_week()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L24" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> day_of_week() :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:era/0">
+
+  <div class="detail-header">
+    <a href="#t:era/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">era()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L25" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> era() :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:hour/0">
+
+  <div class="detail-header">
+    <a href="#t:hour/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">hour()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L32" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> hour() :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:iso_days/0">
+
+  <div class="detail-header">
+    <a href="#t:iso_days/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">iso_days()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L52" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> iso_days() :: {days :: <a href="typespecs.html#basic-types">integer</a>(), <a href="#t:day_fraction/0">day_fraction</a>()}</pre>
+
+      </div>
+
+<p>The internal date format that is used when converting between calendars.</p><p>This is the number of days including the fractional part that has passed of
+the last day since <code class="inline">0000-01-01+00:00T00:00.000000</code> in ISO 8601 notation (also
+known as <em>midnight 1 January BC 1</em> of the proleptic Gregorian calendar).</p>
+  </section>
+</section>
+<section class="detail" id="t:microsecond/0">
+
+  <div class="detail-header">
+    <a href="#t:microsecond/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">microsecond()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L61" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> microsecond() :: {value :: <a href="typespecs.html#basic-types">non_neg_integer</a>(), precision :: <a href="typespecs.html#basic-types">non_neg_integer</a>()}</pre>
+
+      </div>
+
+<p>Microseconds with stored precision.</p><p>The precision represents the number of digits that must be used when
+representing the microseconds to external format. If the precision is <code class="inline">0</code>,
+it means microseconds must be skipped.</p>
+  </section>
+</section>
+<section class="detail" id="t:minute/0">
+
+  <div class="detail-header">
+    <a href="#t:minute/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">minute()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L33" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> minute() :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:month/0">
+
+  <div class="detail-header">
+    <a href="#t:month/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">month()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L21" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> month() :: <a href="typespecs.html#basic-types">pos_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:naive_datetime/0">
+
+  <div class="detail-header">
+    <a href="#t:naive_datetime/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">naive_datetime()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L99" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> naive_datetime() :: %{
+  optional(<a href="typespecs.html#basic-types">any</a>()) =&gt; <a href="typespecs.html#basic-types">any</a>(),
+  calendar: <a href="#t:calendar/0">calendar</a>(),
+  year: <a href="#t:year/0">year</a>(),
+  month: <a href="#t:month/0">month</a>(),
+  day: <a href="#t:day/0">day</a>(),
+  hour: <a href="#t:hour/0">hour</a>(),
+  minute: <a href="#t:minute/0">minute</a>(),
+  second: <a href="#t:second/0">second</a>(),
+  microsecond: <a href="#t:microsecond/0">microsecond</a>()
+}</pre>
+
+      </div>
+
+<p>Any map or struct that contains the naive datetime fields.</p>
+  </section>
+</section>
+<section class="detail" id="t:second/0">
+
+  <div class="detail-header">
+    <a href="#t:second/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">second()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L34" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> second() :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:std_offset/0">
+
+  <div class="detail-header">
+    <a href="#t:std_offset/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">std_offset()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L84" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> std_offset() :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>The time zone standard offset in ISO seconds (typically not zero in summer times).</p><p>It must be added to <a href="#t:utc_offset/0"><code class="inline">utc_offset/0</code></a> to get the total offset from UTC used for &quot;wall time&quot;.</p>
+  </section>
+</section>
+<section class="detail" id="t:time/0">
+
+  <div class="detail-header">
+    <a href="#t:time/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">time()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L90" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> time() :: %{
+  optional(<a href="typespecs.html#basic-types">any</a>()) =&gt; <a href="typespecs.html#basic-types">any</a>(),
+  hour: <a href="#t:hour/0">hour</a>(),
+  minute: <a href="#t:minute/0">minute</a>(),
+  second: <a href="#t:second/0">second</a>(),
+  microsecond: <a href="#t:microsecond/0">microsecond</a>()
+}</pre>
+
+      </div>
+
+<p>Any map or struct that contains the time fields.</p>
+  </section>
+</section>
+<section class="detail" id="t:time_zone/0">
+
+  <div class="detail-header">
+    <a href="#t:time_zone/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">time_zone()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L67" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> time_zone() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>The time zone ID according to the IANA tz database (for example, <code class="inline">Europe/Zurich</code>).</p>
+  </section>
+</section>
+<section class="detail" id="t:time_zone_database/0">
+
+  <div class="detail-header">
+    <a href="#t:time_zone_database/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">time_zone_database()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L148" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> time_zone_database() :: <a href="typespecs.html#built-in-types">module</a>()</pre>
+
+      </div>
+
+<p>Specifies the time zone database for calendar operations.</p><p>Many functions in the <a href="DateTime.html"><code class="inline">DateTime</code></a> module require a time zone database.
+By default, this module uses the default time zone database returned by
+<a href="#get_time_zone_database/0"><code class="inline">Calendar.get_time_zone_database/0</code></a>, which defaults to
+<a href="Calendar.UTCOnlyTimeZoneDatabase.html"><code class="inline">Calendar.UTCOnlyTimeZoneDatabase</code></a>. This database only handles <code class="inline">Etc/UTC</code>
+datetimes and returns <code class="inline">{:error, :utc_only_time_zone_database}</code>
+for any other time zone.</p><p>Other time zone databases (including ones provided by packages)
+can be configured as default either via configuration:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:elixir</span><span class="p">,</span><span class="w"> </span><span class="ss">:time_zone_database</span><span class="p">,</span><span class="w"> </span><span class="nc">CustomTimeZoneDatabase</span></code></pre><p>or by calling <a href="#put_time_zone_database/1"><code class="inline">Calendar.put_time_zone_database/1</code></a>.</p><p>See <a href="Calendar.TimeZoneDatabase.html"><code class="inline">Calendar.TimeZoneDatabase</code></a> for more information on custom
+time zone databases.</p>
+  </section>
+</section>
+<section class="detail" id="t:utc_offset/0">
+
+  <div class="detail-header">
+    <a href="#t:utc_offset/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">utc_offset()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L77" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> utc_offset() :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>The time zone UTC offset in ISO seconds for standard time.</p><p>See also <a href="#t:std_offset/0"><code class="inline">std_offset/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="t:week/0">
+
+  <div class="detail-header">
+    <a href="#t:week/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">week()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L23" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> week() :: <a href="typespecs.html#basic-types">pos_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:year/0">
+
+  <div class="detail-header">
+    <a href="#t:year/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">year()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L20" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> year() :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:zone_abbr/0">
+
+  <div class="detail-header">
+    <a href="#t:zone_abbr/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">zone_abbr()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L70" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> zone_abbr() :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>The time zone abbreviation (for example, <code class="inline">CET</code> or <code class="inline">CEST</code> or <code class="inline">BST</code>).</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:date_to_string/3">
+
+  <div class="detail-header">
+    <a href="#c:date_to_string/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">date_to_string(year, month, day)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L203" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> date_to_string(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the date into a string according to the calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:datetime_to_string/11">
+
+  <div class="detail-header">
+    <a href="#c:datetime_to_string/11" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">datetime_to_string(
+  year,
+  month,
+  day,
+  hour,
+  minute,
+  second,
+  microsecond,
+  time_zone,
+  zone_abbr,
+  utc_offset,
+  std_offset
+)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L214" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> datetime_to_string(
+  <a href="#t:year/0">year</a>(),
+  <a href="#t:month/0">month</a>(),
+  <a href="#t:day/0">day</a>(),
+  <a href="#t:hour/0">hour</a>(),
+  <a href="#t:minute/0">minute</a>(),
+  <a href="#t:second/0">second</a>(),
+  <a href="#t:microsecond/0">microsecond</a>(),
+  <a href="#t:time_zone/0">time_zone</a>(),
+  <a href="#t:zone_abbr/0">zone_abbr</a>(),
+  <a href="#t:utc_offset/0">utc_offset</a>(),
+  <a href="#t:std_offset/0">std_offset</a>()
+) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the datetime (with time zone) into a string according to the calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:day_of_era/3">
+
+  <div class="detail-header">
+    <a href="#c:day_of_era/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day_of_era(year, month, day)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L198" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> day_of_era(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()) :: <a href="#t:day_of_era/0">day_of_era</a>()</pre>
+
+      </div>
+
+<p>Calculates the day and era from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p>
+  </section>
+</section>
+<section class="detail" id="c:day_of_week/4">
+
+  <div class="detail-header">
+    <a href="#c:day_of_week/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day_of_week(year, month, day, starting_on)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L176" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> day_of_week(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>(), starting_on :: :default | <a href="typespecs.html#basic-types">atom</a>()) ::
+  {<a href="#t:day_of_week/0">day_of_week</a>(), first_day_of_week :: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+   last_day_of_week :: <a href="typespecs.html#basic-types">non_neg_integer</a>()}</pre>
+
+      </div>
+
+<p>Calculates the day of the week from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p><p><code class="inline">starting_on</code> represents the starting day of the week. All
+calendars must support at least the <code class="inline">:default</code> value. They may
+also support other values representing their days of the week.</p>
+  </section>
+</section>
+<section class="detail" id="c:day_of_year/3">
+
+  <div class="detail-header">
+    <a href="#c:day_of_year/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day_of_year(year, month, day)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L183" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> day_of_year(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()) :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Calculates the day of the year from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p>
+  </section>
+</section>
+<section class="detail" id="c:day_rollover_relative_to_midnight_utc/0">
+
+  <div class="detail-header">
+    <a href="#c:day_rollover_relative_to_midnight_utc/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">day_rollover_relative_to_midnight_utc()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L276" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> day_rollover_relative_to_midnight_utc() :: <a href="#t:day_fraction/0">day_fraction</a>()</pre>
+
+      </div>
+
+<p>Define the rollover moment for the calendar.</p><p>This is the moment, in your calendar, when the current day ends
+and the next day starts.</p><p>The result of this function is used to check if two calendars roll over at
+the same time of day. If they do not, we can only convert datetimes and times
+between them. If they do, this means that we can also convert dates as well
+as naive datetimes between them.</p><p>This day fraction should be in its most simplified form possible, to make comparisons fast.</p><h2 id="c:day_rollover_relative_to_midnight_utc/0-examples" class="section-heading">
+  <a href="#c:day_rollover_relative_to_midnight_utc/0-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<ul><li>If in your calendar a new day starts at midnight, return <code class="inline">{0, 1}</code>.</li><li>If in your calendar a new day starts at sunrise, return <code class="inline">{1, 4}</code>.</li><li>If in your calendar a new day starts at noon, return <code class="inline">{1, 2}</code>.</li><li>If in your calendar a new day starts at sunset, return <code class="inline">{3, 4}</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:days_in_month/2">
+
+  <div class="detail-header">
+    <a href="#c:days_in_month/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">days_in_month(year, month)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> days_in_month(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>()) :: <a href="#t:day/0">day</a>()</pre>
+
+      </div>
+
+<p>Returns how many days there are in the given month of the given year.</p>
+  </section>
+</section>
+<section class="detail" id="c:iso_days_to_beginning_of_day/1">
+
+  <div class="detail-header">
+    <a href="#c:iso_days_to_beginning_of_day/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">iso_days_to_beginning_of_day(iso_days)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L333" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> iso_days_to_beginning_of_day(<a href="#t:iso_days/0">iso_days</a>()) :: <a href="#t:iso_days/0">iso_days</a>()</pre>
+
+      </div>
+
+<p>Converts the given <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> to the first moment of the day.</p>
+  </section>
+</section>
+<section class="detail" id="c:iso_days_to_end_of_day/1">
+
+  <div class="detail-header">
+    <a href="#c:iso_days_to_end_of_day/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">iso_days_to_end_of_day(iso_days)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L339" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> iso_days_to_end_of_day(<a href="#t:iso_days/0">iso_days</a>()) :: <a href="#t:iso_days/0">iso_days</a>()</pre>
+
+      </div>
+
+<p>Converts the given <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> to the last moment of the day.</p>
+  </section>
+</section>
+<section class="detail" id="c:leap_year?/1">
+
+  <div class="detail-header">
+    <a href="#c:leap_year?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">leap_year?(year)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L167" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> leap_year?(<a href="#t:year/0">year</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if the given year is a leap year.</p><p>A leap year is a year of a longer length than normal. The exact meaning
+is up to the calendar. A calendar must return <code class="inline">false</code> if it does not support
+the concept of leap years.</p>
+  </section>
+</section>
+<section class="detail" id="c:months_in_year/1">
+
+  <div class="detail-header">
+    <a href="#c:months_in_year/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">months_in_year(year)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L158" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> months_in_year(<a href="#t:year/0">year</a>()) :: <a href="#t:month/0">month</a>()</pre>
+
+      </div>
+
+<p>Returns how many months there are in the given year.</p>
+  </section>
+</section>
+<section class="detail" id="c:naive_datetime_from_iso_days/1">
+
+  <div class="detail-header">
+    <a href="#c:naive_datetime_from_iso_days/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">naive_datetime_from_iso_days(iso_days)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L242" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> naive_datetime_from_iso_days(<a href="#t:iso_days/0">iso_days</a>()) ::
+  {<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>(), <a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()}</pre>
+
+      </div>
+
+<p>Converts <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> to the calendar's datetime format.</p>
+  </section>
+</section>
+<section class="detail" id="c:naive_datetime_to_iso_days/7">
+
+  <div class="detail-header">
+    <a href="#c:naive_datetime_to_iso_days/7" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">naive_datetime_to_iso_days(year, month, day, hour, minute, second, microsecond)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L236" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> naive_datetime_to_iso_days(
+  <a href="#t:year/0">year</a>(),
+  <a href="#t:month/0">month</a>(),
+  <a href="#t:day/0">day</a>(),
+  <a href="#t:hour/0">hour</a>(),
+  <a href="#t:minute/0">minute</a>(),
+  <a href="#t:second/0">second</a>(),
+  <a href="#t:microsecond/0">microsecond</a>()
+) ::
+  <a href="#t:iso_days/0">iso_days</a>()</pre>
+
+      </div>
+
+<p>Converts the datetime (without time zone) into the <a href="#t:iso_days/0"><code class="inline">iso_days/0</code></a> format.</p>
+  </section>
+</section>
+<section class="detail" id="c:naive_datetime_to_string/7">
+
+  <div class="detail-header">
+    <a href="#c:naive_datetime_to_string/7" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">naive_datetime_to_string(year, month, day, hour, minute, second, microsecond)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L208" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> naive_datetime_to_string(
+  <a href="#t:year/0">year</a>(),
+  <a href="#t:month/0">month</a>(),
+  <a href="#t:day/0">day</a>(),
+  <a href="#t:hour/0">hour</a>(),
+  <a href="#t:minute/0">minute</a>(),
+  <a href="#t:second/0">second</a>(),
+  <a href="#t:microsecond/0">microsecond</a>()
+) ::
+  <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the naive datetime (without time zone) into a string according to the calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:parse_date/1">
+
+  <div class="detail-header">
+    <a href="#c:parse_date/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse_date(t)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L302" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> parse_date(<a href="String.html#t:t/0">String.t</a>()) :: {:ok, {<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()}} | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Parses the string representation for a date returned by <a href="#c:date_to_string/3"><code class="inline">date_to_string/3</code></a>
+into a date tuple.</p>
+  </section>
+</section>
+<section class="detail" id="c:parse_naive_datetime/1">
+
+  <div class="detail-header">
+    <a href="#c:parse_naive_datetime/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse_naive_datetime(t)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L313" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> parse_naive_datetime(<a href="String.html#t:t/0">String.t</a>()) ::
+  {:ok, {<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>(), <a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()}}
+  | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Parses the string representation for a naive datetime returned by
+<a href="#c:naive_datetime_to_string/7"><code class="inline">naive_datetime_to_string/7</code></a> into a naive datetime tuple.</p><p>The given string may contain a timezone offset but it is ignored.</p>
+  </section>
+</section>
+<section class="detail" id="c:parse_time/1">
+
+  <div class="detail-header">
+    <a href="#c:parse_time/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse_time(t)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L293" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> parse_time(<a href="String.html#t:t/0">String.t</a>()) ::
+  {:ok, {<a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()}} | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Parses the string representation for a time returned by <a href="#c:time_to_string/4"><code class="inline">time_to_string/4</code></a>
+into a time tuple.</p>
+  </section>
+</section>
+<section class="detail" id="c:parse_utc_datetime/1">
+
+  <div class="detail-header">
+    <a href="#c:parse_utc_datetime/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse_utc_datetime(t)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L325" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> parse_utc_datetime(<a href="String.html#t:t/0">String.t</a>()) ::
+  {:ok, {<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>(), <a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()},
+   <a href="#t:utc_offset/0">utc_offset</a>()}
+  | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Parses the string representation for a datetime returned by
+<a href="#c:datetime_to_string/11"><code class="inline">datetime_to_string/11</code></a> into a datetime tuple.</p><p>The returned datetime must be in UTC. The original <code class="inline">utc_offset</code>
+it was written in must be returned in the result.</p>
+  </section>
+</section>
+<section class="detail" id="c:quarter_of_year/3">
+
+  <div class="detail-header">
+    <a href="#c:quarter_of_year/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">quarter_of_year(year, month, day)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L188" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> quarter_of_year(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()) :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Calculates the quarter of the year from the given <code class="inline">year</code>, <code class="inline">month</code>, and <code class="inline">day</code>.</p>
+  </section>
+</section>
+<section class="detail" id="c:shift_date/4">
+
+  <div class="detail-header">
+    <a href="#c:shift_date/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shift_date(year, month, day, t)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L345" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> shift_date(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>(), <a href="Duration.html#t:t/0">Duration.t</a>()) :: {<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()}</pre>
+
+      </div>
+
+<p>Shifts date by given duration according to its calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:shift_naive_datetime/8">
+
+  <div class="detail-header">
+    <a href="#c:shift_naive_datetime/8" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shift_naive_datetime(year, month, day, hour, minute, second, microsecond, t)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L351" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> shift_naive_datetime(
+  <a href="#t:year/0">year</a>(),
+  <a href="#t:month/0">month</a>(),
+  <a href="#t:day/0">day</a>(),
+  <a href="#t:hour/0">hour</a>(),
+  <a href="#t:minute/0">minute</a>(),
+  <a href="#t:second/0">second</a>(),
+  <a href="#t:microsecond/0">microsecond</a>(),
+  <a href="Duration.html#t:t/0">Duration.t</a>()
+) :: {<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>(), <a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()}</pre>
+
+      </div>
+
+<p>Shifts naive datetime by given duration according to its calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:shift_time/5">
+
+  <div class="detail-header">
+    <a href="#c:shift_time/5" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shift_time(hour, minute, second, microsecond, t)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L366" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> shift_time(<a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>(), <a href="Duration.html#t:t/0">Duration.t</a>()) ::
+  {<a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()}</pre>
+
+      </div>
+
+<p>Shifts time by given duration according to its calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:time_from_day_fraction/1">
+
+  <div class="detail-header">
+    <a href="#c:time_from_day_fraction/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">time_from_day_fraction(day_fraction)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L253" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> time_from_day_fraction(<a href="#t:day_fraction/0">day_fraction</a>()) ::
+  {<a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()}</pre>
+
+      </div>
+
+<p>Converts <a href="#t:day_fraction/0"><code class="inline">day_fraction/0</code></a> to the calendar's time format.</p>
+  </section>
+</section>
+<section class="detail" id="c:time_to_day_fraction/4">
+
+  <div class="detail-header">
+    <a href="#c:time_to_day_fraction/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">time_to_day_fraction(hour, minute, second, microsecond)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L248" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> time_to_day_fraction(<a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()) ::
+  <a href="#t:day_fraction/0">day_fraction</a>()</pre>
+
+      </div>
+
+<p>Converts the given time to the <a href="#t:day_fraction/0"><code class="inline">day_fraction/0</code></a> format.</p>
+  </section>
+</section>
+<section class="detail" id="c:time_to_string/4">
+
+  <div class="detail-header">
+    <a href="#c:time_to_string/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">time_to_string(hour, minute, second, microsecond)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L231" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> time_to_string(<a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the time into a string according to the calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:valid_date?/3">
+
+  <div class="detail-header">
+    <a href="#c:valid_date?/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">valid_date?(year, month, day)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L281" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> valid_date?(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Should return <code class="inline">true</code> if the given date describes a proper date in the calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:valid_time?/4">
+
+  <div class="detail-header">
+    <a href="#c:valid_time?/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">valid_time?(hour, minute, second, microsecond)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L286" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> valid_time?(<a href="#t:hour/0">hour</a>(), <a href="#t:minute/0">minute</a>(), <a href="#t:second/0">second</a>(), <a href="#t:microsecond/0">microsecond</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Should return <code class="inline">true</code> if the given time describes a proper time in the calendar.</p>
+  </section>
+</section>
+<section class="detail" id="c:year_of_era/3">
+
+  <div class="detail-header">
+    <a href="#c:year_of_era/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">year_of_era(year, month, day)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L193" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> year_of_era(<a href="#t:year/0">year</a>(), <a href="#t:month/0">month</a>(), <a href="#t:day/0">day</a>()) :: {<a href="#t:year/0">year</a>(), <a href="#t:era/0">era</a>()}</pre>
+
+      </div>
+
+<p>Calculates the year and era from the given <code class="inline">year</code>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="compatible_calendars?/2">
+
+  <div class="detail-header">
+    <a href="#compatible_calendars?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compatible_calendars?(calendar, calendar)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L381" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compatible_calendars?(<a href="#t:calendar/0">calendar</a>(), <a href="#t:calendar/0">calendar</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if two calendars have the same moment of starting a new day,
+<code class="inline">false</code> otherwise.</p><p>If two calendars are not compatible, we can only convert datetimes and times
+between them. If they are compatible, this means that we can also convert
+dates as well as naive datetimes between them.</p>
+  </section>
+</section>
+<section class="detail" id="get_time_zone_database/0">
+
+  <div class="detail-header">
+    <a href="#get_time_zone_database/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_time_zone_database()</h1>
+
+        <span class="note">(since 1.8.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L418" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_time_zone_database() :: <a href="#t:time_zone_database/0">time_zone_database</a>()</pre>
+
+      </div>
+
+<p>Gets the current time zone database.</p>
+  </section>
+</section>
+<section class="detail" id="put_time_zone_database/1">
+
+  <div class="detail-header">
+    <a href="#put_time_zone_database/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_time_zone_database(database)</h1>
+
+        <span class="note">(since 1.8.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L409" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> put_time_zone_database(<a href="#t:time_zone_database/0">time_zone_database</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Sets the current time zone database.</p>
+  </section>
+</section>
+<section class="detail" id="strftime/3">
+
+    <span id="strftime/2"></span>
+
+  <div class="detail-header">
+    <a href="#strftime/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">strftime(date_or_time_or_datetime, string_format, user_options \\ [])</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L575" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> strftime(<a href="typespecs.html#basic-types">map</a>(), <a href="String.html#t:t/0">String.t</a>(), <a href="typespecs.html#built-in-types">keyword</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Formats the given date, time, or datetime into a string.</p><p>The datetime can be any of the <a href="Calendar.html"><code class="inline">Calendar</code></a> types (<a href="Time.html"><code class="inline">Time</code></a>, <a href="Date.html"><code class="inline">Date</code></a>,
+<a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>, and <a href="DateTime.html"><code class="inline">DateTime</code></a>) or any map, as long as they
+contain all of the relevant fields necessary for formatting.
+For example, if you use <code class="inline">%Y</code> to format the year, the datetime
+must have the <code class="inline">:year</code> field. Therefore, if you pass a <a href="Time.html"><code class="inline">Time</code></a>,
+or a map without the <code class="inline">:year</code> field to a format that expects <code class="inline">%Y</code>,
+an error will be raised.</p><p>Examples of common usage:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="8133300747-1">(</span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%y-%m-%d %I:%M:%S %p&quot;</span><span class="p" data-group-id="8133300747-1">)</span><span class="w">
+</span><span class="s">&quot;19-08-26 01:52:06 PM&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="8133300747-2">(</span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%a, %B %d %Y&quot;</span><span class="p" data-group-id="8133300747-2">)</span><span class="w">
+</span><span class="s">&quot;Mon, August 26 2019&quot;</span></code></pre><h2 id="strftime/3-user-options" class="section-heading">
+  <a href="#strftime/3-user-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">User Options</span>
+</h2>
+<ul><li><p><code class="inline">:preferred_datetime</code> - a string for the preferred format to show datetimes,
+it can't contain the <code class="inline">%c</code> format and defaults to <code class="inline">&quot;%Y-%m-%d %H:%M:%S&quot;</code>
+if the option is not received</p></li><li><p><code class="inline">:preferred_date</code> - a string for the preferred format to show dates,
+it can't contain the <code class="inline">%x</code> format and defaults to <code class="inline">&quot;%Y-%m-%d&quot;</code>
+if the option is not received</p></li><li><p><code class="inline">:preferred_time</code> - a string for the preferred format to show times,
+it can't contain the <code class="inline">%X</code> format and defaults to <code class="inline">&quot;%H:%M:%S&quot;</code>
+if the option is not received</p></li><li><p><code class="inline">:am_pm_names</code> - a function that receives either <code class="inline">:am</code> or <code class="inline">:pm</code> and returns
+the name of the period of the day, if the option is not received it defaults
+to a function that returns <code class="inline">&quot;am&quot;</code> and <code class="inline">&quot;pm&quot;</code>, respectively</p></li><li><p> <code class="inline">:month_names</code> - a function that receives a number and returns the name of
+the corresponding month, if the option is not received it defaults to a
+function that returns the month names in English</p></li><li><p><code class="inline">:abbreviated_month_names</code> - a function that receives a number and returns the
+abbreviated name of the corresponding month, if the option is not received it
+defaults to a function that returns the abbreviated month names in English</p></li><li><p><code class="inline">:day_of_week_names</code> - a function that receives a number and returns the name of
+the corresponding day of week, if the option is not received it defaults to a
+function that returns the day of week names in English</p></li><li><p><code class="inline">:abbreviated_day_of_week_names</code> - a function that receives a number and returns
+the abbreviated name of the corresponding day of week, if the option is not received
+it defaults to a function that returns the abbreviated day of week names in English</p></li></ul><h2 id="strftime/3-formatting-syntax" class="section-heading">
+  <a href="#strftime/3-formatting-syntax" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Formatting syntax</span>
+</h2>
+<p>The formatting syntax for the <code class="inline">string_format</code> argument is a sequence of characters in
+the following format:</p><pre><code class="makeup elixir" translate="no"><span class="p">%</span><span class="o">&lt;</span><span class="n">padding</span><span class="o">&gt;</span><span class="o">&lt;</span><span class="n">width</span><span class="o">&gt;</span><span class="o">&lt;</span><span class="n">format</span><span class="o">&gt;</span></code></pre><p>where:</p><ul><li><code class="inline">%</code>: indicates the start of a formatted section</li><li><code class="inline">&lt;padding&gt;</code>: set the padding (see below)</li><li><code class="inline">&lt;width&gt;</code>: a number indicating the minimum size of the formatted section</li><li><code class="inline">&lt;format&gt;</code>: the format itself (see below)</li></ul><h3 id="strftime/3-accepted-padding-options" class="section-heading">
+  <a href="#strftime/3-accepted-padding-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Accepted padding options</span>
+</h3>
+<ul><li><code class="inline">-</code>: no padding, removes all padding from the format</li><li><code class="inline">_</code>: pad with spaces</li><li><code class="inline">0</code>: pad with zeroes</li></ul><h3 id="strftime/3-accepted-string-formats" class="section-heading">
+  <a href="#strftime/3-accepted-string-formats" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Accepted string formats</span>
+</h3>
+<p>The accepted formats for <code class="inline">string_format</code> are:</p><table><thead><tr><th style="text-align: left;">Format</th><th style="text-align: left;">Description</th><th style="text-align: left;">Examples (in ISO)</th></tr></thead><tbody><tr><td style="text-align: left;">a</td><td style="text-align: left;">Abbreviated name of day</td><td style="text-align: left;">Mon</td></tr><tr><td style="text-align: left;">A</td><td style="text-align: left;">Full name of day</td><td style="text-align: left;">Monday</td></tr><tr><td style="text-align: left;">b</td><td style="text-align: left;">Abbreviated month name</td><td style="text-align: left;">Jan</td></tr><tr><td style="text-align: left;">B</td><td style="text-align: left;">Full month name</td><td style="text-align: left;">January</td></tr><tr><td style="text-align: left;">c</td><td style="text-align: left;">Preferred date+time representation</td><td style="text-align: left;">2018-10-17 12:34:56</td></tr><tr><td style="text-align: left;">d</td><td style="text-align: left;">Day of the month</td><td style="text-align: left;">01, 31</td></tr><tr><td style="text-align: left;">f</td><td style="text-align: left;">Microseconds <em>(does not support width and padding modifiers)</em></td><td style="text-align: left;">000000, 999999, 0123</td></tr><tr><td style="text-align: left;">H</td><td style="text-align: left;">Hour using a 24-hour clock</td><td style="text-align: left;">00, 23</td></tr><tr><td style="text-align: left;">I</td><td style="text-align: left;">Hour using a 12-hour clock</td><td style="text-align: left;">01, 12</td></tr><tr><td style="text-align: left;">j</td><td style="text-align: left;">Day of the year</td><td style="text-align: left;">001, 366</td></tr><tr><td style="text-align: left;">m</td><td style="text-align: left;">Month</td><td style="text-align: left;">01, 12</td></tr><tr><td style="text-align: left;">M</td><td style="text-align: left;">Minute</td><td style="text-align: left;">00, 59</td></tr><tr><td style="text-align: left;">p</td><td style="text-align: left;">&quot;AM&quot; or &quot;PM&quot; (noon is &quot;PM&quot;, midnight as &quot;AM&quot;)</td><td style="text-align: left;">AM, PM</td></tr><tr><td style="text-align: left;">P</td><td style="text-align: left;">&quot;am&quot; or &quot;pm&quot; (noon is &quot;pm&quot;, midnight as &quot;am&quot;)</td><td style="text-align: left;">am, pm</td></tr><tr><td style="text-align: left;">q</td><td style="text-align: left;">Quarter</td><td style="text-align: left;">1, 2, 3, 4</td></tr><tr><td style="text-align: left;">s</td><td style="text-align: left;">Number of seconds since the Epoch, 1970-01-01 00:00:00+0000 (UTC)</td><td style="text-align: left;">1565888877</td></tr><tr><td style="text-align: left;">S</td><td style="text-align: left;">Second</td><td style="text-align: left;">00, 59, 60</td></tr><tr><td style="text-align: left;">u</td><td style="text-align: left;">Day of the week</td><td style="text-align: left;">1 (Monday), 7 (Sunday)</td></tr><tr><td style="text-align: left;">x</td><td style="text-align: left;">Preferred date (without time) representation</td><td style="text-align: left;">2018-10-17</td></tr><tr><td style="text-align: left;">X</td><td style="text-align: left;">Preferred time (without date) representation</td><td style="text-align: left;">12:34:56</td></tr><tr><td style="text-align: left;">y</td><td style="text-align: left;">Year as 2-digits</td><td style="text-align: left;">01, 01, 86, 18</td></tr><tr><td style="text-align: left;">Y</td><td style="text-align: left;">Year</td><td style="text-align: left;">-0001, 0001, 1986</td></tr><tr><td style="text-align: left;">z</td><td style="text-align: left;">+hhmm/-hhmm time zone offset from UTC (empty string if naive)</td><td style="text-align: left;">+0300, -0530</td></tr><tr><td style="text-align: left;">Z</td><td style="text-align: left;">Time zone abbreviation (empty string if naive)</td><td style="text-align: left;">CET, BRST</td></tr><tr><td style="text-align: left;">%</td><td style="text-align: left;">Literal &quot;%&quot; character</td><td style="text-align: left;">%</td></tr></tbody></table><p>Any other character will be interpreted as an invalid format and raise an error.</p><h2 id="strftime/3-examples" class="section-heading">
+  <a href="#strftime/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Without user options:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="3625901101-1">(</span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%y-%m-%d %I:%M:%S %p&quot;</span><span class="p" data-group-id="3625901101-1">)</span><span class="w">
+</span><span class="s">&quot;19-08-26 01:52:06 PM&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="3625901101-2">(</span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%a, %B %d %Y&quot;</span><span class="p" data-group-id="3625901101-2">)</span><span class="w">
+</span><span class="s">&quot;Mon, August 26 2019&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="3625901101-3">(</span><span class="ld">~U[2020-04-02 13:52:06.0Z]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%B %-d, %Y&quot;</span><span class="p" data-group-id="3625901101-3">)</span><span class="w">
+</span><span class="s">&quot;April 2, 2020&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="3625901101-4">(</span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%c&quot;</span><span class="p" data-group-id="3625901101-4">)</span><span class="w">
+</span><span class="s">&quot;2019-08-26 13:52:06&quot;</span></code></pre><p>With user options:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="1135877888-1">(</span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">preferred_datetime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;%H:%M:%S %d-%m-%y&quot;</span><span class="p" data-group-id="1135877888-1">)</span><span class="w">
+</span><span class="s">&quot;13:52:06 26-08-19&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="1135877888-2">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="s">&quot;%A&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="ss">day_of_week_names</span><span class="p">:</span><span class="w"> </span><span class="k" data-group-id="1135877888-3">fn</span><span class="w"> </span><span class="n">day_of_week</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">   </span><span class="p" data-group-id="1135877888-4">{</span><span class="s">&quot;segunda-feira&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;terça-feira&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;quarta-feira&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;quinta-feira&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">   </span><span class="s">&quot;sexta-feira&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sábado&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;domingo&quot;</span><span class="p" data-group-id="1135877888-4">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">   </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">elem</span><span class="p" data-group-id="1135877888-5">(</span><span class="n">day_of_week</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1135877888-5">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="k" data-group-id="1135877888-3">end</span><span class="w">
+</span><span class="gp unselectable">...&gt;</span><span class="p" data-group-id="1135877888-2">)</span><span class="w">
+</span><span class="s">&quot;segunda-feira&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calendar</span><span class="o">.</span><span class="n">strftime</span><span class="p" data-group-id="1135877888-6">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="ld">~U[2019-08-26 13:52:06.0Z]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="s">&quot;%B&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="ss">month_names</span><span class="p">:</span><span class="w"> </span><span class="k" data-group-id="1135877888-7">fn</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">   </span><span class="p" data-group-id="1135877888-8">{</span><span class="s">&quot;січень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;лютий&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;березень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;квітень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;травень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;червень&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">   </span><span class="s">&quot;липень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;серпень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;вересень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;жовтень&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;листопад&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;грудень&quot;</span><span class="p" data-group-id="1135877888-8">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">   </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">elem</span><span class="p" data-group-id="1135877888-9">(</span><span class="n">month</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1135877888-9">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w"> </span><span class="k" data-group-id="1135877888-7">end</span><span class="w">
+</span><span class="gp unselectable">...&gt;</span><span class="p" data-group-id="1135877888-6">)</span><span class="w">
+</span><span class="s">&quot;серпень&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="truncate/2">
+
+  <div class="detail-header">
+    <a href="#truncate/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">truncate(microsecond_tuple, atom)</h1>
+
+        <span class="note">(since 1.6.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar.ex#L395" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> truncate(<a href="#t:microsecond/0">microsecond</a>(), :microsecond | :millisecond | :second) :: <a href="#t:microsecond/0">microsecond</a>()</pre>
+
+      </div>
+
+<p>Returns a microsecond tuple truncated to a given precision (<code class="inline">:microsecond</code>,
+<code class="inline">:millisecond</code>, or <code class="inline">:second</code>).</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

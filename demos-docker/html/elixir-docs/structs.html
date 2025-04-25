@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Structs — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/structs.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Structs</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/structs.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>We learned about maps <a href="keywords-and-maps.html">in earlier chapters</a>:</p><pre class="elixir" data-code-id="33333331"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map = %{a: 1, b: 2}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{a: 1, b: 2}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map[:a]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%{map | a: 3}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{a: 3, b: 2}</p></pre><p>Structs are extensions built on top of maps that provide compile-time checks and default values.</p><h2 id="defining-structs" class="section-heading">
+  <a href="#defining-structs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Defining structs</span>
+</h2>
+<p>To define a struct, the <a href="Kernel.html#defstruct/1"><code class="inline">defstruct/1</code></a> construct is used:</p><pre class="elixir" data-code-id="33333935"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">defmodule User do
+  defstruct name: &quot;John&quot;, age: 27
+end</span><span class="info"></span></div></pre><p>The keyword list used with <code class="inline">defstruct</code> defines what fields the struct will have along with their default values. Structs take the name of the module they're defined in. In the example above, we defined a struct named <code class="inline">User</code>.</p><p>We can now create <code class="inline">User</code> structs by using a syntax similar to the one used to create maps:</p><pre class="elixir" data-code-id="33343539"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%User{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{age: 27, name: &quot;John&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%User{name: &quot;Jane&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{age: 27, name: &quot;Jane&quot;}</p></pre><p>Structs provide <em>compile-time</em> guarantees that only the fields defined through <code class="inline">defstruct</code> will be allowed to exist in a struct:</p><pre class="elixir" data-code-id="33353233"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%User{oops: :field}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (KeyError) key :oops not found expanding struct: User.__struct__/1</p></pre><h2 id="accessing-and-updating-structs" class="section-heading">
+  <a href="#accessing-and-updating-structs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Accessing and updating structs</span>
+</h2>
+<p>Structs share the same syntax for accessing and updating fields as maps of fixed keys:</p><pre class="elixir" data-code-id="33353837"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">john = %User{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{age: 27, name: &quot;John&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">john.name</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;John&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">jane = %{john | name: &quot;Jane&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{age: 27, name: &quot;Jane&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%{jane | oops: :field}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (KeyError) key :oops not found in: %User{age: 27, name: &quot;Jane&quot;}</p></pre><p>When using the update syntax (<code class="inline">|</code>), Elixir is aware that no new keys will be added to the struct, allowing the maps underneath to share their structure in memory. In the example above, both <code class="inline">john</code> and <code class="inline">jane</code> share the same key structure in memory.</p><p>Structs can also be used in pattern matching, both for matching on the value of specific keys as well as for ensuring that the matching value is a struct of the same type as the matched value.</p><pre class="elixir" data-code-id="33363531"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%User{name: name} = john</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{age: 27, name: &quot;John&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">name</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;John&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%User{} = %{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: %{}</p></pre><h2 id="structs-are-bare-maps-underneath" class="section-heading">
+  <a href="#structs-are-bare-maps-underneath" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Structs are bare maps underneath</span>
+</h2>
+<p>Structs are simply maps with a &quot;special&quot; field named <code class="inline">__struct__</code> that holds the name of the struct:</p><pre class="elixir" data-code-id="33373135"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_map(john)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">john.__struct__</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># User</p></pre><p>However, structs do not inherit any of the protocols that maps do. For example, you can neither enumerate nor access a struct:</p><pre class="elixir" data-code-id="33373739"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">john = %User{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{age: 27, name: &quot;John&quot;}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">john[:name]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (UndefinedFunctionError) function User.fetch/2 is undefined (User does not implement the Access behaviour)</p><p class="output output-initial" data-code-type="output">#              User.fetch(%User{age: 27, name: &quot;John&quot;}, :name)</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.each(john, fn {field, value} -&gt; IO.puts(value) end)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (Protocol.UndefinedError) protocol Enumerable not implemented for %User{age: 27, name: &quot;John&quot;} of type User (a struct)</p></pre><p>Structs alongside protocols provide one of the most important features for Elixir developers: data polymorphism. That's what we will explore in the next chapter.</p><h2 id="default-values-and-required-keys" class="section-heading">
+  <a href="#default-values-and-required-keys" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Default values and required keys</span>
+</h2>
+<p>If you don't specify a default key value when defining a struct, <code class="inline">nil</code> will be assumed:</p><pre class="elixir" data-code-id="33383433"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">defmodule Product do
+  defstruct [:name]
+end</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%Product{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %Product{name: nil}</p></pre><p>You can define a structure combining both fields with explicit default values, and implicit <code class="inline">nil</code> values. In this case you must first specify the fields which implicitly default to nil:</p><pre class="elixir" data-code-id="33393037"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">defmodule User do
+  defstruct [:email, name: &quot;John&quot;, age: 27]
+end</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%User{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %User{age: 27, email: nil, name: &quot;John&quot;}</p></pre><p>Doing it in reverse order will raise a syntax error:</p><pre class="elixir" data-code-id="33393731"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">defmodule User do
+  defstruct [name: &quot;John&quot;, age: 27, :email]
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (SyntaxError) iex:107: unexpected expression after keyword list. Keyword lists must always come last in lists and maps.</p></pre><p>You can also enforce that certain keys have to be specified when creating the struct via the <code class="inline">@enforce_keys</code> module attribute:</p><pre class="elixir" data-code-id="34303335"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">defmodule Car do
+  @enforce_keys [:make]
+  defstruct [:model, :make]
+end</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%Car{}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (ArgumentError) the following keys must also be given when building struct Car: [:make]</p><p class="output output-initial" data-code-type="output">#     expanding struct: Car.__struct__/1</p></pre><p>Enforcing keys provides a simple compile-time guarantee to aid developers when building structs. It is not enforced on updates and it does not provide any sort of value-validation.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="module-attributes.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Module attributes
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="protocols.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Protocols
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

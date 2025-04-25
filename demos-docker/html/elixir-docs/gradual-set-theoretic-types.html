@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Gradual set-theoretic types — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/gradual-set-theoretic-types.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Gradual set-theoretic types</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/references/gradual-set-theoretic-types.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir is in the process of incorporating set-theoretic types into the compiler. This document outlines the current stage of our implementation.</p><p>The current milestone aims to infer types from patterns and guards and use them to type check programs, enabling the Elixir compiler to find faults and bugs in codebases without requiring changes to existing software. The underlying principles, theory, and roadmap of our work have been outlined in <a href="https://arxiv.org/abs/2306.06391">&quot;The Design Principles of the Elixir Type System&quot; by Giuseppe Castagna, Guillaume Duboc, José Valim</a>.</p><h2 id="supported-types" class="section-heading">
+  <a href="#supported-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Supported types</span>
+</h2>
+<p>At the moment, Elixir developers will interact with set-theoretic types only through warnings found by the type system. All data types in the language are modelled:</p><ul><li><p><code class="inline">binary()</code>, <code class="inline">integer()</code>, <code class="inline">float()</code>, <code class="inline">pid()</code>, <code class="inline">port()</code>, <code class="inline">reference()</code> - these types are indivisible. This means both <code class="inline">1</code> and <code class="inline">13</code> get the same <code class="inline">integer()</code> type.</p></li><li><p><code class="inline">atom()</code> - it represents all atoms and it is divisible. For instance, the atom <code class="inline">:foo</code> and <code class="inline">:hello_world</code> are also valid (distinct) types.</p></li><li><p><code class="inline">map()</code> and structs - maps can be &quot;closed&quot; or &quot;open&quot;. Closed maps only allow the specified keys, such as <code class="inline">%{key: atom(), value: integer()}</code>. Open maps support any other keys in addition to the ones listed and their definition starts with <code class="inline">...</code>, such as <code class="inline">%{..., key: atom(), value: integer()}</code>. Structs are closed maps with the <code class="inline">__struct__</code> key.</p></li><li><p><code class="inline">tuple()</code>, <code class="inline">list()</code>, and <code class="inline">function()</code> - currently they are modelled as indivisible types. The next Elixir versions will also introduce fine-grained types here.</p></li></ul><h2 id="set-operations" class="section-heading">
+  <a href="#set-operations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Set operations</span>
+</h2>
+<p>We can compose set-theoretic types by using set operations (hence the name). For example, to say a function returns either atoms or integers, one could write: <code class="inline">atom() or integer()</code>.</p><p>Intersections are available via the <code class="inline">and</code> operator, such as <code class="inline">atom() and integer()</code>, which in this case it becomes the empty set <code class="inline">none()</code>. <code class="inline">term()</code> is the union of all types, also known as the &quot;top&quot; type.</p><p>Intersections are useful when modelling functions. For example, imagine the following function:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">negate</span><span class="p" data-group-id="3469461228-1">(</span><span class="n">x</span><span class="p" data-group-id="3469461228-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="3469461228-2">(</span><span class="n">x</span><span class="p" data-group-id="3469461228-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="n">x</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">negate</span><span class="p" data-group-id="3469461228-3">(</span><span class="n">x</span><span class="p" data-group-id="3469461228-3">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_boolean</span><span class="p" data-group-id="3469461228-4">(</span><span class="n">x</span><span class="p" data-group-id="3469461228-4">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">x</span></code></pre><p>If you give it an integer, it negates it. If you give it a boolean, it negates it.</p><p>We can say this function has the type <code class="inline">(integer() -&gt; integer())</code> because it is capable of receiving an integer and returning an integer. In this case, <code class="inline">(integer() -&gt; integer())</code> is a set that represents all functions that can receive an integer and return an integer. Even though this function can receive other arguments and return other values, it is still part of the <code class="inline">(integer() -&gt; integer())</code> set.</p><p>This function also has the type <code class="inline">(boolean() -&gt; boolean())</code>, because it receives the booleans and returns booleans. Therefore, we can say the overall type of the function is <code class="inline">(integer() -&gt; integer()) and (boolean() -&gt; boolean())</code>. The intersection means the function belongs to both sets.</p><p>At this point, some may ask, why not a union? As a real-world example, take a t-shirt with green and yellow stripes. We can say the t-shirt belongs to the set of &quot;t-shirts with green color&quot;. We can also say the t-shirt belongs to the set of &quot;t-shirts with yellow color&quot;. Let's see the difference between unions and intersections:</p><ul><li><p><code class="inline">(t_shirts_with_green() or t_shirts_with_yellow())</code> - contains t-shirts with either green or yellow, such as green, green and red, green and yellow, yellow, yellow and red, etc.</p></li><li><p><code class="inline">(t_shirts_with_green() and t_shirts_with_yellow())</code> - contains t-shirts with both green and yellow (and also other colors)</p></li></ul><p>Since the t-shirt has both colors, we say it belongs to the intersection of both sets. The same way that a function that goes from <code class="inline">(integer() -&gt; integer())</code> and <code class="inline">(boolean() -&gt; boolean())</code> is also an intersection. In practice, it does not make sense to define the union of two functions in Elixir, so the compiler will always point to the right direction.</p><p>Finally, we can also negate types by using <code class="inline">not</code>. For example, to express all atoms, except the atoms <code class="inline">:foo</code> and <code class="inline">:bar</code>, one can write: <code class="inline">atom() and not (:foo or :bar)</code>.</p><h2 id="the-dynamic-type" class="section-heading">
+  <a href="#the-dynamic-type" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The <code class="inline">dynamic()</code> type</span>
+</h2>
+<p>Existing Elixir programs do not have type declarations, but we still want to be able to type check them. This is done with the introduction of the <code class="inline">dynamic()</code> type.</p><p>When Elixir sees the following function:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">negate</span><span class="p" data-group-id="2461637121-1">(</span><span class="n">x</span><span class="p" data-group-id="2461637121-1">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_integer</span><span class="p" data-group-id="2461637121-2">(</span><span class="n">x</span><span class="p" data-group-id="2461637121-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="n">x</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">negate</span><span class="p" data-group-id="2461637121-3">(</span><span class="n">x</span><span class="p" data-group-id="2461637121-3">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_boolean</span><span class="p" data-group-id="2461637121-4">(</span><span class="n">x</span><span class="p" data-group-id="2461637121-4">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">x</span></code></pre><p>Elixir type checks it as if the function had the type <code class="inline">(dynamic() -&gt; dynamic())</code>. We say <code class="inline">dynamic()</code> is a gradual type, which leads us to <em>gradual set-theoretic types</em>.</p><p>The simplest way to reason about <code class="inline">dynamic()</code> in Elixir is that it is a range of types. If you have a type <code class="inline">atom() or integer()</code>, the underlying code needs to work with both <code class="inline">atom() or integer()</code>. For example, if you call <code class="inline">Integer.to_string(var)</code>, and <code class="inline">var</code> has type <code class="inline">atom() or integer()</code>, the type system will emit a warning, because <a href="Integer.html#to_string/1"><code class="inline">Integer.to_string/1</code></a> does not accept atoms.</p><p>However, by intersecting a type with <code class="inline">dynamic()</code>, we make the type gradual and therefore only a subset of the type needs to be valid. For instance, if you call <code class="inline">Integer.to_string(var)</code>, and <code class="inline">var</code> has type <code class="inline">dynamic() and (atom() or integer())</code>, the type system will not emit a warning, because <a href="Integer.html#to_string/1"><code class="inline">Integer.to_string/1</code></a> works with at least one of the types. For convenience, most programs will write <code class="inline">dynamic(atom() or integer())</code> instead of the intersection. They are equivalent.</p><p>Compared to other gradually typed languages, the <code class="inline">dynamic()</code> type in Elixir is quite powerful: it restricts our program to certain types, via intersections, while still emitting warnings once it is certain the code will fail. This makes <code class="inline">dynamic()</code> an excellent tool for typing existing Elixir code with meaningful warnings.</p><p>Once Elixir introduces typed function signatures, typed Elixir programs will behave as a statically typed code, unless the <code class="inline">dynamic()</code> type is used. This brings us to one last remark about dynamic types in Elixir: dynamic types are always at the root. For example, when you write a tuple of type <code class="inline">{:ok, dynamic()}</code>, Elixir will rewrite it to <code class="inline">dynamic({:ok, term()})</code>. While this has the downside that you cannot make part of a tuple/map/list gradual, only the whole tuple/map/list, it comes with the upside that dynamic is always explicitly at the root, making it harder to accidentally sneak <code class="inline">dynamic()</code> in a statically typed program.</p><h2 id="roadmap" class="section-heading">
+  <a href="#roadmap" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Roadmap</span>
+</h2>
+<p>The current milestone is to implement type inference and type checking of Elixir programs without changes to the Elixir language. At this stage, we want to collect feedback on the quality of error messages and performance, and therefore the type system has no user facing API.</p><p>If the results are satisfactory, the next milestone will include a mechanism for defining typed structs. Elixir programs frequently pattern match on structs, which reveals information about the struct fields, but it knows nothing about their respective types. By propagating types from structs and their fields throughout the program, we will increase the type system’s ability to find errors while further straining our type system implementation. Proposals including the required changes to the language surface will be sent to the community once we reach this stage.</p><p>The third milestone is to introduce set-theoretic type signatures for functions. Unfortunately, the existing Erlang Typespecs are not precise enough for set-theoretic types and they will be phased out of the language and have their postprocessing moved into a separate library once this stage concludes.</p><h2 id="acknowledgements" class="section-heading">
+  <a href="#acknowledgements" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Acknowledgements</span>
+</h2>
+<p>The type system was made possible thanks to a partnership between  <a href="https://www.cnrs.fr/">CNRS</a> and <a href="https://remote.com/">Remote</a>. The research was partially supported by <a href="https://supabase.com/">Supabase</a> and <a href="https://www.fresha.com/">Fresha</a>. The development work is sponsored by <a href="https://www.fresha.com/">Fresha</a>, <a href="https://starfish.team/">Starfish*</a>, and <a href="https://dashbit.co/">Dashbit</a>.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="compatibility-and-deprecations.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Compatibility and deprecations
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="library-guidelines.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Library guidelines
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

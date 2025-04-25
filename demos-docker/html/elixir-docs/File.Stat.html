@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>File.Stat — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/File.Stat.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">File.Stat</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file/stat.ex#L3" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A struct that holds file information.</p><p>In Erlang, this struct is represented by a <code class="inline">:file_info</code> record.
+Therefore this module also provides functions for converting
+between the Erlang record and the Elixir struct.</p><p>Its fields are:</p><ul><li><p><code class="inline">size</code> - size of file in bytes.</p></li><li><p><code class="inline">type</code> - <code class="inline">:device | :directory | :regular | :other | :symlink</code>; the type of the
+file.</p></li><li><p><code class="inline">access</code> - <code class="inline">:read | :write | :read_write | :none</code>; the current system
+access to the file.</p></li><li><p><code class="inline">atime</code> - the last time the file was read.</p></li><li><p><code class="inline">mtime</code> - the last time the file was written.</p></li><li><p><code class="inline">ctime</code> - the interpretation of this time field depends on the operating
+system. On Unix-like operating systems, it is the last time the file or the inode was changed.
+In Windows, it is the time of creation.</p></li><li><p><code class="inline">mode</code> - the file permissions.</p></li><li><p><code class="inline">links</code> - the number of links to this file. This is always 1 for file
+systems which have no concept of links.</p></li><li><p><code class="inline">major_device</code> - identifies the file system where the file is located.
+In Windows, the number indicates a drive as follows: 0 means A:, 1 means
+B:, and so on.</p></li><li><p><code class="inline">minor_device</code> - only valid for character devices on Unix-like systems. In all other
+cases, this field is zero.</p></li><li><p><code class="inline">inode</code> - gives the inode number. On non-Unix-like file systems, this field
+will be zero.</p></li><li><p><code class="inline">uid</code> - indicates the owner of the file. Will be zero for non-Unix-like file
+systems.</p></li><li><p><code class="inline">gid</code> - indicates the group that owns the file. Will be zero for
+non-Unix-like file systems.</p></li></ul><p>The time type returned in <code class="inline">atime</code>, <code class="inline">mtime</code>, and <code class="inline">ctime</code> is dependent on the
+time type set in options. <code class="inline">{:time, type}</code> where type can be <code class="inline">:local</code>,
+<code class="inline">:universal</code>, or <code class="inline">:posix</code>. Default is <code class="inline">:universal</code>.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_record/1" data-no-tooltip="" translate="no">from_record(file_info)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a <code class="inline">:file_info</code> record into a <a href="File.Stat.html"><code class="inline">File.Stat</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_record/1" data-no-tooltip="" translate="no">to_record(stat)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a <a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct to a <code class="inline">:file_info</code> record.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file/stat.ex#L62" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %File.Stat{
+  access: :read | :write | :read_write | :none | :undefined,
+  atime: <a href="https://www.erlang.org/doc/apps/stdlib/calendar.html#t:datetime/0">:calendar.datetime</a>() | <a href="typespecs.html#basic-types">integer</a>() | :undefined,
+  ctime: <a href="https://www.erlang.org/doc/apps/stdlib/calendar.html#t:datetime/0">:calendar.datetime</a>() | <a href="typespecs.html#basic-types">integer</a>() | :undefined,
+  gid: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined,
+  inode: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined,
+  links: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined,
+  major_device: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined,
+  minor_device: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined,
+  mode: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined,
+  mtime: <a href="https://www.erlang.org/doc/apps/stdlib/calendar.html#t:datetime/0">:calendar.datetime</a>() | <a href="typespecs.html#basic-types">integer</a>() | :undefined,
+  size: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined,
+  type: :device | :directory | :regular | :other | :symlink | :undefined,
+  uid: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :undefined
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="from_record/1">
+
+  <div class="detail-header">
+    <a href="#from_record/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_record(file_info)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file/stat.ex#L90" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_record(<a href="https://www.erlang.org/doc/apps/kernel/file.html#t:file_info/0">:file.file_info</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Converts a <code class="inline">:file_info</code> record into a <a href="File.Stat.html"><code class="inline">File.Stat</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="to_record/1">
+
+  <div class="detail-header">
+    <a href="#to_record/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_record(stat)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/file/stat.ex#L82" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_record(<a href="#t:t/0">t</a>()) :: <a href="https://www.erlang.org/doc/apps/kernel/file.html#t:file_info/0">:file.file_info</a>()</pre>
+
+      </div>
+
+<p>Converts a <a href="File.Stat.html"><code class="inline">File.Stat</code></a> struct to a <code class="inline">:file_info</code> record.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

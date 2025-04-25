@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Changelog for Elixir v1.17 — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/changelog.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Changelog for Elixir v1.17</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/CHANGELOG.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This release includes type inference of patterns to provide warnings for an initial set of constructs (binaries, maps, and atoms) within the same function. It also includes a new Duration data type to interact with Calendar types, support for Erlang/OTP 27, and many other improvements.</p><h2 id="warnings-from-gradual-set-theoretic-types" class="section-heading">
+  <a href="#warnings-from-gradual-set-theoretic-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Warnings from gradual set-theoretic types</span>
+</h2>
+<p>This release introduces gradual set-theoretic types to infer types from patterns and use them to type check programs, enabling the Elixir compiler to find faults and bugs in codebases without requiring changes to existing software. The underlying principles, theory, and roadmap of our work have been outlined in <a href="https://arxiv.org/abs/2306.06391">&quot;The Design Principles of the Elixir Type System&quot; by Giuseppe Castagna, Guillaume Duboc, José Valim</a>.</p><p>At the moment, Elixir developers will interact with set-theoretic types only through warnings found by the type system. The current implementation models all data types in the language:</p><ul><li><p><code class="inline">binary()</code>, <code class="inline">integer()</code>, <code class="inline">float()</code>, <code class="inline">pid()</code>, <code class="inline">port()</code>, <code class="inline">reference()</code> - these types are indivisible. This means both <code class="inline">1</code> and <code class="inline">13</code> get the same <code class="inline">integer()</code> type.</p></li><li><p><code class="inline">atom()</code> - it represents all atoms and it is divisible. For instance, the atom <code class="inline">:foo</code> and <code class="inline">:hello_world</code> are also valid (distinct) types.</p></li><li><p><code class="inline">map()</code> and structs - maps can be &quot;closed&quot; or &quot;open&quot;. Closed maps only allow the specified keys, such as <code class="inline">%{key: atom(), value: integer()}</code>. Open maps support any other keys in addition to the ones listed and their definition starts with <code class="inline">...</code>, such as <code class="inline">%{..., key: atom(), value: integer()}</code>. Structs are closed maps with the <code class="inline">__struct__</code> key.</p></li><li><p><code class="inline">tuple()</code>, <code class="inline">list()</code>, and <code class="inline">function()</code> - currently they are modelled as indivisible types. The next Elixir versions will also introduce fine-grained support to them.</p></li></ul><p>We focused on atoms and maps on this initial release as they are respectively the simplest and the most complex types representations, so we can stress the performance of the type system and quality of error messages. Modelling these types will also provide the most immediate benefits to Elixir developers. Assuming there is a variable named <code class="inline">user</code>, holding a <code class="inline">%User{}</code> struct with an <code class="inline">address</code> field, Elixir v1.17 will emit the following warnings at compile-time:</p><ul><li><p>Pattern matching against a map or a struct that does not have the given key, such as <code class="inline">%{adress: ...} = user</code> (notice <code class="inline">address</code> vs <code class="inline">adress</code>)</p></li><li><p>Accessing a key on a map or a struct that does not have the given key, such as <code class="inline">user.adress</code></p></li><li><p>Invoking a function on non-modules, such as <code class="inline">user.address()</code></p></li><li><p>Capturing a function on non-modules, such as <code class="inline">&amp;user.address/0</code></p></li><li><p>Attempting to invoke to call an anonymous function without an actual function, such as <code class="inline">user.()</code></p></li><li><p>Performing structural comparisons with structs, such as <code class="inline">my_date &lt; ~D[2010-04-17]</code></p></li><li><p>Performing structural comparisons between non-overlapping types, such as <code class="inline">integer &gt;= string</code></p></li><li><p>Building and pattern matching on binaries without the relevant specifiers, such as <code class="inline">&lt;&lt;name&gt;&gt;</code> (this warns because by default it expects an integer, it should have been <code class="inline">&lt;&lt;name::binary&gt;&gt;</code> instead)</p></li><li><p>Attempting to rescue an undefined exception or a struct that is not an exception</p></li><li><p>Accessing a field that is not defined in a rescued exception</p></li></ul><p>These new warnings help Elixir developers find bugs earlier and give more confidence when refactoring code, especially around maps and structs. While some of these warnings were emitted in the past, they were discovered using syntax analysis. The new warnings are more reliable, precise, and with better error messages. Keep in mind, however, that the Elixir typechecker only infers types from patterns within the same function at the moment. Analysis from guards and across function boundaries will be added in future relases. For more details, see our new <a href="https://hexdocs.pm/elixir/gradual-set-theoretic-types.html">reference document on gradual set-theoretic types</a>.</p><p>The type system was made possible thanks to a partnership between <a href="https://www.cnrs.fr/">CNRS</a> and <a href="https://remote.com/">Remote</a>. The development work is currently sponsored by <a href="https://www.fresha.com/">Fresha</a>, <a href="https://starfish.team/">Starfish*</a>, and <a href="https://dashbit.co/">Dashbit</a>.</p><h2 id="erlang-otp-support" class="section-heading">
+  <a href="#erlang-otp-support" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Erlang/OTP support</span>
+</h2>
+<p>This release adds support for Erlang/OTP 27 and drops support for Erlang/OTP 24. We recommend Elixir developers to migrate to Erlang/OTP 26 or later, especially on Windows. Support for WERL (a graphical user interface for the Erlang terminal on Windows) will be removed in Elixir v1.18.</p><h2 id="adding-duration-and-shift-2-functions" class="section-heading">
+  <a href="#adding-duration-and-shift-2-functions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Adding <a href="Duration.html"><code class="inline">Duration</code></a> and <code class="inline">shift/2</code> functions</span>
+</h2>
+<p>Elixir introduces the <a href="Duration.html"><code class="inline">Duration</code></a> data type and APIs to shift dates, times, and date times by a given duration, considering different calendars and time zones.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="0153546510-1">(</span><span class="ld">~D[2016-01-31]</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="0153546510-1">)</span><span class="w">
+</span><span class="ld">~D[2016-03-31]</span></code></pre><p>Note the operation is called <code class="inline">shift</code> (instead of <code class="inline">add</code>) since working with durations does not obey properties such as associativity. For instance, adding one month and then one month does not give the same result as adding two months:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="ld">~D[2016-01-31]</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="6684816430-1">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6684816430-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Date</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="6684816430-2">(</span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6684816430-2">)</span><span class="w">
+</span><span class="ld">~D[2016-03-29]</span></code></pre><p>Still, durations are essential for building intervals, recurring events, and modelling scheduling complexities found in the world around us. For <a href="DateTime.html"><code class="inline">DateTime</code></a>s, Elixir will correctly deal with time zone changes (such as Daylight Saving Time), but provisions are also available in case you want to surface conflicts (for example, you shifted to a wall clock that does not exist, because the clock has been moved forward by one hour). See <a href="DateTime.html#shift/2"><code class="inline">DateTime.shift/2</code></a> for examples.</p><p>Finally, a new <a href="Kernel.html#to_timeout/1"><code class="inline">Kernel.to_timeout/1</code></a> function has been added, which helps developers normalize durations and integers to a timeout used by Process APIs. For example, to send a message after one hour, one can now write:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Process</span><span class="o">.</span><span class="n">send_after</span><span class="p" data-group-id="7866741154-1">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="ss">:wake_up</span><span class="p">,</span><span class="w"> </span><span class="n">to_timeout</span><span class="p" data-group-id="7866741154-2">(</span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7866741154-2">)</span><span class="p" data-group-id="7866741154-1">)</span></code></pre><h2 id="v1-17-3-2024-09-18" class="section-heading">
+  <a href="#v1-17-3-2024-09-18" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">v1.17.3 (2024-09-18)</span>
+</h2>
+<h3 id="1-bug-fixes" class="section-heading">
+  <a href="#1-bug-fixes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">1. Bug fixes</span>
+</h3>
+<h4>Elixir</h4><ul><li>[Duration] Fix parsing of fractional durations with non-positive seconds</li><li>[Kernel] Do not attempt to group module warnings when they have a large context</li></ul><h4>IEx</h4><ul><li>[IEx.Helpers] Properly reconsolidate protocols on <code class="inline">recompile</code></li></ul><h4>Mix</h4><ul><li>[mix compile.elixir] Do not verify modules twice</li><li>[mix xref] Respect the <code class="inline">--label</code> option on stats and cycles</li></ul><h2 id="v1-17-2-2024-07-06" class="section-heading">
+  <a href="#v1-17-2-2024-07-06" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">v1.17.2 (2024-07-06)</span>
+</h2>
+<h3 id="1-bug-fixes-1" class="section-heading">
+  <a href="#1-bug-fixes-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">1. Bug fixes</span>
+</h3>
+<h4>Logger</h4><ul><li>[Logger.Translator] Fix logger crash when <code class="inline">:gen_statem</code>'s <code class="inline">format_status/2</code> returns non-tuple</li></ul><h4>Mix</h4><ul><li>[mix deps.get] Fix regression when fetching a git repository with a <code class="inline">:ref</code></li><li>[mix release] Validate <code class="inline">RELEASE_MODE</code> and set ERRORLEVEL on <code class="inline">.bat</code> scripts</li><li>[mix release] Fix invalid example in code comment inside the generated vm.args.eex</li></ul><h2 id="v1-17-1-2024-06-18" class="section-heading">
+  <a href="#v1-17-1-2024-06-18" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">v1.17.1 (2024-06-18)</span>
+</h2>
+<h3 id="1-enhancements" class="section-heading">
+  <a href="#1-enhancements" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">1. Enhancements</span>
+</h3>
+<h4>Mix</h4><ul><li>[mix compile.elixir] Do not run fixpoint computation on runtime dependencies. This should considerably improve compilation times for large projects when changing only one or two files</li></ul><h3 id="2-bug-fixes" class="section-heading">
+  <a href="#2-bug-fixes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">2. Bug fixes</span>
+</h3>
+<h4>EEx</h4><ul><li>[EEx] Do not warn for assignment with blocks in EEx</li></ul><h4>Elixir</h4><ul><li>[Kernel] Fix bug when using pinned variables inside <code class="inline">with</code>'s <code class="inline">else</code> patterns</li><li>[Kernel] Fix Dialyzer error when with else clause is calling a <code class="inline">no_return</code> function</li></ul><h4>ExUnit</h4><ul><li>[ExUnit] Do not alternative sync/async suites on <code class="inline">--repeat-until-failure</code></li></ul><h2 id="v1-17-0-2024-06-12" class="section-heading">
+  <a href="#v1-17-0-2024-06-12" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">v1.17.0 (2024-06-12)</span>
+</h2>
+<h3 id="1-enhancements-1" class="section-heading">
+  <a href="#1-enhancements-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">1. Enhancements</span>
+</h3>
+<h4>Elixir</h4><ul><li>[Access] Add <a href="Access.html#find/1"><code class="inline">Access.find/1</code></a> that mirrors <a href="Enum.html#find/2"><code class="inline">Enum.find/2</code></a></li><li>[Code] Support cursor inside fn/rescue/catch/else/after inside <a href="Code.Fragment.html#container_cursor_to_quoted/2"><code class="inline">Code.Fragment.container_cursor_to_quoted/2</code></a></li><li>[Date] Add <a href="Date.html#shift/2"><code class="inline">Date.shift/2</code></a> to shift dates with duration and calendar-specific semantics</li><li>[Date] Allow <a href="Date.html"><code class="inline">Date</code></a> to accept years outside of <code class="inline">-9999..9999</code> range</li><li>[DateTime] Add <a href="DateTime.html#shift/2"><code class="inline">DateTime.shift/2</code></a> to shift datetimes with duration and calendar-specific semantics</li><li>[Duration] Add a new <a href="Duration.html"><code class="inline">Duration</code></a> data type</li><li>[GenServer] Add <a href="GenServer.html#c:format_status/1"><code class="inline">GenServer.format_status/1</code></a> callback</li><li>[Kernel] Add <a href="Kernel.html#get_in/1"><code class="inline">Kernel.get_in/1</code></a> with safe nil-handling for access and structs</li><li>[Kernel] Add <a href="Kernel.html#is_non_struct_map/1"><code class="inline">Kernel.is_non_struct_map/1</code></a> guard</li><li>[Kernel] Add <a href="Kernel.html#to_timeout/1"><code class="inline">Kernel.to_timeout/1</code></a></li><li>[Kernel] Emit warnings for undefined functions from modules defined within the same context as the caller code</li><li>[Kernel] Support integers in uppercase sigils</li><li>[Keyword] Add <code class="inline">Keyword.intersect/2-3</code> to mirror the <a href="Map.html"><code class="inline">Map</code></a> API</li><li>[Macro] Add <a href="Macro.Env.html#define_alias/4"><code class="inline">Macro.Env.define_alias/4</code></a>, <a href="Macro.Env.html#define_import/4"><code class="inline">Macro.Env.define_import/4</code></a>, <a href="Macro.Env.html#define_require/4"><code class="inline">Macro.Env.define_require/4</code></a>, <a href="Macro.Env.html#expand_alias/4"><code class="inline">Macro.Env.expand_alias/4</code></a>, <a href="Macro.Env.html#expand_import/5"><code class="inline">Macro.Env.expand_import/5</code></a>, and <a href="Macro.Env.html#expand_require/6"><code class="inline">Macro.Env.expand_require/6</code></a> to aid the implementation of language servers and embedded languages</li><li>[NaiveDateTime] Add <a href="NaiveDateTime.html#shift/2"><code class="inline">NaiveDateTime.shift/2</code></a> to shift naive datetimes with duration and calendar-specific semantics</li><li>[Process] Add <a href="Process.html#set_label/1"><code class="inline">Process.set_label/1</code></a></li><li>[String] Add <a href="String.html#byte_slice/3"><code class="inline">String.byte_slice/3</code></a> to slice a string to a maximum number of bytes while keeping it UTF-8 encoded</li><li>[System] Support <code class="inline">use_stdio: false</code> in <a href="System.html#cmd/3"><code class="inline">System.cmd/3</code></a> and <a href="System.html#shell/2"><code class="inline">System.shell/2</code></a></li><li>[Time] Add <a href="Time.html#shift/2"><code class="inline">Time.shift/2</code></a> to shift times with duration and calendar-specific semantics</li></ul><h4>ExUnit</h4><ul><li>[ExUnit] Propagate the test process itself as a caller in <code class="inline">start_supervised</code></li><li>[ExUnit] Include max cases in ExUnit reports</li></ul><h4>IEx</h4><ul><li>[IEx.Helpers] Warns if <code class="inline">recompile</code> was called and the current working directory changed</li><li>[IEx.Helpers] Add <code class="inline">c/0</code> as an alias to <code class="inline">continue/0</code></li><li>[IEx.Pry] Add <a href="https://hexdocs.pm/iex/IEx.Pry.html#annotate_quoted/3"><code class="inline">IEx.Pry.annotate_quoted/3</code></a> to annotate a quoted expression with pry breakpoints</li></ul><h4>Logger</h4><ul><li>[Logger] Format <code class="inline">:gen_statem</code> reports using Elixir data structures</li><li>[Logger] Include process label in logger events</li></ul><h4>Mix</h4><ul><li>[mix deps] Add <code class="inline">:depth</code> option to <code class="inline">Mix.SCM.Git</code>, thus supporting shallow clones of Git dependencies</li><li>[mix deps] Warn if <code class="inline">:optional</code> is used in combination with <code class="inline">:in_umbrella</code></li><li>[mix deps.get] Do not add optional dependency requirements if its parent dep was skipped</li><li>[mix deps.tree] Add <code class="inline">--umbrella-only</code> to <a href="https://hexdocs.pm/mix/Mix.Tasks.Deps.Tree.html"><code class="inline">mix deps.tree</code></a></li><li>[mix profile.tprof] Add a new profiler, available on Erlang/OTP 27+, which can measure count, time, and heap usage</li><li>[mix test] Add <code class="inline">mix test --breakpoints</code> that sets up a breakpoint before each test that will run</li><li>[mix test] Add <code class="inline">mix test --repeat-until-failure</code> to rerun tests until a failure occurs</li><li>[mix test] Add <code class="inline">mix test --slowest-modules</code> to print slowest modules based on all of the tests they hold</li><li>[mix test] Generate cover HTML files in parallel</li></ul><h3 id="2-bug-fixes-1" class="section-heading">
+  <a href="#2-bug-fixes-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">2. Bug fixes</span>
+</h3>
+<h4>Elixir</h4><ul><li>[bin/elixir.bat] Improve handling of quotes and exclamation marks in flags</li><li>[Code] Address a bug where AST nodes for <code class="inline">(a -&gt; b)</code> were not wrapped as part of the literal encoder</li><li>[Kernel] Resolve inconsistencies of how <code class="inline">..</code> and <code class="inline">...</code> are handled at the AST level</li><li>[Kernel] Fix parsing precedence of ambiguous operators followed by containers</li><li>[Kernel] Do not expand code in <code class="inline">quote bind_quoted: ...</code> twice</li><li>[Kernel] Respect <code class="inline">:line</code> property when <code class="inline">:file</code> is given as option to <code class="inline">quote</code></li><li>[Kernel] Do not crash on <a href="Macro.html#escape/2"><code class="inline">Macro.escape/2</code></a> when passing a quote triplet without valid meta</li><li>[Kernel] Avoid double tracing events when capturing a function</li><li>[Kernel] Fix a bug where captured arguments would conflict when a capture included a macro that also used captures</li><li>[Module] Return default value in <a href="Module.html#get_attribute/3"><code class="inline">Module.get_attribute/3</code></a> for persisted attributes which have not yet been written to</li><li>[String] Properly handle transpositions in <code class="inline">jaro_distance</code>. This will correct the distance result in certain cases</li></ul><h4>IEx</h4><ul><li>[IEx.Helpers] Update the history size whenever history is pruned</li></ul><h4>Mix</h4><ul><li>[mix deps] Fix error message for diverged SCM definition in sibling</li></ul><h3 id="3-soft-deprecations-no-warnings-emitted" class="section-heading">
+  <a href="#3-soft-deprecations-no-warnings-emitted" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">3. Soft deprecations (no warnings emitted)</span>
+</h3>
+<h4>Elixir</h4><ul><li>[GenServer] Deprecate <a href="GenServer.html#c:format_status/2"><code class="inline">GenServer.format_status/2</code></a> callback to align with Erlang/OTP 25+</li></ul><h4>Mix</h4><ul><li>[mix profile.cprof] Deprecated in favor of the new <a href="https://hexdocs.pm/mix/Mix.Tasks.Profile.Tprof.html"><code class="inline">mix profile.tprof</code></a></li><li>[mix profile.eprof] Deprecated in favor of the new <a href="https://hexdocs.pm/mix/Mix.Tasks.Profile.Tprof.html"><code class="inline">mix profile.tprof</code></a></li></ul><h3 id="4-hard-deprecations" class="section-heading">
+  <a href="#4-hard-deprecations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">4. Hard deprecations</span>
+</h3>
+<h4>Elixir</h4><ul><li>[IO] Passing <code class="inline">:all</code> to <a href="IO.html#read/2"><code class="inline">IO.read/2</code></a> and <a href="IO.html#binread/2"><code class="inline">IO.binread/2</code></a> is deprecated, pass <code class="inline">:eof</code> instead</li><li>[Kernel] Single-quote charlists are deprecated, use <code class="inline">~c</code> instead</li><li>[Kernel] Deprecate escaping closing delimiter in uppercase sigils</li><li>[Range] <code class="inline">left..right</code> without explicit steps inside patterns and guards is deprecated, write <code class="inline">left..right//step</code> instead</li><li>[Range] Decreasing ranges, such as <code class="inline">10..1</code> without an explicit step is deprecated, write <code class="inline">10..1//-1</code> instead</li></ul><h4>ExUnit</h4><ul><li>[ExUnit.Case] <code class="inline">register_test/4</code> is deprecated in favor of <code class="inline">register_test/6</code> for performance reasons</li></ul><h2 id="v1-16" class="section-heading">
+  <a href="#v1-16" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">v1.16</span>
+</h2>
+<p>The CHANGELOG for v1.16 releases can be found <a href="https://github.com/elixir-lang/elixir/blob/v1.16/CHANGELOG.md">in the v1.16 branch</a>.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="api-reference.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+API Reference
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="introduction.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Introduction
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

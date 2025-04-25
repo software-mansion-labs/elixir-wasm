@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Application — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Application.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Application</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A module for working with applications and defining application callbacks.</p><p>Applications are the idiomatic way to package software in Erlang/OTP. To get
+the idea, they are similar to the &quot;library&quot; concept common in other
+programming languages, but with some additional characteristics.</p><p>An application is a component implementing some specific functionality, with a
+standardized directory structure, configuration, and life cycle. Applications
+are <em>loaded</em>, <em>started</em>, and <em>stopped</em>. Each application also has its own
+environment, which provides a unified API for configuring each application.</p><p>Developers typically interact with the application environment and its
+callback module. Therefore those will be the topics we will cover first
+before jumping into details about the application resource file and life cycle.</p><h2 id="module-the-application-environment" class="section-heading">
+  <a href="#module-the-application-environment" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The application environment</span>
+</h2>
+<p>Each application has its own environment. The environment is a keyword list
+that maps atoms to terms. Note that this environment is unrelated to the
+operating system environment.</p><p>By default, the environment of an application is an empty list. In a Mix
+project's <code class="inline">mix.exs</code> file, you can set the <code class="inline">:env</code> key in <code class="inline">application/0</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">application</span><span class="w"> </span><span class="k" data-group-id="1773630334-1">do</span><span class="w">
+  </span><span class="p" data-group-id="1773630334-2">[</span><span class="ss">env</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1773630334-3">[</span><span class="ss">db_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p" data-group-id="1773630334-3">]</span><span class="p" data-group-id="1773630334-2">]</span><span class="w">
+</span><span class="k" data-group-id="1773630334-1">end</span></code></pre><p>Now, in your application, you can read this environment by using functions
+such as <a href="#fetch_env!/2"><code class="inline">fetch_env!/2</code></a> and friends:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.DBClient</span><span class="w"> </span><span class="k" data-group-id="4392372012-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="4392372012-2">(</span><span class="p" data-group-id="4392372012-2">)</span><span class="w"> </span><span class="k" data-group-id="4392372012-3">do</span><span class="w">
+    </span><span class="nc">SomeLib.DBClient</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="4392372012-4">(</span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="n">db_host</span><span class="p" data-group-id="4392372012-5">(</span><span class="p" data-group-id="4392372012-5">)</span><span class="p" data-group-id="4392372012-4">)</span><span class="w">
+  </span><span class="k" data-group-id="4392372012-3">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">db_host</span><span class="w"> </span><span class="k" data-group-id="4392372012-6">do</span><span class="w">
+    </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="4392372012-7">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:db_host</span><span class="p" data-group-id="4392372012-7">)</span><span class="w">
+  </span><span class="k" data-group-id="4392372012-6">end</span><span class="w">
+</span><span class="k" data-group-id="4392372012-1">end</span></code></pre><p>In Mix projects, the environment of the application and its dependencies can
+be overridden via the <code class="inline">config/config.exs</code> and <code class="inline">config/runtime.exs</code> files. The
+former is loaded at build-time, before your code compiles, and the latter at
+runtime, just before your app starts. For example, someone using your application
+can override its <code class="inline">:db_host</code> environment variable as follows:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Config</span><span class="w">
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:db_host</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;db.local&quot;</span></code></pre><p>See the &quot;Configuration&quot; section in the <a href="https://hexdocs.pm/mix/Mix.html"><code class="inline">Mix</code></a> module for more information.
+You can also change the application environment dynamically by using functions
+such as <a href="#put_env/3"><code class="inline">put_env/3</code></a> and <a href="#delete_env/2"><code class="inline">delete_env/2</code></a>.</p><section role="note" class="admonition tip"><h4 class="admonition-title tip">Environment in libraries</h4><p>The config files <code class="inline">config/config.exs</code> and <code class="inline">config/runtime.exs</code>
+are rarely used by libraries. Libraries typically define their environment
+in the <code class="inline">application/0</code> function of their <code class="inline">mix.exs</code>. Configuration files
+are rather used by applications to configure their libraries.</p></section><section role="note" class="admonition warning"><h4 class="admonition-title warning">Reading the environment of other applications</h4><p>Each application is responsible for its own environment. Do not
+use the functions in this module for directly accessing or modifying
+the environment of other applications. Whenever you change the application
+environment, Elixir's build tool will only recompile the files that
+belong to that application. So if you read the application environment
+of another application, there is a chance you will be depending on
+outdated configuration, as your file won't be recompiled as it changes.</p></section><h2 id="module-compile-time-environment" class="section-heading">
+  <a href="#module-compile-time-environment" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Compile-time environment</span>
+</h2>
+<p>In the previous example, we read the application environment at runtime:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.DBClient</span><span class="w"> </span><span class="k" data-group-id="2356135599-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="2356135599-2">(</span><span class="p" data-group-id="2356135599-2">)</span><span class="w"> </span><span class="k" data-group-id="2356135599-3">do</span><span class="w">
+    </span><span class="nc">SomeLib.DBClient</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="2356135599-4">(</span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="n">db_host</span><span class="p" data-group-id="2356135599-5">(</span><span class="p" data-group-id="2356135599-5">)</span><span class="p" data-group-id="2356135599-4">)</span><span class="w">
+  </span><span class="k" data-group-id="2356135599-3">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">db_host</span><span class="w"> </span><span class="k" data-group-id="2356135599-6">do</span><span class="w">
+    </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="2356135599-7">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:db_host</span><span class="p" data-group-id="2356135599-7">)</span><span class="w">
+  </span><span class="k" data-group-id="2356135599-6">end</span><span class="w">
+</span><span class="k" data-group-id="2356135599-1">end</span></code></pre><p>In other words, the environment key <code class="inline">:db_host</code> for application <code class="inline">:my_app</code>
+will only be read when <code class="inline">MyApp.DBClient</code> effectively starts. While reading
+the application environment at runtime is the preferred approach, in some
+rare occasions you may want to use the application environment to configure
+the compilation of a certain project. However, if you try to access
+<a href="#fetch_env!/2"><code class="inline">Application.fetch_env!/2</code></a> outside of a function:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.DBClient</span><span class="w"> </span><span class="k" data-group-id="7706939576-1">do</span><span class="w">
+  </span><span class="na">@db_host</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="7706939576-2">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:db_host</span><span class="p" data-group-id="7706939576-2">)</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="7706939576-3">(</span><span class="p" data-group-id="7706939576-3">)</span><span class="w"> </span><span class="k" data-group-id="7706939576-4">do</span><span class="w">
+    </span><span class="nc">SomeLib.DBClient</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="7706939576-5">(</span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="na">@db_host</span><span class="p" data-group-id="7706939576-5">)</span><span class="w">
+  </span><span class="k" data-group-id="7706939576-4">end</span><span class="w">
+</span><span class="k" data-group-id="7706939576-1">end</span></code></pre><p>You might see warnings and errors:</p><pre><code class="makeup elixir" translate="no"><span class="ss">warning</span><span class="p">:</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">discouraged</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">module</span><span class="w"> </span><span class="n">body</span><span class="p">,</span><span class="w">
+</span><span class="kn">use</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="o">/</span><span class="mi">3</span><span class="w"> </span><span class="n">instead</span><span class="w">
+  </span><span class="n">iex</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.DBClient</span><span class="w">
+
+</span><span class="gt">** (ArgumentError) could not fetch application environment :db_host</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="n">application</span><span class="w"> </span><span class="ss">:my_app</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">application</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">loaded</span><span class="w"> </span><span class="n">nor</span><span class="w">
+</span><span class="n">configured</span></code></pre><p>This happens because, when defining modules, the application environment
+is not yet available. Luckily, the warning tells us how to solve this
+issue, by using <a href="#compile_env/3"><code class="inline">Application.compile_env/3</code></a> instead:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.DBClient</span><span class="w"> </span><span class="k" data-group-id="9243536787-1">do</span><span class="w">
+  </span><span class="na">@db_host</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="9243536787-2">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:db_host</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;db.local&quot;</span><span class="p" data-group-id="9243536787-2">)</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="9243536787-3">(</span><span class="p" data-group-id="9243536787-3">)</span><span class="w"> </span><span class="k" data-group-id="9243536787-4">do</span><span class="w">
+    </span><span class="nc">SomeLib.DBClient</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="9243536787-5">(</span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="na">@db_host</span><span class="p" data-group-id="9243536787-5">)</span><span class="w">
+  </span><span class="k" data-group-id="9243536787-4">end</span><span class="w">
+</span><span class="k" data-group-id="9243536787-1">end</span></code></pre><p>The difference here is that <code class="inline">compile_env</code> expects the default value to be
+given as an argument, instead of using the <code class="inline">def application</code> function of
+your <code class="inline">mix.exs</code>. Furthermore, by using <a href="#compile_env/3"><code class="inline">compile_env/3</code></a>, tools like Mix will
+store the values used during compilation and compare the compilation values
+with the runtime values whenever your system starts, raising an error in
+case they differ.</p><p>In any case, compile-time environments should be avoided. Whenever possible,
+reading the application environment at runtime should be the first choice.</p><h2 id="module-the-application-callback-module" class="section-heading">
+  <a href="#module-the-application-callback-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The application callback module</span>
+</h2>
+<p>Applications can be loaded, started, and stopped. Generally, build tools
+like Mix take care of starting an application and all of its dependencies
+for you, but you can also do it manually by calling:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7383187668-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="7383187668-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">ensure_all_started</span><span class="p" data-group-id="7383187668-2">(</span><span class="ss">:some_app</span><span class="p" data-group-id="7383187668-2">)</span></code></pre><p>When an application starts, developers may configure a callback module
+that executes custom code. Developers use this callback to start the
+application supervision tree.</p><p>The first step to do so is to add a <code class="inline">:mod</code> key to the <code class="inline">application/0</code>
+definition in your <code class="inline">mix.exs</code> file. It expects a tuple, with the application
+callback module and start argument (commonly an empty list):</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">application</span><span class="w"> </span><span class="k" data-group-id="8036129849-1">do</span><span class="w">
+  </span><span class="p" data-group-id="8036129849-2">[</span><span class="ss">mod</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8036129849-3">{</span><span class="nc">MyApp</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8036129849-4">[</span><span class="p" data-group-id="8036129849-4">]</span><span class="p" data-group-id="8036129849-3">}</span><span class="p" data-group-id="8036129849-2">]</span><span class="w">
+</span><span class="k" data-group-id="8036129849-1">end</span></code></pre><p>The <code class="inline">MyApp</code> module given to <code class="inline">:mod</code> needs to implement the <a href="Application.html"><code class="inline">Application</code></a> behaviour.
+This can be done by putting <code class="inline">use Application</code> in that module and implementing the
+<a href="#c:start/2"><code class="inline">start/2</code></a> callback, for example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp</span><span class="w"> </span><span class="k" data-group-id="7943671253-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Application</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start</span><span class="p" data-group-id="7943671253-2">(</span><span class="c">_type</span><span class="p">,</span><span class="w"> </span><span class="c">_args</span><span class="p" data-group-id="7943671253-2">)</span><span class="w"> </span><span class="k" data-group-id="7943671253-3">do</span><span class="w">
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7943671253-4">[</span><span class="p" data-group-id="7943671253-4">]</span><span class="w">
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="7943671253-5">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="7943671253-5">)</span><span class="w">
+  </span><span class="k" data-group-id="7943671253-3">end</span><span class="w">
+</span><span class="k" data-group-id="7943671253-1">end</span></code></pre><section role="note" class="admonition info"><h4 class="admonition-title info"><code class="inline">use Application</code></h4><p>When you <code class="inline">use Application</code>, the <a href="Application.html"><code class="inline">Application</code></a> module will
+set <code class="inline">@behaviour Application</code> and define an overridable
+definition for the <a href="#c:stop/1"><code class="inline">stop/1</code></a> function, which is required
+by Erlang/OTP.</p></section><p>The <a href="#c:start/2"><code class="inline">start/2</code></a> callback has to spawn and link a supervisor and return <code class="inline">{:ok, pid}</code> or <code class="inline">{:ok, pid, state}</code>, where <code class="inline">pid</code> is the PID of the supervisor, and
+<code class="inline">state</code> is an optional application state. <code class="inline">args</code> is the second element of the
+tuple given to the <code class="inline">:mod</code> option.</p><p>The <code class="inline">type</code> argument passed to <a href="#c:start/2"><code class="inline">start/2</code></a> is usually <code class="inline">:normal</code> unless in a
+distributed setup where application takeovers and failovers are configured.
+Distributed applications are beyond the scope of this documentation.</p><p>When an application is shutting down, its <a href="#c:stop/1"><code class="inline">stop/1</code></a> callback is called after
+the supervision tree has been stopped by the runtime. This callback allows the
+application to do any final cleanup. The argument is the state returned by
+<a href="#c:start/2"><code class="inline">start/2</code></a>, if it did, or <code class="inline">[]</code> otherwise. The return value of <a href="#c:stop/1"><code class="inline">stop/1</code></a> is
+ignored.</p><p>By using <a href="Application.html"><code class="inline">Application</code></a>, modules get a default implementation of <a href="#c:stop/1"><code class="inline">stop/1</code></a>
+that ignores its argument and returns <code class="inline">:ok</code>, but it can be overridden.</p><p>Application callback modules may also implement the optional callback
+<a href="#c:prep_stop/1"><code class="inline">prep_stop/1</code></a>. If present, <a href="#c:prep_stop/1"><code class="inline">prep_stop/1</code></a> is invoked before the supervision
+tree is terminated. Its argument is the state returned by <a href="#c:start/2"><code class="inline">start/2</code></a>, if it did,
+or <code class="inline">[]</code> otherwise, and its return value is passed to <a href="#c:stop/1"><code class="inline">stop/1</code></a>.</p><h2 id="module-the-application-resource-file" class="section-heading">
+  <a href="#module-the-application-resource-file" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The application resource file</span>
+</h2>
+<p>In the sections above, we have configured an application in the
+<code class="inline">application/0</code> section of the <code class="inline">mix.exs</code> file. Ultimately, Mix will use
+this configuration to create an <a href="https://www.erlang.org/doc/man/app"><em>application resource
+file</em></a>, which is a file called
+<code class="inline">APP_NAME.app</code>. For example, the application resource file of the OTP
+application <code class="inline">ex_unit</code> is called <code class="inline">ex_unit.app</code>.</p><p>You can learn more about the generation of application resource files in
+the documentation of <a href="https://hexdocs.pm/mix/Mix.Tasks.Compile.App.html"><code class="inline">Mix.Tasks.Compile.App</code></a>, available as well by running
+<a href="https://hexdocs.pm/mix/Mix.Tasks.Compile.App.html"><code class="inline">mix help compile.app</code></a>.</p><h2 id="module-the-application-life-cycle" class="section-heading">
+  <a href="#module-the-application-life-cycle" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The application life cycle</span>
+</h2>
+<h3 id="module-loading-applications" class="section-heading">
+  <a href="#module-loading-applications" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Loading applications</span>
+</h3>
+<p>Applications are <em>loaded</em>, which means that the runtime finds and processes
+their resource files:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Application</span><span class="o">.</span><span class="n">load</span><span class="p" data-group-id="0838358235-1">(</span><span class="ss">:ex_unit</span><span class="p" data-group-id="0838358235-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span></code></pre><p>When an application is loaded, the environment specified in its resource file
+is merged with any overrides from config files.</p><p>Loading an application <em>does not</em> load its modules.</p><p>In practice, you rarely load applications by hand because that is part of the
+start process, explained next.</p><h3 id="module-starting-applications" class="section-heading">
+  <a href="#module-starting-applications" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Starting applications</span>
+</h3>
+<p>Applications are also <em>started</em>:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Application</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="2013337374-1">(</span><span class="ss">:ex_unit</span><span class="p" data-group-id="2013337374-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span></code></pre><p>Once your application is compiled, running your system is a matter of starting
+your current application and its dependencies. Differently from other languages,
+Elixir does not have a <code class="inline">main</code> procedure that is responsible for starting your
+system. Instead, you start one or more applications, each with their own
+initialization and termination logic.</p><p>When an application is started, the <a href="#load/1"><code class="inline">Application.load/1</code></a> is automatically
+invoked if it hasn't been done yet. Then, it checks if the dependencies listed
+in the <code class="inline">applications</code> key of the resource file are already started. Having at
+least one dependency not started is an error condition. Functions like
+<a href="#ensure_all_started/1"><code class="inline">ensure_all_started/1</code></a> takes care of starting an application and all of its
+dependencies for you.</p><p>If the application does not have a callback module configured, starting is
+done at this point. Otherwise, its <a href="#c:start/2"><code class="inline">start/2</code></a> callback is invoked. The PID of
+the top-level supervisor returned by this function is stored by the runtime
+for later use, and the returned application state is saved too, if any.</p><h3 id="module-stopping-applications" class="section-heading">
+  <a href="#module-stopping-applications" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Stopping applications</span>
+</h3>
+<p>Started applications are, finally, <em>stopped</em>:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Application</span><span class="o">.</span><span class="n">stop</span><span class="p" data-group-id="5646672523-1">(</span><span class="ss">:ex_unit</span><span class="p" data-group-id="5646672523-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :ok</span></code></pre><p>Stopping an application without a callback module defined, is in practice a
+no-op, except for some system tracing.</p><p>Stopping an application with a callback module has three steps:</p><ol><li>If present, invoke the optional callback <a href="#c:prep_stop/1"><code class="inline">prep_stop/1</code></a>.</li><li>Terminate the top-level supervisor.</li><li>Invoke the required callback <a href="#c:stop/1"><code class="inline">stop/1</code></a>.</li></ol><p>The arguments passed to the callbacks are related to the state optionally
+returned by <a href="#c:start/2"><code class="inline">start/2</code></a>, and are documented in the section about the callback
+module above.</p><p>It is important to highlight that step 2 is a blocking one. Termination of a
+supervisor triggers a recursive chain of children terminations, therefore
+orderly shutting down all descendant processes. The <a href="#c:stop/1"><code class="inline">stop/1</code></a> callback is
+invoked only after termination of the whole supervision tree.</p><p>Shutting down a live system cleanly can be done by calling <a href="System.html#stop/1"><code class="inline">System.stop/1</code></a>. It
+will shut down every application in the reverse order they were started.</p><p>By default, a SIGTERM from the operating system will automatically translate to
+<a href="System.html#stop/0"><code class="inline">System.stop/0</code></a>. You can also have more explicit control over operating system
+signals via the <a href="https://www.erlang.org/doc/apps/kernel/os.html#set_signal/2"><code class="inline">:os.set_signal/2</code></a> function.</p><h2 id="module-tooling" class="section-heading">
+  <a href="#module-tooling" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Tooling</span>
+</h2>
+<p>The Mix build tool automates most of the application management tasks. For example,
+<a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> automatically starts your application dependencies and your application
+itself before your test runs. <code class="inline">mix run --no-halt</code> boots your current project and
+can be used to start a long running system. See <a href="https://hexdocs.pm/mix/Mix.Tasks.Run.html"><code class="inline">mix help run</code></a>.</p><p>Developers can also use <a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html"><code class="inline">mix release</code></a> to build <strong>releases</strong>. Releases are able to
+package all of your source code as well as the Erlang VM into a single directory.
+Releases also give you explicit control over how each application is started and in
+which order. They also provide a more streamlined mechanism for starting and
+stopping systems, debugging, logging, as well as system monitoring.</p><p>Finally, Elixir provides tools such as escripts and archives, which are
+different mechanisms for packaging your application. Those are typically used
+when tools must be shared between developers and not as deployment options.
+See <a href="https://hexdocs.pm/mix/Mix.Tasks.Archive.Build.html"><code class="inline">mix help archive.build</code></a> and <a href="https://hexdocs.pm/mix/Mix.Tasks.Escript.Build.html"><code class="inline">mix help escript.build</code></a> for more detail.</p><h2 id="module-further-information" class="section-heading">
+  <a href="#module-further-information" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Further information</span>
+</h2>
+<p>For further details on applications please check the documentation of the
+<a href="https://www.erlang.org/doc/apps/kernel/application.html"><code class="inline">:application</code> Erlang module</a>, and the
+<a href="https://www.erlang.org/doc/design_principles/applications.html">Applications</a>
+section of the <a href="https://www.erlang.org/doc/design_principles/users_guide.html">OTP Design Principles User's
+Guide</a>.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:app/0" data-no-tooltip="" translate="no">app()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:application_key/0" data-no-tooltip="" translate="no">application_key()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:key/0" data-no-tooltip="" translate="no">key()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:restart_type/0" data-no-tooltip="" translate="no">restart_type()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Specifies the type of the application</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:start_type/0" data-no-tooltip="" translate="no">start_type()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:state/0" data-no-tooltip="" translate="no">state()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:value/0" data-no-tooltip="" translate="no">value()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:config_change/3" data-no-tooltip="" translate="no">config_change(changed, new, removed)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback invoked after code upgrade, if the application environment
+has changed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:prep_stop/1" data-no-tooltip="" translate="no">prep_stop(state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called before stopping the application.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:start/2" data-no-tooltip="" translate="no">start(start_type, start_args)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called when an application is started.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:start_phase/3" data-no-tooltip="" translate="no">start_phase(phase, start_type, phase_args)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts an application in synchronous phases.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:stop/1" data-no-tooltip="" translate="no">stop(state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Called after an application has been stopped.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#app_dir/1" data-no-tooltip="" translate="no">app_dir(app)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the directory for app.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#app_dir/2" data-no-tooltip="" translate="no">app_dir(app, path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the given path inside <a href="#app_dir/1"><code class="inline">app_dir/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile_env/3" data-no-tooltip="" translate="no">compile_env(app, key_or_path, default \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads the application environment at compilation time.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile_env/4" data-no-tooltip="" translate="no">compile_env(env, app, key_or_path, default)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads the application environment at compilation time from a macro.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile_env!/2" data-no-tooltip="" translate="no">compile_env!(app, key_or_path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads the application environment at compilation time or raises.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compile_env!/3" data-no-tooltip="" translate="no">compile_env!(env, app, key_or_path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads the application environment at compilation time from a macro
+or raises.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_env/3" data-no-tooltip="" translate="no">delete_env(app, key, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes the <code class="inline">key</code> from the given <code class="inline">app</code> environment.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ensure_all_started/2" data-no-tooltip="" translate="no">ensure_all_started(app_or_apps, type_or_opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Ensures the given <code class="inline">app</code> or <code class="inline">apps</code> and their child applications are started.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ensure_loaded/1" data-no-tooltip="" translate="no">ensure_loaded(app)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Ensures the given <code class="inline">app</code> is loaded.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ensure_started/2" data-no-tooltip="" translate="no">ensure_started(app, type \\ :temporary)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Ensures the given <code class="inline">app</code> is started with <a href="#t:restart_type/0"><code class="inline">restart_type/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fetch_env/2" data-no-tooltip="" translate="no">fetch_env(app, key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s environment in a tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fetch_env!/2" data-no-tooltip="" translate="no">fetch_env!(app, key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s environment.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#format_error/1" data-no-tooltip="" translate="no">format_error(reason)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Formats the error reason returned by <a href="#start/2"><code class="inline">start/2</code></a>,
+<a href="#ensure_started/2"><code class="inline">ensure_started/2</code></a>, <a href="#stop/1"><code class="inline">stop/1</code></a>, <a href="#load/1"><code class="inline">load/1</code></a> and <a href="#unload/1"><code class="inline">unload/1</code></a>,
+returns a string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_all_env/1" data-no-tooltip="" translate="no">get_all_env(app)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns all key-value pairs for <code class="inline">app</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_application/1" data-no-tooltip="" translate="no">get_application(module)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the application for the given module.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_env/3" data-no-tooltip="" translate="no">get_env(app, key, default \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s environment.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#load/1" data-no-tooltip="" translate="no">load(app)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Loads the given <code class="inline">app</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#loaded_applications/0" data-no-tooltip="" translate="no">loaded_applications()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a list with information about the applications which have been loaded.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_all_env/2" data-no-tooltip="" translate="no">put_all_env(config, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Puts the environment for multiple applications at the same time.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_env/4" data-no-tooltip="" translate="no">put_env(app, key, value, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Puts the <code class="inline">value</code> in <code class="inline">key</code> for the given <code class="inline">app</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spec/1" data-no-tooltip="" translate="no">spec(app)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the spec for <code class="inline">app</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spec/2" data-no-tooltip="" translate="no">spec(app, key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s specification.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start/2" data-no-tooltip="" translate="no">start(app, type \\ :temporary)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts the given <code class="inline">app</code> with <a href="#t:restart_type/0"><code class="inline">restart_type/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#started_applications/1" data-no-tooltip="" translate="no">started_applications(timeout \\ 5000)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a list with information about the applications which are currently running.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stop/1" data-no-tooltip="" translate="no">stop(app)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Stops the given <code class="inline">app</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#unload/1" data-no-tooltip="" translate="no">unload(app)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Unloads the given <code class="inline">app</code>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:app/0">
+
+  <div class="detail-header">
+    <a href="#t:app/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">app()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L433" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> app() :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:application_key/0">
+
+  <div class="detail-header">
+    <a href="#t:application_key/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">application_key()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L435" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> application_key() ::
+  :start_phases
+  | :mod
+  | :applications
+  | :optional_applications
+  | :included_applications
+  | :registered
+  | :maxT
+  | :maxP
+  | :modules
+  | :vsn
+  | :id
+  | :description</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:key/0">
+
+  <div class="detail-header">
+    <a href="#t:key/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">key()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L434" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> key() :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:restart_type/0">
+
+  <div class="detail-header">
+    <a href="#t:restart_type/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">restart_type()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L461" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> restart_type() :: :permanent | :transient | :temporary</pre>
+
+      </div>
+
+<p>Specifies the type of the application:</p><ul><li><p><code class="inline">:permanent</code> - if <code class="inline">app</code> terminates, all other applications and the entire
+node are also terminated.</p></li><li><p><code class="inline">:transient</code> - if <code class="inline">app</code> terminates with <code class="inline">:normal</code> reason, it is reported
+but no other applications are terminated. If a transient application
+terminates abnormally, all other applications and the entire node are
+also terminated.</p></li><li><p><code class="inline">:temporary</code> - if <code class="inline">app</code> terminates, it is reported but no other
+applications are terminated (the default).</p></li></ul><p>Note that it is always possible to stop an application explicitly by calling
+<a href="#stop/1"><code class="inline">stop/1</code></a>. Regardless of the type of the application, no other applications will
+be affected.</p><p>Note also that the <code class="inline">:transient</code> type is of little practical use, since when a
+supervision tree terminates, the reason is set to <code class="inline">:shutdown</code>, not <code class="inline">:normal</code>.</p>
+  </section>
+</section>
+<section class="detail" id="t:start_type/0">
+
+  <div class="detail-header">
+    <a href="#t:start_type/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_type()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L438" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> start_type() :: :normal | {:takeover, <a href="typespecs.html#built-in-types">node</a>()} | {:failover, <a href="typespecs.html#built-in-types">node</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:state/0">
+
+  <div class="detail-header">
+    <a href="#t:state/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">state()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L437" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> state() :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:value/0">
+
+  <div class="detail-header">
+    <a href="#t:value/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">value()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L436" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> value() :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:config_change/3">
+
+  <div class="detail-header">
+    <a href="#c:config_change/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">config_change(changed, new, removed)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L397" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> config_change(changed, new, removed) :: :ok
+when changed: <a href="typespecs.html#built-in-types">keyword</a>(), new: <a href="typespecs.html#built-in-types">keyword</a>(), removed: [<a href="typespecs.html#basic-types">atom</a>()]</pre>
+
+      </div>
+
+<p>Callback invoked after code upgrade, if the application environment
+has changed.</p><p><code class="inline">changed</code> is a keyword list of keys and their changed values in the
+application environment. <code class="inline">new</code> is a keyword list with all new keys
+and their values. <code class="inline">removed</code> is a list with all removed keys.</p>
+  </section>
+</section>
+<section class="detail" id="c:prep_stop/1">
+
+  <div class="detail-header">
+    <a href="#c:prep_stop/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">prep_stop(state)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L359" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> prep_stop(<a href="#t:state/0">state</a>()) :: <a href="#t:state/0">state</a>()</pre>
+
+      </div>
+
+<p>Called before stopping the application.</p><p>This function is called before the top-level supervisor is terminated. It
+receives the state returned by <a href="#c:start/2"><code class="inline">start/2</code></a>, if it did, or <code class="inline">[]</code> otherwise.
+The return value is later passed to <a href="#c:stop/1"><code class="inline">stop/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="c:start/2">
+
+  <div class="detail-header">
+    <a href="#c:start/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start(start_type, start_args)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L347" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> start(<a href="#t:start_type/0">start_type</a>(), start_args :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  {:ok, <a href="typespecs.html#basic-types">pid</a>()} | {:ok, <a href="typespecs.html#basic-types">pid</a>(), <a href="#t:state/0">state</a>()} | {:error, reason :: <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Called when an application is started.</p><p>This function is called when an application is started using
+<a href="#start/2"><code class="inline">Application.start/2</code></a> (and functions on top of that, such as
+<a href="#ensure_started/2"><code class="inline">Application.ensure_started/2</code></a>). This function should start the top-level
+process of the application (which should be the top supervisor of the
+application's supervision tree if the application follows the OTP design
+principles around supervision).</p><p><code class="inline">start_type</code> defines how the application is started:</p><ul><li><code class="inline">:normal</code> - used if the startup is a normal startup or if the application
+is distributed and is started on the current node because of a failover
+from another node and the application specification key <code class="inline">:start_phases</code>
+is <code class="inline">:undefined</code>.</li><li><code class="inline">{:takeover, node}</code> - used if the application is distributed and is
+started on the current node because of a failover on the node <code class="inline">node</code>.</li><li><code class="inline">{:failover, node}</code> - used if the application is distributed and is
+started on the current node because of a failover on node <code class="inline">node</code>, and the
+application specification key <code class="inline">:start_phases</code> is not <code class="inline">:undefined</code>.</li></ul><p><code class="inline">start_args</code> are the arguments passed to the application in the <code class="inline">:mod</code>
+specification key (for example, <code class="inline">mod: {MyApp, [:my_args]}</code>).</p><p>This function should either return <code class="inline">{:ok, pid}</code> or <code class="inline">{:ok, pid, state}</code> if
+startup is successful. <code class="inline">pid</code> should be the PID of the top supervisor. <code class="inline">state</code>
+can be an arbitrary term, and if omitted will default to <code class="inline">[]</code>; if the
+application is later stopped, <code class="inline">state</code> is passed to the <a href="#stop/1"><code class="inline">stop/1</code></a> callback (see
+the documentation for the <a href="#c:stop/1"><code class="inline">stop/1</code></a> callback for more information).</p><p><code class="inline">use Application</code> provides no default implementation for the <a href="#start/2"><code class="inline">start/2</code></a>
+callback.</p>
+  </section>
+</section>
+<section class="detail" id="c:start_phase/3">
+
+  <div class="detail-header">
+    <a href="#c:start_phase/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_phase(phase, start_type, phase_args)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L386" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> start_phase(phase :: <a href="typespecs.html#built-in-types">term</a>(), <a href="#t:start_type/0">start_type</a>(), phase_args :: <a href="typespecs.html#built-in-types">term</a>()) ::
+  :ok | {:error, reason :: <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Starts an application in synchronous phases.</p><p>This function is called after <a href="#start/2"><code class="inline">start/2</code></a> finishes but before
+<a href="#start/2"><code class="inline">Application.start/2</code></a> returns. It will be called once for every start phase
+defined in the application's (and any included applications') specification,
+in the order they are listed in.</p>
+  </section>
+</section>
+<section class="detail" id="c:stop/1">
+
+  <div class="detail-header">
+    <a href="#c:stop/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stop(state)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L376" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> stop(<a href="#t:state/0">state</a>()) :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Called after an application has been stopped.</p><p>This function is called after an application has been stopped, i.e., after its
+supervision tree has been stopped. It should do the opposite of what the
+<a href="#c:start/2"><code class="inline">start/2</code></a> callback did, and should perform any necessary cleanup. The return
+value of this callback is ignored.</p><p><code class="inline">state</code> is the state returned by <a href="#c:start/2"><code class="inline">start/2</code></a>, if it did, or <code class="inline">[]</code> otherwise.
+If the optional callback <a href="#c:prep_stop/1"><code class="inline">prep_stop/1</code></a> is present, <code class="inline">state</code> is its return
+value instead.</p><p><code class="inline">use Application</code> defines a default implementation of this function which does
+nothing and just returns <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="app_dir/1">
+
+  <div class="detail-header">
+    <a href="#app_dir/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">app_dir(app)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L1027" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> app_dir(<a href="#t:app/0">app</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Gets the directory for app.</p><p>This information is returned based on the code path. Here is an
+example:</p><pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">mkdir_p!</span><span class="p" data-group-id="5128931269-1">(</span><span class="s">&quot;foo/ebin&quot;</span><span class="p" data-group-id="5128931269-1">)</span><span class="w">
+</span><span class="nc">Code</span><span class="o">.</span><span class="n">prepend_path</span><span class="p" data-group-id="5128931269-2">(</span><span class="s">&quot;foo/ebin&quot;</span><span class="p" data-group-id="5128931269-2">)</span><span class="w">
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">app_dir</span><span class="p" data-group-id="5128931269-3">(</span><span class="ss">:foo</span><span class="p" data-group-id="5128931269-3">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;foo&quot;</span></code></pre><p>Even though the directory is empty and there is no <code class="inline">.app</code> file
+it is considered the application directory based on the name
+&quot;foo/ebin&quot;. The name may contain a dash <code class="inline">-</code> which is considered
+to be the app version and it is removed for the lookup purposes:</p><pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">mkdir_p!</span><span class="p" data-group-id="1515636537-1">(</span><span class="s">&quot;bar-123/ebin&quot;</span><span class="p" data-group-id="1515636537-1">)</span><span class="w">
+</span><span class="nc">Code</span><span class="o">.</span><span class="n">prepend_path</span><span class="p" data-group-id="1515636537-2">(</span><span class="s">&quot;bar-123/ebin&quot;</span><span class="p" data-group-id="1515636537-2">)</span><span class="w">
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">app_dir</span><span class="p" data-group-id="1515636537-3">(</span><span class="ss">:bar</span><span class="p" data-group-id="1515636537-3">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;bar-123&quot;</span></code></pre><p>For more information on code paths, check the <a href="Code.html"><code class="inline">Code</code></a> module in
+Elixir and also Erlang's <a href="https://www.erlang.org/doc/apps/kernel/code.html"><code class="inline">:code</code> module</a>.</p>
+  </section>
+</section>
+<section class="detail" id="app_dir/2">
+
+  <div class="detail-header">
+    <a href="#app_dir/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">app_dir(app, path)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L1054" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> app_dir(<a href="#t:app/0">app</a>(), <a href="String.html#t:t/0">String.t</a>() | [<a href="String.html#t:t/0">String.t</a>()]) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Returns the given path inside <a href="#app_dir/1"><code class="inline">app_dir/1</code></a>.</p><p>If <code class="inline">path</code> is a string, then it will be used as the path inside <a href="#app_dir/1"><code class="inline">app_dir/1</code></a>. If
+<code class="inline">path</code> is a list of strings, it will be joined (see <a href="Path.html#join/1"><code class="inline">Path.join/1</code></a>) and the result
+will be used as the path inside <a href="#app_dir/1"><code class="inline">app_dir/1</code></a>.</p><h2 id="app_dir/2-examples" class="section-heading">
+  <a href="#app_dir/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">File</span><span class="o">.</span><span class="n">mkdir_p!</span><span class="p" data-group-id="2152033601-1">(</span><span class="s">&quot;foo/ebin&quot;</span><span class="p" data-group-id="2152033601-1">)</span><span class="w">
+</span><span class="nc">Code</span><span class="o">.</span><span class="n">prepend_path</span><span class="p" data-group-id="2152033601-2">(</span><span class="s">&quot;foo/ebin&quot;</span><span class="p" data-group-id="2152033601-2">)</span><span class="w">
+
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">app_dir</span><span class="p" data-group-id="2152033601-3">(</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_path&quot;</span><span class="p" data-group-id="2152033601-3">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;foo/my_path&quot;</span><span class="w">
+
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">app_dir</span><span class="p" data-group-id="2152033601-4">(</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2152033601-5">[</span><span class="s">&quot;my&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;nested&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path&quot;</span><span class="p" data-group-id="2152033601-5">]</span><span class="p" data-group-id="2152033601-4">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;foo/my/nested/path&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="compile_env/3">
+
+    <span id="compile_env/2"></span>
+
+  <div class="detail-header">
+    <a href="#compile_env/3" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compile_env(app, key_or_path, default \\ nil)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L566" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compile_env(<a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>() | <a href="typespecs.html#built-in-types">list</a>(), <a href="#t:value/0">value</a>()) :: <a href="#t:value/0">value</a>()</pre>
+
+      </div>
+
+<p>Reads the application environment at compilation time.</p><p>Similar to <a href="#get_env/3"><code class="inline">get_env/3</code></a>, except it must be used to read values
+at compile time. This allows Elixir to track when configuration
+values change between compile time and runtime.</p><p>The first argument is the application name. The second argument
+<code class="inline">key_or_path</code> is either an atom key or a path to traverse in
+search of the configuration, starting with an atom key.</p><p>For example, imagine the following configuration:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:key</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2418338948-1">[</span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2418338948-2">[</span><span class="ss">bar</span><span class="p">:</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="2418338948-2">]</span><span class="p" data-group-id="2418338948-1">]</span></code></pre><p>We can access it during compile time as:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="7171084516-1">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:key</span><span class="p" data-group-id="7171084516-1">)</span><span class="w">
+</span><span class="c1">#=&gt; [foo: [bar: :baz]]</span><span class="w">
+
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="7171084516-2">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7171084516-3">[</span><span class="ss">:key</span><span class="p">,</span><span class="w"> </span><span class="ss">:foo</span><span class="p" data-group-id="7171084516-3">]</span><span class="p" data-group-id="7171084516-2">)</span><span class="w">
+</span><span class="c1">#=&gt; [bar: :baz]</span><span class="w">
+
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="7171084516-4">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7171084516-5">[</span><span class="ss">:key</span><span class="p">,</span><span class="w"> </span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p" data-group-id="7171084516-5">]</span><span class="p" data-group-id="7171084516-4">)</span><span class="w">
+</span><span class="c1">#=&gt; :baz</span></code></pre><p>A default value can also be given as third argument. If
+any of the keys in the path along the way is missing, the
+default value is used:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="3498826050-1">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498826050-2">[</span><span class="ss">:unknown</span><span class="p">,</span><span class="w"> </span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p" data-group-id="3498826050-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="3498826050-1">)</span><span class="w">
+</span><span class="c1">#=&gt; :default</span><span class="w">
+
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="3498826050-3">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498826050-4">[</span><span class="ss">:key</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p" data-group-id="3498826050-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="3498826050-3">)</span><span class="w">
+</span><span class="c1">#=&gt; :default</span><span class="w">
+
+</span><span class="nc">Application</span><span class="o">.</span><span class="n">compile_env</span><span class="p" data-group-id="3498826050-5">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3498826050-6">[</span><span class="ss">:key</span><span class="p">,</span><span class="w"> </span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown</span><span class="p" data-group-id="3498826050-6">]</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="3498826050-5">)</span><span class="w">
+</span><span class="c1">#=&gt; :default</span></code></pre><p>Giving a path is useful to let Elixir know that only certain paths
+in a large configuration are compile time dependent.</p>
+  </section>
+</section>
+<section class="detail" id="compile_env/4">
+
+  <div class="detail-header">
+    <a href="#compile_env/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compile_env(env, app, key_or_path, default)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L591" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compile_env(<a href="Macro.Env.html#t:t/0">Macro.Env.t</a>(), <a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>() | <a href="typespecs.html#built-in-types">list</a>(), <a href="#t:value/0">value</a>()) :: <a href="#t:value/0">value</a>()</pre>
+
+      </div>
+
+<p>Reads the application environment at compilation time from a macro.</p><p>Typically, developers will use <a href="#compile_env/3"><code class="inline">compile_env/3</code></a>. This function must
+only be invoked from macros which aim to read the compilation environment
+dynamically.</p><p>It expects a <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> as first argument, where the <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> is
+typically the <code class="inline">__CALLER__</code> in a macro. It raises if <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> comes
+from a function.</p>
+  </section>
+</section>
+<section class="detail" id="compile_env!/2">
+
+  <div class="detail-header">
+    <a href="#compile_env!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compile_env!(app, key_or_path)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L606" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compile_env!(<a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>() | <a href="typespecs.html#built-in-types">list</a>()) :: <a href="#t:value/0">value</a>()</pre>
+
+      </div>
+
+<p>Reads the application environment at compilation time or raises.</p><p>This is the same as <a href="#compile_env/3"><code class="inline">compile_env/3</code></a> but it raises an
+<a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> if the configuration is not available.</p>
+  </section>
+</section>
+<section class="detail" id="compile_env!/3">
+
+  <div class="detail-header">
+    <a href="#compile_env!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compile_env!(env, app, key_or_path)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L632" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compile_env!(<a href="Macro.Env.html#t:t/0">Macro.Env.t</a>(), <a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>() | <a href="typespecs.html#built-in-types">list</a>()) :: <a href="#t:value/0">value</a>()</pre>
+
+      </div>
+
+<p>Reads the application environment at compilation time from a macro
+or raises.</p><p>Typically, developers will use <a href="#compile_env!/2"><code class="inline">compile_env!/2</code></a>. This function must
+only be invoked from macros which aim to read the compilation environment
+dynamically.</p><p>It expects a <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> as first argument, where the <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> is
+typically the <code class="inline">__CALLER__</code> in a macro. It raises if <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> comes
+from a function.</p>
+  </section>
+</section>
+<section class="detail" id="delete_env/3">
+
+    <span id="delete_env/2"></span>
+
+  <div class="detail-header">
+    <a href="#delete_env/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_env(app, key, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L856" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> delete_env(<a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>(), timeout: <a href="typespecs.html#built-in-types">timeout</a>(), persistent: <a href="typespecs.html#built-in-types">boolean</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Deletes the <code class="inline">key</code> from the given <code class="inline">app</code> environment.</p><p>It receives the same options as <a href="#put_env/4"><code class="inline">put_env/4</code></a>. Returns <code class="inline">:ok</code>.</p>
+  </section>
+</section>
+<section class="detail" id="ensure_all_started/2">
+
+    <span id="ensure_all_started/1"></span>
+
+  <div class="detail-header">
+    <a href="#ensure_all_started/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ensure_all_started(app_or_apps, type_or_opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L920" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ensure_all_started(<a href="#t:app/0">app</a>() | [<a href="#t:app/0">app</a>()],
+  type: <a href="#t:restart_type/0">restart_type</a>(),
+  mode: :serial | :concurrent
+) ::
+  {:ok, [<a href="#t:app/0">app</a>()]} | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+          <pre translate="no"><span class="attribute">@spec</span> ensure_all_started(<a href="#t:app/0">app</a>() | [<a href="#t:app/0">app</a>()], <a href="#t:restart_type/0">restart_type</a>()) ::
+  {:ok, [<a href="#t:app/0">app</a>()]} | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Ensures the given <code class="inline">app</code> or <code class="inline">apps</code> and their child applications are started.</p><p>The second argument is either the <code class="inline">t:restart_type/1</code> (for consistency with
+<a href="#start/2"><code class="inline">start/2</code></a>) or a keyword list.</p><h2 id="ensure_all_started/2-options" class="section-heading">
+  <a href="#ensure_all_started/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:type</code> - if the application should be started <code class="inline">:temporary</code> (default),
+<code class="inline">:permanent</code>, or <code class="inline">:transient</code>. See <code class="inline">t:restart_type/1</code> for more information.</p></li><li><p><code class="inline">:mode</code> - (since v1.15.0) if the applications should be started serially
+(<code class="inline">:serial</code>, default) or concurrently (<code class="inline">:concurrent</code>). This option requires
+Erlang/OTP 26+.</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="ensure_loaded/1">
+
+  <div class="detail-header">
+    <a href="#ensure_loaded/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ensure_loaded(app)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L892" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ensure_loaded(<a href="#t:app/0">app</a>()) :: :ok | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Ensures the given <code class="inline">app</code> is loaded.</p><p>Same as <a href="#load/1"><code class="inline">load/1</code></a> but returns <code class="inline">:ok</code> if the application was already
+loaded.</p>
+  </section>
+</section>
+<section class="detail" id="ensure_started/2">
+
+    <span id="ensure_started/1"></span>
+
+  <div class="detail-header">
+    <a href="#ensure_started/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">ensure_started(app, type \\ :temporary)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L880" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> ensure_started(<a href="#t:app/0">app</a>(), <a href="#t:restart_type/0">restart_type</a>()) :: :ok | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Ensures the given <code class="inline">app</code> is started with <a href="#t:restart_type/0"><code class="inline">restart_type/0</code></a>.</p><p>Same as <a href="#start/2"><code class="inline">start/2</code></a> but returns <code class="inline">:ok</code> if the application was already
+started.</p>
+  </section>
+</section>
+<section class="detail" id="fetch_env/2">
+
+  <div class="detail-header">
+    <a href="#fetch_env/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">fetch_env(app, key)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L745" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> fetch_env(<a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>()) :: {:ok, <a href="#t:value/0">value</a>()} | :error</pre>
+
+      </div>
+
+<p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s environment in a tuple.</p><p>If the configuration parameter does not exist, the function returns <code class="inline">:error</code>.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>You must use this function to read only your own application
+environment. Do not read the environment of other applications.</p></section><blockquote><h4>Application environment in info</h4><p>If you are writing a library to be used by other developers,
+it is generally recommended to avoid the application environment, as the
+application environment is effectively a global storage. For more information,
+read our <a href="library-guidelines.html">library guidelines</a>.</p></blockquote>
+  </section>
+</section>
+<section class="detail" id="fetch_env!/2">
+
+  <div class="detail-header">
+    <a href="#fetch_env!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">fetch_env!(app, key)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L772" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> fetch_env!(<a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>()) :: <a href="#t:value/0">value</a>()</pre>
+
+      </div>
+
+<p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s environment.</p><p>If the configuration parameter does not exist, raises <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a>.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>You must use this function to read only your own application
+environment. Do not read the environment of other applications.</p></section><blockquote><h4>Application environment in info</h4><p>If you are writing a library to be used by other developers,
+it is generally recommended to avoid the application environment, as the
+application environment is effectively a global storage. For more information,
+read our <a href="library-guidelines.html">library guidelines</a>.</p></blockquote>
+  </section>
+</section>
+<section class="detail" id="format_error/1">
+
+  <div class="detail-header">
+    <a href="#format_error/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">format_error(reason)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L1086" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> format_error(<a href="typespecs.html#basic-types">any</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Formats the error reason returned by <a href="#start/2"><code class="inline">start/2</code></a>,
+<a href="#ensure_started/2"><code class="inline">ensure_started/2</code></a>, <a href="#stop/1"><code class="inline">stop/1</code></a>, <a href="#load/1"><code class="inline">load/1</code></a> and <a href="#unload/1"><code class="inline">unload/1</code></a>,
+returns a string.</p>
+  </section>
+</section>
+<section class="detail" id="get_all_env/1">
+
+  <div class="detail-header">
+    <a href="#get_all_env/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_all_env(app)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L518" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_all_env(<a href="#t:app/0">app</a>()) :: [{<a href="#t:key/0">key</a>(), <a href="#t:value/0">value</a>()}]</pre>
+
+      </div>
+
+<p>Returns all key-value pairs for <code class="inline">app</code>.</p>
+  </section>
+</section>
+<section class="detail" id="get_application/1">
+
+  <div class="detail-header">
+    <a href="#get_application/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_application(module)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L507" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_application(<a href="typespecs.html#basic-types">atom</a>()) :: <a href="typespecs.html#basic-types">atom</a>() | nil</pre>
+
+      </div>
+
+<p>Gets the application for the given module.</p><p>The application is located by analyzing the spec
+of all loaded applications. Returns <code class="inline">nil</code> if
+the module is not listed in any application spec.</p>
+  </section>
+</section>
+<section class="detail" id="get_env/3">
+
+    <span id="get_env/2"></span>
+
+  <div class="detail-header">
+    <a href="#get_env/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_env(app, key, default \\ nil)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L722" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_env(<a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>(), <a href="#t:value/0">value</a>()) :: <a href="#t:value/0">value</a>()</pre>
+
+      </div>
+
+<p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s environment.</p><p>If the configuration parameter does not exist, the function returns the
+<code class="inline">default</code> value.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>You must use this function to read only your own application
+environment. Do not read the environment of other applications.</p></section><section role="note" class="admonition info"><h4 class="admonition-title info">Application environment in libraries</h4><p>If you are writing a library to be used by other developers,
+it is generally recommended to avoid the application environment, as the
+application environment is effectively a global storage. For more information,
+read our <a href="library-guidelines.html">library guidelines</a>.</p></section><h2 id="get_env/3-examples" class="section-heading">
+  <a href="#get_env/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p><a href="#get_env/3"><code class="inline">get_env/3</code></a> is commonly used to read the configuration of your OTP applications.
+Since Mix configurations are commonly used to configure applications, we will use
+this as a point of illustration.</p><p>Consider a new application <code class="inline">:my_app</code>. <code class="inline">:my_app</code> contains a database engine which
+supports a pool of databases. The database engine needs to know the configuration for
+each of those databases, and that configuration is supplied by key-value pairs in
+environment of <code class="inline">:my_app</code>.</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="nc">Databases.RepoOne</span><span class="p">,</span><span class="w">
+  </span><span class="c1"># A database configuration</span><span class="w">
+  </span><span class="ss">ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">5433</span><span class="w">
+
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="nc">Databases.RepoTwo</span><span class="p">,</span><span class="w">
+  </span><span class="c1"># Another database configuration (for the same OTP app)</span><span class="w">
+  </span><span class="ss">ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">20717</span><span class="w">
+
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">my_app_databases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4936585056-1">[</span><span class="nc">Databases.RepoOne</span><span class="p">,</span><span class="w"> </span><span class="nc">Databases.RepoTwo</span><span class="p" data-group-id="4936585056-1">]</span></code></pre><p>Our database engine used by <code class="inline">:my_app</code> needs to know what databases exist, and
+what the database configurations are. The database engine can make a call to
+<code class="inline">Application.get_env(:my_app, :my_app_databases, [])</code> to retrieve the list of
+databases (specified by module names).</p><p>The engine can then traverse each repository in the list and call
+<code class="inline">Application.get_env(:my_app, Databases.RepoOne)</code> and so forth to retrieve the
+configuration of each one. In this case, each configuration will be a keyword
+list, so you can use the functions in the <a href="Keyword.html"><code class="inline">Keyword</code></a> module or even the <a href="Access.html"><code class="inline">Access</code></a>
+module to traverse it, for example:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">get_env</span><span class="p" data-group-id="2926549365-1">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="nc">Databases.RepoOne</span><span class="p" data-group-id="2926549365-1">)</span><span class="w">
+</span><span class="n">config</span><span class="p" data-group-id="2926549365-2">[</span><span class="ss">:ip</span><span class="p" data-group-id="2926549365-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="load/1">
+
+  <div class="detail-header">
+    <a href="#load/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">load(app)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L987" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> load(<a href="#t:app/0">app</a>()) :: :ok | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Loads the given <code class="inline">app</code>.</p><p>In order to be loaded, an <code class="inline">.app</code> file must be in the load paths.
+All <code class="inline">:included_applications</code> will also be loaded.</p><p>Loading the application does not start it nor load its modules, but
+it does load its environment.</p>
+  </section>
+</section>
+<section class="detail" id="loaded_applications/0">
+
+  <div class="detail-header">
+    <a href="#loaded_applications/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">loaded_applications()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L1076" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> loaded_applications() :: [{<a href="#t:app/0">app</a>(), description :: <a href="typespecs.html#built-in-types">charlist</a>(), vsn :: <a href="typespecs.html#built-in-types">charlist</a>()}]</pre>
+
+      </div>
+
+<p>Returns a list with information about the applications which have been loaded.</p>
+  </section>
+</section>
+<section class="detail" id="put_all_env/2">
+
+    <span id="put_all_env/1"></span>
+
+  <div class="detail-header">
+    <a href="#put_all_env/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_all_env(config, opts \\ [])</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L846" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> put_all_env([{<a href="#t:app/0">app</a>(), [{<a href="#t:key/0">key</a>(), <a href="#t:value/0">value</a>()}]}],
+  timeout: <a href="typespecs.html#built-in-types">timeout</a>(),
+  persistent: <a href="typespecs.html#built-in-types">boolean</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Puts the environment for multiple applications at the same time.</p><p>The given config should not:</p><ul><li>have the same application listed more than once</li><li>have the same key inside the same application listed more than once</li></ul><p>If those conditions are not met, this function will raise.</p><p>This function receives the same options as <a href="#put_env/4"><code class="inline">put_env/4</code></a>. Returns <code class="inline">:ok</code>.</p><h2 id="put_all_env/2-examples" class="section-heading">
+  <a href="#put_all_env/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Application</span><span class="o">.</span><span class="n">put_all_env</span><span class="p" data-group-id="2600594293-1">(</span><span class="w">
+  </span><span class="ss">my_app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2600594293-2">[</span><span class="w">
+    </span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="ss">:value</span><span class="p">,</span><span class="w">
+    </span><span class="ss">another_key</span><span class="p">:</span><span class="w"> </span><span class="ss">:another_value</span><span class="w">
+  </span><span class="p" data-group-id="2600594293-2">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">another_app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2600594293-3">[</span><span class="w">
+    </span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="ss">:value</span><span class="w">
+  </span><span class="p" data-group-id="2600594293-3">]</span><span class="w">
+</span><span class="p" data-group-id="2600594293-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="put_env/4">
+
+    <span id="put_env/3"></span>
+
+  <div class="detail-header">
+    <a href="#put_env/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_env(app, key, value, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L814" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> put_env(<a href="#t:app/0">app</a>(), <a href="#t:key/0">key</a>(), <a href="#t:value/0">value</a>(), timeout: <a href="typespecs.html#built-in-types">timeout</a>(), persistent: <a href="typespecs.html#built-in-types">boolean</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Puts the <code class="inline">value</code> in <code class="inline">key</code> for the given <code class="inline">app</code>.</p><h2 id="put_env/4-options" class="section-heading">
+  <a href="#put_env/4-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:timeout</code> - the timeout for the change (defaults to <code class="inline">5_000</code> milliseconds)</li><li><code class="inline">:persistent</code> - persists the given value on application load and reloads</li></ul><p>If <a href="#put_env/4"><code class="inline">put_env/4</code></a> is called before the application is loaded, the application
+environment values specified in the <code class="inline">.app</code> file will override the ones
+previously set.</p><p>The <code class="inline">:persistent</code> option can be set to <code class="inline">true</code> when there is a need to guarantee
+parameters set with this function will not be overridden by the ones defined
+in the application resource file on load. This means persistent values will
+stick after the application is loaded and also on application reload.</p>
+  </section>
+</section>
+<section class="detail" id="spec/1">
+
+  <div class="detail-header">
+    <a href="#spec/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">spec(app)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L477" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> spec(<a href="#t:app/0">app</a>()) :: [{<a href="#t:application_key/0">application_key</a>(), <a href="#t:value/0">value</a>()}] | nil</pre>
+
+      </div>
+
+<p>Returns the spec for <code class="inline">app</code>.</p><p>The following keys are returned:</p><ul><li><code class="inline">:description</code></li><li><code class="inline">:id</code></li><li><code class="inline">:vsn</code></li><li><code class="inline">:modules</code></li><li><code class="inline">:maxP</code></li><li><code class="inline">:maxT</code></li><li><code class="inline">:registered</code></li><li><code class="inline">:included_applications</code></li><li><code class="inline">:optional_applications</code></li><li><code class="inline">:applications</code></li><li><code class="inline">:mod</code></li><li><code class="inline">:start_phases</code></li></ul><p>For a description of all fields, see <a href="https://www.erlang.org/doc/man/app">Erlang's application
+specification</a>.</p><p>Note the environment is not returned as it can be accessed via
+<a href="#fetch_env/2"><code class="inline">fetch_env/2</code></a>. Returns <code class="inline">nil</code> if the application is not loaded.</p>
+  </section>
+</section>
+<section class="detail" id="spec/2">
+
+  <div class="detail-header">
+    <a href="#spec/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">spec(app, key)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L492" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> spec(<a href="#t:app/0">app</a>(), <a href="#t:application_key/0">application_key</a>()) :: <a href="#t:value/0">value</a>() | nil</pre>
+
+      </div>
+
+<p>Returns the value for <code class="inline">key</code> in <code class="inline">app</code>'s specification.</p><p>See <a href="#spec/1"><code class="inline">spec/1</code></a> for the supported keys. If the given
+specification parameter does not exist, this function
+will raise. Returns <code class="inline">nil</code> if the application is not loaded.</p>
+  </section>
+</section>
+<section class="detail" id="start/2">
+
+    <span id="start/1"></span>
+
+  <div class="detail-header">
+    <a href="#start/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start(app, type \\ :temporary)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L963" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start(<a href="#t:app/0">app</a>(), <a href="#t:restart_type/0">restart_type</a>()) :: :ok | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Starts the given <code class="inline">app</code> with <a href="#t:restart_type/0"><code class="inline">restart_type/0</code></a>.</p><p>If the <code class="inline">app</code> is not loaded, the application will first be loaded using <a href="#load/1"><code class="inline">load/1</code></a>.
+Any included application, defined in the <code class="inline">:included_applications</code> key of the
+<code class="inline">.app</code> file will also be loaded, but they won't be started.</p><p>Furthermore, all applications listed in the <code class="inline">:applications</code> key must be explicitly
+started before this application is. If not, <code class="inline">{:error, {:not_started, app}}</code> is
+returned, where <code class="inline">app</code> is the name of the missing application.</p><p>In case you want to automatically load <strong>and start</strong> all of <code class="inline">app</code>'s dependencies,
+see <a href="#ensure_all_started/2"><code class="inline">ensure_all_started/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="started_applications/1">
+
+    <span id="started_applications/0"></span>
+
+  <div class="detail-header">
+    <a href="#started_applications/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">started_applications(timeout \\ 5000)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L1068" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> started_applications(<a href="typespecs.html#built-in-types">timeout</a>()) :: [
+  {<a href="#t:app/0">app</a>(), description :: <a href="typespecs.html#built-in-types">charlist</a>(), vsn :: <a href="typespecs.html#built-in-types">charlist</a>()}
+]</pre>
+
+      </div>
+
+<p>Returns a list with information about the applications which are currently running.</p>
+  </section>
+</section>
+<section class="detail" id="stop/1">
+
+  <div class="detail-header">
+    <a href="#stop/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stop(app)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L973" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stop(<a href="#t:app/0">app</a>()) :: :ok | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Stops the given <code class="inline">app</code>.</p><p>When stopped, the application is still loaded.</p>
+  </section>
+</section>
+<section class="detail" id="unload/1">
+
+  <div class="detail-header">
+    <a href="#unload/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">unload(app)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/application.ex#L998" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> unload(<a href="#t:app/0">app</a>()) :: :ok | {:error, <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Unloads the given <code class="inline">app</code>.</p><p>It will also unload all <code class="inline">:included_applications</code>.
+Note that the function does not purge the application modules.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

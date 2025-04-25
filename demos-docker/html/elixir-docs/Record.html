@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Record — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Record.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Record</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/record.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Module to work with, define, and import records.</p><p>Records are simply tuples where the first element is an atom:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Record</span><span class="o">.</span><span class="n">is_record</span><span class="p" data-group-id="3011690354-1">(</span><span class="p" data-group-id="3011690354-2">{</span><span class="nc">User</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;john&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p" data-group-id="3011690354-2">}</span><span class="p" data-group-id="3011690354-1">)</span><span class="w">
+</span><span class="no">true</span></code></pre><p>This module provides conveniences for working with records at
+compilation time, where compile-time field names are used to
+manipulate the tuples, providing fast operations on top of
+the tuples' compact structure.</p><p>In Elixir, records are used mostly in two situations:</p><ol><li>to work with short, internal data</li><li>to interface with Erlang records</li></ol><p>The macros <a href="#defrecord/3"><code class="inline">defrecord/3</code></a> and <a href="#defrecordp/3"><code class="inline">defrecordp/3</code></a> can be used to create records
+while <a href="#extract/2"><code class="inline">extract/2</code></a> and <a href="#extract_all/1"><code class="inline">extract_all/1</code></a> can be used to extract records from
+Erlang files.</p><h2 id="module-types" class="section-heading">
+  <a href="#module-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Types</span>
+</h2>
+<p>Types can be defined for tuples with the <code class="inline">record/2</code> macro (only available in
+typespecs). This macro will expand to a tuple as seen in the example below:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="5771594070-1">do</span><span class="w">
+  </span><span class="kn">require</span><span class="w"> </span><span class="nc">Record</span><span class="w">
+  </span><span class="nc">Record</span><span class="o">.</span><span class="n">defrecord</span><span class="p" data-group-id="5771594070-2">(</span><span class="ss">:user</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;john&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p" data-group-id="5771594070-2">)</span><span class="w">
+
+  </span><span class="na">@type</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">record</span><span class="p" data-group-id="5771594070-3">(</span><span class="ss">:user</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="5771594070-4">(</span><span class="p" data-group-id="5771594070-4">)</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="5771594070-3">)</span><span class="w">
+  </span><span class="c1"># expands to: &quot;@type user :: {:user, String.t(), integer}&quot;</span><span class="w">
+</span><span class="k" data-group-id="5771594070-1">end</span></code></pre><h2 id="module-reflection" class="section-heading">
+  <a href="#module-reflection" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Reflection</span>
+</h2>
+<p>A list of all records in a module, if any, can be retrieved by reading the
+<code class="inline">@__records__</code> module attribute. It returns a list of maps with the record
+kind, name, tag, and fields. The attribute is only available inside the
+module definition.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-guards summary">
+  <h2>
+    <a href="#guards">Guards</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#is_record/1" data-no-tooltip="" translate="no">is_record(data)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the given <code class="inline">data</code> is a record.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#is_record/2" data-no-tooltip="" translate="no">is_record(data, kind)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the given <code class="inline">data</code> is a record of kind <code class="inline">kind</code>.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#defrecord/3" data-no-tooltip="" translate="no">defrecord(name, tag \\ nil, kv)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Defines a set of macros to create, access, and pattern match
+on a record.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#defrecordp/3" data-no-tooltip="" translate="no">defrecordp(name, tag \\ nil, kv)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Same as <a href="#defrecord/3"><code class="inline">defrecord/3</code></a> but generates private macros.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#extract/2" data-no-tooltip="" translate="no">extract(name, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Extracts record information from an Erlang file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#extract_all/1" data-no-tooltip="" translate="no">extract_all(opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Extracts all records information from an Erlang file.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="guards" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#guards">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Guards</span>
+    </h1>
+    <div class="guards-list">
+<section class="detail" id="is_record/1">
+
+  <div class="detail-header">
+    <a href="#is_record/1" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">is_record(data)</h1>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/record.ex#L154" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if the given <code class="inline">data</code> is a record.</p><p>This is implemented as a macro so it can be used in guard clauses.</p><h2 id="is_record/1-examples" class="section-heading">
+  <a href="#is_record/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">Record</span><span class="o">.</span><span class="n">is_record</span><span class="p" data-group-id="7160341344-1">(</span><span class="p" data-group-id="7160341344-2">{</span><span class="nc">User</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;john&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p" data-group-id="7160341344-2">}</span><span class="p" data-group-id="7160341344-1">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span><span class="w">
+
+</span><span class="nc">Record</span><span class="o">.</span><span class="n">is_record</span><span class="p" data-group-id="7160341344-3">(</span><span class="p" data-group-id="7160341344-4">{</span><span class="p" data-group-id="7160341344-4">}</span><span class="p" data-group-id="7160341344-3">)</span><span class="w">
+</span><span class="c1">#=&gt; false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="is_record/2">
+
+  <div class="detail-header">
+    <a href="#is_record/2" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">is_record(data, kind)</h1>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/record.ex#L136" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if the given <code class="inline">data</code> is a record of kind <code class="inline">kind</code>.</p><p>This is implemented as a macro so it can be used in guard clauses.</p><h2 id="is_record/2-examples" class="section-heading">
+  <a href="#is_record/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4502784489-1">{</span><span class="nc">User</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;john&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p" data-group-id="4502784489-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Record</span><span class="o">.</span><span class="n">is_record</span><span class="p" data-group-id="4502784489-2">(</span><span class="n">record</span><span class="p">,</span><span class="w"> </span><span class="nc">User</span><span class="p" data-group-id="4502784489-2">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="defrecord/3">
+
+    <span id="defrecord/2"></span>
+
+  <div class="detail-header">
+    <a href="#defrecord/3" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">defrecord(name, tag \\ nil, kv)</h1>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/record.ex#L251" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Defines a set of macros to create, access, and pattern match
+on a record.</p><p>The name of the generated macros will be <code class="inline">name</code> (which has to be an
+atom). <code class="inline">tag</code> is also an atom and is used as the &quot;tag&quot; for the record (i.e.,
+the first element of the record tuple); by default (if <code class="inline">nil</code>), it's the same
+as <code class="inline">name</code>. <code class="inline">kv</code> is a keyword list of <code class="inline">name: default_value</code> fields for the
+new record.</p><p>The following macros are generated:</p><ul><li><code class="inline">name/0</code> to create a new record with default values for all fields</li><li><code class="inline">name/1</code> to create a new record with the given fields and values,
+to get the zero-based index of the given field in a record or to
+convert the given record to a keyword list</li><li><code class="inline">name/2</code> to update an existing record with the given fields and values
+or to access a given field in a given record</li></ul><p>All these macros are public macros (as defined by <code class="inline">defmacro</code>).</p><p>See the &quot;Examples&quot; section for examples on how to use these macros.</p><h2 id="defrecord/3-examples" class="section-heading">
+  <a href="#defrecord/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">User</span><span class="w"> </span><span class="k" data-group-id="0098611773-1">do</span><span class="w">
+  </span><span class="kn">require</span><span class="w"> </span><span class="nc">Record</span><span class="w">
+  </span><span class="nc">Record</span><span class="o">.</span><span class="n">defrecord</span><span class="p" data-group-id="0098611773-2">(</span><span class="ss">:user</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;25&quot;</span><span class="p" data-group-id="0098611773-2">)</span><span class="w">
+</span><span class="k" data-group-id="0098611773-1">end</span></code></pre><p>In the example above, a set of macros named <code class="inline">user</code> but with different
+arities will be defined to manipulate the underlying record.</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Import the module to make the user macros locally available</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nc">User</span><span class="w">
+
+</span><span class="c1"># To create records</span><span class="w">
+</span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p" data-group-id="9746104836-1">(</span><span class="p" data-group-id="9746104836-1">)</span><span class="w">        </span><span class="c1">#=&gt; {:user, &quot;meg&quot;, 25}</span><span class="w">
+</span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p" data-group-id="9746104836-2">(</span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="mi">26</span><span class="p" data-group-id="9746104836-2">)</span><span class="w"> </span><span class="c1">#=&gt; {:user, &quot;meg&quot;, 26}</span><span class="w">
+
+</span><span class="c1"># To get a field from the record</span><span class="w">
+</span><span class="n">user</span><span class="p" data-group-id="9746104836-3">(</span><span class="n">record</span><span class="p">,</span><span class="w"> </span><span class="ss">:name</span><span class="p" data-group-id="9746104836-3">)</span><span class="w"> </span><span class="c1">#=&gt; &quot;meg&quot;</span><span class="w">
+
+</span><span class="c1"># To update the record</span><span class="w">
+</span><span class="n">user</span><span class="p" data-group-id="9746104836-4">(</span><span class="n">record</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">:</span><span class="w"> </span><span class="mi">26</span><span class="p" data-group-id="9746104836-4">)</span><span class="w"> </span><span class="c1">#=&gt; {:user, &quot;meg&quot;, 26}</span><span class="w">
+
+</span><span class="c1"># To get the zero-based index of the field in record tuple</span><span class="w">
+</span><span class="c1"># (index 0 is occupied by the record &quot;tag&quot;)</span><span class="w">
+</span><span class="n">user</span><span class="p" data-group-id="9746104836-5">(</span><span class="ss">:name</span><span class="p" data-group-id="9746104836-5">)</span><span class="w"> </span><span class="c1">#=&gt; 1</span><span class="w">
+
+</span><span class="c1"># Convert a record to a keyword list</span><span class="w">
+</span><span class="n">user</span><span class="p" data-group-id="9746104836-6">(</span><span class="n">record</span><span class="p" data-group-id="9746104836-6">)</span><span class="w"> </span><span class="c1">#=&gt; [name: &quot;meg&quot;, age: 26]</span></code></pre><p>The generated macros can also be used in order to pattern match on records and
+to bind variables during the match:</p><pre><code class="makeup elixir" translate="no"><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p" data-group-id="2611155091-1">(</span><span class="p" data-group-id="2611155091-1">)</span><span class="w"> </span><span class="c1">#=&gt; {:user, &quot;meg&quot;, 25}</span><span class="w">
+
+</span><span class="n">user</span><span class="p" data-group-id="2611155091-2">(</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="2611155091-2">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">record</span><span class="w">
+</span><span class="n">name</span><span class="w"> </span><span class="c1">#=&gt; &quot;meg&quot;</span></code></pre><p>By default, Elixir uses the record name as the first element of the tuple (the &quot;tag&quot;).
+However, a different tag can be specified when defining a record,
+as in the following example, in which we use <code class="inline">Customer</code> as the second argument of <a href="#defrecord/3"><code class="inline">defrecord/3</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">User</span><span class="w"> </span><span class="k" data-group-id="2196723028-1">do</span><span class="w">
+  </span><span class="kn">require</span><span class="w"> </span><span class="nc">Record</span><span class="w">
+  </span><span class="nc">Record</span><span class="o">.</span><span class="n">defrecord</span><span class="p" data-group-id="2196723028-2">(</span><span class="ss">:user</span><span class="p">,</span><span class="w"> </span><span class="nc">Customer</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="2196723028-2">)</span><span class="w">
+</span><span class="k" data-group-id="2196723028-1">end</span><span class="w">
+
+</span><span class="kn">require</span><span class="w"> </span><span class="nc">User</span><span class="w">
+</span><span class="nc">User</span><span class="o">.</span><span class="n">user</span><span class="p" data-group-id="2196723028-3">(</span><span class="p" data-group-id="2196723028-3">)</span><span class="w"> </span><span class="c1">#=&gt; {Customer, nil}</span></code></pre><h2 id="defrecord/3-defining-extracted-records-with-anonymous-functions-in-the-values" class="section-heading">
+  <a href="#defrecord/3-defining-extracted-records-with-anonymous-functions-in-the-values" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Defining extracted records with anonymous functions in the values</span>
+</h2>
+<p>If a record defines an anonymous function in the default values, an
+<a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> will be raised. This can happen unintentionally when defining
+a record after extracting it from an Erlang library that uses anonymous
+functions for defaults.</p><pre><code class="makeup elixir" translate="no"><span class="nc">Record</span><span class="o">.</span><span class="n">defrecord</span><span class="p" data-group-id="1895386449-1">(</span><span class="ss">:my_rec</span><span class="p">,</span><span class="w"> </span><span class="nc">Record</span><span class="o">.</span><span class="n">extract</span><span class="p" data-group-id="1895386449-2">(</span><span class="n">...</span><span class="p" data-group-id="1895386449-2">)</span><span class="p" data-group-id="1895386449-1">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) invalid value for record field fun_field,
+    cannot escape #Function&lt;12.90072148/2 in :erl_eval.expr/5&gt;.</span></code></pre><p>To work around this error, redefine the field with your own &amp;M.f/a function,
+like so:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyRec</span><span class="w"> </span><span class="k" data-group-id="7905033542-1">do</span><span class="w">
+  </span><span class="kn">require</span><span class="w"> </span><span class="nc">Record</span><span class="w">
+  </span><span class="nc">Record</span><span class="o">.</span><span class="n">defrecord</span><span class="p" data-group-id="7905033542-2">(</span><span class="ss">:my_rec</span><span class="p">,</span><span class="w"> </span><span class="nc">Record</span><span class="o">.</span><span class="n">extract</span><span class="p" data-group-id="7905033542-3">(</span><span class="n">...</span><span class="p" data-group-id="7905033542-3">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="7905033542-4">(</span><span class="ss">fun_field</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="bp">__MODULE__</span><span class="o">.</span><span class="n">foo</span><span class="o">/</span><span class="mi">2</span><span class="p" data-group-id="7905033542-4">)</span><span class="p" data-group-id="7905033542-2">)</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">foo</span><span class="p" data-group-id="7905033542-5">(</span><span class="n">bar</span><span class="p">,</span><span class="w"> </span><span class="n">baz</span><span class="p" data-group-id="7905033542-5">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="7905033542-6">(</span><span class="p" data-group-id="7905033542-7">{</span><span class="n">bar</span><span class="p">,</span><span class="w"> </span><span class="n">baz</span><span class="p" data-group-id="7905033542-7">}</span><span class="p" data-group-id="7905033542-6">)</span><span class="w">
+</span><span class="k" data-group-id="7905033542-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="defrecordp/3">
+
+    <span id="defrecordp/2"></span>
+
+  <div class="detail-header">
+    <a href="#defrecordp/3" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">defrecordp(name, tag \\ nil, kv)</h1>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/record.ex#L269" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Same as <a href="#defrecord/3"><code class="inline">defrecord/3</code></a> but generates private macros.</p>
+  </section>
+</section>
+<section class="detail" id="extract/2">
+
+  <div class="detail-header">
+    <a href="#extract/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">extract(name, opts)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/record.ex#L103" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> extract(
+  name :: <a href="typespecs.html#basic-types">atom</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+      </div>
+
+<p>Extracts record information from an Erlang file.</p><p>Returns a quoted expression containing the fields as a list
+of tuples.</p><p><code class="inline">name</code>, which is the name of the extracted record, is expected to be an atom
+<em>at compile time</em>.</p><h2 id="extract/2-options" class="section-heading">
+  <a href="#extract/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>This function requires one of the following options, which are exclusive to each
+other (i.e., only one of them can be used in the same call):</p><ul><li><p><code class="inline">:from</code> - (binary representing a path to a file) path to the Erlang file
+that contains the record definition to extract; with this option, this
+function uses the same path lookup used by the <code class="inline">-include</code> attribute used in
+Erlang modules.</p></li><li><p><code class="inline">:from_lib</code> - (binary representing a path to a file) path to the Erlang
+file that contains the record definition to extract; with this option,
+this function uses the same path lookup used by the <code class="inline">-include_lib</code>
+attribute used in Erlang modules.</p></li></ul><p>It additionally accepts the following optional, non-exclusive options:</p><ul><li><p><code class="inline">:includes</code> - (a list of directories as binaries) if the record being
+extracted depends on relative includes, this option allows developers
+to specify the directory where those relative includes exist.</p></li><li><p><code class="inline">:macros</code> - (keyword list of macro names and values) if the record
+being extracted depends on the values of macros, this option allows
+the value of those macros to be set.</p></li></ul><p>These options are expected to be literals (including the binary values) at
+compile time.</p><h2 id="extract/2-examples" class="section-heading">
+  <a href="#extract/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Record</span><span class="o">.</span><span class="n">extract</span><span class="p" data-group-id="4073752358-1">(</span><span class="ss">:file_info</span><span class="p">,</span><span class="w"> </span><span class="ss">from_lib</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kernel/include/file.hrl&quot;</span><span class="p" data-group-id="4073752358-1">)</span><span class="w">
+</span><span class="p" data-group-id="4073752358-2">[</span><span class="w">
+  </span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">access</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">atime</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">mtime</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">ctime</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">mode</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">links</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">major_device</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">minor_device</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">inode</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">uid</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="p">,</span><span class="w">
+  </span><span class="ss">gid</span><span class="p">:</span><span class="w"> </span><span class="ss">:undefined</span><span class="w">
+</span><span class="p" data-group-id="4073752358-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="extract_all/1">
+
+  <div class="detail-header">
+    <a href="#extract_all/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">extract_all(opts)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/record.ex#L120" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> extract_all(<a href="typespecs.html#built-in-types">keyword</a>()) :: [{name :: <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">keyword</a>()}]</pre>
+
+      </div>
+
+<p>Extracts all records information from an Erlang file.</p><p>Returns a keyword list of <code class="inline">{record_name, fields}</code> tuples where <code class="inline">record_name</code>
+is the name of an extracted record and <code class="inline">fields</code> is a list of <code class="inline">{field, value}</code>
+tuples representing the fields for that record.</p><h2 id="extract_all/1-options" class="section-heading">
+  <a href="#extract_all/1-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>Accepts the same options as listed for <a href="#extract/2"><code class="inline">Record.extract/2</code></a>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

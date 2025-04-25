@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Basic types — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/basic-types.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Basic types</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/basic-types.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter we will learn more about Elixir basic types: integers, floats, booleans, atoms, and strings. Other data types, such as lists and tuples, will be explored in the next chapter.</p><pre class="elixir" data-code-id="3637"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1          # integer</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">0x1F       # integer</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1.0        # float</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">true       # boolean</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:atom      # atom / symbol</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;elixir&quot;   # string</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[1, 2, 3]  # list</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">{1, 2, 3}  # tuple</span><span class="info"></span></div></pre><h2 id="basic-arithmetic" class="section-heading">
+  <a href="#basic-arithmetic" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Basic arithmetic</span>
+</h2>
+<p>Open up <code class="inline">iex</code> and type the following expressions:</p><pre class="elixir" data-code-id="313331"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 + 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">5 * 5</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 25</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">10 / 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 5.0</p></pre><p>Notice that <code class="inline">10 / 2</code> returned a float <code class="inline">5.0</code> instead of an integer <code class="inline">5</code>. This is expected. In Elixir, the operator <code class="inline">/</code> always returns a float. If you want to do integer division or get the division remainder, you can invoke the <code class="inline">div</code> and <code class="inline">rem</code> functions:</p><pre class="elixir" data-code-id="313935"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">div(10, 2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 5</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">div 10, 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 5</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">rem 10, 3</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p></pre><p>Notice that Elixir allows you to drop the parentheses when invoking functions that expect one or more arguments. This feature gives a cleaner syntax when writing declarations and control-flow constructs. However, Elixir developers generally prefer to use parentheses.</p><p>Elixir also supports shortcut notations for entering binary, octal, and hexadecimal numbers:</p><pre class="elixir" data-code-id="323539"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">0b1010</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 10</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">0o777</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 511</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">0x1F</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 31</p></pre><p>Float numbers require a dot followed by at least one digit and also support <code class="inline">e</code> for scientific notation:</p><pre class="elixir" data-code-id="333233"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1.0</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1.0</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1.0e-10</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1.0e-10</p></pre><p>Floats in Elixir are 64-bit precision.</p><p>You can invoke the <code class="inline">round</code> function to get the closest integer to a given float, or the <code class="inline">trunc</code> function to get the integer part of a float.</p><pre class="elixir" data-code-id="333837"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">round(3.58)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 4</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">trunc(3.58)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p></pre><p>Finally, we work with different data types, we will learn Elixir provides several predicate functions to check for the type of a value. For example, the <code class="inline">is_integer</code> can be used to check if a value is an integer or not:</p><pre class="elixir" data-code-id="343531"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_integer(1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_integer(2.0)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>You can also use <code class="inline">is_float</code> or <code class="inline">is_number</code> to check, respectively, if an argument is a float, or either an integer or float.</p><h2 id="identifying-functions-and-documentation" class="section-heading">
+  <a href="#identifying-functions-and-documentation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Identifying functions and documentation</span>
+</h2>
+<p>Before we move on to the next data type, let's talk about how Elixir identifies functions.</p><p>Functions in Elixir are identified by both their name and their arity. The arity of a function describes the number of arguments that the function takes. From this point on we will use both the function name and its arity to describe functions throughout the documentation. <a href="Kernel.html#trunc/1"><code class="inline">trunc/1</code></a> identifies the function which is named <code class="inline">trunc</code> and takes <code class="inline">1</code> argument, whereas <code class="inline">trunc/2</code> identifies a different (nonexistent) function with the same name but with an arity of <code class="inline">2</code>.</p><p>We can also use this syntax to access documentation. The Elixir shell defines the <code class="inline">h</code> function, which you can use to access documentation for any function. For example, typing <code class="inline">h trunc/1</code> is going to print the documentation for the <a href="Kernel.html#trunc/1"><code class="inline">trunc/1</code></a> function:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">h</span><span class="w"> </span><span class="n">trunc</span><span class="o">/</span><span class="mi">1</span><span class="w">
+                             </span><span class="kd">def</span><span class="w"> </span><span class="nf">trunc</span><span class="p" data-group-id="5304274679-1">(</span><span class="p" data-group-id="5304274679-1">)</span><span class="w">
+
+</span><span class="nc">Returns</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">number</span><span class="o">.</span></code></pre><p><code class="inline">h trunc/1</code> works because it is defined in the <a href="Kernel.html"><code class="inline">Kernel</code></a> module. All functions in the <a href="Kernel.html"><code class="inline">Kernel</code></a> module are automatically imported into our namespace. Most often you will also include the module name when looking up the documentation for a given function:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">h</span><span class="w"> </span><span class="nc">Kernel</span><span class="o">.</span><span class="n">trunc</span><span class="o">/</span><span class="mi">1</span><span class="w">
+                             </span><span class="kd">def</span><span class="w"> </span><span class="nf">trunc</span><span class="p" data-group-id="7355791217-1">(</span><span class="p" data-group-id="7355791217-1">)</span><span class="w">
+
+</span><span class="nc">Returns</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">number</span><span class="o">.</span></code></pre><p>You can use the module+function to lookup for anything, including operators (try <code class="inline">h Kernel.+/2</code>). Invoking <code class="inline">h</code> without arguments displays the documentation for <a href="https://hexdocs.pm/iex/IEx.Helpers.html"><code class="inline">IEx.Helpers</code></a>, which is where <code class="inline">h</code> and other functionality is defined.</p><h2 id="booleans-and-nil" class="section-heading">
+  <a href="#booleans-and-nil" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Booleans and <code class="inline">nil</code></span>
+</h2>
+<p>Elixir supports <code class="inline">true</code> and <code class="inline">false</code> as booleans:</p><pre class="elixir" data-code-id="353135"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">true</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">true == false</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>Elixir also provides three boolean operators: <a href="Kernel.html#or/2"><code class="inline">or/2</code></a>, <a href="Kernel.html#and/2"><code class="inline">and/2</code></a>, and <a href="Kernel.html#not/1"><code class="inline">not/1</code></a>. These operators are strict in the sense that they expect something that evaluates to a boolean (<code class="inline">true</code> or <code class="inline">false</code>) as their first argument:</p><pre class="elixir" data-code-id="353739"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">true and true</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">false or is_boolean(true)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Providing a non-boolean will raise an exception:</p><pre class="elixir" data-code-id="363433"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 and true</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (BadBooleanError) expected a boolean on left-side of &quot;and&quot;, got: 1</p></pre><p><code class="inline">or</code> and <code class="inline">and</code> are short-circuit operators. They only execute the right side if the left side is not enough to determine the result:</p><pre class="elixir" data-code-id="373037"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">false and raise(&quot;This error will never be raised&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">true or raise(&quot;This error will never be raised&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Elixir also provides the concept of <code class="inline">nil</code>, to indicate the absence of a value, and a set of logical operators that also manipulate <code class="inline">nil</code>: <a href="Kernel.html#%7C%7C/2"><code class="inline">||/2</code></a>, <a href="Kernel.html#&&/2"><code class="inline">&amp;&amp;/2</code></a>, and <a href="Kernel.html#!/1"><code class="inline">!/1</code></a>. For these operators, <code class="inline">false</code> and <code class="inline">nil</code> are considered &quot;falsy&quot;, all other values are considered &quot;truthy&quot;:</p><pre class="elixir" data-code-id="373731"><p class="comment" data-code-type="comment"># or</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 || true</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">false || 11</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 11</p><p class="comment" data-code-type="comment"># and</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">nil &amp;&amp; 13</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># nil</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">true &amp;&amp; 17</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 17</p><p class="comment" data-code-type="comment"># not</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">!true</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">!1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">!nil</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Similarly, values like <code class="inline">0</code> and <code class="inline">&quot;&quot;</code>, which some other programming languages consider to be &quot;falsy&quot;, are also &quot;truthy&quot; in Elixir.</p><h2 id="atoms" class="section-heading">
+  <a href="#atoms" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Atoms</span>
+</h2>
+<p>An atom is a constant whose value is its own name. Some other languages call these symbols. They are often useful to enumerate over distinct values, such as:</p><pre class="elixir" data-code-id="383335"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:apple</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># :apple</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:orange</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># :orange</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:watermelon</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># :watermelon</p></pre><p>Atoms are equal if their names are equal.</p><pre class="elixir" data-code-id="383939"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:apple == :apple</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:apple == :orange</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>Often they are used to express the state of an operation, by using values such as <code class="inline">:ok</code> and <code class="inline">:error</code>.</p><p>The booleans <code class="inline">true</code> and <code class="inline">false</code> are also atoms:</p><pre class="elixir" data-code-id="393633"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">true == :true</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_atom(false)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_boolean(:false)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Elixir allows you to skip the leading <code class="inline">:</code> for the atoms <code class="inline">false</code>, <code class="inline">true</code> and <code class="inline">nil</code>.</p><h2 id="strings" class="section-heading">
+  <a href="#strings" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Strings</span>
+</h2>
+<p>Strings in Elixir are delimited by double quotes, and they are encoded in UTF-8:</p><pre class="elixir" data-code-id="31303237"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;hellö&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hellö&quot;</p></pre><blockquote><p>Note: if you are running on Windows, there is a chance your terminal does not use UTF-8 by default. You can change the encoding of your current session by running <code class="inline">chcp 65001</code> before entering IEx.</p></blockquote><p>You can concatenate two strings with the <a href="Kernel.html#%3C%3E/2"><code class="inline">&lt;&gt;/2</code></a> operator:</p><pre class="elixir" data-code-id="31303931"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;hello &quot; &lt;&gt; &quot;world!&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello world!&quot;</p></pre><p>Elixir also supports string interpolation:</p><pre class="elixir" data-code-id="31313535"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">string = &quot;world&quot;</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;hello #{string}!&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello world!&quot;</p></pre><p>String concatenation requires both sides to be strings but interpolation supports any data type that may be converted to a string:</p><pre class="elixir" data-code-id="31323139"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">number = 42</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;i am #{number} years old!&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;i am 42 years old!&quot;</p></pre><p>Strings can have line breaks in them. You can introduce them using escape sequences:</p><pre class="elixir" data-code-id="31323833"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;hello
+world&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello\nworld&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;hello\nworld&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello\nworld&quot;</p></pre><p>You can print a string using the <a href="IO.html#puts/1"><code class="inline">IO.puts/1</code></a> function from the <a href="IO.html"><code class="inline">IO</code></a> module:</p><pre class="elixir" data-code-id="31333437"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">IO.puts(&quot;hello\nworld&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># hello</p><p class="output output-initial" data-code-type="output"># world</p><p class="output output-initial" data-code-type="output"># :ok</p></pre><p>Notice that the <a href="IO.html#puts/1"><code class="inline">IO.puts/1</code></a> function returns the atom <code class="inline">:ok</code> after printing.</p><p>Strings in Elixir are represented internally by contiguous sequences of bytes known as binaries:</p><pre class="elixir" data-code-id="31343131"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_binary(&quot;hellö&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>We can also get the number of bytes in a string:</p><pre class="elixir" data-code-id="31343735"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">byte_size(&quot;hellö&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 6</p></pre><p>Notice that the number of bytes in that string is 6, even though it has 5 graphemes. That's because the grapheme &quot;ö&quot; takes 2 bytes to be represented in UTF-8. We can get the actual length of the string, based on the number of graphemes, by using the <a href="String.html#length/1"><code class="inline">String.length/1</code></a> function:</p><pre class="elixir" data-code-id="31353339"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.length(&quot;hellö&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 5</p></pre><p>The <a href="String.html"><code class="inline">String</code></a> module contains a bunch of functions that operate on strings as defined in the Unicode standard:</p><pre class="elixir" data-code-id="31363033"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.upcase(&quot;hellö&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;HELLÖ&quot;</p></pre><h2 id="structural-comparison" class="section-heading">
+  <a href="#structural-comparison" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Structural comparison</span>
+</h2>
+<p>Elixir also provides <code class="inline">==</code>, <code class="inline">!=</code>, <code class="inline">&lt;=</code>, <code class="inline">&gt;=</code>, <code class="inline">&lt;</code> and <code class="inline">&gt;</code> as comparison operators. We can compare numbers:</p><pre class="elixir" data-code-id="31363637"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 == 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 != 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 &lt; 2</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>But also atoms, strings, booleans, etc:</p><pre class="elixir" data-code-id="31373331"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;foo&quot; == &quot;foo&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;foo&quot; == &quot;bar&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>Integers and floats compare the same if they have the same value:</p><pre class="elixir" data-code-id="31373935"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 == 1.0</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 == 2.0</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>However, you can use the strict comparison operator <code class="inline">===</code> and <code class="inline">!==</code> if you want to distinguish between integers and floats (that's the only difference between these operators):</p><pre class="elixir" data-code-id="31383539"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">1 === 1.0</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>The comparison operators in Elixir can compare across any data type. We say these operators perform <em>structural comparison</em>. For more information, you can read our documentation on <a href="Kernel.html#module-structural-comparison">Structural vs Semantic comparisons</a>.</p><p>Elixir also provides data-types for expressing collections, such as lists and tuples, which we learn next. When we talk about concurrency and fault-tolerance via processes, we will also discuss ports, pids, and references, but that will come on later chapters. Let's move forward.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="introduction.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Introduction
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="lists-and-tuples.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Lists and tuples
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

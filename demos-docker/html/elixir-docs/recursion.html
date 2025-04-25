@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Recursion — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/recursion.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Recursion</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/recursion.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir does not provide loop constructs. Instead we leverage recursion and high-level functions for working with collections. This chapter will explore the former.</p><h2 id="loops-through-recursion" class="section-heading">
+  <a href="#loops-through-recursion" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Loops through recursion</span>
+</h2>
+<p>Due to immutability, loops in Elixir (as in any functional programming language) are written differently from imperative languages. For example, in an imperative language like C, one would write:</p><pre><code class="c">for(i = 0; i &lt; sizeof(array); i++) {
+  array[i] = array[i] * 2;
+}</code></pre><p>In the example above, we are mutating both the array and the variable <code class="inline">i</code>. However, data structures in Elixir are immutable. For this reason, functional languages rely on recursion: a function is called recursively until a condition is reached that stops the recursive action from continuing. No data is mutated in this process. Consider the example below that prints a string an arbitrary number of times:</p><pre class="elixir" data-code-id="313330"><p class="output output-initial" data-code-type="output"># defmodule Recursion do</p><p class="output output-initial" data-code-type="output">#   def print_multiple_times(msg, n) when n &gt; 0 do</p><p class="output output-initial" data-code-type="output">#     IO.puts(msg)</p><p class="output output-initial" data-code-type="output">#     print_multiple_times(msg, n - 1)</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output">#   def print_multiple_times(_msg, 0) do</p><p class="output output-initial" data-code-type="output">#     :ok</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># Recursion.print_multiple_times(&quot;Hello!&quot;, 3)</p><p class="comment" data-code-type="comment"># Hello!</p><p class="comment" data-code-type="comment"># Hello!</p><p class="comment" data-code-type="comment"># Hello!</p><p class="output output-initial" data-code-type="output"># :ok</p></pre><p>Similar to <code class="inline">case</code>, a function may have many clauses. A particular clause is executed when the arguments passed to the function match the clause's argument patterns and its guards evaluate to <code class="inline">true</code>.</p><p>When <code class="inline">print_multiple_times/2</code> is initially called in the example above, the argument <code class="inline">n</code> is equal to <code class="inline">3</code>.</p><p>The first clause has a guard which says &quot;use this definition if and only if <code class="inline">n</code> is more than <code class="inline">0</code>&quot;. Since this is the case, it prints the <code class="inline">msg</code> and then calls itself passing <code class="inline">n - 1</code> (<code class="inline">2</code>) as the second argument.</p><p>Now we execute the same function again, starting from the first clause. Given the second argument, <code class="inline">n</code>, is still more than 0, we print the message and call ourselves once more, now with the second argument set to <code class="inline">1</code>. Then we print the message one last time and call <code class="inline">print_multiple_times(&quot;Hello!&quot;, 0)</code>, starting from the top once again.</p><p>When the second argument is zero, the guard <code class="inline">n &gt; 0</code> evaluates to false, and the first function clause won't execute. Elixir then proceeds to try the next function clause, which explicitly matches on the case where <code class="inline">n</code> is <code class="inline">0</code>. This clause, also known as the termination clause, ignores the message argument by assigning it to the <code class="inline">_msg</code> variable and returns the atom <code class="inline">:ok</code>.</p><p>Finally, if you pass an argument that does not match any clause, Elixir raises a <a href="FunctionClauseError.html"><code class="inline">FunctionClauseError</code></a>:</p><pre class="elixir" data-code-id="313934"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Recursion.print_multiple_times &quot;Hello!&quot;, -1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (FunctionClauseError) no function clause matching in Recursion.print_multiple_times/2</p><p class="output output-initial" data-code-type="output">#     The following arguments were given to Recursion.print_multiple_times/2:</p><p class="output output-initial" data-code-type="output">#         # 1</p><p class="output output-initial" data-code-type="output">#         &quot;Hello!&quot;</p><p class="output output-initial" data-code-type="output">#         # 2</p><p class="output output-initial" data-code-type="output">#         -1</p><p class="output output-initial" data-code-type="output">#     iex:1: Recursion.print_multiple_times/2</p></pre><h2 id="reduce-and-map-algorithms" class="section-heading">
+  <a href="#reduce-and-map-algorithms" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Reduce and map algorithms</span>
+</h2>
+<p>Let's now see how we can use the power of recursion to sum a list of numbers:</p><pre class="elixir" data-code-id="323538"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def sum_list([head | tail], accumulator) do</p><p class="output output-initial" data-code-type="output">#     sum_list(tail, head + accumulator)</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output">#   def sum_list([], accumulator) do</p><p class="output output-initial" data-code-type="output">#     accumulator</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># IO.puts Math.sum_list([1, 2, 3], 0) #=&gt; 6</p></pre><p>We invoke <code class="inline">sum_list</code> with the list <code class="inline">[1, 2, 3]</code> and the initial value <code class="inline">0</code> as arguments. We will try each clause until we find one that matches according to the pattern matching rules. In this case, the list <code class="inline">[1, 2, 3]</code> matches against <code class="inline">[head | tail]</code> which binds <code class="inline">head</code> to <code class="inline">1</code> and <code class="inline">tail</code> to <code class="inline">[2, 3]</code>; <code class="inline">accumulator</code> is set to <code class="inline">0</code>.</p><p>Then, we add the head of the list to the accumulator <code class="inline">head + accumulator</code> and call <code class="inline">sum_list</code> again, recursively, passing the tail of the list as its first argument. The tail will once again match <code class="inline">[head | tail]</code> until the list is empty, as seen below:</p><pre class="elixir" data-code-id="333232"><p class="output output-initial" data-code-type="output"># sum_list [1, 2, 3], 0</p><p class="output output-initial" data-code-type="output"># sum_list [2, 3], 1</p><p class="output output-initial" data-code-type="output"># sum_list [3], 3</p><p class="output output-initial" data-code-type="output"># sum_list [], 6</p></pre><p>When the list is empty, it will match the final clause which returns the final result of <code class="inline">6</code>.</p><p>The process of taking a list and <em>reducing</em> it down to one value is known as a <em>reduce algorithm</em> and is central to functional programming.</p><p>What if we instead want to double all of the values in our list?</p><pre class="elixir" data-code-id="333836"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def double_each([head | tail]) do</p><p class="output output-initial" data-code-type="output">#     [head * 2 | double_each(tail)]</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output">#   def double_each([]) do</p><p class="output output-initial" data-code-type="output">#     []</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p></pre><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex math.exs
+</span></code></pre><pre class="elixir" data-code-id="343530"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Math.double_each([1, 2, 3]) #=&gt; [2, 4, 6]</span><span class="info"></span></div></pre><p>Here we have used recursion to traverse a list, doubling each element and returning a new list. The process of taking a list and <em>mapping</em> over it is known as a <em>map algorithm</em>.</p><p>Recursion and <a href="https://en.wikipedia.org/wiki/Tail_call">tail call</a> optimization are an important part of Elixir and are commonly used to create loops. However, when programming in Elixir you will rarely use recursion as above to manipulate lists.</p><p>The <a href="Enum.html"><code class="inline">Enum</code></a> module, which we're going to see in the next chapter already provides many conveniences for working with lists. For instance, the examples above could be written as:</p><pre class="elixir" data-code-id="353134"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.reduce([1, 2, 3], 0, fn x, acc -&gt; x + acc end)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 6</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.map([1, 2, 3], fn x -&gt; x * 2 end)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [2, 4, 6]</p></pre><p>Or, using the capture syntax:</p><pre class="elixir" data-code-id="353738"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.reduce([1, 2, 3], 0, &amp;+/2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 6</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Enum.map([1, 2, 3], &amp;(&amp;1 * 2))</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [2, 4, 6]</p></pre><p>Let's take a deeper look at <a href="Enumerable.html"><code class="inline">Enumerable</code></a> and, while we're at it, its lazy counterpart, <a href="Stream.html"><code class="inline">Stream</code></a>.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="modules-and-functions.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Modules and functions
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="enumerable-and-streams.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Enumerables and Streams
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

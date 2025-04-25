@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Base — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Base.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Base</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>This module provides data encoding and decoding functions
+according to <a href="https://tools.ietf.org/html/rfc4648">RFC 4648</a>.</p><p>This document defines the commonly used base 16, base 32, and base
+64 encoding schemes.</p><h2 id="module-base-16-alphabet" class="section-heading">
+  <a href="#module-base-16-alphabet" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Base 16 alphabet</span>
+</h2>
+<table><thead><tr><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th></tr></thead><tbody><tr><td style="text-align: right;">0</td><td style="text-align: left;">0</td><td style="text-align: right;">4</td><td style="text-align: left;">4</td><td style="text-align: right;">8</td><td style="text-align: left;">8</td><td style="text-align: right;">12</td><td style="text-align: left;">C</td></tr><tr><td style="text-align: right;">1</td><td style="text-align: left;">1</td><td style="text-align: right;">5</td><td style="text-align: left;">5</td><td style="text-align: right;">9</td><td style="text-align: left;">9</td><td style="text-align: right;">13</td><td style="text-align: left;">D</td></tr><tr><td style="text-align: right;">2</td><td style="text-align: left;">2</td><td style="text-align: right;">6</td><td style="text-align: left;">6</td><td style="text-align: right;">10</td><td style="text-align: left;">A</td><td style="text-align: right;">14</td><td style="text-align: left;">E</td></tr><tr><td style="text-align: right;">3</td><td style="text-align: left;">3</td><td style="text-align: right;">7</td><td style="text-align: left;">7</td><td style="text-align: right;">11</td><td style="text-align: left;">B</td><td style="text-align: right;">15</td><td style="text-align: left;">F</td></tr></tbody></table><h2 id="module-base-32-alphabet" class="section-heading">
+  <a href="#module-base-32-alphabet" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Base 32 alphabet</span>
+</h2>
+<table><thead><tr><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th></tr></thead><tbody><tr><td style="text-align: right;">0</td><td style="text-align: left;">A</td><td style="text-align: right;">9</td><td style="text-align: left;">J</td><td style="text-align: right;">18</td><td style="text-align: left;">S</td><td style="text-align: right;">27</td><td style="text-align: left;">3</td></tr><tr><td style="text-align: right;">1</td><td style="text-align: left;">B</td><td style="text-align: right;">10</td><td style="text-align: left;">K</td><td style="text-align: right;">19</td><td style="text-align: left;">T</td><td style="text-align: right;">28</td><td style="text-align: left;">4</td></tr><tr><td style="text-align: right;">2</td><td style="text-align: left;">C</td><td style="text-align: right;">11</td><td style="text-align: left;">L</td><td style="text-align: right;">20</td><td style="text-align: left;">U</td><td style="text-align: right;">29</td><td style="text-align: left;">5</td></tr><tr><td style="text-align: right;">3</td><td style="text-align: left;">D</td><td style="text-align: right;">12</td><td style="text-align: left;">M</td><td style="text-align: right;">21</td><td style="text-align: left;">V</td><td style="text-align: right;">30</td><td style="text-align: left;">6</td></tr><tr><td style="text-align: right;">4</td><td style="text-align: left;">E</td><td style="text-align: right;">13</td><td style="text-align: left;">N</td><td style="text-align: right;">22</td><td style="text-align: left;">W</td><td style="text-align: right;">31</td><td style="text-align: left;">7</td></tr><tr><td style="text-align: right;">5</td><td style="text-align: left;">F</td><td style="text-align: right;">14</td><td style="text-align: left;">O</td><td style="text-align: right;">23</td><td style="text-align: left;">X</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">6</td><td style="text-align: left;">G</td><td style="text-align: right;">15</td><td style="text-align: left;">P</td><td style="text-align: right;">24</td><td style="text-align: left;">Y</td><td style="text-align: right;">(pad)</td><td style="text-align: left;">=</td></tr><tr><td style="text-align: right;">7</td><td style="text-align: left;">H</td><td style="text-align: right;">16</td><td style="text-align: left;">Q</td><td style="text-align: right;">25</td><td style="text-align: left;">Z</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">8</td><td style="text-align: left;">I</td><td style="text-align: right;">17</td><td style="text-align: left;">R</td><td style="text-align: right;">26</td><td style="text-align: left;">2</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr></tbody></table><h2 id="module-base-32-extended-hex-alphabet" class="section-heading">
+  <a href="#module-base-32-extended-hex-alphabet" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Base 32 (extended hex) alphabet</span>
+</h2>
+<table><thead><tr><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th></tr></thead><tbody><tr><td style="text-align: right;">0</td><td style="text-align: left;">0</td><td style="text-align: right;">9</td><td style="text-align: left;">9</td><td style="text-align: right;">18</td><td style="text-align: left;">I</td><td style="text-align: right;">27</td><td style="text-align: left;">R</td></tr><tr><td style="text-align: right;">1</td><td style="text-align: left;">1</td><td style="text-align: right;">10</td><td style="text-align: left;">A</td><td style="text-align: right;">19</td><td style="text-align: left;">J</td><td style="text-align: right;">28</td><td style="text-align: left;">S</td></tr><tr><td style="text-align: right;">2</td><td style="text-align: left;">2</td><td style="text-align: right;">11</td><td style="text-align: left;">B</td><td style="text-align: right;">20</td><td style="text-align: left;">K</td><td style="text-align: right;">29</td><td style="text-align: left;">T</td></tr><tr><td style="text-align: right;">3</td><td style="text-align: left;">3</td><td style="text-align: right;">12</td><td style="text-align: left;">C</td><td style="text-align: right;">21</td><td style="text-align: left;">L</td><td style="text-align: right;">30</td><td style="text-align: left;">U</td></tr><tr><td style="text-align: right;">4</td><td style="text-align: left;">4</td><td style="text-align: right;">13</td><td style="text-align: left;">D</td><td style="text-align: right;">22</td><td style="text-align: left;">M</td><td style="text-align: right;">31</td><td style="text-align: left;">V</td></tr><tr><td style="text-align: right;">5</td><td style="text-align: left;">5</td><td style="text-align: right;">14</td><td style="text-align: left;">E</td><td style="text-align: right;">23</td><td style="text-align: left;">N</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">6</td><td style="text-align: left;">6</td><td style="text-align: right;">15</td><td style="text-align: left;">F</td><td style="text-align: right;">24</td><td style="text-align: left;">O</td><td style="text-align: right;">(pad)</td><td style="text-align: left;">=</td></tr><tr><td style="text-align: right;">7</td><td style="text-align: left;">7</td><td style="text-align: right;">16</td><td style="text-align: left;">G</td><td style="text-align: right;">25</td><td style="text-align: left;">P</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">8</td><td style="text-align: left;">8</td><td style="text-align: right;">17</td><td style="text-align: left;">H</td><td style="text-align: right;">26</td><td style="text-align: left;">Q</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr></tbody></table><h2 id="module-base-64-alphabet" class="section-heading">
+  <a href="#module-base-64-alphabet" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Base 64 alphabet</span>
+</h2>
+<table><thead><tr><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th></tr></thead><tbody><tr><td style="text-align: right;">0</td><td style="text-align: left;">A</td><td style="text-align: right;">17</td><td style="text-align: left;">R</td><td style="text-align: right;">34</td><td style="text-align: left;">i</td><td style="text-align: right;">51</td><td style="text-align: left;">z</td></tr><tr><td style="text-align: right;">1</td><td style="text-align: left;">B</td><td style="text-align: right;">18</td><td style="text-align: left;">S</td><td style="text-align: right;">35</td><td style="text-align: left;">j</td><td style="text-align: right;">52</td><td style="text-align: left;">0</td></tr><tr><td style="text-align: right;">2</td><td style="text-align: left;">C</td><td style="text-align: right;">19</td><td style="text-align: left;">T</td><td style="text-align: right;">36</td><td style="text-align: left;">k</td><td style="text-align: right;">53</td><td style="text-align: left;">1</td></tr><tr><td style="text-align: right;">3</td><td style="text-align: left;">D</td><td style="text-align: right;">20</td><td style="text-align: left;">U</td><td style="text-align: right;">37</td><td style="text-align: left;">l</td><td style="text-align: right;">54</td><td style="text-align: left;">2</td></tr><tr><td style="text-align: right;">4</td><td style="text-align: left;">E</td><td style="text-align: right;">21</td><td style="text-align: left;">V</td><td style="text-align: right;">38</td><td style="text-align: left;">m</td><td style="text-align: right;">55</td><td style="text-align: left;">3</td></tr><tr><td style="text-align: right;">5</td><td style="text-align: left;">F</td><td style="text-align: right;">22</td><td style="text-align: left;">W</td><td style="text-align: right;">39</td><td style="text-align: left;">n</td><td style="text-align: right;">56</td><td style="text-align: left;">4</td></tr><tr><td style="text-align: right;">6</td><td style="text-align: left;">G</td><td style="text-align: right;">23</td><td style="text-align: left;">X</td><td style="text-align: right;">40</td><td style="text-align: left;">o</td><td style="text-align: right;">57</td><td style="text-align: left;">5</td></tr><tr><td style="text-align: right;">7</td><td style="text-align: left;">H</td><td style="text-align: right;">24</td><td style="text-align: left;">Y</td><td style="text-align: right;">41</td><td style="text-align: left;">p</td><td style="text-align: right;">58</td><td style="text-align: left;">6</td></tr><tr><td style="text-align: right;">8</td><td style="text-align: left;">I</td><td style="text-align: right;">25</td><td style="text-align: left;">Z</td><td style="text-align: right;">42</td><td style="text-align: left;">q</td><td style="text-align: right;">59</td><td style="text-align: left;">7</td></tr><tr><td style="text-align: right;">9</td><td style="text-align: left;">J</td><td style="text-align: right;">26</td><td style="text-align: left;">a</td><td style="text-align: right;">43</td><td style="text-align: left;">r</td><td style="text-align: right;">60</td><td style="text-align: left;">8</td></tr><tr><td style="text-align: right;">10</td><td style="text-align: left;">K</td><td style="text-align: right;">27</td><td style="text-align: left;">b</td><td style="text-align: right;">44</td><td style="text-align: left;">s</td><td style="text-align: right;">61</td><td style="text-align: left;">9</td></tr><tr><td style="text-align: right;">11</td><td style="text-align: left;">L</td><td style="text-align: right;">28</td><td style="text-align: left;">c</td><td style="text-align: right;">45</td><td style="text-align: left;">t</td><td style="text-align: right;">62</td><td style="text-align: left;">+</td></tr><tr><td style="text-align: right;">12</td><td style="text-align: left;">M</td><td style="text-align: right;">29</td><td style="text-align: left;">d</td><td style="text-align: right;">46</td><td style="text-align: left;">u</td><td style="text-align: right;">63</td><td style="text-align: left;">/</td></tr><tr><td style="text-align: right;">13</td><td style="text-align: left;">N</td><td style="text-align: right;">30</td><td style="text-align: left;">e</td><td style="text-align: right;">47</td><td style="text-align: left;">v</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">14</td><td style="text-align: left;">O</td><td style="text-align: right;">31</td><td style="text-align: left;">f</td><td style="text-align: right;">48</td><td style="text-align: left;">w</td><td style="text-align: right;">(pad)</td><td style="text-align: left;">=</td></tr><tr><td style="text-align: right;">15</td><td style="text-align: left;">P</td><td style="text-align: right;">32</td><td style="text-align: left;">g</td><td style="text-align: right;">49</td><td style="text-align: left;">x</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">16</td><td style="text-align: left;">Q</td><td style="text-align: right;">33</td><td style="text-align: left;">h</td><td style="text-align: right;">50</td><td style="text-align: left;">y</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr></tbody></table><h2 id="module-base-64-url-and-filename-safe-alphabet" class="section-heading">
+  <a href="#module-base-64-url-and-filename-safe-alphabet" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Base 64 (URL and filename safe) alphabet</span>
+</h2>
+<table><thead><tr><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th><th style="text-align: right;">Value</th><th style="text-align: left;">Encoding</th></tr></thead><tbody><tr><td style="text-align: right;">0</td><td style="text-align: left;">A</td><td style="text-align: right;">17</td><td style="text-align: left;">R</td><td style="text-align: right;">34</td><td style="text-align: left;">i</td><td style="text-align: right;">51</td><td style="text-align: left;">z</td></tr><tr><td style="text-align: right;">1</td><td style="text-align: left;">B</td><td style="text-align: right;">18</td><td style="text-align: left;">S</td><td style="text-align: right;">35</td><td style="text-align: left;">j</td><td style="text-align: right;">52</td><td style="text-align: left;">0</td></tr><tr><td style="text-align: right;">2</td><td style="text-align: left;">C</td><td style="text-align: right;">19</td><td style="text-align: left;">T</td><td style="text-align: right;">36</td><td style="text-align: left;">k</td><td style="text-align: right;">53</td><td style="text-align: left;">1</td></tr><tr><td style="text-align: right;">3</td><td style="text-align: left;">D</td><td style="text-align: right;">20</td><td style="text-align: left;">U</td><td style="text-align: right;">37</td><td style="text-align: left;">l</td><td style="text-align: right;">54</td><td style="text-align: left;">2</td></tr><tr><td style="text-align: right;">4</td><td style="text-align: left;">E</td><td style="text-align: right;">21</td><td style="text-align: left;">V</td><td style="text-align: right;">38</td><td style="text-align: left;">m</td><td style="text-align: right;">55</td><td style="text-align: left;">3</td></tr><tr><td style="text-align: right;">5</td><td style="text-align: left;">F</td><td style="text-align: right;">22</td><td style="text-align: left;">W</td><td style="text-align: right;">39</td><td style="text-align: left;">n</td><td style="text-align: right;">56</td><td style="text-align: left;">4</td></tr><tr><td style="text-align: right;">6</td><td style="text-align: left;">G</td><td style="text-align: right;">23</td><td style="text-align: left;">X</td><td style="text-align: right;">40</td><td style="text-align: left;">o</td><td style="text-align: right;">57</td><td style="text-align: left;">5</td></tr><tr><td style="text-align: right;">7</td><td style="text-align: left;">H</td><td style="text-align: right;">24</td><td style="text-align: left;">Y</td><td style="text-align: right;">41</td><td style="text-align: left;">p</td><td style="text-align: right;">58</td><td style="text-align: left;">6</td></tr><tr><td style="text-align: right;">8</td><td style="text-align: left;">I</td><td style="text-align: right;">25</td><td style="text-align: left;">Z</td><td style="text-align: right;">42</td><td style="text-align: left;">q</td><td style="text-align: right;">59</td><td style="text-align: left;">7</td></tr><tr><td style="text-align: right;">9</td><td style="text-align: left;">J</td><td style="text-align: right;">26</td><td style="text-align: left;">a</td><td style="text-align: right;">43</td><td style="text-align: left;">r</td><td style="text-align: right;">60</td><td style="text-align: left;">8</td></tr><tr><td style="text-align: right;">10</td><td style="text-align: left;">K</td><td style="text-align: right;">27</td><td style="text-align: left;">b</td><td style="text-align: right;">44</td><td style="text-align: left;">s</td><td style="text-align: right;">61</td><td style="text-align: left;">9</td></tr><tr><td style="text-align: right;">11</td><td style="text-align: left;">L</td><td style="text-align: right;">28</td><td style="text-align: left;">c</td><td style="text-align: right;">45</td><td style="text-align: left;">t</td><td style="text-align: right;">62</td><td style="text-align: left;">-</td></tr><tr><td style="text-align: right;">12</td><td style="text-align: left;">M</td><td style="text-align: right;">29</td><td style="text-align: left;">d</td><td style="text-align: right;">46</td><td style="text-align: left;">u</td><td style="text-align: right;">63</td><td style="text-align: left;">_</td></tr><tr><td style="text-align: right;">13</td><td style="text-align: left;">N</td><td style="text-align: right;">30</td><td style="text-align: left;">e</td><td style="text-align: right;">47</td><td style="text-align: left;">v</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">14</td><td style="text-align: left;">O</td><td style="text-align: right;">31</td><td style="text-align: left;">f</td><td style="text-align: right;">48</td><td style="text-align: left;">w</td><td style="text-align: right;">(pad)</td><td style="text-align: left;">=</td></tr><tr><td style="text-align: right;">15</td><td style="text-align: left;">P</td><td style="text-align: right;">32</td><td style="text-align: left;">g</td><td style="text-align: right;">49</td><td style="text-align: left;">x</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr><tr><td style="text-align: right;">16</td><td style="text-align: left;">Q</td><td style="text-align: right;">33</td><td style="text-align: left;">h</td><td style="text-align: right;">50</td><td style="text-align: left;">y</td><td style="text-align: right;"></td><td style="text-align: left;"></td></tr></tbody></table>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:decode_case/0" data-no-tooltip="" translate="no">decode_case()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:encode_case/0" data-no-tooltip="" translate="no">encode_case()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode16/2" data-no-tooltip="" translate="no">decode16(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 16 encoded string into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode16!/2" data-no-tooltip="" translate="no">decode16!(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 16 encoded string into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode32/2" data-no-tooltip="" translate="no">decode32(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 32 encoded string into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode32!/2" data-no-tooltip="" translate="no">decode32!(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 32 encoded string into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode64/2" data-no-tooltip="" translate="no">decode64(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 64 encoded string into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decode64!/2" data-no-tooltip="" translate="no">decode64!(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 64 encoded string into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#encode16/2" data-no-tooltip="" translate="no">encode16(data, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encodes a binary string into a base 16 encoded string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#encode32/2" data-no-tooltip="" translate="no">encode32(data, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encodes a binary string into a base 32 encoded string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#encode64/2" data-no-tooltip="" translate="no">encode64(data, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encodes a binary string into a base 64 encoded string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#hex_decode32/2" data-no-tooltip="" translate="no">hex_decode32(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 32 encoded string with extended hexadecimal alphabet
+into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#hex_decode32!/2" data-no-tooltip="" translate="no">hex_decode32!(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 32 encoded string with extended hexadecimal alphabet
+into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#hex_encode32/2" data-no-tooltip="" translate="no">hex_encode32(data, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encodes a binary string into a base 32 encoded string with an
+extended hexadecimal alphabet.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#url_decode64/2" data-no-tooltip="" translate="no">url_decode64(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 64 encoded string with URL and filename safe alphabet
+into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#url_decode64!/2" data-no-tooltip="" translate="no">url_decode64!(string, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decodes a base 64 encoded string with URL and filename safe alphabet
+into a binary string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#url_encode64/2" data-no-tooltip="" translate="no">url_encode64(data, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Encodes a binary string into a base 64 encoded string with URL and filename
+safe alphabet.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:decode_case/0">
+
+  <div class="detail-header">
+    <a href="#t:decode_case/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode_case()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L96" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> decode_case() :: :upper | :lower | :mixed</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:encode_case/0">
+
+  <div class="detail-header">
+    <a href="#t:encode_case/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encode_case()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L95" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> encode_case() :: :upper | :lower</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="decode16/2">
+
+    <span id="decode16/1"></span>
+
+  <div class="detail-header">
+    <a href="#decode16/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode16(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L265" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode16(<a href="typespecs.html#built-in-types">binary</a>(), [{:case, <a href="#t:decode_case/0">decode_case</a>()}]) :: {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Decodes a base 16 encoded string into a binary string.</p><h2 id="decode16/2-options" class="section-heading">
+  <a href="#decode16/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to accept when decoding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - only allows upper case characters (default)</li><li><code class="inline">:lower</code> - only allows lower case characters</li><li><code class="inline">:mixed</code> - allows mixed case characters</li></ul><h2 id="decode16/2-examples" class="section-heading">
+  <a href="#decode16/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode16</span><span class="p" data-group-id="5738625910-1">(</span><span class="s">&quot;666F6F626172&quot;</span><span class="p" data-group-id="5738625910-1">)</span><span class="w">
+</span><span class="p" data-group-id="5738625910-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="5738625910-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode16</span><span class="p" data-group-id="5738625910-3">(</span><span class="s">&quot;666f6f626172&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="5738625910-3">)</span><span class="w">
+</span><span class="p" data-group-id="5738625910-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="5738625910-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode16</span><span class="p" data-group-id="5738625910-5">(</span><span class="s">&quot;666f6F626172&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:mixed</span><span class="p" data-group-id="5738625910-5">)</span><span class="w">
+</span><span class="p" data-group-id="5738625910-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="5738625910-6">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode16!/2">
+
+    <span id="decode16!/1"></span>
+
+  <div class="detail-header">
+    <a href="#decode16!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode16!(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L302" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode16!(<a href="typespecs.html#built-in-types">binary</a>(), [{:case, <a href="#t:decode_case/0">decode_case</a>()}]) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Decodes a base 16 encoded string into a binary string.</p><h2 id="decode16!/2-options" class="section-heading">
+  <a href="#decode16!/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to accept when decoding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - only allows upper case characters (default)</li><li><code class="inline">:lower</code> - only allows lower case characters</li><li><code class="inline">:mixed</code> - allows mixed case characters</li></ul><p>An <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> exception is raised if the padding is incorrect or
+a non-alphabet character is present in the string.</p><h2 id="decode16!/2-examples" class="section-heading">
+  <a href="#decode16!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode16!</span><span class="p" data-group-id="5901658459-1">(</span><span class="s">&quot;666F6F626172&quot;</span><span class="p" data-group-id="5901658459-1">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode16!</span><span class="p" data-group-id="5901658459-2">(</span><span class="s">&quot;666f6f626172&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="5901658459-2">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode16!</span><span class="p" data-group-id="5901658459-3">(</span><span class="s">&quot;666f6F626172&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:mixed</span><span class="p" data-group-id="5901658459-3">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode32/2">
+
+    <span id="decode32/1"></span>
+
+  <div class="detail-header">
+    <a href="#decode32/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode32(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L930" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode32(<a href="typespecs.html#built-in-types">binary</a>(), case: <a href="#t:decode_case/0">decode_case</a>(), padding: <a href="typespecs.html#built-in-types">boolean</a>()) ::
+  {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Decodes a base 32 encoded string into a binary string.</p><h2 id="decode32/2-options" class="section-heading">
+  <a href="#decode32/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to accept when decoding</li><li><code class="inline">:padding</code> - specifies whether to require padding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - only allows  upper case characters (default)</li><li><code class="inline">:lower</code> - only allows lower case characters</li><li><code class="inline">:mixed</code> - allows mixed case characters</li></ul><p>The values for <code class="inline">:padding</code> can be:</p><ul><li><code class="inline">true</code> - requires the input string to be padded to the nearest multiple of 8 (default)</li><li><code class="inline">false</code> - ignores padding from the input string</li></ul><h2 id="decode32/2-examples" class="section-heading">
+  <a href="#decode32/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32</span><span class="p" data-group-id="8810917977-1">(</span><span class="s">&quot;MZXW6YTBOI======&quot;</span><span class="p" data-group-id="8810917977-1">)</span><span class="w">
+</span><span class="p" data-group-id="8810917977-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="8810917977-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32</span><span class="p" data-group-id="8810917977-3">(</span><span class="s">&quot;mzxw6ytboi======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="8810917977-3">)</span><span class="w">
+</span><span class="p" data-group-id="8810917977-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="8810917977-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32</span><span class="p" data-group-id="8810917977-5">(</span><span class="s">&quot;mzXW6ytBOi======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:mixed</span><span class="p" data-group-id="8810917977-5">)</span><span class="w">
+</span><span class="p" data-group-id="8810917977-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="8810917977-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32</span><span class="p" data-group-id="8810917977-7">(</span><span class="s">&quot;MZXW6YTBOI&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="8810917977-7">)</span><span class="w">
+</span><span class="p" data-group-id="8810917977-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="8810917977-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode32!/2">
+
+    <span id="decode32!/1"></span>
+
+  <div class="detail-header">
+    <a href="#decode32!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode32!(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L976" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode32!(<a href="typespecs.html#built-in-types">binary</a>(), case: <a href="#t:decode_case/0">decode_case</a>(), padding: <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Decodes a base 32 encoded string into a binary string.</p><p>An <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> exception is raised if the padding is incorrect or
+a non-alphabet character is present in the string.</p><h2 id="decode32!/2-options" class="section-heading">
+  <a href="#decode32!/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to accept when decoding</li><li><code class="inline">:padding</code> - specifies whether to require padding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - only allows upper case characters (default)</li><li><code class="inline">:lower</code> - only allows lower case characters</li><li><code class="inline">:mixed</code> - allows mixed case characters</li></ul><p>The values for <code class="inline">:padding</code> can be:</p><ul><li><code class="inline">true</code> - requires the input string to be padded to the nearest multiple of 8 (default)</li><li><code class="inline">false</code> - ignores padding from the input string</li></ul><h2 id="decode32!/2-examples" class="section-heading">
+  <a href="#decode32!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32!</span><span class="p" data-group-id="8915365573-1">(</span><span class="s">&quot;MZXW6YTBOI======&quot;</span><span class="p" data-group-id="8915365573-1">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32!</span><span class="p" data-group-id="8915365573-2">(</span><span class="s">&quot;mzxw6ytboi======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="8915365573-2">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32!</span><span class="p" data-group-id="8915365573-3">(</span><span class="s">&quot;mzXW6ytBOi======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:mixed</span><span class="p" data-group-id="8915365573-3">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode32!</span><span class="p" data-group-id="8915365573-4">(</span><span class="s">&quot;MZXW6YTBOI&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="8915365573-4">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode64/2">
+
+    <span id="decode64/1"></span>
+
+  <div class="detail-header">
+    <a href="#decode64/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode64(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L519" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode64(<a href="typespecs.html#built-in-types">binary</a>(), ignore: :whitespace, padding: <a href="typespecs.html#built-in-types">boolean</a>()) ::
+  {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Decodes a base 64 encoded string into a binary string.</p><p>Accepts <code class="inline">ignore: :whitespace</code> option which will ignore all the
+whitespace characters in the input string.</p><p>Accepts <code class="inline">padding: false</code> option which will ignore padding from
+the input string.</p><h2 id="decode64/2-examples" class="section-heading">
+  <a href="#decode64/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64</span><span class="p" data-group-id="7610328805-1">(</span><span class="s">&quot;Zm9vYmFy&quot;</span><span class="p" data-group-id="7610328805-1">)</span><span class="w">
+</span><span class="p" data-group-id="7610328805-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="7610328805-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64</span><span class="p" data-group-id="7610328805-3">(</span><span class="s">&quot;Zm9vYmFy</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">ignore</span><span class="p">:</span><span class="w"> </span><span class="ss">:whitespace</span><span class="p" data-group-id="7610328805-3">)</span><span class="w">
+</span><span class="p" data-group-id="7610328805-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="7610328805-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64</span><span class="p" data-group-id="7610328805-5">(</span><span class="s">&quot;Zm9vYg==&quot;</span><span class="p" data-group-id="7610328805-5">)</span><span class="w">
+</span><span class="p" data-group-id="7610328805-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foob&quot;</span><span class="p" data-group-id="7610328805-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64</span><span class="p" data-group-id="7610328805-7">(</span><span class="s">&quot;Zm9vYg&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="7610328805-7">)</span><span class="w">
+</span><span class="p" data-group-id="7610328805-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foob&quot;</span><span class="p" data-group-id="7610328805-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="decode64!/2">
+
+    <span id="decode64!/1"></span>
+
+  <div class="detail-header">
+    <a href="#decode64!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decode64!(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L553" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decode64!(<a href="typespecs.html#built-in-types">binary</a>(), ignore: :whitespace, padding: <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Decodes a base 64 encoded string into a binary string.</p><p>Accepts <code class="inline">ignore: :whitespace</code> option which will ignore all the
+whitespace characters in the input string.</p><p>Accepts <code class="inline">padding: false</code> option which will ignore padding from
+the input string.</p><p>An <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> exception is raised if the padding is incorrect or
+a non-alphabet character is present in the string.</p><h2 id="decode64!/2-examples" class="section-heading">
+  <a href="#decode64!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64!</span><span class="p" data-group-id="1203887589-1">(</span><span class="s">&quot;Zm9vYmFy&quot;</span><span class="p" data-group-id="1203887589-1">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64!</span><span class="p" data-group-id="1203887589-2">(</span><span class="s">&quot;Zm9vYmFy</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">ignore</span><span class="p">:</span><span class="w"> </span><span class="ss">:whitespace</span><span class="p" data-group-id="1203887589-2">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64!</span><span class="p" data-group-id="1203887589-3">(</span><span class="s">&quot;Zm9vYg==&quot;</span><span class="p" data-group-id="1203887589-3">)</span><span class="w">
+</span><span class="s">&quot;foob&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">decode64!</span><span class="p" data-group-id="1203887589-4">(</span><span class="s">&quot;Zm9vYg&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="1203887589-4">)</span><span class="w">
+</span><span class="s">&quot;foob&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="encode16/2">
+
+    <span id="encode16/1"></span>
+
+  <div class="detail-header">
+    <a href="#encode16/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encode16(data, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L178" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> encode16(<a href="typespecs.html#built-in-types">binary</a>(), [{:case, <a href="#t:encode_case/0">encode_case</a>()}]) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Encodes a binary string into a base 16 encoded string.</p><h2 id="encode16/2-options" class="section-heading">
+  <a href="#encode16/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to use when encoding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - uses upper case characters (default)</li><li><code class="inline">:lower</code> - uses lower case characters</li></ul><h2 id="encode16/2-examples" class="section-heading">
+  <a href="#encode16/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode16</span><span class="p" data-group-id="6475533294-1">(</span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="6475533294-1">)</span><span class="w">
+</span><span class="s">&quot;666F6F626172&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode16</span><span class="p" data-group-id="6475533294-2">(</span><span class="s">&quot;foobar&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="6475533294-2">)</span><span class="w">
+</span><span class="s">&quot;666f6f626172&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="encode32/2">
+
+    <span id="encode32/1"></span>
+
+  <div class="detail-header">
+    <a href="#encode32/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encode32(data, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L773" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> encode32(<a href="typespecs.html#built-in-types">binary</a>(), case: <a href="#t:encode_case/0">encode_case</a>(), padding: <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Encodes a binary string into a base 32 encoded string.</p><h2 id="encode32/2-options" class="section-heading">
+  <a href="#encode32/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to use when encoding</li><li><code class="inline">:padding</code> - specifies whether to apply padding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - uses upper case characters (default)</li><li><code class="inline">:lower</code> - uses lower case characters</li></ul><p>The values for <code class="inline">:padding</code> can be:</p><ul><li><code class="inline">true</code> - pad the output string to the nearest multiple of 8 (default)</li><li><code class="inline">false</code> - omit padding from the output string</li></ul><h2 id="encode32/2-examples" class="section-heading">
+  <a href="#encode32/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode32</span><span class="p" data-group-id="1229649680-1">(</span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="1229649680-1">)</span><span class="w">
+</span><span class="s">&quot;MZXW6YTBOI======&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode32</span><span class="p" data-group-id="1229649680-2">(</span><span class="s">&quot;foobar&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="1229649680-2">)</span><span class="w">
+</span><span class="s">&quot;mzxw6ytboi======&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode32</span><span class="p" data-group-id="1229649680-3">(</span><span class="s">&quot;foobar&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="1229649680-3">)</span><span class="w">
+</span><span class="s">&quot;MZXW6YTBOI&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="encode64/2">
+
+    <span id="encode64/1"></span>
+
+  <div class="detail-header">
+    <a href="#encode64/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">encode64(data, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L393" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> encode64(<a href="typespecs.html#built-in-types">binary</a>(), [{:padding, <a href="typespecs.html#built-in-types">boolean</a>()}]) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Encodes a binary string into a base 64 encoded string.</p><p>Accepts <code class="inline">padding: false</code> option which will omit padding from
+the output string.</p><h2 id="encode64/2-examples" class="section-heading">
+  <a href="#encode64/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode64</span><span class="p" data-group-id="5308852541-1">(</span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="5308852541-1">)</span><span class="w">
+</span><span class="s">&quot;Zm9vYmFy&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode64</span><span class="p" data-group-id="5308852541-2">(</span><span class="s">&quot;foob&quot;</span><span class="p" data-group-id="5308852541-2">)</span><span class="w">
+</span><span class="s">&quot;Zm9vYg==&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">encode64</span><span class="p" data-group-id="5308852541-3">(</span><span class="s">&quot;foob&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="5308852541-3">)</span><span class="w">
+</span><span class="s">&quot;Zm9vYg&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="hex_decode32/2">
+
+    <span id="hex_decode32/1"></span>
+
+  <div class="detail-header">
+    <a href="#hex_decode32/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">hex_decode32(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L1024" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> hex_decode32(<a href="typespecs.html#built-in-types">binary</a>(), case: <a href="#t:decode_case/0">decode_case</a>(), padding: <a href="typespecs.html#built-in-types">boolean</a>()) ::
+  {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Decodes a base 32 encoded string with extended hexadecimal alphabet
+into a binary string.</p><h2 id="hex_decode32/2-options" class="section-heading">
+  <a href="#hex_decode32/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to accept when decoding</li><li><code class="inline">:padding</code> - specifies whether to require padding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - only allows upper case characters (default)</li><li><code class="inline">:lower</code> - only allows lower case characters</li><li><code class="inline">:mixed</code> - allows mixed case characters</li></ul><p>The values for <code class="inline">:padding</code> can be:</p><ul><li><code class="inline">true</code> - requires the input string to be padded to the nearest multiple of 8 (default)</li><li><code class="inline">false</code> - ignores padding from the input string</li></ul><h2 id="hex_decode32/2-examples" class="section-heading">
+  <a href="#hex_decode32/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32</span><span class="p" data-group-id="7710638539-1">(</span><span class="s">&quot;CPNMUOJ1E8======&quot;</span><span class="p" data-group-id="7710638539-1">)</span><span class="w">
+</span><span class="p" data-group-id="7710638539-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="7710638539-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32</span><span class="p" data-group-id="7710638539-3">(</span><span class="s">&quot;cpnmuoj1e8======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="7710638539-3">)</span><span class="w">
+</span><span class="p" data-group-id="7710638539-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="7710638539-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32</span><span class="p" data-group-id="7710638539-5">(</span><span class="s">&quot;cpnMuOJ1E8======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:mixed</span><span class="p" data-group-id="7710638539-5">)</span><span class="w">
+</span><span class="p" data-group-id="7710638539-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="7710638539-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32</span><span class="p" data-group-id="7710638539-7">(</span><span class="s">&quot;CPNMUOJ1E8&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="7710638539-7">)</span><span class="w">
+</span><span class="p" data-group-id="7710638539-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="7710638539-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="hex_decode32!/2">
+
+    <span id="hex_decode32!/1"></span>
+
+  <div class="detail-header">
+    <a href="#hex_decode32!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">hex_decode32!(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L1071" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> hex_decode32!(<a href="typespecs.html#built-in-types">binary</a>(), case: <a href="#t:decode_case/0">decode_case</a>(), padding: <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Decodes a base 32 encoded string with extended hexadecimal alphabet
+into a binary string.</p><p>An <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> exception is raised if the padding is incorrect or
+a non-alphabet character is present in the string.</p><h2 id="hex_decode32!/2-options" class="section-heading">
+  <a href="#hex_decode32!/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to accept when decoding</li><li><code class="inline">:padding</code> - specifies whether to require padding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - only allows upper case characters (default)</li><li><code class="inline">:lower</code> - only allows lower case characters</li><li><code class="inline">:mixed</code> - allows mixed case characters</li></ul><p>The values for <code class="inline">:padding</code> can be:</p><ul><li><code class="inline">true</code> - requires the input string to be padded to the nearest multiple of 8 (default)</li><li><code class="inline">false</code> - ignores padding from the input string</li></ul><h2 id="hex_decode32!/2-examples" class="section-heading">
+  <a href="#hex_decode32!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32!</span><span class="p" data-group-id="6240988748-1">(</span><span class="s">&quot;CPNMUOJ1E8======&quot;</span><span class="p" data-group-id="6240988748-1">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32!</span><span class="p" data-group-id="6240988748-2">(</span><span class="s">&quot;cpnmuoj1e8======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="6240988748-2">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32!</span><span class="p" data-group-id="6240988748-3">(</span><span class="s">&quot;cpnMuOJ1E8======&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:mixed</span><span class="p" data-group-id="6240988748-3">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_decode32!</span><span class="p" data-group-id="6240988748-4">(</span><span class="s">&quot;CPNMUOJ1E8&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="6240988748-4">)</span><span class="w">
+</span><span class="s">&quot;foobar&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="hex_encode32/2">
+
+    <span id="hex_encode32/1"></span>
+
+  <div class="detail-header">
+    <a href="#hex_encode32/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">hex_encode32(data, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L816" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> hex_encode32(<a href="typespecs.html#built-in-types">binary</a>(), case: <a href="#t:encode_case/0">encode_case</a>(), padding: <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Encodes a binary string into a base 32 encoded string with an
+extended hexadecimal alphabet.</p><h2 id="hex_encode32/2-options" class="section-heading">
+  <a href="#hex_encode32/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The accepted options are:</p><ul><li><code class="inline">:case</code> - specifies the character case to use when encoding</li><li><code class="inline">:padding</code> - specifies whether to apply padding</li></ul><p>The values for <code class="inline">:case</code> can be:</p><ul><li><code class="inline">:upper</code> - uses upper case characters (default)</li><li><code class="inline">:lower</code> - uses lower case characters</li></ul><p>The values for <code class="inline">:padding</code> can be:</p><ul><li><code class="inline">true</code> - pad the output string to the nearest multiple of 8 (default)</li><li><code class="inline">false</code> - omit padding from the output string</li></ul><h2 id="hex_encode32/2-examples" class="section-heading">
+  <a href="#hex_encode32/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_encode32</span><span class="p" data-group-id="2569284803-1">(</span><span class="s">&quot;foobar&quot;</span><span class="p" data-group-id="2569284803-1">)</span><span class="w">
+</span><span class="s">&quot;CPNMUOJ1E8======&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_encode32</span><span class="p" data-group-id="2569284803-2">(</span><span class="s">&quot;foobar&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">case</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span><span class="p" data-group-id="2569284803-2">)</span><span class="w">
+</span><span class="s">&quot;cpnmuoj1e8======&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">hex_encode32</span><span class="p" data-group-id="2569284803-3">(</span><span class="s">&quot;foobar&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="2569284803-3">)</span><span class="w">
+</span><span class="s">&quot;CPNMUOJ1E8&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="url_decode64/2">
+
+    <span id="url_decode64/1"></span>
+
+  <div class="detail-header">
+    <a href="#url_decode64/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">url_decode64(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L581" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> url_decode64(<a href="typespecs.html#built-in-types">binary</a>(), ignore: :whitespace, padding: <a href="typespecs.html#built-in-types">boolean</a>()) ::
+  {:ok, <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Decodes a base 64 encoded string with URL and filename safe alphabet
+into a binary string.</p><p>Accepts <code class="inline">ignore: :whitespace</code> option which will ignore all the
+whitespace characters in the input string.</p><p>Accepts <code class="inline">padding: false</code> option which will ignore padding from
+the input string.</p><h2 id="url_decode64/2-examples" class="section-heading">
+  <a href="#url_decode64/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_decode64</span><span class="p" data-group-id="5111985595-1">(</span><span class="s">&quot;_3_-_A==&quot;</span><span class="p" data-group-id="5111985595-1">)</span><span class="w">
+</span><span class="p" data-group-id="5111985595-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5111985595-3">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="5111985595-3">&gt;&gt;</span><span class="p" data-group-id="5111985595-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_decode64</span><span class="p" data-group-id="5111985595-4">(</span><span class="s">&quot;_3_-_A==</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">ignore</span><span class="p">:</span><span class="w"> </span><span class="ss">:whitespace</span><span class="p" data-group-id="5111985595-4">)</span><span class="w">
+</span><span class="p" data-group-id="5111985595-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5111985595-6">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="5111985595-6">&gt;&gt;</span><span class="p" data-group-id="5111985595-5">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_decode64</span><span class="p" data-group-id="5111985595-7">(</span><span class="s">&quot;_3_-_A&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="5111985595-7">)</span><span class="w">
+</span><span class="p" data-group-id="5111985595-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5111985595-9">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="5111985595-9">&gt;&gt;</span><span class="p" data-group-id="5111985595-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="url_decode64!/2">
+
+    <span id="url_decode64!/1"></span>
+
+  <div class="detail-header">
+    <a href="#url_decode64!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">url_decode64!(string, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L613" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> url_decode64!(<a href="typespecs.html#built-in-types">binary</a>(), ignore: :whitespace, padding: <a href="typespecs.html#built-in-types">boolean</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Decodes a base 64 encoded string with URL and filename safe alphabet
+into a binary string.</p><p>Accepts <code class="inline">ignore: :whitespace</code> option which will ignore all the
+whitespace characters in the input string.</p><p>Accepts <code class="inline">padding: false</code> option which will ignore padding from
+the input string.</p><p>An <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> exception is raised if the padding is incorrect or
+a non-alphabet character is present in the string.</p><h2 id="url_decode64!/2-examples" class="section-heading">
+  <a href="#url_decode64!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_decode64!</span><span class="p" data-group-id="8392595873-1">(</span><span class="s">&quot;_3_-_A==&quot;</span><span class="p" data-group-id="8392595873-1">)</span><span class="w">
+</span><span class="p" data-group-id="8392595873-2">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="8392595873-2">&gt;&gt;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_decode64!</span><span class="p" data-group-id="8392595873-3">(</span><span class="s">&quot;_3_-_A==</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">ignore</span><span class="p">:</span><span class="w"> </span><span class="ss">:whitespace</span><span class="p" data-group-id="8392595873-3">)</span><span class="w">
+</span><span class="p" data-group-id="8392595873-4">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="8392595873-4">&gt;&gt;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_decode64!</span><span class="p" data-group-id="8392595873-5">(</span><span class="s">&quot;_3_-_A&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="8392595873-5">)</span><span class="w">
+</span><span class="p" data-group-id="8392595873-6">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="8392595873-6">&gt;&gt;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="url_encode64/2">
+
+    <span id="url_encode64/1"></span>
+
+  <div class="detail-header">
+    <a href="#url_encode64/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">url_encode64(data, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/base.ex#L415" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> url_encode64(<a href="typespecs.html#built-in-types">binary</a>(), [{:padding, <a href="typespecs.html#built-in-types">boolean</a>()}]) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Encodes a binary string into a base 64 encoded string with URL and filename
+safe alphabet.</p><p>Accepts <code class="inline">padding: false</code> option which will omit padding from
+the output string.</p><h2 id="url_encode64/2-examples" class="section-heading">
+  <a href="#url_encode64/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_encode64</span><span class="p" data-group-id="6264227668-1">(</span><span class="p" data-group-id="6264227668-2">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="6264227668-2">&gt;&gt;</span><span class="p" data-group-id="6264227668-1">)</span><span class="w">
+</span><span class="s">&quot;_3_-_A==&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_encode64</span><span class="p" data-group-id="6264227668-3">(</span><span class="p" data-group-id="6264227668-4">&lt;&lt;</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">,</span><span class="w"> </span><span class="mi">252</span><span class="p" data-group-id="6264227668-4">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="6264227668-3">)</span><span class="w">
+</span><span class="s">&quot;_3_-_A&quot;</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

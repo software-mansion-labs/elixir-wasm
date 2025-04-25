@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Quote and unquote — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/quote-and-unquote.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Quote and unquote</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/meta-programming/quote-and-unquote.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This guide aims to introduce the meta-programming techniques available in Elixir. The ability to represent an Elixir program by its own data structures is at the heart of meta-programming. This chapter starts by exploring those structures and the associated <a href="Kernel.SpecialForms.html#quote/2"><code class="inline">quote/2</code></a> and <a href="Kernel.SpecialForms.html#unquote/1"><code class="inline">unquote/1</code></a> constructs, so we can take a look at macros in the next guide, and finally build our own domain specific language.</p><h2 id="quoting" class="section-heading">
+  <a href="#quoting" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Quoting</span>
+</h2>
+<p>The building block of an Elixir program is a tuple with three elements. For example, the function call <code class="inline">sum(1, 2, 3)</code> is represented internally as:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3189641255-1">{</span><span class="ss">:sum</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3189641255-2">[</span><span class="p" data-group-id="3189641255-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3189641255-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3189641255-3">]</span><span class="p" data-group-id="3189641255-1">}</span></code></pre><p>You can get the representation of any expression by using the <a href="Kernel.SpecialForms.html#quote/2"><code class="inline">quote/2</code></a> macro:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">sum</span><span class="p" data-group-id="9251715135-1">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9251715135-1">)</span><span class="w">
+</span><span class="p" data-group-id="9251715135-2">{</span><span class="ss">:sum</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9251715135-3">[</span><span class="p" data-group-id="9251715135-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9251715135-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9251715135-4">]</span><span class="p" data-group-id="9251715135-2">}</span></code></pre><p>The first element is the function name, the second is a keyword list containing metadata, and the third is the arguments list.</p><p>Operators are also represented as such tuples:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="p" data-group-id="7896871914-1">{</span><span class="ss">:+</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7896871914-2">[</span><span class="ss">context</span><span class="p">:</span><span class="w"> </span><span class="nc">Elixir</span><span class="p">,</span><span class="w"> </span><span class="ss">import</span><span class="p">:</span><span class="w"> </span><span class="nc">Kernel</span><span class="p" data-group-id="7896871914-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7896871914-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7896871914-3">]</span><span class="p" data-group-id="7896871914-1">}</span></code></pre><p>Even a map is represented as a call to <code class="inline">%{}</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4646169679-1">%{</span><span class="mi">1</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="4646169679-1">}</span><span class="w">
+</span><span class="p" data-group-id="4646169679-2">{</span><span class="ss">:%{}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4646169679-3">[</span><span class="p" data-group-id="4646169679-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4646169679-4">[</span><span class="p" data-group-id="4646169679-5">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="4646169679-5">}</span><span class="p" data-group-id="4646169679-4">]</span><span class="p" data-group-id="4646169679-2">}</span></code></pre><p>Variables are represented using such triplets, with the difference that the last element is an atom, instead of a list:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">x</span><span class="w">
+</span><span class="p" data-group-id="1227151985-1">{</span><span class="ss">:x</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1227151985-2">[</span><span class="p" data-group-id="1227151985-2">]</span><span class="p">,</span><span class="w"> </span><span class="nc">Elixir</span><span class="p" data-group-id="1227151985-1">}</span></code></pre><p>When quoting more complex expressions, we can see that the code is represented in such tuples, which are often nested inside each other in a structure resembling a tree. Many languages would call such representations an <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree"><em>Abstract Syntax Tree</em></a> (AST). Elixir calls them <em>quoted expressions</em>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">sum</span><span class="p" data-group-id="0253418839-1">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="0253418839-1">)</span><span class="w">
+</span><span class="p" data-group-id="0253418839-2">{</span><span class="ss">:sum</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0253418839-3">[</span><span class="p" data-group-id="0253418839-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0253418839-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0253418839-5">{</span><span class="ss">:+</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0253418839-6">[</span><span class="ss">context</span><span class="p">:</span><span class="w"> </span><span class="nc">Elixir</span><span class="p">,</span><span class="w"> </span><span class="ss">import</span><span class="p">:</span><span class="w"> </span><span class="nc">Kernel</span><span class="p" data-group-id="0253418839-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0253418839-7">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0253418839-7">]</span><span class="p" data-group-id="0253418839-5">}</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="0253418839-4">]</span><span class="p" data-group-id="0253418839-2">}</span></code></pre><p>Sometimes, when working with quoted expressions, it may be useful to get the textual code representation back. This can be done with <a href="Macro.html#to_string/1"><code class="inline">Macro.to_string/1</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Macro</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="2525812384-1">(</span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">sum</span><span class="p" data-group-id="2525812384-2">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="2525812384-2">)</span><span class="p" data-group-id="2525812384-1">)</span><span class="w">
+</span><span class="s">&quot;sum(1, 2 + 3, 4)&quot;</span></code></pre><p>In general, the tuples above are structured according to the following format:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2506392966-1">{</span><span class="n">atom</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tuple</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">atom</span><span class="p" data-group-id="2506392966-1">}</span></code></pre><ul><li>The first element is an atom or another tuple in the same representation;</li><li>The second element is a keyword list containing metadata, like numbers and contexts;</li><li>The third element is either a list of arguments for the function call or an atom. When this element is an atom, it means the tuple represents a variable.</li></ul><p>Besides the tuple defined above, there are five Elixir literals that, when quoted, return themselves (and not a tuple). They are:</p><pre><code class="makeup elixir" translate="no"><span class="ss">:sum</span><span class="w">         </span><span class="c1">#=&gt; Atoms</span><span class="w">
+</span><span class="mf">1.0</span><span class="w">          </span><span class="c1">#=&gt; Numbers</span><span class="w">
+</span><span class="p" data-group-id="0259274877-1">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="0259274877-1">]</span><span class="w">       </span><span class="c1">#=&gt; Lists</span><span class="w">
+</span><span class="s">&quot;strings&quot;</span><span class="w">    </span><span class="c1">#=&gt; Strings</span><span class="w">
+</span><span class="p" data-group-id="0259274877-2">{</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="0259274877-2">}</span><span class="w"> </span><span class="c1">#=&gt; Tuples with two elements</span></code></pre><p>Most Elixir code has a straight-forward translation to its underlying quoted expression. We recommend you try out different code samples and see what the results are. For example, what does <code class="inline">String.upcase(&quot;foo&quot;)</code> expand to? We have also learned that <code class="inline">if(true, do: :this, else: :that)</code> is the same as <code class="inline">if true do :this else :that end</code>. How does this affirmation hold with quoted expressions?</p><h2 id="unquoting" class="section-heading">
+  <a href="#unquoting" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unquoting</span>
+</h2>
+<p>Quoting is about retrieving the inner representation of some particular chunk of code. However, sometimes it may be necessary to inject some other particular chunk of code inside the representation we want to retrieve.</p><p>For example, imagine you have a variable called <code class="inline">number</code> which contains the number you want to inject inside a quoted expression.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Macro</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="2755015791-1">(</span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">number</span><span class="p" data-group-id="2755015791-1">)</span><span class="w">
+</span><span class="s">&quot;11 + number&quot;</span></code></pre><p>That's not what we wanted, since the value of the <code class="inline">number</code> variable has not been injected and <code class="inline">number</code> has been quoted in the expression. In order to inject the <em>value</em> of the <code class="inline">number</code> variable, <a href="Kernel.SpecialForms.html#unquote/1"><code class="inline">unquote/1</code></a> has to be used inside the quoted representation:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Macro</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="8763327123-1">(</span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="8763327123-2">(</span><span class="n">number</span><span class="p" data-group-id="8763327123-2">)</span><span class="p" data-group-id="8763327123-1">)</span><span class="w">
+</span><span class="s">&quot;11 + 13&quot;</span></code></pre><p><a href="Kernel.SpecialForms.html#unquote/1"><code class="inline">unquote/1</code></a> can even be used to inject function names:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">:hello</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Macro</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="5152598199-1">(</span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="5152598199-2">(</span><span class="n">fun</span><span class="p" data-group-id="5152598199-2">)</span><span class="p" data-group-id="5152598199-3">(</span><span class="ss">:world</span><span class="p" data-group-id="5152598199-3">)</span><span class="p" data-group-id="5152598199-1">)</span><span class="w">
+</span><span class="s">&quot;hello(:world)&quot;</span></code></pre><p>In some cases, it may be necessary to inject many values inside a list. For example, imagine you have a list containing <code class="inline">[1, 2, 6]</code>, and we want to inject <code class="inline">[3, 4, 5]</code> into it. Using <a href="Kernel.SpecialForms.html#unquote/1"><code class="inline">unquote/1</code></a> won't yield the desired result:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">inner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3612233601-1">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="3612233601-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Macro</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="3612233601-2">(</span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3612233601-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="3612233601-4">(</span><span class="n">inner</span><span class="p" data-group-id="3612233601-4">)</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3612233601-3">]</span><span class="p" data-group-id="3612233601-2">)</span><span class="w">
+</span><span class="s">&quot;[1, 2, [3, 4, 5], 6]&quot;</span></code></pre><p>That's when <a href="Kernel.SpecialForms.html#unquote_splicing/1"><code class="inline">unquote_splicing/1</code></a> comes in handy:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">inner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1709000802-1">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="1709000802-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Macro</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="1709000802-2">(</span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1709000802-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k">unquote_splicing</span><span class="p" data-group-id="1709000802-4">(</span><span class="n">inner</span><span class="p" data-group-id="1709000802-4">)</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="1709000802-3">]</span><span class="p" data-group-id="1709000802-2">)</span><span class="w">
+</span><span class="s">&quot;[1, 2, 3, 4, 5, 6]&quot;</span></code></pre><p>Unquoting is very useful when working with macros. When writing macros, developers are able to receive code chunks and inject them inside other code chunks, which can be used to transform code or write code that generates code during compilation.</p><h2 id="escaping" class="section-heading">
+  <a href="#escaping" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Escaping</span>
+</h2>
+<p>As we saw at the beginning of this chapter, only some values are valid quoted expressions in Elixir. For example, a map is not a valid quoted expression. Neither is a tuple with four elements. However, such values <em>can</em> be expressed as a quoted expression:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">quote</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6430234422-1">%{</span><span class="mi">1</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6430234422-1">}</span><span class="w">
+</span><span class="p" data-group-id="6430234422-2">{</span><span class="ss">:%{}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6430234422-3">[</span><span class="p" data-group-id="6430234422-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6430234422-4">[</span><span class="p" data-group-id="6430234422-5">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6430234422-5">}</span><span class="p" data-group-id="6430234422-4">]</span><span class="p" data-group-id="6430234422-2">}</span></code></pre><p>In some cases, you may need to inject such <em>values</em> into <em>quoted expressions</em>. To do that, we need to first escape those values into quoted expressions with the help of <a href="Macro.html#escape/1"><code class="inline">Macro.escape/1</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0856581059-1">%{</span><span class="ss">hello</span><span class="p">:</span><span class="w"> </span><span class="ss">:world</span><span class="p" data-group-id="0856581059-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Macro</span><span class="o">.</span><span class="n">escape</span><span class="p" data-group-id="0856581059-2">(</span><span class="n">map</span><span class="p" data-group-id="0856581059-2">)</span><span class="w">
+</span><span class="p" data-group-id="0856581059-3">{</span><span class="ss">:%{}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0856581059-4">[</span><span class="p" data-group-id="0856581059-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0856581059-5">[</span><span class="ss">hello</span><span class="p">:</span><span class="w"> </span><span class="ss">:world</span><span class="p" data-group-id="0856581059-5">]</span><span class="p" data-group-id="0856581059-3">}</span></code></pre><p>Macros receive quoted expressions and must return quoted expressions. However, sometimes during the execution of a macro, you may need to work with values and making a distinction between values and quoted expressions will be required.</p><p>In other words, it is important to make a distinction between a regular Elixir value (like a list, a map, a process, a reference, and so on) and a quoted expression. Some values, such as integers, atoms, and strings, have a quoted expression equal to the value itself. Other values, like maps, need to be explicitly converted. Finally, values like functions and references cannot be converted to a quoted expression at all.</p><p>When working with macros and code that generates code, check out the documentation for the <a href="Macro.html"><code class="inline">Macro</code></a> module, which contains many functions to work with Elixir's AST.</p><p>In this introduction, we have laid the groundwork to finally write our first macro. You can check that out in the <a href="macros.html">next guide</a>.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="macro-anti-patterns.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Meta-programming anti-patterns
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="macros.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Macros
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Operators reference — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/operators.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Operators reference</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/references/operators.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This document is a complete reference of operators in Elixir, how they are parsed, how they can be defined, and how they can be overridden.</p><h2 id="operator-precedence-and-associativity" class="section-heading">
+  <a href="#operator-precedence-and-associativity" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Operator precedence and associativity</span>
+</h2>
+<p>The following is a list of all operators that Elixir is capable of parsing, ordered from higher to lower precedence, alongside their associativity:</p><table><thead><tr><th style="text-align: left;">Operator</th><th style="text-align: left;">Associativity</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">@</code></td><td style="text-align: left;">Unary</td></tr><tr><td style="text-align: left;"><code class="inline">.</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">+</code> <code class="inline">-</code> <code class="inline">!</code> <code class="inline">^</code> <code class="inline">not</code></td><td style="text-align: left;">Unary</td></tr><tr><td style="text-align: left;"><code class="inline">**</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">*</code> <code class="inline">/</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">+</code> <code class="inline">-</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">++</code> <code class="inline">--</code> <code class="inline">+++</code> <code class="inline">---</code> <code class="inline">..</code> <code class="inline">&lt;&gt;</code></td><td style="text-align: left;">Right</td></tr><tr><td style="text-align: left;"><code class="inline">in</code> <code class="inline">not in</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">|&gt;</code> <code class="inline">&lt;&lt;&lt;</code> <code class="inline">&gt;&gt;&gt;</code> <code class="inline">&lt;&lt;~</code> <code class="inline">~&gt;&gt;</code> <code class="inline">&lt;~</code> <code class="inline">~&gt;</code> <code class="inline">&lt;~&gt;</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">&lt;</code> <code class="inline">&gt;</code> <code class="inline">&lt;=</code> <code class="inline">&gt;=</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">==</code> <code class="inline">!=</code> <code class="inline">=~</code> <code class="inline">===</code> <code class="inline">!==</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">&amp;&amp;</code> <code class="inline">&amp;&amp;&amp;</code> <code class="inline">and</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">||</code> <code class="inline">|||</code> <code class="inline">or</code></td><td style="text-align: left;">Left</td></tr><tr><td style="text-align: left;"><code class="inline">=</code></td><td style="text-align: left;">Right</td></tr><tr><td style="text-align: left;"><code class="inline">&amp;</code>, <code class="inline">...</code></td><td style="text-align: left;">Unary</td></tr><tr><td style="text-align: left;"><code class="inline">=&gt;</code> (valid only inside <code class="inline">%{}</code>)</td><td style="text-align: left;">Right</td></tr><tr><td style="text-align: left;"><code class="inline">|</code></td><td style="text-align: left;">Right</td></tr><tr><td style="text-align: left;"><code class="inline">::</code></td><td style="text-align: left;">Right</td></tr><tr><td style="text-align: left;"><code class="inline">when</code></td><td style="text-align: left;">Right</td></tr><tr><td style="text-align: left;"><code class="inline">&lt;-</code> <code class="inline">\\</code></td><td style="text-align: left;">Left</td></tr></tbody></table><h2 id="general-operators" class="section-heading">
+  <a href="#general-operators" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">General operators</span>
+</h2>
+<p>Elixir provides the following built-in operators:</p><ul><li><a href="Kernel.html#+/1"><code class="inline">+</code></a> and <a href="Kernel.html#-/1"><code class="inline">-</code></a> - unary positive/negative</li><li><a href="Kernel.html#+/2"><code class="inline">+</code></a>, <a href="Kernel.html#-/2"><code class="inline">-</code></a>, <a href="Kernel.html#*/2"><code class="inline">*</code></a>, and <a href="Kernel.html#//2"><code class="inline">/</code></a> - basic arithmetic operations</li><li><a href="Kernel.html#++/2"><code class="inline">++</code></a> and <a href="Kernel.html#--/2"><code class="inline">--</code></a> - list concatenation and subtraction</li><li><a href="Kernel.html#and/2"><code class="inline">and</code></a> and <a href="Kernel.html#&&/2"><code class="inline">&amp;&amp;</code></a> - strict and relaxed boolean &quot;and&quot;</li><li><a href="Kernel.html#or/2"><code class="inline">or</code></a> and <a href="Kernel.html#%7C%7C/2"><code class="inline">||</code></a> - strict and relaxed boolean &quot;or&quot;</li><li><a href="Kernel.html#not/1"><code class="inline">not</code></a> and <a href="Kernel.html#!/1"><code class="inline">!</code></a> - strict and relaxed boolean &quot;not&quot;</li><li><a href="Kernel.html#in/2"><code class="inline">in</code></a> and <a href="Kernel.html#in/2"><code class="inline">not in</code></a> - membership</li><li><a href="Kernel.html#@/1"><code class="inline">@</code></a> - module attribute</li><li><a href="Kernel.html#../0"><code class="inline">..</code></a>, <a href="Kernel.html#../2"><code class="inline">..</code></a>, and <a href="Kernel.html#..///3"><code class="inline">..//</code></a> - range creation</li><li><a href="Kernel.html#%3C%3E/2"><code class="inline">&lt;&gt;</code></a> - binary concatenation</li><li><a href="Kernel.html#%7C%3E/2"><code class="inline">|&gt;</code></a> - pipeline</li><li><a href="Kernel.html#=~/2"><code class="inline">=~</code></a> - text-based match</li></ul><p>Many of those can be used in guards; consult the <a href="patterns-and-guards.html#list-of-allowed-functions-and-operators">list of allowed guard functions and operators</a>.</p><p>Additionally, there are a few other operators that Elixir parses but doesn't actually use.
+See <a href="#custom-and-overridden-operators">Custom and overridden operators</a> below for a list and for guidelines about their use.</p><p>Some other operators are special forms and cannot be overridden:</p><ul><li><a href="Kernel.SpecialForms.html#%5E/1"><code class="inline">^</code></a> - pin operator</li><li><a href="Kernel.SpecialForms.html#./2"><code class="inline">.</code></a> - dot operator</li><li><a href="Kernel.SpecialForms.html#=/2"><code class="inline">=</code></a> - match operator</li><li><a href="Kernel.SpecialForms.html#&/1"><code class="inline">&amp;</code></a> - capture operator</li><li><a href="Kernel.SpecialForms.html#::/2"><code class="inline">::</code></a> - type operator</li></ul><p>Finally, these operators appear in the precedence table above but are only meaningful within certain constructs:</p><ul><li><code class="inline">=&gt;</code> - see <a href="Kernel.SpecialForms.html#%25%7B%7D/1"><code class="inline">%{}</code></a></li><li><code class="inline">when</code> - see <a href="patterns-and-guards.html#guards">Guards</a></li><li><code class="inline">&lt;-</code> - see <a href="Kernel.SpecialForms.html#for/1"><code class="inline">for</code></a> and <a href="Kernel.SpecialForms.html#with/1"><code class="inline">with</code></a></li><li><code class="inline">\\</code> - see <a href="Kernel.html#def/2-default-arguments">Default arguments</a></li></ul><h2 id="comparison-operators" class="section-heading">
+  <a href="#comparison-operators" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Comparison operators</span>
+</h2>
+<p>Elixir provides the following built-in comparison operators (all of which can be used in guards):</p><ul><li><a href="Kernel.html#==/2"><code class="inline">==</code></a> - equal to</li><li><a href="Kernel.html#===/2"><code class="inline">===</code></a> - strictly equal to</li><li><a href="Kernel.html#!=/2"><code class="inline">!=</code></a> - not equal to</li><li><a href="Kernel.html#!==/2"><code class="inline">!==</code></a> - strictly not equal to</li><li><a href="Kernel.html#%3C/2"><code class="inline">&lt;</code></a> - less-than</li><li><a href="Kernel.html#%3E/2"><code class="inline">&gt;</code></a> - greater-than</li><li><a href="Kernel.html#%3C=/2"><code class="inline">&lt;=</code></a> - less-than or equal to</li><li><a href="Kernel.html#%3E=/2"><code class="inline">&gt;=</code></a> - greater-than or equal to</li></ul><p>The only difference between <a href="Kernel.html#==/2"><code class="inline">==</code></a> and <a href="Kernel.html#===/2"><code class="inline">===</code></a> is that <a href="Kernel.html#===/2"><code class="inline">===</code></a> is strict when it comes to comparing integers and floats:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">1.0</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">1.0</span><span class="w">
+</span><span class="no">false</span></code></pre><p><a href="Kernel.html#!=/2"><code class="inline">!=</code></a> and <a href="Kernel.html#!==/2"><code class="inline">!==</code></a> act as the negation of <a href="Kernel.html#==/2"><code class="inline">==</code></a> and <a href="Kernel.html#===/2"><code class="inline">===</code></a>, respectively.</p><h2 id="custom-and-overridden-operators" class="section-heading">
+  <a href="#custom-and-overridden-operators" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Custom and overridden operators</span>
+</h2>
+<h3 id="defining-custom-operators" class="section-heading">
+  <a href="#defining-custom-operators" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Defining custom operators</span>
+</h3>
+<p>Elixir is capable of parsing a predefined set of operators. It's not possible to define new operators (as supported by some languages). However, not all operators that Elixir can parse are <em>used</em> by Elixir: for example, <code class="inline">+</code> and <code class="inline">||</code> are used by Elixir for addition and boolean <em>or</em>, but <code class="inline">&lt;~&gt;</code> is not used (but valid).</p><p>To define an operator, you can use the usual <code class="inline">def*</code> constructs (<code class="inline">def</code>, <code class="inline">defp</code>, <code class="inline">defmacro</code>, and so on) but with a syntax similar to how the operator is used:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyOperators</span><span class="w"> </span><span class="k" data-group-id="1887478548-1">do</span><span class="w">
+  </span><span class="c1"># We define ~&gt; to return the maximum of the given two numbers,</span><span class="w">
+  </span><span class="c1"># and &lt;~ to return the minimum.</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">~&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">max</span><span class="p" data-group-id="1887478548-2">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="1887478548-2">)</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;~</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">min</span><span class="p" data-group-id="1887478548-3">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="1887478548-3">)</span><span class="w">
+</span><span class="k" data-group-id="1887478548-1">end</span></code></pre><p>To use the newly defined operators, you <strong>have to</strong> import the module that defines them:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nc">MyOperators</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="o">~&gt;</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;~</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="mi">1</span></code></pre><p>The following is a table of all the operators that Elixir is capable of parsing, but that are not used by default:</p><ul><li><code class="inline">|||</code></li><li><code class="inline">&amp;&amp;&amp;</code></li><li><code class="inline">&lt;&lt;&lt;</code></li><li><code class="inline">&gt;&gt;&gt;</code></li><li><code class="inline">&lt;&lt;~</code></li><li><code class="inline">~&gt;&gt;</code></li><li><code class="inline">&lt;~</code></li><li><code class="inline">~&gt;</code></li><li><code class="inline">&lt;~&gt;</code></li><li><code class="inline">+++</code></li><li><code class="inline">---</code></li></ul><p>The following operators are used by the <a href="Bitwise.html"><code class="inline">Bitwise</code></a> module when imported: <a href="Bitwise.html#&&&/2"><code class="inline">&amp;&amp;&amp;</code></a>, <a href="Bitwise.html#%3C%3C%3C/2"><code class="inline">&lt;&lt;&lt;</code></a>, <a href="Bitwise.html#%3E%3E%3E/2"><code class="inline">&gt;&gt;&gt;</code></a>, and <a href="Bitwise.html#%7C%7C%7C/2"><code class="inline">|||</code></a>. See the <a href="Bitwise.html"><code class="inline">Bitwise</code></a> documentation for more information.</p><p>Note that the Elixir community generally discourages custom operators. They can be hard to read and even more to understand, as they don't have a descriptive name like functions do. That said, some specific cases or custom domain specific languages (DSLs) may justify these practices.</p><p>It is also possible to replace predefined operators, such as <code class="inline">+</code>, but doing so is extremely discouraged.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="naming-conventions.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Naming conventions
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="patterns-and-guards.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Patterns and guards
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

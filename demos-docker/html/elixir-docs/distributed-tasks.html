@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Distributed tasks and tags — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/distributed-tasks.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Distributed tasks and tags</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/distributed-tasks.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter, we will go back to the <code class="inline">:kv</code> application and add a routing layer that will allow us to distribute requests between nodes based on the bucket name.</p><p>The routing layer will receive a routing table of the following format:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7843890019-1">[</span><span class="w">
+  </span><span class="p" data-group-id="7843890019-2">{</span><span class="sc">?a</span><span class="o">..</span><span class="sc">?m</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p" data-group-id="7843890019-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7843890019-3">{</span><span class="sc">?n</span><span class="o">..</span><span class="sc">?z</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;bar@computer-name&quot;</span><span class="p" data-group-id="7843890019-3">}</span><span class="w">
+</span><span class="p" data-group-id="7843890019-1">]</span></code></pre><p>The router will check the first byte of the bucket name against the table and dispatch to the appropriate node based on that. For example, a bucket starting with the letter &quot;a&quot; (<code class="inline">?a</code> represents the Unicode codepoint of the letter &quot;a&quot;) will be dispatched to node <code class="inline">foo@computer-name</code>.</p><p>If the matching entry points to the node evaluating the request, then we've finished routing, and this node will perform the requested operation. If the matching entry points to a different node, we'll pass the request to said node, which will look at its own routing table (which may be different from the one in the first node) and act accordingly. If no entry matches, an error will be raised.</p><blockquote><p>Note: we will be using two nodes in the same machine throughout this chapter. You are free to use two (or more) different machines on the same network but you need to do some prep work. First of all, you need to ensure all machines have a <code class="inline">~/.erlang.cookie</code> file with exactly the same value. Then you need to guarantee <a href="http://www.erlang.org/doc/man/epmd.html">epmd</a> is running on a port that is not blocked (you can run <code class="inline">epmd -d</code> for debug info).</p></blockquote><h2 id="our-first-distributed-code" class="section-heading">
+  <a href="#our-first-distributed-code" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Our first distributed code</span>
+</h2>
+<p>Elixir ships with facilities to connect nodes and exchange information between them. In fact, we use the same concepts of processes, message passing and receiving messages when working in a distributed environment because Elixir processes are <em>location transparent</em>. This means that when sending a message, it doesn't matter if the recipient process is on the same node or on another node, the VM will be able to deliver the message in both cases.</p><p>In order to run distributed code, we need to start the VM with a name. The name can be short (when in the same network) or long (requires the full computer address). Let's start a new IEx session:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex --sname foo
+</span></code></pre><p>You can see now the prompt is slightly different and shows the node name followed by the computer name:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Interactive</span><span class="w"> </span><span class="nc">Elixir</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">press</span><span class="w"> </span><span class="nc">Ctrl</span><span class="o">+</span><span class="nc">C</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">exit</span><span class="w"> </span><span class="p" data-group-id="8715269279-1">(</span><span class="n">type</span><span class="w"> </span><span class="n">h</span><span class="p" data-group-id="8715269279-2">(</span><span class="p" data-group-id="8715269279-2">)</span><span class="w"> </span><span class="nc">ENTER</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="p" data-group-id="8715269279-1">)</span><span class="w">
+</span><span class="n">iex</span><span class="p" data-group-id="8715269279-3">(</span><span class="n">foo</span><span class="na">@jv</span><span class="p" data-group-id="8715269279-3">)</span><span class="mi">1</span><span class="o">&gt;</span></code></pre><p>My computer is named <code class="inline">jv</code>, so I see <code class="inline">foo@jv</code> in the example above, but you will get a different result. We will use <code class="inline">foo@computer-name</code> in the following examples and you should update them accordingly when trying out the code.</p><p>Let's define a module named <code class="inline">Hello</code> in this shell:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Hello</span><span class="w"> </span><span class="k" data-group-id="9107414962-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">world</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="w"> </span><span class="s">&quot;hello world&quot;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="9107414962-1">end</span></code></pre><p>If you have another computer on the same network with both Erlang and Elixir installed, you can start another shell on it. If you don't, you can start another IEx session in another terminal. In either case, give it the short name of <code class="inline">bar</code>:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex --sname bar
+</span></code></pre><p>Note that inside this new IEx session, we cannot access <code class="inline">Hello.world/0</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Hello</span><span class="o">.</span><span class="n">world</span><span class="w">
+</span><span class="gt">** (UndefinedFunctionError) function Hello.world/0 is undefined (module Hello is not available)
+    Hello.world()</span></code></pre><p>However, we can spawn a new process on <code class="inline">foo@computer-name</code> from <code class="inline">bar@computer-name</code>! Let's give it a try (where <code class="inline">@computer-name</code> is the one you see locally):</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Node</span><span class="o">.</span><span class="n">spawn_link</span><span class="p" data-group-id="2926926541-1">(</span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2926926541-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Hello</span><span class="o">.</span><span class="n">world</span><span class="p" data-group-id="2926926541-3">(</span><span class="p" data-group-id="2926926541-3">)</span><span class="w"> </span><span class="k" data-group-id="2926926541-2">end</span><span class="p" data-group-id="2926926541-1">)</span><span class="w">
+</span><span class="p" data-group-id="2926926541-4">#</span><span class="nc" data-group-id="2926926541-4">PID</span><span class="p" data-group-id="2926926541-4">&lt;</span><span class="mi">9014</span><span class="o">.</span><span class="mi">59</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="2926926541-4">&gt;</span><span class="w">
+</span><span class="n">hello</span><span class="w"> </span><span class="n">world</span></code></pre><p>Elixir spawned a process on another node and returned its PID. The code then executed on the other node where the <code class="inline">Hello.world/0</code> function exists and invoked that function. Note that the result of &quot;hello world&quot; was printed on the current node <code class="inline">bar</code> and not on <code class="inline">foo</code>. In other words, the message to be printed was sent back from <code class="inline">foo</code> to <code class="inline">bar</code>. This happens because the process spawned on the other node (<code class="inline">foo</code>) knows all the output should be sent back to the original node!</p><p>We can send and receive messages from the PID returned by <a href="Node.html#spawn_link/2"><code class="inline">Node.spawn_link/2</code></a> as usual. Let's try a quick ping-pong example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Node</span><span class="o">.</span><span class="n">spawn_link</span><span class="p" data-group-id="1279212253-1">(</span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1279212253-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k">receive</span><span class="w"> </span><span class="k" data-group-id="1279212253-3">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="p" data-group-id="1279212253-4">{</span><span class="ss">:ping</span><span class="p">,</span><span class="w"> </span><span class="n">client</span><span class="p" data-group-id="1279212253-4">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">send</span><span class="p" data-group-id="1279212253-5">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="ss">:pong</span><span class="p" data-group-id="1279212253-5">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="1279212253-3">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="1279212253-2">end</span><span class="p" data-group-id="1279212253-1">)</span><span class="w">
+</span><span class="p" data-group-id="1279212253-6">#</span><span class="nc" data-group-id="1279212253-6">PID</span><span class="p" data-group-id="1279212253-6">&lt;</span><span class="mi">9014</span><span class="o">.</span><span class="mi">59</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="1279212253-6">&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">send</span><span class="p" data-group-id="1279212253-7">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1279212253-8">{</span><span class="ss">:ping</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p" data-group-id="1279212253-9">(</span><span class="p" data-group-id="1279212253-9">)</span><span class="p" data-group-id="1279212253-8">}</span><span class="p" data-group-id="1279212253-7">)</span><span class="w">
+</span><span class="p" data-group-id="1279212253-10">{</span><span class="ss">:ping</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1279212253-11">#</span><span class="nc" data-group-id="1279212253-11">PID</span><span class="p" data-group-id="1279212253-11">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">73</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="1279212253-11">&gt;</span><span class="p" data-group-id="1279212253-10">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">flush</span><span class="p" data-group-id="1279212253-12">(</span><span class="p" data-group-id="1279212253-12">)</span><span class="w">
+</span><span class="ss">:pong</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><p>From our quick exploration, we could conclude that we should use <a href="Node.html#spawn_link/2"><code class="inline">Node.spawn_link/2</code></a> to spawn processes on a remote node every time we need to do a distributed computation. However, we have learned throughout this guide that spawning processes outside of supervision trees should be avoided if possible, so we need to look for other options.</p><p>There are three better alternatives to <a href="Node.html#spawn_link/2"><code class="inline">Node.spawn_link/2</code></a> that we could use in our implementation:</p><ol><li><p>We could use Erlang's <a href="http://www.erlang.org/doc/man/erpc.html">:erpc</a> module to execute functions on a remote node. Inside the <code class="inline">bar@computer-name</code> shell above, you can call <code class="inline">:erpc.call(:&quot;foo@computer-name&quot;, Hello, :world, [])</code> and it will print &quot;hello world&quot;</p></li><li><p>We could have a server running on the other node and send requests to that node via the <a href="GenServer.html"><code class="inline">GenServer</code></a> API. For example, you can call a server on a remote node by using <code class="inline">GenServer.call({name, node}, arg)</code> or passing the remote process PID as the first argument</p></li><li><p>We could use <a href="Task.html">tasks</a>, which we have learned about in <a href="task-and-gen-tcp.html">a previous chapter</a>, as they can be spawned on both local and remote nodes</p></li></ol><p>The options above have different properties. The GenServer would serialize your requests on a single server, while tasks are effectively running asynchronously on the remote node, with the only serialization point being the spawning done by the supervisor.</p><p>For our routing layer, we are going to use tasks, but feel free to explore the other alternatives too.</p><h2 id="async-await" class="section-heading">
+  <a href="#async-await" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">async/await</span>
+</h2>
+<p>So far we have explored tasks that are started and run in isolation, without regard to their return value. However, sometimes it is useful to run a task to compute a value and read its result later on. For this, tasks also provide the <code class="inline">async/await</code> pattern:</p><pre><code class="makeup elixir" translate="no"><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Task</span><span class="o">.</span><span class="n">async</span><span class="p" data-group-id="4229021443-1">(</span><span class="k" data-group-id="4229021443-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">compute_something_expensive</span><span class="p" data-group-id="4229021443-3">(</span><span class="p" data-group-id="4229021443-3">)</span><span class="w"> </span><span class="k" data-group-id="4229021443-2">end</span><span class="p" data-group-id="4229021443-1">)</span><span class="w">
+</span><span class="n">res</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">compute_something_else</span><span class="p" data-group-id="4229021443-4">(</span><span class="p" data-group-id="4229021443-4">)</span><span class="w">
+</span><span class="n">res</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Task</span><span class="o">.</span><span class="n">await</span><span class="p" data-group-id="4229021443-5">(</span><span class="n">task</span><span class="p" data-group-id="4229021443-5">)</span></code></pre><p><code class="inline">async/await</code> provides a very simple mechanism to compute values concurrently. Not only that, <code class="inline">async/await</code> can also be used with the same <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> we have used in previous chapters. We just need to call <a href="Task.Supervisor.html#async/2"><code class="inline">Task.Supervisor.async/2</code></a> instead of <a href="Task.Supervisor.html#start_child/2"><code class="inline">Task.Supervisor.start_child/2</code></a> and use <a href="Task.html#await/2"><code class="inline">Task.await/2</code></a> to read the result later on.</p><h2 id="distributed-tasks" class="section-heading">
+  <a href="#distributed-tasks" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Distributed tasks</span>
+</h2>
+<p>Distributed tasks are exactly the same as supervised tasks. The only difference is that we pass the node name when spawning the task on the supervisor. Open up <code class="inline">lib/kv/supervisor.ex</code> from the <code class="inline">:kv</code> application. Let's add a task supervisor as the last child of the tree:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2940775355-1">{</span><span class="nc">Task.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KV.RouterTasks</span><span class="p" data-group-id="2940775355-1">}</span><span class="p">,</span></code></pre><p>Now, let's start two named nodes again, but inside the <code class="inline">:kv</code> application:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex --sname foo -S mix
+</span><span class="gp unselectable">$ </span><span class="">iex --sname bar -S mix
+</span></code></pre><p>From inside <code class="inline">bar@computer-name</code>, we can now spawn a task directly on the other node via the supervisor:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async</span><span class="p" data-group-id="0145464071-1">(</span><span class="p" data-group-id="0145464071-2">{</span><span class="nc">KV.RouterTasks</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p" data-group-id="0145464071-2">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="0145464071-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="0145464071-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p" data-group-id="0145464071-5">(</span><span class="p" data-group-id="0145464071-5">)</span><span class="p" data-group-id="0145464071-4">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="0145464071-3">end</span><span class="p" data-group-id="0145464071-1">)</span><span class="w">
+</span><span class="p" data-group-id="0145464071-6">%</span><span class="nc" data-group-id="0145464071-6">Task</span><span class="p" data-group-id="0145464071-6">{</span><span class="w">
+  </span><span class="ss">mfa</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0145464071-7">{</span><span class="ss">:erlang</span><span class="p">,</span><span class="w"> </span><span class="ss">:apply</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="0145464071-7">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">owner</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0145464071-8">#</span><span class="nc" data-group-id="0145464071-8">PID</span><span class="p" data-group-id="0145464071-8">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">122</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="0145464071-8">&gt;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">pid</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0145464071-9">#</span><span class="nc" data-group-id="0145464071-9">PID</span><span class="p" data-group-id="0145464071-9">&lt;</span><span class="mi">12467</span><span class="o">.</span><span class="mi">88</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="0145464071-9">&gt;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0145464071-10">#</span><span class="nc" data-group-id="0145464071-10">Reference</span><span class="p" data-group-id="0145464071-10">&lt;</span><span class="mf">0.0</span><span class="o">.</span><span class="mf">0.400</span><span class="p" data-group-id="0145464071-10">&gt;</span><span class="w">
+</span><span class="p" data-group-id="0145464071-6">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Task</span><span class="o">.</span><span class="n">await</span><span class="p" data-group-id="0145464071-11">(</span><span class="n">task</span><span class="p" data-group-id="0145464071-11">)</span><span class="w">
+</span><span class="p" data-group-id="0145464071-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p" data-group-id="0145464071-12">}</span></code></pre><p>Our first distributed task retrieves the name of the node the task is running on. Notice we have given an anonymous function to <a href="Task.Supervisor.html#async/2"><code class="inline">Task.Supervisor.async/2</code></a> but, in distributed cases, it is preferable to give the module, function, and arguments explicitly:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async</span><span class="p" data-group-id="6971116654-1">(</span><span class="p" data-group-id="6971116654-2">{</span><span class="nc">KV.RouterTasks</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p" data-group-id="6971116654-2">}</span><span class="p">,</span><span class="w"> </span><span class="nc">Kernel</span><span class="p">,</span><span class="w"> </span><span class="ss">:node</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6971116654-3">[</span><span class="p" data-group-id="6971116654-3">]</span><span class="p" data-group-id="6971116654-1">)</span><span class="w">
+</span><span class="p" data-group-id="6971116654-4">%</span><span class="nc" data-group-id="6971116654-4">Task</span><span class="p" data-group-id="6971116654-4">{</span><span class="w">
+  </span><span class="ss">mfa</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6971116654-5">{</span><span class="nc">Kernel</span><span class="p">,</span><span class="w"> </span><span class="ss">:node</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6971116654-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">owner</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6971116654-6">#</span><span class="nc" data-group-id="6971116654-6">PID</span><span class="p" data-group-id="6971116654-6">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">122</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6971116654-6">&gt;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">pid</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6971116654-7">#</span><span class="nc" data-group-id="6971116654-7">PID</span><span class="p" data-group-id="6971116654-7">&lt;</span><span class="mi">12467</span><span class="o">.</span><span class="mi">89</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6971116654-7">&gt;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6971116654-8">#</span><span class="nc" data-group-id="6971116654-8">Reference</span><span class="p" data-group-id="6971116654-8">&lt;</span><span class="mf">0.0</span><span class="o">.</span><span class="mf">0.404</span><span class="p" data-group-id="6971116654-8">&gt;</span><span class="w">
+</span><span class="p" data-group-id="6971116654-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Task</span><span class="o">.</span><span class="n">await</span><span class="p" data-group-id="6971116654-9">(</span><span class="n">task</span><span class="p" data-group-id="6971116654-9">)</span><span class="w">
+</span><span class="ss">:&quot;foo@computer-name&quot;</span></code></pre><p>The difference is that anonymous functions require the target node to have exactly the same code version as the caller. Using module, function, and arguments is more robust because you only need to find a function with matching arity in the given module.</p><p>With this knowledge in hand, let's finally write the routing code.</p><h2 id="routing-layer" class="section-heading">
+  <a href="#routing-layer" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Routing layer</span>
+</h2>
+<p>Create a file at <code class="inline">lib/kv/router.ex</code> with the following contents:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.Router</span><span class="w"> </span><span class="k" data-group-id="0581022057-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Dispatch the given `mod`, `fun`, `args` request
+  to the appropriate node based on the `bucket`.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">route</span><span class="p" data-group-id="0581022057-2">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p" data-group-id="0581022057-2">)</span><span class="w"> </span><span class="k" data-group-id="0581022057-3">do</span><span class="w">
+    </span><span class="c1"># Get the first byte of the binary</span><span class="w">
+    </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:binary</span><span class="o">.</span><span class="n">first</span><span class="p" data-group-id="0581022057-4">(</span><span class="n">bucket</span><span class="p" data-group-id="0581022057-4">)</span><span class="w">
+
+    </span><span class="c1"># Try to find an entry in the table() or raise</span><span class="w">
+    </span><span class="n">entry</span><span class="w"> </span><span class="o">=</span><span class="w">
+      </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find</span><span class="p" data-group-id="0581022057-5">(</span><span class="n">table</span><span class="p" data-group-id="0581022057-6">(</span><span class="p" data-group-id="0581022057-6">)</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="0581022057-7">fn</span><span class="w"> </span><span class="p" data-group-id="0581022057-8">{</span><span class="n">enum</span><span class="p">,</span><span class="w"> </span><span class="c">_node</span><span class="p" data-group-id="0581022057-8">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="n">first</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">enum</span><span class="w">
+      </span><span class="k" data-group-id="0581022057-7">end</span><span class="p" data-group-id="0581022057-5">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">no_entry_error</span><span class="p" data-group-id="0581022057-9">(</span><span class="n">bucket</span><span class="p" data-group-id="0581022057-9">)</span><span class="w">
+
+    </span><span class="c1"># If the entry node is the current node</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="n">elem</span><span class="p" data-group-id="0581022057-10">(</span><span class="n">entry</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0581022057-10">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">node</span><span class="p" data-group-id="0581022057-11">(</span><span class="p" data-group-id="0581022057-11">)</span><span class="w"> </span><span class="k" data-group-id="0581022057-12">do</span><span class="w">
+      </span><span class="n">apply</span><span class="p" data-group-id="0581022057-13">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p" data-group-id="0581022057-13">)</span><span class="w">
+    </span><span class="k" data-group-id="0581022057-12">else</span><span class="w">
+      </span><span class="p" data-group-id="0581022057-14">{</span><span class="nc">KV.RouterTasks</span><span class="p">,</span><span class="w"> </span><span class="n">elem</span><span class="p" data-group-id="0581022057-15">(</span><span class="n">entry</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0581022057-15">)</span><span class="p" data-group-id="0581022057-14">}</span><span class="w">
+      </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async</span><span class="p" data-group-id="0581022057-16">(</span><span class="nc">KV.Router</span><span class="p">,</span><span class="w"> </span><span class="ss">:route</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0581022057-17">[</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p" data-group-id="0581022057-17">]</span><span class="p" data-group-id="0581022057-16">)</span><span class="w">
+      </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Task</span><span class="o">.</span><span class="n">await</span><span class="p" data-group-id="0581022057-18">(</span><span class="p" data-group-id="0581022057-18">)</span><span class="w">
+    </span><span class="k" data-group-id="0581022057-12">end</span><span class="w">
+  </span><span class="k" data-group-id="0581022057-3">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">no_entry_error</span><span class="p" data-group-id="0581022057-19">(</span><span class="n">bucket</span><span class="p" data-group-id="0581022057-19">)</span><span class="w"> </span><span class="k" data-group-id="0581022057-20">do</span><span class="w">
+    </span><span class="k">raise</span><span class="w"> </span><span class="s">&quot;could not find entry for </span><span class="si" data-group-id="0581022057-21">#{</span><span class="n">inspect</span><span class="w"> </span><span class="n">bucket</span><span class="si" data-group-id="0581022057-21">}</span><span class="s"> in table </span><span class="si" data-group-id="0581022057-22">#{</span><span class="n">inspect</span><span class="w"> </span><span class="n">table</span><span class="p" data-group-id="0581022057-23">(</span><span class="p" data-group-id="0581022057-23">)</span><span class="si" data-group-id="0581022057-22">}</span><span class="s">&quot;</span><span class="w">
+  </span><span class="k" data-group-id="0581022057-20">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  The routing table.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">table</span><span class="w"> </span><span class="k" data-group-id="0581022057-24">do</span><span class="w">
+    </span><span class="c1"># Replace computer-name with your local machine name</span><span class="w">
+    </span><span class="p" data-group-id="0581022057-25">[</span><span class="p" data-group-id="0581022057-26">{</span><span class="sc">?a</span><span class="o">..</span><span class="sc">?m</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p" data-group-id="0581022057-26">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0581022057-27">{</span><span class="sc">?n</span><span class="o">..</span><span class="sc">?z</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;bar@computer-name&quot;</span><span class="p" data-group-id="0581022057-27">}</span><span class="p" data-group-id="0581022057-25">]</span><span class="w">
+  </span><span class="k" data-group-id="0581022057-24">end</span><span class="w">
+</span><span class="k" data-group-id="0581022057-1">end</span></code></pre><p>Let's write a test to verify our router works. Create a file named <code class="inline">test/kv/router_test.exs</code> containing:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.RouterTest</span><span class="w"> </span><span class="k" data-group-id="0026040223-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;route requests across nodes&quot;</span><span class="w"> </span><span class="k" data-group-id="0026040223-2">do</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Router</span><span class="o">.</span><span class="n">route</span><span class="p" data-group-id="0026040223-3">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="nc">Kernel</span><span class="p">,</span><span class="w"> </span><span class="ss">:node</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0026040223-4">[</span><span class="p" data-group-id="0026040223-4">]</span><span class="p" data-group-id="0026040223-3">)</span><span class="w"> </span><span class="o">==</span><span class="w">
+             </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Router</span><span class="o">.</span><span class="n">route</span><span class="p" data-group-id="0026040223-5">(</span><span class="s">&quot;world&quot;</span><span class="p">,</span><span class="w"> </span><span class="nc">Kernel</span><span class="p">,</span><span class="w"> </span><span class="ss">:node</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0026040223-6">[</span><span class="p" data-group-id="0026040223-6">]</span><span class="p" data-group-id="0026040223-5">)</span><span class="w"> </span><span class="o">==</span><span class="w">
+             </span><span class="ss">:&quot;bar@computer-name&quot;</span><span class="w">
+  </span><span class="k" data-group-id="0026040223-2">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;raises on unknown entries&quot;</span><span class="w"> </span><span class="k" data-group-id="0026040223-7">do</span><span class="w">
+    </span><span class="n">assert_raise</span><span class="w"> </span><span class="nc">RuntimeError</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/could not find entry/</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="0026040223-8">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+      </span><span class="nc">KV.Router</span><span class="o">.</span><span class="n">route</span><span class="p" data-group-id="0026040223-9">(</span><span class="p" data-group-id="0026040223-10">&lt;&lt;</span><span class="mi">0</span><span class="p" data-group-id="0026040223-10">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="nc">Kernel</span><span class="p">,</span><span class="w"> </span><span class="ss">:node</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0026040223-11">[</span><span class="p" data-group-id="0026040223-11">]</span><span class="p" data-group-id="0026040223-9">)</span><span class="w">
+    </span><span class="k" data-group-id="0026040223-8">end</span><span class="w">
+  </span><span class="k" data-group-id="0026040223-7">end</span><span class="w">
+</span><span class="k" data-group-id="0026040223-1">end</span></code></pre><p>The first test invokes <a href="Kernel.html#node/0"><code class="inline">Kernel.node/0</code></a>, which returns the name of the current node, based on the bucket names &quot;hello&quot; and &quot;world&quot;. According to our routing table so far, we should get <code class="inline">foo@computer-name</code> and <code class="inline">bar@computer-name</code> as responses, respectively.</p><p>The second test checks that the code raises for unknown entries.</p><p>In order to run the first test, we need to have two nodes running. Move into <code class="inline">apps/kv</code> and let's restart the node named <code class="inline">bar</code> which is going to be used by tests.</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex --sname bar -S mix
+</span></code></pre><p>And now run tests with:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">elixir --sname foo -S mix test
+</span></code></pre><p>The test should pass.</p><h2 id="test-filters-and-tags" class="section-heading">
+  <a href="#test-filters-and-tags" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Test filters and tags</span>
+</h2>
+<p>Although our tests pass, our testing structure is getting more complex. In particular, running tests with only <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> causes failures in our suite, since our test requires a connection to another node.</p><p>Luckily, ExUnit ships with a facility to tag tests, allowing us to run specific callbacks or even filter tests altogether based on those tags. We have already used the <code class="inline">:capture_log</code> tag in the previous chapter, which has its semantics specified by ExUnit itself.</p><p>This time let's add a <code class="inline">:distributed</code> tag to <code class="inline">test/kv/router_test.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="na">@tag</span><span class="w"> </span><span class="ss">:distributed</span><span class="w">
+</span><span class="n">test</span><span class="w"> </span><span class="s">&quot;route requests across nodes&quot;</span><span class="w"> </span><span class="k" data-group-id="5174990696-1">do</span></code></pre><p>Writing <code class="inline">@tag :distributed</code> is equivalent to writing <code class="inline">@tag distributed: true</code>.</p><p>With the test properly tagged, we can now check if the node is alive on the network and, if not, we can exclude all distributed tests. Open up <code class="inline">test/test_helper.exs</code> inside the <code class="inline">:kv</code> application and add the following:</p><pre><code class="makeup elixir" translate="no"><span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="nc">Node</span><span class="o">.</span><span class="n">alive?</span><span class="p" data-group-id="3035498969-1">(</span><span class="p" data-group-id="3035498969-1">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3035498969-2">[</span><span class="p" data-group-id="3035498969-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3035498969-3">[</span><span class="ss">distributed</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3035498969-3">]</span><span class="w">
+
+</span><span class="nc">ExUnit</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="3035498969-4">(</span><span class="ss">exclude</span><span class="p">:</span><span class="w"> </span><span class="n">exclude</span><span class="p" data-group-id="3035498969-4">)</span></code></pre><p>Now run tests with <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a>:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">mix test
+</span><span class="">Excluding tags: [distributed: true]
+</span><span class="">
+</span><span class="">.......
+</span><span class="">
+</span><span class="">Finished in 0.05 seconds
+</span><span class="">9 tests, 0 failures, 1 excluded
+</span></code></pre><p>This time all tests passed and ExUnit warned us that distributed tests were being excluded. If you run tests with <code class="inline">$ elixir --sname foo -S mix test</code>, one extra test should run and successfully pass as long as the <code class="inline">bar@computer-name</code> node is available.</p><p>The <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> command also allows us to dynamically include and exclude tags. For example, we can run <code class="inline">$ mix test --include distributed</code> to run distributed tests regardless of the value set in <code class="inline">test/test_helper.exs</code>. We could also pass <code class="inline">--exclude</code> to exclude a particular tag from the command line. Finally, <code class="inline">--only</code> can be used to run only tests with a particular tag:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">elixir --sname foo -S mix test --only distributed
+</span></code></pre><p>You can read more about filters, tags, and the default tags in the <a href="https://hexdocs.pm/ex_unit/ExUnit.Case.html"><code class="inline">ExUnit.Case</code></a> module documentation.</p><h2 id="wiring-it-all-up" class="section-heading">
+  <a href="#wiring-it-all-up" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Wiring it all up</span>
+</h2>
+<p>Now with our routing system in place, let's change <code class="inline">KVServer</code> to use the router. Replace the <code class="inline">lookup/2</code> function in <code class="inline">KVServer.Command</code> from this:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">lookup</span><span class="p" data-group-id="8585102178-1">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">callback</span><span class="p" data-group-id="8585102178-1">)</span><span class="w"> </span><span class="k" data-group-id="8585102178-2">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="8585102178-3">(</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="8585102178-3">)</span><span class="w"> </span><span class="k" data-group-id="8585102178-4">do</span><span class="w">
+    </span><span class="p" data-group-id="8585102178-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="8585102178-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">callback</span><span class="o">.</span><span class="p" data-group-id="8585102178-6">(</span><span class="n">pid</span><span class="p" data-group-id="8585102178-6">)</span><span class="w">
+    </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="8585102178-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_found</span><span class="p" data-group-id="8585102178-7">}</span><span class="w">
+  </span><span class="k" data-group-id="8585102178-4">end</span><span class="w">
+</span><span class="k" data-group-id="8585102178-2">end</span></code></pre><p>by this:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">lookup</span><span class="p" data-group-id="5284768496-1">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">callback</span><span class="p" data-group-id="5284768496-1">)</span><span class="w"> </span><span class="k" data-group-id="5284768496-2">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="nc">KV.Router</span><span class="o">.</span><span class="n">route</span><span class="p" data-group-id="5284768496-3">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="ss">:lookup</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5284768496-4">[</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="5284768496-4">]</span><span class="p" data-group-id="5284768496-3">)</span><span class="w"> </span><span class="k" data-group-id="5284768496-5">do</span><span class="w">
+    </span><span class="p" data-group-id="5284768496-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="5284768496-6">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">callback</span><span class="o">.</span><span class="p" data-group-id="5284768496-7">(</span><span class="n">pid</span><span class="p" data-group-id="5284768496-7">)</span><span class="w">
+    </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="5284768496-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_found</span><span class="p" data-group-id="5284768496-8">}</span><span class="w">
+  </span><span class="k" data-group-id="5284768496-5">end</span><span class="w">
+</span><span class="k" data-group-id="5284768496-2">end</span></code></pre><p>Instead of directly looking up the registry, we are using the router instead to match a specific node. Then we get a <code class="inline">pid</code> that can be from any process in our cluster. From now on, <code class="inline">GET</code>, <code class="inline">PUT</code> and <code class="inline">DELETE</code> requests are all routed to the appropriate node.</p><p>Let's also make sure that when a new bucket is created it ends up on the correct node. Replace the <code class="inline">run/1</code> function in <code class="inline">KVServer.Command</code>, the one that matches the <code class="inline">:create</code> command, with the following:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="9997017621-1">(</span><span class="p" data-group-id="9997017621-2">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="9997017621-2">}</span><span class="p" data-group-id="9997017621-1">)</span><span class="w"> </span><span class="k" data-group-id="9997017621-3">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="nc">KV.Router</span><span class="o">.</span><span class="n">route</span><span class="p" data-group-id="9997017621-4">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9997017621-5">[</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="9997017621-5">]</span><span class="p" data-group-id="9997017621-4">)</span><span class="w"> </span><span class="k" data-group-id="9997017621-6">do</span><span class="w">
+    </span><span class="n">pid</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_pid</span><span class="p" data-group-id="9997017621-7">(</span><span class="n">pid</span><span class="p" data-group-id="9997017621-7">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9997017621-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="9997017621-8">}</span><span class="w">
+    </span><span class="bp">_</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9997017621-9">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;FAILED TO CREATE BUCKET&quot;</span><span class="p" data-group-id="9997017621-9">}</span><span class="w">
+  </span><span class="k" data-group-id="9997017621-6">end</span><span class="w">
+</span><span class="k" data-group-id="9997017621-3">end</span></code></pre><p>Now if you run the tests, you will see that an existing test that checks the server interaction will fail, as it will attempt to use the routing table. To address this failure, change the <code class="inline">test_helper.exs</code> for <code class="inline">:kv_server</code> application as we did for <code class="inline">:kv</code> and add <code class="inline">@tag :distributed</code> to this test too:</p><pre><code class="makeup elixir" translate="no"><span class="na">@tag</span><span class="w"> </span><span class="ss">:distributed</span><span class="w">
+</span><span class="n">test</span><span class="w"> </span><span class="s">&quot;server interaction&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4567525065-1">%{</span><span class="ss">socket</span><span class="p">:</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="4567525065-1">}</span><span class="w"> </span><span class="k" data-group-id="4567525065-2">do</span></code></pre><p>However, keep in mind that by making the test distributed, we will likely run it less frequently, since we may not do the distributed setup on every test run. We will learn how to address this in the next chapter, by effectively learning how to make the routing table configurable.</p><h2 id="summing-up" class="section-heading">
+  <a href="#summing-up" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Summing up</span>
+</h2>
+<p>We have only scratched the surface of what is possible when it comes to distribution.</p><p>In all of our examples, we relied on Erlang's ability to automatically connect nodes whenever there is a request. For example, when we invoked <code class="inline">Node.spawn_link(:&quot;foo@computer-name&quot;, fn -&gt; Hello.world() end)</code>, Erlang automatically connected to said node and started a new process. However, you may also want to take a more explicit approach to connections, by using <a href="Node.html#connect/1"><code class="inline">Node.connect/1</code></a> and <a href="Node.html#disconnect/1"><code class="inline">Node.disconnect/1</code></a>.</p><p>By default, Erlang establishes a fully meshed network, which means all nodes are connected to each other. Under this topology, the Erlang distribution is known to scale to several dozens of nodes in the same cluster. Erlang also has the concept of hidden nodes, which can allow developers to assemble custom topologies as seen in projects such as <a href="https://github.com/lasp-lang/partisan">Partisan</a>.</p><p>In production, you may have nodes connecting and disconnecting at any time. In such scenarios, you need to provide <em>node discoverability</em>. Libraries such as <a href="https://github.com/bitwalker/libcluster/">libcluster</a> and <a href="https://github.com/phoenixframework/dns_cluster">dns_cluster</a> provide several strategies for node discoverability using DNS, Kubernetes, etc.</p><p>Distributed key-value stores, used in real-life, need to consider the fact nodes may go up and down at any time and also migrate the bucket across nodes. Even further, buckets often need to be duplicated between nodes, so a failure in a node does not lead to the whole bucket being lost. This process is called <em>replication</em>. Our implementation won't attempt to tackle such problems. Instead, we assume there is a fixed number of nodes and therefore use a fixed routing table.</p><p>These topics can be daunting at first but remember that most Elixir frameworks abstract those concerns for you. For example, when using <a href="https://phoenixframework.org">the Phoenix web framework</a>, its plug-and-play abstractions take care of sending messages and tracking how users join and leave a cluster. However, if you are interested in distributed systems after all, there is much to explore. Here are some additional references:</p><ul><li><a href="http://learnyousomeerlang.com/distribunomicon">The excellent Distribunomicon chapter from Learn You Some Erlang</a></li><li><a href="https://www.erlang.org/doc/man/global.html">Erlang's global module</a>, which can provide global names and global locks, allowing unique names and unique locks in a whole cluster of machines</li><li><a href="https://www.erlang.org/doc/man/pg.html">Erlang's pg module</a>, which allows process to join different groups shared across the whole cluster</li><li><a href="https://github.com/phoenixframework/phoenix_pubsub">Phoenix PubSub project</a>, which provides a distributed messaging system and a distributed presence system for tracking users and processes in a cluster</li></ul><p>You will also find many libraries for building distributed systems within the overall Erlang ecosystem. For now, it is time to go back to our simple distributed key-value store and learn how to configure and package it for production.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="docs-tests-and-with.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Doctests, patterns, and with
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="config-and-releases.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Configuration and releases
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

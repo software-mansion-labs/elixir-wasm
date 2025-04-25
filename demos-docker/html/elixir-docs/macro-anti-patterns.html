@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Meta-programming anti-patterns — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/macro-anti-patterns.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Meta-programming anti-patterns</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/anti-patterns/macro-anti-patterns.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This document outlines potential anti-patterns related to meta-programming.</p><h2 id="large-code-generation" class="section-heading">
+  <a href="#large-code-generation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Large code generation</span>
+</h2>
+<h4>Problem</h4><p>This anti-pattern is related to macros that generate too much code. When a macro generates a large amount of code, it impacts how the compiler and/or the runtime work. The reason for this is that Elixir may have to expand, compile, and execute the code multiple times, which will make compilation slower and the resulting compiled artifacts larger.</p><h4>Example</h4><p>Imagine you are defining a router for a web application, where you could have macros like <code class="inline">get/2</code>. On every invocation of the macro (which could be hundreds), the code inside <code class="inline">get/2</code> will be expanded and compiled, which can generate a large volume of code overall.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Routes</span><span class="w"> </span><span class="k" data-group-id="4367336203-1">do</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">get</span><span class="p" data-group-id="4367336203-2">(</span><span class="n">route</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="p" data-group-id="4367336203-2">)</span><span class="w"> </span><span class="k" data-group-id="4367336203-3">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="4367336203-4">do</span><span class="w">
+      </span><span class="n">route</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="4367336203-5">(</span><span class="n">route</span><span class="p" data-group-id="4367336203-5">)</span><span class="w">
+      </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="4367336203-6">(</span><span class="n">handler</span><span class="p" data-group-id="4367336203-6">)</span><span class="w">
+
+      </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="4367336203-7">(</span><span class="n">route</span><span class="p" data-group-id="4367336203-7">)</span><span class="w"> </span><span class="k" data-group-id="4367336203-8">do</span><span class="w">
+        </span><span class="k">raise</span><span class="w"> </span><span class="nc">ArgumentError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;route must be a binary&quot;</span><span class="w">
+      </span><span class="k" data-group-id="4367336203-8">end</span><span class="w">
+
+      </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">is_atom</span><span class="p" data-group-id="4367336203-9">(</span><span class="n">handler</span><span class="p" data-group-id="4367336203-9">)</span><span class="w"> </span><span class="k" data-group-id="4367336203-10">do</span><span class="w">
+        </span><span class="k">raise</span><span class="w"> </span><span class="nc">ArgumentError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;handler must be a module&quot;</span><span class="w">
+      </span><span class="k" data-group-id="4367336203-10">end</span><span class="w">
+
+      </span><span class="na">@store_route_for_compilation</span><span class="w"> </span><span class="p" data-group-id="4367336203-11">{</span><span class="n">route</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="p" data-group-id="4367336203-11">}</span><span class="w">
+    </span><span class="k" data-group-id="4367336203-4">end</span><span class="w">
+  </span><span class="k" data-group-id="4367336203-3">end</span><span class="w">
+</span><span class="k" data-group-id="4367336203-1">end</span></code></pre><h4>Refactoring</h4><p>To remove this anti-pattern, the developer should simplify the macro, delegating part of its work to other functions. As shown below, by encapsulating the code inside <code class="inline">quote/1</code> inside the function <code class="inline">__define__/3</code> instead, we reduce the code that is expanded and compiled on every invocation of the macro, and instead we dispatch to a function to do the bulk of the work.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Routes</span><span class="w"> </span><span class="k" data-group-id="9226253779-1">do</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">get</span><span class="p" data-group-id="9226253779-2">(</span><span class="n">route</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="p" data-group-id="9226253779-2">)</span><span class="w"> </span><span class="k" data-group-id="9226253779-3">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="9226253779-4">do</span><span class="w">
+      </span><span class="nc">Routes</span><span class="o">.</span><span class="c">__define__</span><span class="p" data-group-id="9226253779-5">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="9226253779-6">(</span><span class="n">route</span><span class="p" data-group-id="9226253779-6">)</span><span class="p">,</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="9226253779-7">(</span><span class="n">handler</span><span class="p" data-group-id="9226253779-7">)</span><span class="p" data-group-id="9226253779-5">)</span><span class="w">
+    </span><span class="k" data-group-id="9226253779-4">end</span><span class="w">
+  </span><span class="k" data-group-id="9226253779-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">__define__</span><span class="p" data-group-id="9226253779-8">(</span><span class="n">module</span><span class="p">,</span><span class="w"> </span><span class="n">route</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="p" data-group-id="9226253779-8">)</span><span class="w"> </span><span class="k" data-group-id="9226253779-9">do</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="9226253779-10">(</span><span class="n">route</span><span class="p" data-group-id="9226253779-10">)</span><span class="w"> </span><span class="k" data-group-id="9226253779-11">do</span><span class="w">
+      </span><span class="k">raise</span><span class="w"> </span><span class="nc">ArgumentError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;route must be a binary&quot;</span><span class="w">
+    </span><span class="k" data-group-id="9226253779-11">end</span><span class="w">
+
+    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">is_atom</span><span class="p" data-group-id="9226253779-12">(</span><span class="n">handler</span><span class="p" data-group-id="9226253779-12">)</span><span class="w"> </span><span class="k" data-group-id="9226253779-13">do</span><span class="w">
+      </span><span class="k">raise</span><span class="w"> </span><span class="nc">ArgumentError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;handler must be a module&quot;</span><span class="w">
+    </span><span class="k" data-group-id="9226253779-13">end</span><span class="w">
+
+    </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="9226253779-14">(</span><span class="n">module</span><span class="p">,</span><span class="w"> </span><span class="ss">:store_route_for_compilation</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9226253779-15">{</span><span class="n">route</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="p" data-group-id="9226253779-15">}</span><span class="p" data-group-id="9226253779-14">)</span><span class="w">
+  </span><span class="k" data-group-id="9226253779-9">end</span><span class="w">
+</span><span class="k" data-group-id="9226253779-1">end</span></code></pre><h2 id="unnecessary-macros" class="section-heading">
+  <a href="#unnecessary-macros" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unnecessary macros</span>
+</h2>
+<h4>Problem</h4><p><em>Macros</em> are powerful meta-programming mechanisms that can be used in Elixir to extend the language. While using macros is not an anti-pattern in itself, this meta-programming mechanism should only be used when absolutely necessary. Whenever a macro is used, but it would have been possible to solve the same problem using functions or other existing Elixir structures, the code becomes unnecessarily more complex and less readable. Because macros are more difficult to implement and reason about, their indiscriminate use can compromise the evolution of a system, reducing its maintainability.</p><h4>Example</h4><p>The <code class="inline">MyMath</code> module implements the <code class="inline">sum/2</code> macro to perform the sum of two numbers received as parameters. While this code has no syntax errors and can be executed correctly to get the desired result, it is unnecessarily more complex. By implementing this functionality as a macro rather than a conventional function, the code became less clear:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyMath</span><span class="w"> </span><span class="k" data-group-id="5038944140-1">do</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">sum</span><span class="p" data-group-id="5038944140-2">(</span><span class="n">v1</span><span class="p">,</span><span class="w"> </span><span class="n">v2</span><span class="p" data-group-id="5038944140-2">)</span><span class="w"> </span><span class="k" data-group-id="5038944140-3">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="5038944140-4">do</span><span class="w">
+      </span><span class="k">unquote</span><span class="p" data-group-id="5038944140-5">(</span><span class="n">v1</span><span class="p" data-group-id="5038944140-5">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="5038944140-6">(</span><span class="n">v2</span><span class="p" data-group-id="5038944140-6">)</span><span class="w">
+    </span><span class="k" data-group-id="5038944140-4">end</span><span class="w">
+  </span><span class="k" data-group-id="5038944140-3">end</span><span class="w">
+</span><span class="k" data-group-id="5038944140-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kn">require</span><span class="w"> </span><span class="nc">MyMath</span><span class="w">
+</span><span class="nc">MyMath</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">MyMath</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="6199941397-1">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="6199941397-1">)</span><span class="w">
+</span><span class="mi">8</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">MyMath</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="6199941397-2">(</span><span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="6199941397-2">)</span><span class="w">
+</span><span class="mi">15</span></code></pre><h4>Refactoring</h4><p>To remove this anti-pattern, the developer must replace the unnecessary macro with structures that are simpler to write and understand, such as named functions. The code shown below is the result of the refactoring of the previous example. Basically, the <code class="inline">sum/2</code> macro has been transformed into a conventional named function. Note that the <a href="Kernel.SpecialForms.html#require/2"><code class="inline">require/2</code></a> call is no longer needed:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyMath</span><span class="w"> </span><span class="k" data-group-id="2214324597-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">sum</span><span class="p" data-group-id="2214324597-2">(</span><span class="n">v1</span><span class="p">,</span><span class="w"> </span><span class="n">v2</span><span class="p" data-group-id="2214324597-2">)</span><span class="w"> </span><span class="k" data-group-id="2214324597-3">do</span><span class="w"> </span><span class="c1"># &lt;= The macro became a named function</span><span class="w">
+    </span><span class="n">v1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">v2</span><span class="w">
+  </span><span class="k" data-group-id="2214324597-3">end</span><span class="w">
+</span><span class="k" data-group-id="2214324597-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">MyMath</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="6405749109-1">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="6405749109-1">)</span><span class="w">
+</span><span class="mi">8</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">MyMath</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="6405749109-2">(</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">+</span><span class="mi">6</span><span class="p" data-group-id="6405749109-2">)</span><span class="w">
+</span><span class="mi">15</span></code></pre><h2 id="use-instead-of-import" class="section-heading">
+  <a href="#use-instead-of-import" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">use</code> instead of <code class="inline">import</code></span>
+</h2>
+<h4>Problem</h4><p>Elixir has mechanisms such as <code class="inline">import/1</code>, <code class="inline">alias/1</code>, and <a href="Kernel.html#use/1"><code class="inline">use/1</code></a> to establish dependencies between modules. Code implemented with these mechanisms does not characterize a smell by itself. However, while the <code class="inline">import/1</code> and <code class="inline">alias/1</code> directives have lexical scope and only facilitate a module calling functions of another, the <a href="Kernel.html#use/1"><code class="inline">use/1</code></a> directive has a <em>broader scope</em>, which can be problematic.</p><p>The <a href="Kernel.html#use/1"><code class="inline">use/1</code></a> directive allows a module to inject any type of code into another, including propagating dependencies. In this way, using the <a href="Kernel.html#use/1"><code class="inline">use/1</code></a> directive makes code harder to read, because to understand exactly what will happen when it references a module, it is necessary to have knowledge of the internal details of the referenced module.</p><h4>Example</h4><p>The code shown below is an example of this anti-pattern. It defines three modules -- <code class="inline">ModuleA</code>, <code class="inline">Library</code>, and <code class="inline">ClientApp</code>. <code class="inline">ClientApp</code> is reusing code from the <code class="inline">Library</code> via the <a href="Kernel.html#use/1"><code class="inline">use/1</code></a> directive, but is unaware of its internal details. This makes it harder for the author of <code class="inline">ClientApp</code> to visualize which modules and functionality are now available within its module. To make matters worse, <code class="inline">Library</code> also imports <code class="inline">ModuleA</code>, which defines a <code class="inline">foo/0</code> function that conflicts with a local function defined in <code class="inline">ClientApp</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ModuleA</span><span class="w"> </span><span class="k" data-group-id="0144093008-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">foo</span><span class="w"> </span><span class="k" data-group-id="0144093008-2">do</span><span class="w">
+    </span><span class="s">&quot;From Module A&quot;</span><span class="w">
+  </span><span class="k" data-group-id="0144093008-2">end</span><span class="w">
+</span><span class="k" data-group-id="0144093008-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Library</span><span class="w"> </span><span class="k" data-group-id="6748388158-1">do</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">__using__</span><span class="p" data-group-id="6748388158-2">(</span><span class="c">_opts</span><span class="p" data-group-id="6748388158-2">)</span><span class="w"> </span><span class="k" data-group-id="6748388158-3">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="6748388158-4">do</span><span class="w">
+      </span><span class="kn">import</span><span class="w"> </span><span class="nc">Library</span><span class="w">
+      </span><span class="kn">import</span><span class="w"> </span><span class="nc">ModuleA</span><span class="w">  </span><span class="c1"># &lt;= propagating dependencies!</span><span class="w">
+    </span><span class="k" data-group-id="6748388158-4">end</span><span class="w">
+  </span><span class="k" data-group-id="6748388158-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">from_lib</span><span class="w"> </span><span class="k" data-group-id="6748388158-5">do</span><span class="w">
+    </span><span class="s">&quot;From Library&quot;</span><span class="w">
+  </span><span class="k" data-group-id="6748388158-5">end</span><span class="w">
+</span><span class="k" data-group-id="6748388158-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ClientApp</span><span class="w"> </span><span class="k" data-group-id="0841049859-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Library</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">foo</span><span class="w"> </span><span class="k" data-group-id="0841049859-2">do</span><span class="w">
+    </span><span class="s">&quot;Local function from client app&quot;</span><span class="w">
+  </span><span class="k" data-group-id="0841049859-2">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">from_client_app</span><span class="w"> </span><span class="k" data-group-id="0841049859-3">do</span><span class="w">
+    </span><span class="n">from_lib</span><span class="p" data-group-id="0841049859-4">(</span><span class="p" data-group-id="0841049859-4">)</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s">&quot; - &quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">foo</span><span class="p" data-group-id="0841049859-5">(</span><span class="p" data-group-id="0841049859-5">)</span><span class="w">
+  </span><span class="k" data-group-id="0841049859-3">end</span><span class="w">
+</span><span class="k" data-group-id="0841049859-1">end</span></code></pre><p>When we try to compile <code class="inline">ClientApp</code>, Elixir detects the conflict and throws the following error:</p><pre><code class="text">error: imported ModuleA.foo/0 conflicts with local function
+  └ client_app.ex:4:</code></pre><h4>Refactoring</h4><p>To remove this anti-pattern, we recommend library authors avoid providing <code class="inline">__using__/1</code> callbacks whenever it can be replaced by <code class="inline">alias/1</code> or <code class="inline">import/1</code> directives. In the following code, we assume <code class="inline">use Library</code> is no longer available and <code class="inline">ClientApp</code> was refactored in this way, and with that, the code is clearer and the conflict as previously shown no longer exists:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ClientApp</span><span class="w"> </span><span class="k" data-group-id="0878678853-1">do</span><span class="w">
+  </span><span class="kn">import</span><span class="w"> </span><span class="nc">Library</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">foo</span><span class="w"> </span><span class="k" data-group-id="0878678853-2">do</span><span class="w">
+    </span><span class="s">&quot;Local function from client app&quot;</span><span class="w">
+  </span><span class="k" data-group-id="0878678853-2">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">from_client_app</span><span class="w"> </span><span class="k" data-group-id="0878678853-3">do</span><span class="w">
+    </span><span class="n">from_lib</span><span class="p" data-group-id="0878678853-4">(</span><span class="p" data-group-id="0878678853-4">)</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s">&quot; - &quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">foo</span><span class="p" data-group-id="0878678853-5">(</span><span class="p" data-group-id="0878678853-5">)</span><span class="w">
+  </span><span class="k" data-group-id="0878678853-3">end</span><span class="w">
+</span><span class="k" data-group-id="0878678853-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">ClientApp</span><span class="o">.</span><span class="n">from_client_app</span><span class="p" data-group-id="6649740647-1">(</span><span class="p" data-group-id="6649740647-1">)</span><span class="w">
+</span><span class="s">&quot;From Library - Local function from client app&quot;</span></code></pre><h4>Additional remarks</h4><p>In situations where you need to do more than importing and aliasing modules, providing <code class="inline">use MyModule</code> may be necessary, as it provides a common extension point within the Elixir ecosystem.</p><p>Therefore, to provide guidance and clarity, we recommend library authors to include an admonition block in their <code class="inline">@moduledoc</code> that explains how <code class="inline">use MyModule</code> impacts the developer's code. As an example, the <a href="GenServer.html"><code class="inline">GenServer</code></a> documentation outlines:</p><section role="note" class="admonition info"><h4 class="admonition-title info"><code class="inline">use GenServer</code></h4><p>When you <code class="inline">use GenServer</code>, the <a href="GenServer.html"><code class="inline">GenServer</code></a> module will
+set <code class="inline">@behaviour GenServer</code> and define a <code class="inline">child_spec/1</code>
+function, so your module can be used as a child
+in a supervision tree.</p></section><p>Think of this summary as a <a href="https://en.wikipedia.org/wiki/Nutrition_facts_label">&quot;Nutrition facts label&quot;</a> for code generation. Make sure to only list changes made to the public API of the module. For example, if <code class="inline">use Library</code> sets an internal attribute called <code class="inline">@_some_module_info</code> and this attribute is never meant to be public, avoid documenting it in the nutrition facts.</p><p>For convenience, the markup notation to generate the admonition block above is this:</p><pre><code class="markdown">&gt; #### `use GenServer` {: .info}
+&gt;
+&gt; When you `use GenServer`, the `GenServer` module will
+&gt; set `@behaviour GenServer` and define a `child_spec/1`
+&gt; function, so your module can be used as a child
+&gt; in a supervision tree.</code></pre>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="process-anti-patterns.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Process-related anti-patterns
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="quote-and-unquote.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Quote and unquote
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

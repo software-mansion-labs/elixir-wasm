@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>PartitionSupervisor — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/PartitionSupervisor.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">PartitionSupervisor</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/partition_supervisor.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A supervisor that starts multiple partitions of the same child.</p><p>Certain processes may become bottlenecks in large systems.
+If those processes can have their state trivially partitioned,
+in a way there is no dependency between them, then they can use
+the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a> to create multiple isolated and
+independent partitions.</p><p>Once the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a> starts, you can dispatch to its
+children using <code class="inline">{:via, PartitionSupervisor, {name, key}}</code>, where
+<code class="inline">name</code> is the name of the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a> and key is used
+for routing.</p><p>This module was introduced in Elixir v1.14.0.</p><h2 id="module-simple-example" class="section-heading">
+  <a href="#module-simple-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Simple Example</span>
+</h2>
+<p>Let's start with an example which is not useful per se, but shows how the
+partitions are started and how messages are routed to them.</p><p>Here's a toy GenServer that simply collects the messages it's given.
+It prints them for easy illustration.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Collector</span><span class="w"> </span><span class="k" data-group-id="5344568451-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="5344568451-2">(</span><span class="n">args</span><span class="p" data-group-id="5344568451-2">)</span><span class="w"> </span><span class="k" data-group-id="5344568451-3">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="5344568451-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p" data-group-id="5344568451-4">)</span><span class="w">
+  </span><span class="k" data-group-id="5344568451-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="5344568451-5">(</span><span class="n">args</span><span class="p" data-group-id="5344568451-5">)</span><span class="w"> </span><span class="k" data-group-id="5344568451-6">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="5344568451-7">(</span><span class="p" data-group-id="5344568451-8">[</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; got args &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; in &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p" data-group-id="5344568451-9">(</span><span class="p" data-group-id="5344568451-9">)</span><span class="p" data-group-id="5344568451-8">]</span><span class="p" data-group-id="5344568451-7">)</span><span class="w">
+    </span><span class="p" data-group-id="5344568451-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="c">_initial_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5344568451-11">[</span><span class="p" data-group-id="5344568451-11">]</span><span class="p" data-group-id="5344568451-10">}</span><span class="w">
+  </span><span class="k" data-group-id="5344568451-6">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">collect</span><span class="p" data-group-id="5344568451-12">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p" data-group-id="5344568451-12">)</span><span class="w"> </span><span class="k" data-group-id="5344568451-13">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="5344568451-14">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5344568451-15">{</span><span class="ss">:collect</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p" data-group-id="5344568451-15">}</span><span class="p" data-group-id="5344568451-14">)</span><span class="w">
+  </span><span class="k" data-group-id="5344568451-13">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="5344568451-16">(</span><span class="p" data-group-id="5344568451-17">{</span><span class="ss">:collect</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p" data-group-id="5344568451-17">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="5344568451-16">)</span><span class="w"> </span><span class="k" data-group-id="5344568451-18">do</span><span class="w">
+    </span><span class="n">new_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5344568451-19">[</span><span class="n">msg</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="5344568451-19">]</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="5344568451-20">(</span><span class="p" data-group-id="5344568451-21">[</span><span class="s">&quot;current messages:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">new_state</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; in process&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p" data-group-id="5344568451-22">(</span><span class="p" data-group-id="5344568451-22">)</span><span class="p" data-group-id="5344568451-21">]</span><span class="p" data-group-id="5344568451-20">)</span><span class="w">
+    </span><span class="p" data-group-id="5344568451-23">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">new_state</span><span class="p" data-group-id="5344568451-23">}</span><span class="w">
+  </span><span class="k" data-group-id="5344568451-18">end</span><span class="w">
+</span><span class="k" data-group-id="5344568451-1">end</span></code></pre><p>To run multiple of these, we can start them under a <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a> by placing
+this in our supervision tree:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1874905798-1">{</span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w">
+  </span><span class="ss">child_spec</span><span class="p">:</span><span class="w"> </span><span class="nc">Collector</span><span class="o">.</span><span class="n">child_spec</span><span class="p" data-group-id="1874905798-2">(</span><span class="p" data-group-id="1874905798-3">[</span><span class="ss">some</span><span class="p">:</span><span class="w"> </span><span class="ss">:arg</span><span class="p" data-group-id="1874905798-3">]</span><span class="p" data-group-id="1874905798-2">)</span><span class="p">,</span><span class="w">
+  </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.PartitionSupervisor</span><span class="w">
+</span><span class="p" data-group-id="1874905798-1">}</span></code></pre><p>We can send messages to them using a &quot;via tuple&quot;:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># The key is used to route our message to a particular instance.</span><span class="w">
+</span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="nc">Collector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="0874901408-1">(</span><span class="p" data-group-id="0874901408-2">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0874901408-3">{</span><span class="nc">MyApp.PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="0874901408-3">}</span><span class="p" data-group-id="0874901408-2">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:hi</span><span class="p" data-group-id="0874901408-1">)</span><span class="w">
+</span><span class="c1"># [&quot;current messages:&quot;, [:hi], &quot; in process&quot;, #PID&lt;0.602.0&gt;]</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="nc">Collector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="0874901408-4">(</span><span class="p" data-group-id="0874901408-5">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0874901408-6">{</span><span class="nc">MyApp.PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="0874901408-6">}</span><span class="p" data-group-id="0874901408-5">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:ho</span><span class="p" data-group-id="0874901408-4">)</span><span class="w">
+</span><span class="c1"># [&quot;current messages:&quot;, [:ho, :hi], &quot; in process&quot;, #PID&lt;0.602.0&gt;]</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+
+</span><span class="c1"># With a different key, the message will be routed to a different instance.</span><span class="w">
+</span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="nc">Collector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="0874901408-7">(</span><span class="p" data-group-id="0874901408-8">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0874901408-9">{</span><span class="nc">MyApp.PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="0874901408-9">}</span><span class="p" data-group-id="0874901408-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:a</span><span class="p" data-group-id="0874901408-7">)</span><span class="w">
+</span><span class="c1"># [&quot;current messages:&quot;, [:a], &quot; in process&quot;, #PID&lt;0.603.0&gt;]</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="nc">Collector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="0874901408-10">(</span><span class="p" data-group-id="0874901408-11">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0874901408-12">{</span><span class="nc">MyApp.PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="0874901408-12">}</span><span class="p" data-group-id="0874901408-11">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:b</span><span class="p" data-group-id="0874901408-10">)</span><span class="w">
+</span><span class="c1"># [&quot;current messages:&quot;, [:b, :a], &quot; in process&quot;, #PID&lt;0.603.0&gt;]</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><p>Now let's move on to a useful example.</p><h2 id="module-dynamicsupervisor-example" class="section-heading">
+  <a href="#module-dynamicsupervisor-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a> Example</span>
+</h2>
+<p>The <a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a> is a single process responsible for starting
+other processes. In some applications, the <a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a> may
+become a bottleneck. To address this, you can start multiple instances
+of the <a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a> through a <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a>, and then
+pick a &quot;random&quot; instance to start the child on.</p><p>Instead of starting a single <a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8709483298-1">[</span><span class="w">
+  </span><span class="p" data-group-id="8709483298-2">{</span><span class="nc">DynamicSupervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.DynamicSupervisor</span><span class="p" data-group-id="8709483298-2">}</span><span class="w">
+</span><span class="p" data-group-id="8709483298-1">]</span><span class="w">
+
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="8709483298-3">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="8709483298-3">)</span></code></pre><p>and starting children on that dynamic supervisor directly:</p><pre><code class="makeup elixir" translate="no"><span class="nc">DynamicSupervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p" data-group-id="9815283082-1">(</span><span class="nc">MyApp.DynamicSupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9815283082-2">{</span><span class="nc">Agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9815283082-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9815283082-4">%{</span><span class="p" data-group-id="9815283082-4">}</span><span class="w"> </span><span class="k" data-group-id="9815283082-3">end</span><span class="p" data-group-id="9815283082-2">}</span><span class="p" data-group-id="9815283082-1">)</span></code></pre><p>You can do start the dynamic supervisors under a <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1147046488-1">[</span><span class="w">
+  </span><span class="p" data-group-id="1147046488-2">{</span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w">
+   </span><span class="ss">child_spec</span><span class="p">:</span><span class="w"> </span><span class="nc">DynamicSupervisor</span><span class="p">,</span><span class="w">
+   </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.DynamicSupervisors</span><span class="p" data-group-id="1147046488-2">}</span><span class="w">
+</span><span class="p" data-group-id="1147046488-1">]</span><span class="w">
+
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="1147046488-3">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="1147046488-3">)</span></code></pre><p>and then:</p><pre><code class="makeup elixir" translate="no"><span class="nc">DynamicSupervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p" data-group-id="3029175594-1">(</span><span class="w">
+  </span><span class="p" data-group-id="3029175594-2">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3029175594-3">{</span><span class="nc">MyApp.DynamicSupervisors</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p" data-group-id="3029175594-4">(</span><span class="p" data-group-id="3029175594-4">)</span><span class="p" data-group-id="3029175594-3">}</span><span class="p" data-group-id="3029175594-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3029175594-5">{</span><span class="nc">Agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3029175594-6">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="3029175594-7">%{</span><span class="p" data-group-id="3029175594-7">}</span><span class="w"> </span><span class="k" data-group-id="3029175594-6">end</span><span class="p" data-group-id="3029175594-5">}</span><span class="w">
+</span><span class="p" data-group-id="3029175594-1">)</span></code></pre><p>In the code above, we start a partition supervisor that will by default
+start a dynamic supervisor for each core in your machine. Then, instead
+of calling the <a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a> by name, you call it through the
+partition supervisor using the <code class="inline">{:via, PartitionSupervisor, {name, key}}</code>
+format. We picked <code class="inline">self()</code> as the routing key, which means each process
+will be assigned one of the existing dynamic supervisors. See <a href="#start_link/1"><code class="inline">start_link/1</code></a>
+to see all options supported by the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a>.</p><h2 id="module-implementation-notes" class="section-heading">
+  <a href="#module-implementation-notes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Implementation notes</span>
+</h2>
+<p>The <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a> uses either an ETS table or a <a href="Registry.html"><code class="inline">Registry</code></a> to
+manage all of the partitions. Under the hood, the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a>
+generates a child spec for each partition and then acts as a regular
+supervisor. The ID of each child spec is the partition number.</p><p>For routing, two strategies are used. If <code class="inline">key</code> is an integer, it is routed
+using <code class="inline">rem(abs(key), partitions)</code> where <code class="inline">partitions</code> is the number of
+partitions. Otherwise it uses <code class="inline">:erlang.phash2(key, partitions)</code>.
+The particular routing may change in the future, and therefore must not
+be relied on. If you want to retrieve a particular PID for a certain key,
+you can use <code class="inline">GenServer.whereis({:via, PartitionSupervisor, {name, key}})</code>.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:name/0" data-no-tooltip="" translate="no">name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The name of the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a>.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#count_children/1" data-no-tooltip="" translate="no">count_children(supervisor)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a map containing count values for the supervisor.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#partitions/1" data-no-tooltip="" translate="no">partitions(name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the number of partitions for the partition supervisor.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_link/1" data-no-tooltip="" translate="no">start_link(opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a partition supervisor with the given options.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stop/3" data-no-tooltip="" translate="no">stop(supervisor, reason \\ :normal, timeout \\ :infinity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Synchronously stops the given partition supervisor with the given <code class="inline">reason</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#which_children/1" data-no-tooltip="" translate="no">which_children(name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a list with information about all children.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:name/0">
+
+  <div class="detail-header">
+    <a href="#t:name/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">name()</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/partition_supervisor.ex#L149" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> name() :: <a href="typespecs.html#basic-types">atom</a>() | {:via, <a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>The name of the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="count_children/1">
+
+  <div class="detail-header">
+    <a href="#count_children/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">count_children(supervisor)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/partition_supervisor.ex#L407" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> count_children(<a href="#t:name/0">name</a>()) :: %{
+  specs: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  active: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  supervisors: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  workers: <a href="typespecs.html#basic-types">non_neg_integer</a>()
+}</pre>
+
+      </div>
+
+<p>Returns a map containing count values for the supervisor.</p><p>The map contains the following keys:</p><ul><li><p><code class="inline">:specs</code> - the number of partitions (children processes)</p></li><li><p><code class="inline">:active</code> - the count of all actively running child processes managed by
+this supervisor</p></li><li><p><code class="inline">:supervisors</code> - the count of all supervisors whether or not the child
+process is still alive</p></li><li><p><code class="inline">:workers</code> - the count of all workers, whether or not the child process
+is still alive</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="partitions/1">
+
+  <div class="detail-header">
+    <a href="#partitions/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">partitions(name)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/partition_supervisor.ex#L334" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> partitions(<a href="#t:name/0">name</a>()) :: <a href="typespecs.html#basic-types">pos_integer</a>()</pre>
+
+      </div>
+
+<p>Returns the number of partitions for the partition supervisor.</p>
+  </section>
+</section>
+<section class="detail" id="start_link/1">
+
+  <div class="detail-header">
+    <a href="#start_link/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_link(opts)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/partition_supervisor.ex#L228" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_link(<a href="typespecs.html#built-in-types">keyword</a>()) :: <a href="Supervisor.html#t:on_start/0">Supervisor.on_start</a>()</pre>
+
+      </div>
+
+<p>Starts a partition supervisor with the given options.</p><p>This function is typically not invoked directly, instead it is invoked
+when using a <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a> as a child of another supervisor:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5015251991-1">[</span><span class="w">
+  </span><span class="p" data-group-id="5015251991-2">{</span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">child_spec</span><span class="p">:</span><span class="w"> </span><span class="nc">SomeChild</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyPartitionSupervisor</span><span class="p" data-group-id="5015251991-2">}</span><span class="w">
+</span><span class="p" data-group-id="5015251991-1">]</span></code></pre><p>If the supervisor is successfully spawned, this function returns
+<code class="inline">{:ok, pid}</code>, where <code class="inline">pid</code> is the PID of the supervisor. If the given name
+for the partition supervisor is already assigned to a process,
+the function returns <code class="inline">{:error, {:already_started, pid}}</code>, where <code class="inline">pid</code>
+is the PID of that process.</p><p>Note that a supervisor started with this function is linked to the parent
+process and exits not only on crashes but also if the parent process exits
+with <code class="inline">:normal</code> reason.</p><h2 id="start_link/1-options" class="section-heading">
+  <a href="#start_link/1-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:name</code> - an atom or via tuple representing the name of the partition
+supervisor (see <a href="#t:name/0"><code class="inline">name/0</code></a>).</p></li><li><p><code class="inline">:child_spec</code> - the child spec to be used when starting the partitions.</p></li><li><p><code class="inline">:partitions</code> - a positive integer with the number of partitions.
+Defaults to <code class="inline">System.schedulers_online()</code> (typically the number of cores).</p></li><li><p><code class="inline">:strategy</code> - the restart strategy option, defaults to <code class="inline">:one_for_one</code>.
+You can learn more about strategies in the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module docs.</p></li><li><p><code class="inline">:max_restarts</code> - the maximum number of restarts allowed in
+a time frame. Defaults to <code class="inline">3</code>.</p></li><li><p><code class="inline">:max_seconds</code> - the time frame in which <code class="inline">:max_restarts</code> applies.
+Defaults to <code class="inline">5</code>.</p></li><li><p><code class="inline">:with_arguments</code> - a two-argument anonymous function that allows
+the partition to be given to the child starting function. See the
+<code class="inline">:with_arguments</code> section below.</p></li></ul><h2 id="start_link/1-with_arguments" class="section-heading">
+  <a href="#start_link/1-with_arguments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">:with_arguments</code></span>
+</h2>
+<p>Sometimes you want each partition to know their partition assigned number.
+This can be done with the <code class="inline">:with_arguments</code> option. This function receives
+the value of the <code class="inline">:child_spec</code> option and an integer for the partition
+number. It must return a new list of arguments that will be used to start the
+partition process.</p><p>For example, most processes are started by calling <code class="inline">start_link(opts)</code>,
+where <code class="inline">opts</code> is a keyword list. You could inject the partition into the
+options given to the child:</p><pre><code class="makeup elixir" translate="no"><span class="ss">with_arguments</span><span class="p">:</span><span class="w"> </span><span class="k" data-group-id="7525182520-1">fn</span><span class="w"> </span><span class="p" data-group-id="7525182520-2">[</span><span class="n">opts</span><span class="p" data-group-id="7525182520-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">partition</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="p" data-group-id="7525182520-3">[</span><span class="nc">Keyword</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="7525182520-4">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="ss">:partition</span><span class="p">,</span><span class="w"> </span><span class="n">partition</span><span class="p" data-group-id="7525182520-4">)</span><span class="p" data-group-id="7525182520-3">]</span><span class="w">
+</span><span class="k" data-group-id="7525182520-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="stop/3">
+
+    <span id="stop/1"></span>
+
+    <span id="stop/2"></span>
+
+  <div class="detail-header">
+    <a href="#stop/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stop(supervisor, reason \\ :normal, timeout \\ :infinity)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/partition_supervisor.ex#L423" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stop(<a href="#t:name/0">name</a>(), reason :: <a href="typespecs.html#built-in-types">term</a>(), <a href="typespecs.html#built-in-types">timeout</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Synchronously stops the given partition supervisor with the given <code class="inline">reason</code>.</p><p>It returns <code class="inline">:ok</code> if the supervisor terminates with the given
+reason. If it terminates with another reason, the call exits.</p><p>This function keeps OTP semantics regarding error reporting.
+If the reason is any other than <code class="inline">:normal</code>, <code class="inline">:shutdown</code> or
+<code class="inline">{:shutdown, _}</code>, an error report is logged.</p>
+  </section>
+</section>
+<section class="detail" id="which_children/1">
+
+  <div class="detail-header">
+    <a href="#which_children/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">which_children(name)</h1>
+
+        <span class="note">(since 1.14.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/partition_supervisor.ex#L379" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> which_children(<a href="#t:name/0">name</a>()) :: [
+  {:undefined, <a href="typespecs.html#basic-types">pid</a>() | :restarting, :worker | :supervisor,
+   [<a href="typespecs.html#built-in-types">module</a>()] | :dynamic}
+]</pre>
+
+      </div>
+
+<p>Returns a list with information about all children.</p><p>This function returns a list of tuples containing:</p><ul><li><p><code class="inline">id</code> - the partition number</p></li><li><p><code class="inline">child</code> - the PID of the corresponding child process or the
+atom <code class="inline">:restarting</code> if the process is about to be restarted</p></li><li><p><code class="inline">type</code> - <code class="inline">:worker</code> or <code class="inline">:supervisor</code> as defined in the child
+specification</p></li><li><p><code class="inline">modules</code> - as defined in the child specification</p></li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

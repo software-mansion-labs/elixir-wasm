@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Config.Provider — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Config.Provider.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Config.Provider</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Specifies a provider API that loads configuration during boot.</p><p>Config providers are typically used during releases to load
+external configuration while the system boots. This is done
+by starting the VM with the minimum amount of applications
+running, then invoking all of the providers, and then
+restarting the system. This requires a mutable configuration
+file on disk, as the results of the providers are written to
+the file system. For more information on runtime configuration,
+see <a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html"><code class="inline">mix release</code></a>.</p><h2 id="module-multiple-config-files" class="section-heading">
+  <a href="#module-multiple-config-files" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Multiple config files</span>
+</h2>
+<p>One common use of config providers is to specify multiple
+configuration files in a release. Elixir ships with one provider,
+called <a href="Config.Reader.html"><code class="inline">Config.Reader</code></a>, which is capable of handling Elixir's
+built-in config files.</p><p>For example, imagine you want to list some basic configuration
+on Mix's built-in <code class="inline">config/runtime.exs</code> file, but you also want
+to support additional configuration files. To do so, you can add
+this inside the <code class="inline">def project</code> portion of  your <code class="inline">mix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">releases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6894389064-1">[</span><span class="w">
+  </span><span class="ss">demo</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6894389064-2">[</span><span class="w">
+    </span><span class="ss">config_providers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6894389064-3">[</span><span class="w">
+      </span><span class="p" data-group-id="6894389064-4">{</span><span class="nc">Config.Reader</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6894389064-5">{</span><span class="ss">:system</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RELEASE_ROOT&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/extra_config.exs&quot;</span><span class="p" data-group-id="6894389064-5">}</span><span class="p" data-group-id="6894389064-4">}</span><span class="w">
+    </span><span class="p" data-group-id="6894389064-3">]</span><span class="w">
+  </span><span class="p" data-group-id="6894389064-2">]</span><span class="w">
+</span><span class="p" data-group-id="6894389064-1">]</span></code></pre><p>You can place this <code class="inline">extra_config.exs</code> file in your release in
+multiple ways:</p><ol><li><p>If it is available on the host when assembling the release,
+you can place it on &quot;rel/overlays/extra_config.exs&quot; and it
+will be automatically copied to the release root</p></li><li><p>If it is available on the target during deployment, you can
+simply copy it to the release root as a step in your deployment</p></li></ol><p>Now once the system boots, it will load both <code class="inline">config/runtime.exs</code>
+and <code class="inline">extra_config.exs</code> early in the boot process. You can learn
+more options on <a href="Config.Reader.html"><code class="inline">Config.Reader</code></a>.</p><h2 id="module-custom-config-provider" class="section-heading">
+  <a href="#module-custom-config-provider" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Custom config provider</span>
+</h2>
+<p>You can also implement custom config providers, similar to how
+<a href="Config.Reader.html"><code class="inline">Config.Reader</code></a> works. For example, imagine you need to load
+some configuration from a JSON file and load that into the system.
+Said configuration provider would look like:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">JSONConfigProvider</span><span class="w"> </span><span class="k" data-group-id="5713505778-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Config.Provider</span><span class="w">
+
+  </span><span class="c1"># Let&#39;s pass the path to the JSON file as config</span><span class="w">
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="5713505778-2">(</span><span class="n">path</span><span class="p" data-group-id="5713505778-2">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="5713505778-3">(</span><span class="n">path</span><span class="p" data-group-id="5713505778-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">path</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">load</span><span class="p" data-group-id="5713505778-4">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p" data-group-id="5713505778-4">)</span><span class="w"> </span><span class="k" data-group-id="5713505778-5">do</span><span class="w">
+    </span><span class="c1"># We need to start any app we may depend on.</span><span class="w">
+    </span><span class="p" data-group-id="5713505778-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5713505778-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">ensure_all_started</span><span class="p" data-group-id="5713505778-7">(</span><span class="ss">:jason</span><span class="p" data-group-id="5713505778-7">)</span><span class="w">
+
+    </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">read!</span><span class="p" data-group-id="5713505778-8">(</span><span class="p" data-group-id="5713505778-8">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Jason</span><span class="o">.</span><span class="n">decode!</span><span class="p" data-group-id="5713505778-9">(</span><span class="p" data-group-id="5713505778-9">)</span><span class="w">
+
+    </span><span class="nc">Config.Reader</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="5713505778-10">(</span><span class="w">
+      </span><span class="n">config</span><span class="p">,</span><span class="w">
+      </span><span class="ss">my_app</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5713505778-11">[</span><span class="w">
+        </span><span class="ss">some_value</span><span class="p">:</span><span class="w"> </span><span class="n">json</span><span class="p" data-group-id="5713505778-12">[</span><span class="s">&quot;my_app_some_value&quot;</span><span class="p" data-group-id="5713505778-12">]</span><span class="p">,</span><span class="w">
+        </span><span class="ss">another_value</span><span class="p">:</span><span class="w"> </span><span class="n">json</span><span class="p" data-group-id="5713505778-13">[</span><span class="s">&quot;my_app_another_value&quot;</span><span class="p" data-group-id="5713505778-13">]</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="5713505778-11">]</span><span class="w">
+    </span><span class="p" data-group-id="5713505778-10">)</span><span class="w">
+  </span><span class="k" data-group-id="5713505778-5">end</span><span class="w">
+</span><span class="k" data-group-id="5713505778-1">end</span></code></pre><p>Then, when specifying your release, you can specify the provider in
+the release configuration:</p><pre><code class="makeup elixir" translate="no"><span class="ss">releases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3679628465-1">[</span><span class="w">
+  </span><span class="ss">demo</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3679628465-2">[</span><span class="w">
+    </span><span class="ss">config_providers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3679628465-3">[</span><span class="w">
+      </span><span class="p" data-group-id="3679628465-4">{</span><span class="nc">JSONConfigProvider</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/etc/config.json&quot;</span><span class="p" data-group-id="3679628465-4">}</span><span class="w">
+    </span><span class="p" data-group-id="3679628465-3">]</span><span class="w">
+  </span><span class="p" data-group-id="3679628465-2">]</span><span class="w">
+</span><span class="p" data-group-id="3679628465-1">]</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:config/0" data-no-tooltip="" translate="no">config()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:config_path/0" data-no-tooltip="" translate="no">config_path()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A path pointing to a configuration file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:state/0" data-no-tooltip="" translate="no">state()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:init/1" data-no-tooltip="" translate="no">init(term)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Invoked when initializing a config provider.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:load/2" data-no-tooltip="" translate="no">load(config, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Loads configuration (typically during system boot).</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#resolve_config_path!/1" data-no-tooltip="" translate="no">resolve_config_path!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Resolves a <a href="#t:config_path/0"><code class="inline">config_path/0</code></a> to an actual path.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#validate_config_path!/1" data-no-tooltip="" translate="no">validate_config_path!(path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Validates a <a href="#t:config_path/0"><code class="inline">config_path/0</code></a>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:config/0">
+
+  <div class="detail-header">
+    <a href="#t:config/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">config()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L92" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> config() :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:config_path/0">
+
+  <div class="detail-header">
+    <a href="#t:config_path/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">config_path()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L108" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> config_path() :: {:system, <a href="typespecs.html#built-in-types">binary</a>(), <a href="typespecs.html#built-in-types">binary</a>()} | <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>A path pointing to a configuration file.</p><p>Since configuration files are often accessed on target machines,
+it can be expressed either as:</p><ul><li><p>a binary representing an absolute path</p></li><li><p>a <code class="inline">{:system, system_var, path}</code> tuple where the config is the
+concatenation of the environment variable <code class="inline">system_var</code> with
+the given <code class="inline">path</code></p></li></ul>
+  </section>
+</section>
+<section class="detail" id="t:state/0">
+
+  <div class="detail-header">
+    <a href="#t:state/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">state()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L93" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> state() :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:init/1">
+
+  <div class="detail-header">
+    <a href="#c:init/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">init(term)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L125" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> init(<a href="typespecs.html#built-in-types">term</a>()) :: <a href="#t:state/0">state</a>()</pre>
+
+      </div>
+
+<p>Invoked when initializing a config provider.</p><p>A config provider is typically initialized on the machine
+where the system is assembled and not on the target machine.
+The <a href="#c:init/1"><code class="inline">init/1</code></a> callback is useful to verify the arguments
+given to the provider and prepare the state that will be
+given to <a href="#c:load/2"><code class="inline">load/2</code></a>.</p><p>Furthermore, because the state returned by <a href="#c:init/1"><code class="inline">init/1</code></a> can
+be written to text-based config files, it should be
+restricted only to simple data types, such as integers,
+strings, atoms, tuples, maps, and lists. Entries such as
+PIDs, references, and functions cannot be serialized.</p>
+  </section>
+</section>
+<section class="detail" id="c:load/2">
+
+  <div class="detail-header">
+    <a href="#c:load/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">load(config, state)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L140" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> load(<a href="#t:config/0">config</a>(), <a href="#t:state/0">state</a>()) :: <a href="#t:config/0">config</a>()</pre>
+
+      </div>
+
+<p>Loads configuration (typically during system boot).</p><p>It receives the current <code class="inline">config</code> and the <code class="inline">state</code> returned by
+<a href="#c:init/1"><code class="inline">init/1</code></a>. Then, you typically read the extra configuration
+from an external source and merge it into the received <code class="inline">config</code>.
+Merging should be done with <a href="Config.Reader.html#merge/2"><code class="inline">Config.Reader.merge/2</code></a>, as it
+performs deep merge. It should return the updated config.</p><p>Note that <a href="#c:load/2"><code class="inline">load/2</code></a> is typically invoked very early in the
+boot process, therefore if you need to use an application
+in the provider, it is your responsibility to start it.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="resolve_config_path!/1">
+
+  <div class="detail-header">
+    <a href="#resolve_config_path!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">resolve_config_path!(path)</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L184" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> resolve_config_path!(<a href="#t:config_path/0">config_path</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Resolves a <a href="#t:config_path/0"><code class="inline">config_path/0</code></a> to an actual path.</p>
+  </section>
+</section>
+<section class="detail" id="validate_config_path!/1">
+
+  <div class="detail-header">
+    <a href="#validate_config_path!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">validate_config_path!(path)</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config/provider.ex#L159" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> validate_config_path!(<a href="#t:config_path/0">config_path</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Validates a <a href="#t:config_path/0"><code class="inline">config_path/0</code></a>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Task and gen_tcp — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/task-and-gen-tcp.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Task and gen_tcp</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/task-and-gen-tcp.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter, we are going to learn how to use <a href="http://www.erlang.org/doc/man/gen_tcp.html">Erlang's <code class="inline">:gen_tcp</code> module</a> to serve requests. This provides a great opportunity to explore Elixir's <a href="Task.html"><code class="inline">Task</code></a> module. In future chapters, we will expand our server so that it can actually serve the commands.</p><h2 id="echo-server" class="section-heading">
+  <a href="#echo-server" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Echo server</span>
+</h2>
+<p>We will start our TCP server by first implementing an echo server. It will send a response with the text it received in the request. We will slowly improve our server until it is supervised and ready to handle multiple connections.</p><p>A TCP server, in broad strokes, performs the following steps:</p><ol><li>Listens to a port until the port is available and it gets hold of the socket</li><li>Waits for a client connection on that port and accepts it</li><li>Reads the client request and writes a response back</li></ol><p>Let's implement those steps. Move to the <code class="inline">apps/kv_server</code> application, open up <code class="inline">lib/kv_server.ex</code>, and add the following functions:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KVServer</span><span class="w"> </span><span class="k" data-group-id="9142946590-1">do</span><span class="w">
+  </span><span class="kn">require</span><span class="w"> </span><span class="nc">Logger</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">accept</span><span class="p" data-group-id="9142946590-2">(</span><span class="n">port</span><span class="p" data-group-id="9142946590-2">)</span><span class="w"> </span><span class="k" data-group-id="9142946590-3">do</span><span class="w">
+    </span><span class="c1"># The options below mean:</span><span class="w">
+    </span><span class="c1">#</span><span class="w">
+    </span><span class="c1"># 1. `:binary` - receives data as binaries (instead of lists)</span><span class="w">
+    </span><span class="c1"># 2. `packet: :line` - receives data line by line</span><span class="w">
+    </span><span class="c1"># 3. `active: false` - blocks on `:gen_tcp.recv/2` until data is available</span><span class="w">
+    </span><span class="c1"># 4. `reuseaddr: true` - allows us to reuse the address if the listener crashes</span><span class="w">
+    </span><span class="c1">#</span><span class="w">
+    </span><span class="p" data-group-id="9142946590-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="9142946590-4">}</span><span class="w"> </span><span class="o">=</span><span class="w">
+      </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">listen</span><span class="p" data-group-id="9142946590-5">(</span><span class="n">port</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9142946590-6">[</span><span class="ss">:binary</span><span class="p">,</span><span class="w"> </span><span class="ss">packet</span><span class="p">:</span><span class="w"> </span><span class="ss">:line</span><span class="p">,</span><span class="w"> </span><span class="ss">active</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w"> </span><span class="ss">reuseaddr</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="9142946590-6">]</span><span class="p" data-group-id="9142946590-5">)</span><span class="w">
+    </span><span class="nc">Logger</span><span class="o">.</span><span class="n">info</span><span class="p" data-group-id="9142946590-7">(</span><span class="s">&quot;Accepting connections on port </span><span class="si" data-group-id="9142946590-8">#{</span><span class="n">port</span><span class="si" data-group-id="9142946590-8">}</span><span class="s">&quot;</span><span class="p" data-group-id="9142946590-7">)</span><span class="w">
+    </span><span class="n">loop_acceptor</span><span class="p" data-group-id="9142946590-9">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-9">)</span><span class="w">
+  </span><span class="k" data-group-id="9142946590-3">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">loop_acceptor</span><span class="p" data-group-id="9142946590-10">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-10">)</span><span class="w"> </span><span class="k" data-group-id="9142946590-11">do</span><span class="w">
+    </span><span class="p" data-group-id="9142946590-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">client</span><span class="p" data-group-id="9142946590-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="9142946590-13">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-13">)</span><span class="w">
+    </span><span class="n">serve</span><span class="p" data-group-id="9142946590-14">(</span><span class="n">client</span><span class="p" data-group-id="9142946590-14">)</span><span class="w">
+    </span><span class="n">loop_acceptor</span><span class="p" data-group-id="9142946590-15">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-15">)</span><span class="w">
+  </span><span class="k" data-group-id="9142946590-11">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">serve</span><span class="p" data-group-id="9142946590-16">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-16">)</span><span class="w"> </span><span class="k" data-group-id="9142946590-17">do</span><span class="w">
+    </span><span class="n">socket</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">read_line</span><span class="p" data-group-id="9142946590-18">(</span><span class="p" data-group-id="9142946590-18">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">write_line</span><span class="p" data-group-id="9142946590-19">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-19">)</span><span class="w">
+
+    </span><span class="n">serve</span><span class="p" data-group-id="9142946590-20">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-20">)</span><span class="w">
+  </span><span class="k" data-group-id="9142946590-17">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">read_line</span><span class="p" data-group-id="9142946590-21">(</span><span class="n">socket</span><span class="p" data-group-id="9142946590-21">)</span><span class="w"> </span><span class="k" data-group-id="9142946590-22">do</span><span class="w">
+    </span><span class="p" data-group-id="9142946590-23">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p" data-group-id="9142946590-23">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">recv</span><span class="p" data-group-id="9142946590-24">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9142946590-24">)</span><span class="w">
+    </span><span class="n">data</span><span class="w">
+  </span><span class="k" data-group-id="9142946590-22">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="9142946590-25">(</span><span class="n">line</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="9142946590-25">)</span><span class="w"> </span><span class="k" data-group-id="9142946590-26">do</span><span class="w">
+    </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="9142946590-27">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="p" data-group-id="9142946590-27">)</span><span class="w">
+  </span><span class="k" data-group-id="9142946590-26">end</span><span class="w">
+</span><span class="k" data-group-id="9142946590-1">end</span></code></pre><p>We are going to start our server by calling <code class="inline">KVServer.accept(4040)</code>, where 4040 is the port. The first step in <code class="inline">accept/1</code> is to listen to the port until the socket becomes available and then call <code class="inline">loop_acceptor/1</code>. <code class="inline">loop_acceptor/1</code> is a loop accepting client connections. For each accepted connection, we call <code class="inline">serve/1</code>.</p><p><code class="inline">serve/1</code> is another loop that reads a line from the socket and writes those lines back to the socket. Note that the <code class="inline">serve/1</code> function uses the pipe operator <a href="Kernel.html#%7C%3E/2"><code class="inline">|&gt;/2</code></a> to express this flow of operations. The pipe operator evaluates the left side and passes its result as the first argument to the function on the right side. The example above:</p><pre><code class="makeup elixir" translate="no"><span class="n">socket</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">read_line</span><span class="p" data-group-id="5073850232-1">(</span><span class="p" data-group-id="5073850232-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">write_line</span><span class="p" data-group-id="5073850232-2">(</span><span class="n">socket</span><span class="p" data-group-id="5073850232-2">)</span></code></pre><p>is equivalent to:</p><pre><code class="makeup elixir" translate="no"><span class="n">write_line</span><span class="p" data-group-id="8607834848-1">(</span><span class="n">read_line</span><span class="p" data-group-id="8607834848-2">(</span><span class="n">socket</span><span class="p" data-group-id="8607834848-2">)</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="8607834848-1">)</span></code></pre><p>The <code class="inline">read_line/1</code> implementation receives data from the socket using <a href="https://www.erlang.org/doc/apps/kernel/gen_tcp.html#recv/2"><code class="inline">:gen_tcp.recv/2</code></a> and <code class="inline">write_line/2</code> writes to the socket using <a href="https://www.erlang.org/doc/apps/kernel/gen_tcp.html#send/2"><code class="inline">:gen_tcp.send/2</code></a>.</p><p>Note that <code class="inline">serve/1</code> is an infinite loop called sequentially inside <code class="inline">loop_acceptor/1</code>, so the tail call to <code class="inline">loop_acceptor/1</code> is never reached and could be avoided. However, as we shall see, we will need to execute <code class="inline">serve/1</code> in a separate process, so we will need that tail call soon.</p><p>This is pretty much all we need to implement our echo server. Let's give it a try!</p><p>Start an IEx session inside the <code class="inline">kv_server</code> application with <code class="inline">iex -S mix</code>. Inside IEx, run:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">KVServer</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="9550230310-1">(</span><span class="mi">4040</span><span class="p" data-group-id="9550230310-1">)</span></code></pre><p>The server is now running, and you will even notice the console is blocked. Let's use <a href="https://en.wikipedia.org/wiki/Telnet">a <code class="inline">telnet</code> client</a> to access our server. There are clients available on most operating systems, and their command lines are generally similar:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">telnet 127.0.0.1 4040
+</span><span class="">Trying 127.0.0.1...
+</span><span class="">Connected to localhost.
+</span><span class="">Escape character is &#39;^]&#39;.
+</span><span class="">hello
+</span><span class="">hello
+</span><span class="">is it me
+</span><span class="">is it me
+</span><span class="">you are looking for?
+</span><span class="">you are looking for?
+</span></code></pre><p>Type &quot;hello&quot;, press enter, and you will get &quot;hello&quot; back. Excellent!</p><p>My particular telnet client can be exited by typing <code class="inline">ctrl + ]</code>, typing <code class="inline">quit</code>, and pressing <code class="inline">&lt;Enter&gt;</code>, but your client may require different steps.</p><p>Once you exit the telnet client, you will likely see an error in the IEx session:</p><pre><code class="makeup elixir" translate="no"><span class="gt">** (MatchError) no match of right hand side value: {:error, :closed}
+    (kv_server) lib/kv_server.ex:45: KVServer.read_line/1
+    (kv_server) lib/kv_server.ex:37: KVServer.serve/1
+    (kv_server) lib/kv_server.ex:30: KVServer.loop_acceptor/1</span></code></pre><p>That's because we were expecting data from <a href="https://www.erlang.org/doc/apps/kernel/gen_tcp.html#recv/2"><code class="inline">:gen_tcp.recv/2</code></a> but the client closed the connection. We need to handle such cases better in future revisions of our server.</p><p>For now, there is a more important bug we need to fix: what happens if our TCP acceptor crashes? Since there is no supervision, the server dies and we won't be able to serve more requests, because it won't be restarted. That's why we must move our server to a supervision tree.</p><h2 id="tasks" class="section-heading">
+  <a href="#tasks" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Tasks</span>
+</h2>
+<p>We have learned about agents, generic servers, and supervisors. They are all meant to work with multiple messages or manage state. But what do we use when we only need to execute some task and that is it?</p><p>The <a href="Task.html"><code class="inline">Task</code></a> module provides this functionality exactly. For example, it has a <a href="Task.html#start_link/1"><code class="inline">Task.start_link/1</code></a> function that receives an anonymous function and executes it inside a new process that will be part of a supervision tree.</p><p>Let's give it a try. Open up <code class="inline">lib/kv_server/application.ex</code>, and let's change the supervisor in the <code class="inline">start/2</code> function to the following:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start</span><span class="p" data-group-id="4505976938-1">(</span><span class="c">_type</span><span class="p">,</span><span class="w"> </span><span class="c">_args</span><span class="p" data-group-id="4505976938-1">)</span><span class="w"> </span><span class="k" data-group-id="4505976938-2">do</span><span class="w">
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4505976938-3">[</span><span class="w">
+      </span><span class="p" data-group-id="4505976938-4">{</span><span class="nc">Task</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4505976938-5">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">KVServer</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="4505976938-6">(</span><span class="mi">4040</span><span class="p" data-group-id="4505976938-6">)</span><span class="w"> </span><span class="k" data-group-id="4505976938-5">end</span><span class="p" data-group-id="4505976938-4">}</span><span class="w">
+    </span><span class="p" data-group-id="4505976938-3">]</span><span class="w">
+
+    </span><span class="n">opts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4505976938-7">[</span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KVServer.Supervisor</span><span class="p" data-group-id="4505976938-7">]</span><span class="w">
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="4505976938-8">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="4505976938-8">)</span><span class="w">
+  </span><span class="k" data-group-id="4505976938-2">end</span></code></pre><p>As usual, we've passed a two-element tuple as a child specification, which in turn will invoke <a href="Task.html#start_link/1"><code class="inline">Task.start_link/1</code></a>.</p><p>With this change, we are saying that we want to run <code class="inline">KVServer.accept(4040)</code> as a task. We are hardcoding the port for now but this could be changed in a few ways, for example, by reading the port out of the system environment when starting the application:</p><pre><code class="makeup elixir" translate="no"><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">to_integer</span><span class="p" data-group-id="8506838714-1">(</span><span class="nc">System</span><span class="o">.</span><span class="n">get_env</span><span class="p" data-group-id="8506838714-2">(</span><span class="s">&quot;PORT&quot;</span><span class="p" data-group-id="8506838714-2">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s">&quot;4040&quot;</span><span class="p" data-group-id="8506838714-1">)</span><span class="w">
+</span><span class="c1"># ...</span><span class="w">
+</span><span class="p" data-group-id="8506838714-3">{</span><span class="nc">Task</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8506838714-4">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">KVServer</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="8506838714-5">(</span><span class="n">port</span><span class="p" data-group-id="8506838714-5">)</span><span class="w"> </span><span class="k" data-group-id="8506838714-4">end</span><span class="p" data-group-id="8506838714-3">}</span></code></pre><p>Insert these changes in your code and now you may start your application using the following command <code class="inline">PORT=4321 mix run --no-halt</code>, notice how we are passing the port as a variable, but still defaults to 4040 if none is given.</p><p>Now that the server is part of the supervision tree, it should start automatically when we run the application. Start your server, now passing the port, and once again use the <code class="inline">telnet</code> client to make sure that everything still works:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">telnet 127.0.0.1 4321
+</span><span class="">Trying 127.0.0.1...
+</span><span class="">Connected to localhost.
+</span><span class="">Escape character is &#39;^]&#39;.
+</span><span class="">say you
+</span><span class="">say you
+</span><span class="">say me
+</span><span class="">say me
+</span></code></pre><p>Yes, it works! However, does it <em>scale</em>?</p><p>Try to connect two telnet clients at the same time. When you do so, you will notice that the second client doesn't echo:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">telnet 127.0.0.1 4321
+</span><span class="">Trying 127.0.0.1...
+</span><span class="">Connected to localhost.
+</span><span class="">Escape character is &#39;^]&#39;.
+</span><span class="">hello
+</span><span class="">hello?
+</span><span class="">HELLOOOOOO?
+</span></code></pre><p>It doesn't seem to work at all. That's because we are serving requests in the same process that are accepting connections. When one client is connected, we can't accept another client.</p><h2 id="task-supervisor" class="section-heading">
+  <a href="#task-supervisor" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Task supervisor</span>
+</h2>
+<p>In order to make our server handle simultaneous connections, we need to have one process working as an acceptor that spawns other processes to serve requests. One solution would be to change:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">loop_acceptor</span><span class="p" data-group-id="2875156806-1">(</span><span class="n">socket</span><span class="p" data-group-id="2875156806-1">)</span><span class="w"> </span><span class="k" data-group-id="2875156806-2">do</span><span class="w">
+  </span><span class="p" data-group-id="2875156806-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">client</span><span class="p" data-group-id="2875156806-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="2875156806-4">(</span><span class="n">socket</span><span class="p" data-group-id="2875156806-4">)</span><span class="w">
+  </span><span class="n">serve</span><span class="p" data-group-id="2875156806-5">(</span><span class="n">client</span><span class="p" data-group-id="2875156806-5">)</span><span class="w">
+  </span><span class="n">loop_acceptor</span><span class="p" data-group-id="2875156806-6">(</span><span class="n">socket</span><span class="p" data-group-id="2875156806-6">)</span><span class="w">
+</span><span class="k" data-group-id="2875156806-2">end</span></code></pre><p>to also use <a href="Task.html#start_link/1"><code class="inline">Task.start_link/1</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">loop_acceptor</span><span class="p" data-group-id="1383967109-1">(</span><span class="n">socket</span><span class="p" data-group-id="1383967109-1">)</span><span class="w"> </span><span class="k" data-group-id="1383967109-2">do</span><span class="w">
+  </span><span class="p" data-group-id="1383967109-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">client</span><span class="p" data-group-id="1383967109-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="1383967109-4">(</span><span class="n">socket</span><span class="p" data-group-id="1383967109-4">)</span><span class="w">
+  </span><span class="nc">Task</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="1383967109-5">(</span><span class="k" data-group-id="1383967109-6">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">serve</span><span class="p" data-group-id="1383967109-7">(</span><span class="n">client</span><span class="p" data-group-id="1383967109-7">)</span><span class="w"> </span><span class="k" data-group-id="1383967109-6">end</span><span class="p" data-group-id="1383967109-5">)</span><span class="w">
+  </span><span class="n">loop_acceptor</span><span class="p" data-group-id="1383967109-8">(</span><span class="n">socket</span><span class="p" data-group-id="1383967109-8">)</span><span class="w">
+</span><span class="k" data-group-id="1383967109-2">end</span></code></pre><p>We are starting a linked Task directly from the acceptor process. But we've already made this mistake once. Do you remember?</p><p>This is similar to the mistake we made when we called <code class="inline">KV.Bucket.start_link/1</code> straight from the registry. That meant a failure in any bucket would bring the whole registry down.</p><p>The code above would have the same flaw: if we link the <code class="inline">serve(client)</code> task to the acceptor, a crash when serving a request would bring the acceptor, and consequently all other connections, down.</p><p>We fixed the issue for the registry by using a simple one for one supervisor. We are going to use the same tactic here, except that this pattern is so common with tasks that <a href="Task.html"><code class="inline">Task</code></a> already comes with a solution: a simple one for one supervisor that starts temporary tasks as part of our supervision tree.</p><p>Let's change <code class="inline">start/2</code> once again, to add a supervisor to our tree:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start</span><span class="p" data-group-id="9836458663-1">(</span><span class="c">_type</span><span class="p">,</span><span class="w"> </span><span class="c">_args</span><span class="p" data-group-id="9836458663-1">)</span><span class="w"> </span><span class="k" data-group-id="9836458663-2">do</span><span class="w">
+    </span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">to_integer</span><span class="p" data-group-id="9836458663-3">(</span><span class="nc">System</span><span class="o">.</span><span class="n">get_env</span><span class="p" data-group-id="9836458663-4">(</span><span class="s">&quot;PORT&quot;</span><span class="p" data-group-id="9836458663-4">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s">&quot;4040&quot;</span><span class="p" data-group-id="9836458663-3">)</span><span class="w">
+
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9836458663-5">[</span><span class="w">
+      </span><span class="p" data-group-id="9836458663-6">{</span><span class="nc">Task.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KVServer.TaskSupervisor</span><span class="p" data-group-id="9836458663-6">}</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="9836458663-7">{</span><span class="nc">Task</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9836458663-8">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">KVServer</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="9836458663-9">(</span><span class="n">port</span><span class="p" data-group-id="9836458663-9">)</span><span class="w"> </span><span class="k" data-group-id="9836458663-8">end</span><span class="p" data-group-id="9836458663-7">}</span><span class="w">
+    </span><span class="p" data-group-id="9836458663-5">]</span><span class="w">
+
+    </span><span class="n">opts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9836458663-10">[</span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KVServer.Supervisor</span><span class="p" data-group-id="9836458663-10">]</span><span class="w">
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="9836458663-11">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="9836458663-11">)</span><span class="w">
+  </span><span class="k" data-group-id="9836458663-2">end</span></code></pre><p>We'll now start a <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> process with name <code class="inline">KVServer.TaskSupervisor</code>. Remember, since the acceptor task depends on this supervisor, the supervisor must be started first.</p><p>Now we need to change <code class="inline">loop_acceptor/1</code> to use <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> to serve each request:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">loop_acceptor</span><span class="p" data-group-id="3623617421-1">(</span><span class="n">socket</span><span class="p" data-group-id="3623617421-1">)</span><span class="w"> </span><span class="k" data-group-id="3623617421-2">do</span><span class="w">
+  </span><span class="p" data-group-id="3623617421-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">client</span><span class="p" data-group-id="3623617421-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="3623617421-4">(</span><span class="n">socket</span><span class="p" data-group-id="3623617421-4">)</span><span class="w">
+  </span><span class="p" data-group-id="3623617421-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="3623617421-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p" data-group-id="3623617421-6">(</span><span class="nc">KVServer.TaskSupervisor</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3623617421-7">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">serve</span><span class="p" data-group-id="3623617421-8">(</span><span class="n">client</span><span class="p" data-group-id="3623617421-8">)</span><span class="w"> </span><span class="k" data-group-id="3623617421-7">end</span><span class="p" data-group-id="3623617421-6">)</span><span class="w">
+  </span><span class="ss">:ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">controlling_process</span><span class="p" data-group-id="3623617421-9">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="3623617421-9">)</span><span class="w">
+  </span><span class="n">loop_acceptor</span><span class="p" data-group-id="3623617421-10">(</span><span class="n">socket</span><span class="p" data-group-id="3623617421-10">)</span><span class="w">
+</span><span class="k" data-group-id="3623617421-2">end</span></code></pre><p>You might notice that we added a line, <code class="inline">:ok = :gen_tcp.controlling_process(client, pid)</code>. This makes the child process the &quot;controlling process&quot; of the <code class="inline">client</code> socket. If we didn't do this, the acceptor would bring down all the clients if it crashed because sockets would be tied to the process that accepted them (which is the default behavior).</p><p>Start a new server with <code class="inline">PORT=4040 mix run --no-halt</code> and we can now open up many concurrent telnet clients. You will also notice that quitting a client does not bring the acceptor down. Excellent!</p><p>Here is the full echo server implementation:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KVServer</span><span class="w"> </span><span class="k" data-group-id="8532150476-1">do</span><span class="w">
+  </span><span class="kn">require</span><span class="w"> </span><span class="nc">Logger</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Starts accepting connections on the given `port`.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">accept</span><span class="p" data-group-id="8532150476-2">(</span><span class="n">port</span><span class="p" data-group-id="8532150476-2">)</span><span class="w"> </span><span class="k" data-group-id="8532150476-3">do</span><span class="w">
+    </span><span class="p" data-group-id="8532150476-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="8532150476-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">listen</span><span class="p" data-group-id="8532150476-5">(</span><span class="n">port</span><span class="p">,</span><span class="w">
+                      </span><span class="p" data-group-id="8532150476-6">[</span><span class="ss">:binary</span><span class="p">,</span><span class="w"> </span><span class="ss">packet</span><span class="p">:</span><span class="w"> </span><span class="ss">:line</span><span class="p">,</span><span class="w"> </span><span class="ss">active</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w"> </span><span class="ss">reuseaddr</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8532150476-6">]</span><span class="p" data-group-id="8532150476-5">)</span><span class="w">
+    </span><span class="nc">Logger</span><span class="o">.</span><span class="n">info</span><span class="w"> </span><span class="s">&quot;Accepting connections on port </span><span class="si" data-group-id="8532150476-7">#{</span><span class="n">port</span><span class="si" data-group-id="8532150476-7">}</span><span class="s">&quot;</span><span class="w">
+    </span><span class="n">loop_acceptor</span><span class="p" data-group-id="8532150476-8">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-8">)</span><span class="w">
+  </span><span class="k" data-group-id="8532150476-3">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">loop_acceptor</span><span class="p" data-group-id="8532150476-9">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-9">)</span><span class="w"> </span><span class="k" data-group-id="8532150476-10">do</span><span class="w">
+    </span><span class="p" data-group-id="8532150476-11">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">client</span><span class="p" data-group-id="8532150476-11">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="8532150476-12">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-12">)</span><span class="w">
+    </span><span class="p" data-group-id="8532150476-13">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="8532150476-13">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p" data-group-id="8532150476-14">(</span><span class="nc">KVServer.TaskSupervisor</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8532150476-15">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">serve</span><span class="p" data-group-id="8532150476-16">(</span><span class="n">client</span><span class="p" data-group-id="8532150476-16">)</span><span class="w"> </span><span class="k" data-group-id="8532150476-15">end</span><span class="p" data-group-id="8532150476-14">)</span><span class="w">
+    </span><span class="ss">:ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">controlling_process</span><span class="p" data-group-id="8532150476-17">(</span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="8532150476-17">)</span><span class="w">
+    </span><span class="n">loop_acceptor</span><span class="p" data-group-id="8532150476-18">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-18">)</span><span class="w">
+  </span><span class="k" data-group-id="8532150476-10">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">serve</span><span class="p" data-group-id="8532150476-19">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-19">)</span><span class="w"> </span><span class="k" data-group-id="8532150476-20">do</span><span class="w">
+    </span><span class="n">socket</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">read_line</span><span class="p" data-group-id="8532150476-21">(</span><span class="p" data-group-id="8532150476-21">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">write_line</span><span class="p" data-group-id="8532150476-22">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-22">)</span><span class="w">
+
+    </span><span class="n">serve</span><span class="p" data-group-id="8532150476-23">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-23">)</span><span class="w">
+  </span><span class="k" data-group-id="8532150476-20">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">read_line</span><span class="p" data-group-id="8532150476-24">(</span><span class="n">socket</span><span class="p" data-group-id="8532150476-24">)</span><span class="w"> </span><span class="k" data-group-id="8532150476-25">do</span><span class="w">
+    </span><span class="p" data-group-id="8532150476-26">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p" data-group-id="8532150476-26">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">recv</span><span class="p" data-group-id="8532150476-27">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8532150476-27">)</span><span class="w">
+    </span><span class="n">data</span><span class="w">
+  </span><span class="k" data-group-id="8532150476-25">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="8532150476-28">(</span><span class="n">line</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="8532150476-28">)</span><span class="w"> </span><span class="k" data-group-id="8532150476-29">do</span><span class="w">
+    </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="8532150476-30">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="p" data-group-id="8532150476-30">)</span><span class="w">
+  </span><span class="k" data-group-id="8532150476-29">end</span><span class="w">
+</span><span class="k" data-group-id="8532150476-1">end</span></code></pre><p>Since we have changed the supervisor specification, we need to ask: is our supervision strategy still correct?</p><p>In this case, the answer is yes: if the acceptor crashes, there is no need to crash the existing connections. On the other hand, if the task supervisor crashes, there is no need to crash the acceptor too.</p><p>However, there is still one concern left, which are the restart strategies. Tasks, by default, have the <code class="inline">:restart</code> value set to <code class="inline">:temporary</code>, which means they are not restarted. This is an excellent default for the connections started via the <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a>, as it makes no sense to restart a failed connection, but it is a bad choice for the acceptor. If the acceptor crashes, we want to bring the acceptor up and running again.</p><p>Let's fix this. We know that for a child of shape <code class="inline">{Task, fun}</code>, Elixir will invoke <code class="inline">Task.child_spec(fun)</code> to retrieve the underlying child specification. Therefore, one might imagine that to change the <code class="inline">{Task, fun}</code> specification to have a <code class="inline">:restart</code> of <code class="inline">:permanent</code>, we would need to change the <a href="Task.html"><code class="inline">Task</code></a> module. However, that's impossible to do, as the <a href="Task.html"><code class="inline">Task</code></a> module is defined as part of Elixir's standard library (and even if it was possible, it is unlikely it would be a good idea).
+Luckily, this can be done by using <a href="Supervisor.html#child_spec/2"><code class="inline">Supervisor.child_spec/2</code></a>, which allows us to configure a child specification with new values. Let's rewrite <code class="inline">start/2</code> in <code class="inline">KVServer.Application</code> once more:</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start</span><span class="p" data-group-id="3942194296-1">(</span><span class="c">_type</span><span class="p">,</span><span class="w"> </span><span class="c">_args</span><span class="p" data-group-id="3942194296-1">)</span><span class="w"> </span><span class="k" data-group-id="3942194296-2">do</span><span class="w">
+    </span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">to_integer</span><span class="p" data-group-id="3942194296-3">(</span><span class="nc">System</span><span class="o">.</span><span class="n">get_env</span><span class="p" data-group-id="3942194296-4">(</span><span class="s">&quot;PORT&quot;</span><span class="p" data-group-id="3942194296-4">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s">&quot;4040&quot;</span><span class="p" data-group-id="3942194296-3">)</span><span class="w">
+
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3942194296-5">[</span><span class="w">
+      </span><span class="p" data-group-id="3942194296-6">{</span><span class="nc">Task.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KVServer.TaskSupervisor</span><span class="p" data-group-id="3942194296-6">}</span><span class="p">,</span><span class="w">
+      </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">child_spec</span><span class="p" data-group-id="3942194296-7">(</span><span class="p" data-group-id="3942194296-8">{</span><span class="nc">Task</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3942194296-9">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">KVServer</span><span class="o">.</span><span class="n">accept</span><span class="p" data-group-id="3942194296-10">(</span><span class="n">port</span><span class="p" data-group-id="3942194296-10">)</span><span class="w"> </span><span class="k" data-group-id="3942194296-9">end</span><span class="p" data-group-id="3942194296-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="3942194296-7">)</span><span class="w">
+    </span><span class="p" data-group-id="3942194296-5">]</span><span class="w">
+
+    </span><span class="n">opts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3942194296-11">[</span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">KVServer.Supervisor</span><span class="p" data-group-id="3942194296-11">]</span><span class="w">
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="3942194296-12">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="3942194296-12">)</span><span class="w">
+  </span><span class="k" data-group-id="3942194296-2">end</span></code></pre><p>Now we have an always running acceptor that starts temporary task processes under an always running task supervisor.</p><p>In the next chapter, we will start parsing the client requests and sending responses, finishing our server.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="dependencies-and-umbrella-projects.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Dependencies and umbrella projects
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="docs-tests-and-with.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Doctests, patterns, and with
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

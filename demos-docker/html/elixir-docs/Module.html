@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Module — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Module.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Module</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Provides functions to deal with modules during compilation time.</p><p>It allows a developer to dynamically add, delete and register
+attributes, attach documentation and so forth.</p><p>After a module is compiled, using many of the functions in
+this module will raise errors, since it is out of their scope
+to inspect runtime data. Most of the runtime data can be inspected
+via the <a href="#c:__info__/1"><code class="inline">__info__/1</code></a> function attached to
+each compiled module.</p><h2 id="module-module-attributes" class="section-heading">
+  <a href="#module-module-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Module attributes</span>
+</h2>
+<p>Each module can be decorated with one or more attributes. The following ones
+are currently defined by Elixir:</p><h3 id="module-after_compile" class="section-heading">
+  <a href="#module-after_compile" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@after_compile</code></span>
+</h3>
+<p>A hook that will be invoked right after the current module is compiled.
+Accepts a module or a <code class="inline">{module, function_name}</code>. See the &quot;Compile callbacks&quot;
+section below.</p><h3 id="module-after_verify-since-v1-14-0" class="section-heading">
+  <a href="#module-after_verify-since-v1-14-0" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@after_verify</code> (since v1.14.0)</span>
+</h3>
+<p>A hook that will be invoked right after the current module is verified for
+undefined functions, deprecations, etc. Accepts a module or a <code class="inline">{module, function_name}</code>.
+See the &quot;Compile callbacks&quot; section below.</p><h3 id="module-before_compile" class="section-heading">
+  <a href="#module-before_compile" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@before_compile</code></span>
+</h3>
+<p>A hook that will be invoked before the module is compiled.
+Accepts a module or a <code class="inline">{module, function_or_macro_name}</code> tuple.
+See the &quot;Compile callbacks&quot; section below.</p><h3 id="module-behaviour" class="section-heading">
+  <a href="#module-behaviour" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@behaviour</code></span>
+</h3>
+<p>Note the British spelling!</p><p>Behaviours can be referenced by modules to ensure they implement
+required specific function signatures defined by <code class="inline">@callback</code>.</p><p>For example, you could specify a <code class="inline">URI.Parser</code> behaviour as follows:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">URI.Parser</span><span class="w"> </span><span class="k" data-group-id="2642340868-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;Defines a default port&quot;</span><span class="w">
+  </span><span class="na">@callback</span><span class="w"> </span><span class="n">default_port</span><span class="p" data-group-id="2642340868-2">(</span><span class="p" data-group-id="2642340868-2">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">integer</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;Parses the given URL&quot;</span><span class="w">
+  </span><span class="na">@callback</span><span class="w"> </span><span class="n">parse</span><span class="p" data-group-id="2642340868-3">(</span><span class="n">uri_info</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="2642340868-4">(</span><span class="p" data-group-id="2642340868-4">)</span><span class="p" data-group-id="2642340868-3">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nc">URI</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="2642340868-5">(</span><span class="p" data-group-id="2642340868-5">)</span><span class="w">
+</span><span class="k" data-group-id="2642340868-1">end</span></code></pre><p>And then a module may use it as:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">URI.HTTP</span><span class="w"> </span><span class="k" data-group-id="8660035116-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">URI.Parser</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">default_port</span><span class="p" data-group-id="8660035116-2">(</span><span class="p" data-group-id="8660035116-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="8660035116-3">(</span><span class="n">info</span><span class="p" data-group-id="8660035116-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">info</span><span class="w">
+</span><span class="k" data-group-id="8660035116-1">end</span></code></pre><p>If the behaviour changes or <code class="inline">URI.HTTP</code> does not implement
+one of the callbacks, a warning will be raised.</p><p>For detailed documentation, see the
+<a href="typespecs.html#behaviours">behaviour typespec documentation</a>.</p><h3 id="module-impl-since-v1-5-0" class="section-heading">
+  <a href="#module-impl-since-v1-5-0" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@impl</code> (since v1.5.0)</span>
+</h3>
+<p>To aid in the correct implementation of behaviours, you may optionally declare
+<code class="inline">@impl</code> for implemented callbacks of a behaviour. This makes callbacks
+explicit and can help you to catch errors in your code. The compiler will warn
+in these cases:</p><ul><li><p>if you mark a function with <code class="inline">@impl</code> when that function is not a callback.</p></li><li><p>if you don't mark a function with <code class="inline">@impl</code> when other functions are marked
+with <code class="inline">@impl</code>. If you mark one function with <code class="inline">@impl</code>, you must mark all
+other callbacks for that behaviour as <code class="inline">@impl</code>.</p></li></ul><p><code class="inline">@impl</code> works on a per-context basis. If you generate a function through a macro
+and mark it with <code class="inline">@impl</code>, that won't affect the module where that function is
+generated in.</p><p><code class="inline">@impl</code> also helps with maintainability by making it clear to other developers
+that the function is implementing a callback.</p><p>Using <code class="inline">@impl</code>, the example above can be rewritten as:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">URI.HTTP</span><span class="w"> </span><span class="k" data-group-id="0582385636-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">URI.Parser</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">default_port</span><span class="p" data-group-id="0582385636-2">(</span><span class="p" data-group-id="0582385636-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="0582385636-3">(</span><span class="n">info</span><span class="p" data-group-id="0582385636-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">info</span><span class="w">
+</span><span class="k" data-group-id="0582385636-1">end</span></code></pre><p>You may pass either <code class="inline">false</code>, <code class="inline">true</code>, or a specific behaviour to <code class="inline">@impl</code>.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Foo</span><span class="w"> </span><span class="k" data-group-id="4516748280-1">do</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Bar</span><span class="w">
+  </span><span class="na">@behaviour</span><span class="w"> </span><span class="nc">Baz</span><span class="w">
+
+  </span><span class="c1"># Will warn if neither Bar nor Baz specify a callback named bar/0.</span><span class="w">
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">bar</span><span class="p" data-group-id="4516748280-2">(</span><span class="p" data-group-id="4516748280-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:ok</span><span class="w">
+
+  </span><span class="c1"># Will warn if Baz does not specify a callback named baz/0.</span><span class="w">
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">Baz</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">baz</span><span class="p" data-group-id="4516748280-3">(</span><span class="p" data-group-id="4516748280-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:ok</span><span class="w">
+</span><span class="k" data-group-id="4516748280-1">end</span></code></pre><p>The code is now more readable, as it is now clear which functions are
+part of your API and which ones are callback implementations. To reinforce this
+idea, <code class="inline">@impl true</code> automatically marks the function as <code class="inline">@doc false</code>, disabling
+documentation unless <code class="inline">@doc</code> is explicitly set.</p><h3 id="module-compile" class="section-heading">
+  <a href="#module-compile" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@compile</code></span>
+</h3>
+<p>Defines options for module compilation. This is used to configure
+both Elixir and Erlang compilers, as any other compilation pass
+added by external tools. For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="8302603514-1">do</span><span class="w">
+  </span><span class="na">@compile</span><span class="w"> </span><span class="p" data-group-id="8302603514-2">{</span><span class="ss">:inline</span><span class="p">,</span><span class="w"> </span><span class="ss">my_fun</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8302603514-2">}</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">my_fun</span><span class="p" data-group-id="8302603514-3">(</span><span class="n">arg</span><span class="p" data-group-id="8302603514-3">)</span><span class="w"> </span><span class="k" data-group-id="8302603514-4">do</span><span class="w">
+    </span><span class="n">to_string</span><span class="p" data-group-id="8302603514-5">(</span><span class="n">arg</span><span class="p" data-group-id="8302603514-5">)</span><span class="w">
+  </span><span class="k" data-group-id="8302603514-4">end</span><span class="w">
+</span><span class="k" data-group-id="8302603514-1">end</span></code></pre><p>Multiple uses of <code class="inline">@compile</code> will accumulate instead of overriding
+previous ones. See the &quot;Compile options&quot; section below.</p><h3 id="module-deprecated-since-v1-6-0" class="section-heading">
+  <a href="#module-deprecated-since-v1-6-0" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@deprecated</code> (since v1.6.0)</span>
+</h3>
+<p>Provides the deprecation reason for a function. For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Keyword</span><span class="w"> </span><span class="k" data-group-id="1062842888-1">do</span><span class="w">
+  </span><span class="na">@deprecated</span><span class="w"> </span><span class="s">&quot;Use Kernel.length/1 instead&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">size</span><span class="p" data-group-id="1062842888-2">(</span><span class="n">keyword</span><span class="p" data-group-id="1062842888-2">)</span><span class="w"> </span><span class="k" data-group-id="1062842888-3">do</span><span class="w">
+    </span><span class="n">length</span><span class="p" data-group-id="1062842888-4">(</span><span class="n">keyword</span><span class="p" data-group-id="1062842888-4">)</span><span class="w">
+  </span><span class="k" data-group-id="1062842888-3">end</span><span class="w">
+</span><span class="k" data-group-id="1062842888-1">end</span></code></pre><p>The Mix compiler automatically looks for calls to deprecated modules
+and emit warnings during compilation.</p><p>Using the <code class="inline">@deprecated</code> attribute will also be reflected in the
+documentation of the given function and macro. You can choose between
+the <code class="inline">@deprecated</code> attribute and the documentation metadata to provide
+hard-deprecations (with warnings) and soft-deprecations (without warnings):</p><p>This is a soft-deprecation as it simply annotates the documentation
+as deprecated:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="ss">deprecated</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use Kernel.length/1 instead&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">size</span><span class="p" data-group-id="3726041278-1">(</span><span class="n">keyword</span><span class="p" data-group-id="3726041278-1">)</span></code></pre><p>This is a hard-deprecation as it emits warnings and annotates the
+documentation as deprecated:</p><pre><code class="makeup elixir" translate="no"><span class="na">@deprecated</span><span class="w"> </span><span class="s">&quot;Use Kernel.length/1 instead&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">size</span><span class="p" data-group-id="7004321200-1">(</span><span class="n">keyword</span><span class="p" data-group-id="7004321200-1">)</span></code></pre><p>Currently <code class="inline">@deprecated</code> only supports functions and macros. However
+you can use the <code class="inline">:deprecated</code> key in the annotation metadata to
+annotate the docs of modules, types and callbacks too.</p><p>We recommend using this feature with care, especially library authors.
+Deprecating code always pushes the burden towards library users. We
+also recommend for deprecated functionality to be maintained for long
+periods of time, even after deprecation, giving developers plenty of
+time to update (except for cases where keeping the deprecated API is
+undesired, such as in the presence of security issues).</p><h3 id="module-doc-and-typedoc" class="section-heading">
+  <a href="#module-doc-and-typedoc" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@doc</code> and <code class="inline">@typedoc</code></span>
+</h3>
+<p>Provides documentation for the entity that follows the attribute.
+<code class="inline">@doc</code> is to be used with a function, macro, callback, or
+macrocallback, while <code class="inline">@typedoc</code> with a type (public or opaque).</p><p>Accepts one of these:</p><ul><li>a string (often a heredoc)</li><li><code class="inline">false</code>, which will make the entity invisible to documentation-extraction
+tools like <a href="https://hexdocs.pm/ex_doc/"><code class="inline">ExDoc</code></a></li><li>a keyword list, since Elixir 1.7.0</li></ul><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="4118423862-1">do</span><span class="w">
+  </span><span class="na">@typedoc</span><span class="w"> </span><span class="s">&quot;This type&quot;</span><span class="w">
+  </span><span class="na">@typedoc</span><span class="w"> </span><span class="ss">since</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.1.0&quot;</span><span class="w">
+  </span><span class="na">@type</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">term</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;Hello world&quot;</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="ss">since</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.1.0&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">hello</span><span class="w"> </span><span class="k" data-group-id="4118423862-2">do</span><span class="w">
+    </span><span class="s">&quot;world&quot;</span><span class="w">
+  </span><span class="k" data-group-id="4118423862-2">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Sums `a` to `b`.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">sum</span><span class="p" data-group-id="4118423862-3">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="4118423862-3">)</span><span class="w"> </span><span class="k" data-group-id="4118423862-4">do</span><span class="w">
+    </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w">
+  </span><span class="k" data-group-id="4118423862-4">end</span><span class="w">
+</span><span class="k" data-group-id="4118423862-1">end</span></code></pre><p>As can be seen in the example above, since Elixir 1.7.0 <code class="inline">@doc</code> and <code class="inline">@typedoc</code>
+also accept a keyword list that serves as a way to provide arbitrary metadata
+about the entity. Tools like <a href="https://hexdocs.pm/ex_doc/"><code class="inline">ExDoc</code></a> and
+<a href="https://hexdocs.pm/iex/IEx.html"><code class="inline">IEx</code></a> may use this information to display annotations. A common use
+case is the <code class="inline">:since</code> key, which may be used to annotate in which version the
+function was introduced.</p><p>As illustrated in the example, it is possible to use these attributes
+more than once before an entity. However, the compiler will warn if
+used twice with binaries as that replaces the documentation text from
+the preceding use. Multiple uses with keyword lists will merge the
+lists into one.</p><p>Note that since the compiler also defines some additional metadata,
+there are a few reserved keys that will be ignored and warned if used.
+Currently these are: <code class="inline">:opaque</code> and <code class="inline">:defaults</code>.</p><p>Once this module is compiled, this information becomes available via
+the <a href="Code.html#fetch_docs/1"><code class="inline">Code.fetch_docs/1</code></a> function.</p><h3 id="module-dialyzer" class="section-heading">
+  <a href="#module-dialyzer" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@dialyzer</code></span>
+</h3>
+<p>Defines warnings to request or suppress when using <code class="inline">:dialyzer</code>.</p><p>Accepts an atom, a tuple, or a list of atoms and tuples. For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="4358554358-1">do</span><span class="w">
+  </span><span class="na">@dialyzer</span><span class="w"> </span><span class="p" data-group-id="4358554358-2">{</span><span class="ss">:nowarn_function</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4358554358-3">[</span><span class="ss">my_fun</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4358554358-3">]</span><span class="p" data-group-id="4358554358-2">}</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">my_fun</span><span class="p" data-group-id="4358554358-4">(</span><span class="n">arg</span><span class="p" data-group-id="4358554358-4">)</span><span class="w"> </span><span class="k" data-group-id="4358554358-5">do</span><span class="w">
+    </span><span class="nc">M</span><span class="o">.</span><span class="n">not_a_function</span><span class="p" data-group-id="4358554358-6">(</span><span class="n">arg</span><span class="p" data-group-id="4358554358-6">)</span><span class="w">
+  </span><span class="k" data-group-id="4358554358-5">end</span><span class="w">
+</span><span class="k" data-group-id="4358554358-1">end</span></code></pre><p>For the list of supported warnings, see <a href="https://www.erlang.org/doc/apps/dialyzer/dialyzer.html"><code class="inline">:dialyzer</code> module</a>.</p><p>Multiple uses of <code class="inline">@dialyzer</code> will accumulate instead of overriding
+previous ones.</p><h3 id="module-external_resource" class="section-heading">
+  <a href="#module-external_resource" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@external_resource</code></span>
+</h3>
+<p>Specifies an external resource for the current module.</p><p>Sometimes a module embeds information from an external file. This
+attribute allows the module to annotate which external resources
+have been used.</p><p>Tools may use this information to ensure the module is recompiled
+in case any of the external resources change, see for example:
+<a href="https://hexdocs.pm/mix/Mix.Tasks.Compile.Elixir.html"><code class="inline">mix compile.elixir</code></a>.</p><p>The specified file path provided is interpreted as relative to
+the folder containing the project's <code class="inline">mix.exs</code>, which is the
+current working directory, not the file where <code class="inline">@external_resource</code>
+is declared.</p><p>If the external resource does not exist, the module still has
+a dependency on it, causing the module to be recompiled as soon
+as the file is added.</p><h3 id="module-file" class="section-heading">
+  <a href="#module-file" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@file</code></span>
+</h3>
+<p>Changes the filename used in stacktraces for the function or macro that
+follows the attribute, such as:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="9582792611-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;Hello world&quot;</span><span class="w">
+  </span><span class="na">@file</span><span class="w"> </span><span class="s">&quot;hello.ex&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">hello</span><span class="w"> </span><span class="k" data-group-id="9582792611-2">do</span><span class="w">
+    </span><span class="s">&quot;world&quot;</span><span class="w">
+  </span><span class="k" data-group-id="9582792611-2">end</span><span class="w">
+</span><span class="k" data-group-id="9582792611-1">end</span></code></pre><p>Note that this is only valid for exceptions/diagnostics that come from the
+definition inner scope (which includes its patterns and guards). For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="6272747322-1">do</span><span class="w"> </span><span class="c1"># &lt;---- module definition</span><span class="w">
+  </span><span class="na">@file</span><span class="w"> </span><span class="s">&quot;hello.ex&quot;</span><span class="w">
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">unused</span><span class="p" data-group-id="6272747322-2">(</span><span class="n">a</span><span class="p" data-group-id="6272747322-2">)</span><span class="w"> </span><span class="k" data-group-id="6272747322-3">do</span><span class="w"> </span><span class="c1"># &lt;---- function definition</span><span class="w">
+    </span><span class="s">&quot;world&quot;</span><span class="w"> </span><span class="c1"># &lt;---- function scope</span><span class="w">
+  </span><span class="k" data-group-id="6272747322-3">end</span><span class="w">
+
+  </span><span class="na">@file</span><span class="w"> </span><span class="s">&quot;bye.ex&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">unused</span><span class="p" data-group-id="6272747322-4">(</span><span class="bp">_</span><span class="p" data-group-id="6272747322-4">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+</span><span class="k" data-group-id="6272747322-1">end</span></code></pre><p>If you run this code with the second &quot;unused&quot; definition commented, you will
+see that <code class="inline">hello.ex</code> is used as the stacktrace when reporting warnings, but if
+you uncomment it you'll see that the error will not mention <code class="inline">bye.ex</code>, because
+it's a module-level error rather than an expression-level error.</p><h3 id="module-moduledoc" class="section-heading">
+  <a href="#module-moduledoc" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@moduledoc</code></span>
+</h3>
+<p>Provides documentation for the current module.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="6051819362-1">do</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  A very useful module.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="ss">authors</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6051819362-2">[</span><span class="s">&quot;Alice&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bob&quot;</span><span class="p" data-group-id="6051819362-2">]</span><span class="w">
+</span><span class="k" data-group-id="6051819362-1">end</span></code></pre><p>Accepts a string (often a heredoc) or <code class="inline">false</code> where <code class="inline">@moduledoc false</code>
+will make the module invisible to documentation extraction tools like
+<a href="https://hexdocs.pm/ex_doc/"><code class="inline">ExDoc</code></a>.</p><p>Similarly to <code class="inline">@doc</code> also accepts a keyword list to provide metadata
+about the module. For more details, see the documentation of <code class="inline">@doc</code>
+above.</p><p>Once this module is compiled, this information becomes available via
+the <a href="Code.html#fetch_docs/1"><code class="inline">Code.fetch_docs/1</code></a> function.</p><h3 id="module-nifs-since-v1-16-0" class="section-heading">
+  <a href="#module-nifs-since-v1-16-0" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@nifs</code> (since v1.16.0)</span>
+</h3>
+<p>A list of functions and their arities which will be overridden
+by a native implementation (NIF).</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyLibrary.MyModule</span><span class="w"> </span><span class="k" data-group-id="9733133084-1">do</span><span class="w">
+  </span><span class="na">@nifs</span><span class="w"> </span><span class="p" data-group-id="9733133084-2">[</span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9733133084-2">]</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">foo</span><span class="p" data-group-id="9733133084-3">(</span><span class="n">arg1</span><span class="p" data-group-id="9733133084-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">:erlang</span><span class="o">.</span><span class="n">nif_error</span><span class="p" data-group-id="9733133084-4">(</span><span class="ss">:not_loaded</span><span class="p" data-group-id="9733133084-4">)</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">bar</span><span class="p" data-group-id="9733133084-5">(</span><span class="n">arg1</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="p" data-group-id="9733133084-5">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">:erlang</span><span class="o">.</span><span class="n">nif_error</span><span class="p" data-group-id="9733133084-6">(</span><span class="ss">:not_loaded</span><span class="p" data-group-id="9733133084-6">)</span><span class="w">
+</span><span class="k" data-group-id="9733133084-1">end</span></code></pre><p>See the Erlang documentation for more information:
+<a href="https://www.erlang.org/doc/man/erl_nif">https://www.erlang.org/doc/man/erl_nif</a></p><h3 id="module-on_definition" class="section-heading">
+  <a href="#module-on_definition" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@on_definition</code></span>
+</h3>
+<p>A hook that will be invoked when each function or macro in the current
+module is defined. Useful when annotating functions.</p><p>Accepts a module or a <code class="inline">{module, function_name}</code> tuple. The function
+must take 6 arguments:</p><ul><li>the module environment</li><li>the kind of the function/macro: <code class="inline">:def</code>, <code class="inline">:defp</code>, <code class="inline">:defmacro</code>, or <code class="inline">:defmacrop</code></li><li>the function/macro name</li><li>the list of quoted arguments</li><li>the list of quoted guards</li><li>the quoted function body</li></ul><p>If the function/macro being defined has multiple clauses, the hook will
+be called for each clause.</p><p>Unlike other hooks, <code class="inline">@on_definition</code> will only invoke functions and
+never macros. This is to avoid <code class="inline">@on_definition</code> callbacks from
+redefining functions that have just been defined in favor of more
+explicit approaches.</p><p>When just a module is provided, the function is assumed to be
+<code class="inline">__on_definition__/6</code>.</p><h4>Example</h4><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Hooks</span><span class="w"> </span><span class="k" data-group-id="6864312380-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">on_def</span><span class="p" data-group-id="6864312380-2">(</span><span class="c">_env</span><span class="p">,</span><span class="w"> </span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">guards</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p" data-group-id="6864312380-2">)</span><span class="w"> </span><span class="k" data-group-id="6864312380-3">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6864312380-4">(</span><span class="s">&quot;Defining </span><span class="si" data-group-id="6864312380-5">#{</span><span class="n">kind</span><span class="si" data-group-id="6864312380-5">}</span><span class="s"> named </span><span class="si" data-group-id="6864312380-6">#{</span><span class="n">name</span><span class="si" data-group-id="6864312380-6">}</span><span class="s"> with args:&quot;</span><span class="p" data-group-id="6864312380-4">)</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="6864312380-7">(</span><span class="n">args</span><span class="p" data-group-id="6864312380-7">)</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6864312380-8">(</span><span class="s">&quot;and guards&quot;</span><span class="p" data-group-id="6864312380-8">)</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="6864312380-9">(</span><span class="n">guards</span><span class="p" data-group-id="6864312380-9">)</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6864312380-10">(</span><span class="s">&quot;and body&quot;</span><span class="p" data-group-id="6864312380-10">)</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6864312380-11">(</span><span class="nc">Macro</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="6864312380-12">(</span><span class="n">body</span><span class="p" data-group-id="6864312380-12">)</span><span class="p" data-group-id="6864312380-11">)</span><span class="w">
+  </span><span class="k" data-group-id="6864312380-3">end</span><span class="w">
+</span><span class="k" data-group-id="6864312380-1">end</span><span class="w">
+
+</span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="6864312380-13">do</span><span class="w">
+  </span><span class="na">@on_definition</span><span class="w"> </span><span class="p" data-group-id="6864312380-14">{</span><span class="nc">Hooks</span><span class="p">,</span><span class="w"> </span><span class="ss">:on_def</span><span class="p" data-group-id="6864312380-14">}</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">hello</span><span class="p" data-group-id="6864312380-15">(</span><span class="n">arg</span><span class="p" data-group-id="6864312380-15">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p" data-group-id="6864312380-16">(</span><span class="n">arg</span><span class="p" data-group-id="6864312380-16">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">is_list</span><span class="p" data-group-id="6864312380-17">(</span><span class="n">arg</span><span class="p" data-group-id="6864312380-17">)</span><span class="w"> </span><span class="k" data-group-id="6864312380-18">do</span><span class="w">
+    </span><span class="s">&quot;Hello&quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">to_string</span><span class="p" data-group-id="6864312380-19">(</span><span class="n">arg</span><span class="p" data-group-id="6864312380-19">)</span><span class="w">
+  </span><span class="k" data-group-id="6864312380-18">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">hello</span><span class="p" data-group-id="6864312380-20">(</span><span class="bp">_</span><span class="p" data-group-id="6864312380-20">)</span><span class="w"> </span><span class="k" data-group-id="6864312380-21">do</span><span class="w">
+    </span><span class="ss">:ok</span><span class="w">
+  </span><span class="k" data-group-id="6864312380-21">end</span><span class="w">
+</span><span class="k" data-group-id="6864312380-13">end</span></code></pre><h3 id="module-on_load" class="section-heading">
+  <a href="#module-on_load" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@on_load</code></span>
+</h3>
+<p>A hook that will be invoked whenever the module is loaded.</p><p>Accepts the function name (as an atom) of a function in the current module.
+The function must have an arity of 0 (no arguments). If the function does
+not return <code class="inline">:ok</code>, the loading of the module will be aborted.
+For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="4925344991-1">do</span><span class="w">
+  </span><span class="na">@on_load</span><span class="w"> </span><span class="ss">:load_check</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">load_check</span><span class="w"> </span><span class="k" data-group-id="4925344991-2">do</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="n">some_condition</span><span class="p" data-group-id="4925344991-3">(</span><span class="p" data-group-id="4925344991-3">)</span><span class="w"> </span><span class="k" data-group-id="4925344991-4">do</span><span class="w">
+      </span><span class="ss">:ok</span><span class="w">
+    </span><span class="k" data-group-id="4925344991-4">else</span><span class="w">
+      </span><span class="ss">:abort</span><span class="w">
+    </span><span class="k" data-group-id="4925344991-4">end</span><span class="w">
+  </span><span class="k" data-group-id="4925344991-2">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">some_condition</span><span class="w"> </span><span class="k" data-group-id="4925344991-5">do</span><span class="w">
+    </span><span class="no">false</span><span class="w">
+  </span><span class="k" data-group-id="4925344991-5">end</span><span class="w">
+</span><span class="k" data-group-id="4925344991-1">end</span></code></pre><h3 id="module-vsn" class="section-heading">
+  <a href="#module-vsn" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@vsn</code></span>
+</h3>
+<p>Specify the module version. Accepts any valid Elixir value, for example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="7208338337-1">do</span><span class="w">
+  </span><span class="na">@vsn</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span><span class="w">
+</span><span class="k" data-group-id="7208338337-1">end</span></code></pre><h3 id="module-struct-attributes" class="section-heading">
+  <a href="#module-struct-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Struct attributes</span>
+</h3>
+<ul><li><p><code class="inline">@derive</code> - derives an implementation for the given protocol for the
+struct defined in the current module</p></li><li><p><code class="inline">@enforce_keys</code> - ensures the given keys are always set when building
+the struct defined in the current module</p></li></ul><p>See <a href="Kernel.html#defstruct/1"><code class="inline">defstruct/1</code></a> for more information on building and using structs.</p><h3 id="module-typespec-attributes" class="section-heading">
+  <a href="#module-typespec-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Typespec attributes</span>
+</h3>
+<p>The following attributes are part of typespecs and are also built-in in
+Elixir:</p><ul><li><code class="inline">@type</code> - defines a type to be used in <code class="inline">@spec</code></li><li><code class="inline">@typep</code> - defines a private type to be used in <code class="inline">@spec</code></li><li><code class="inline">@opaque</code> - defines an opaque type to be used in <code class="inline">@spec</code></li><li><code class="inline">@spec</code> - provides a specification for a function</li><li><code class="inline">@callback</code> - provides a specification for a behaviour callback</li><li><code class="inline">@macrocallback</code> - provides a specification for a macro behaviour callback</li><li><code class="inline">@optional_callbacks</code> - specifies which behaviour callbacks and macro
+behaviour callbacks are optional</li><li><code class="inline">@impl</code> - declares an implementation of a callback function or macro</li></ul><p>For detailed documentation, see the <a href="typespecs.html">typespec documentation</a>.</p><h3 id="module-custom-attributes" class="section-heading">
+  <a href="#module-custom-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Custom attributes</span>
+</h3>
+<p>In addition to the built-in attributes outlined above, custom attributes may
+also be added. Custom attributes are expressed using the <a href="Kernel.html#@/1"><code class="inline">@/1</code></a> operator followed
+by a valid variable name. The value given to the custom attribute must be a valid
+Elixir value:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="0432846054-1">do</span><span class="w">
+  </span><span class="na">@custom_attr</span><span class="w"> </span><span class="p" data-group-id="0432846054-2">[</span><span class="ss">some</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;stuff&quot;</span><span class="p" data-group-id="0432846054-2">]</span><span class="w">
+</span><span class="k" data-group-id="0432846054-1">end</span></code></pre><p>For more advanced options available when defining custom attributes, see
+<a href="#register_attribute/3"><code class="inline">register_attribute/3</code></a>.</p><h2 id="module-compile-callbacks" class="section-heading">
+  <a href="#module-compile-callbacks" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Compile callbacks</span>
+</h2>
+<p>There are three compilation callbacks, invoked in this order:
+<code class="inline">@before_compile</code>, <code class="inline">@after_compile</code>, and <code class="inline">@after_verify</code>.
+They are described next.</p><h3 id="module-before_compile-1" class="section-heading">
+  <a href="#module-before_compile-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@before_compile</code></span>
+</h3>
+<p>A hook that will be invoked before the module is compiled. This is
+often used to change how the current module is being compiled.</p><p>Accepts a module or a <code class="inline">{module, function_or_macro_name}</code> tuple. The
+function/macro must take one argument: the module environment. If
+it's a macro, its returned value will be injected at the end of the
+module definition before the compilation starts.</p><p>When just a module is provided, the function/macro is assumed to be
+<code class="inline">__before_compile__/1</code>.</p><p>Callbacks will run in the order they are registered. Any overridable
+definition will be made concrete before the first callback runs.
+A definition may be made overridable again in another before compile
+callback and it will be made concrete one last time after all callbacks
+run.</p><p><em>Note</em>: the callback function/macro must be placed in a separate module
+(because when the callback is invoked, the current module does not yet exist).</p><h4>Example</h4><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="k" data-group-id="5383788576-1">do</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">__before_compile__</span><span class="p" data-group-id="5383788576-2">(</span><span class="c">_env</span><span class="p" data-group-id="5383788576-2">)</span><span class="w"> </span><span class="k" data-group-id="5383788576-3">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="5383788576-4">do</span><span class="w">
+      </span><span class="kd">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="w">
+    </span><span class="k" data-group-id="5383788576-4">end</span><span class="w">
+  </span><span class="k" data-group-id="5383788576-3">end</span><span class="w">
+</span><span class="k" data-group-id="5383788576-1">end</span><span class="w">
+
+</span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">B</span><span class="w"> </span><span class="k" data-group-id="5383788576-5">do</span><span class="w">
+  </span><span class="na">@before_compile</span><span class="w"> </span><span class="nc">A</span><span class="w">
+</span><span class="k" data-group-id="5383788576-5">end</span><span class="w">
+
+</span><span class="nc">B</span><span class="o">.</span><span class="n">hello</span><span class="p" data-group-id="5383788576-6">(</span><span class="p" data-group-id="5383788576-6">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;world&quot;</span></code></pre><h3 id="module-after_compile-1" class="section-heading">
+  <a href="#module-after_compile-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@after_compile</code></span>
+</h3>
+<p>A hook that will be invoked right after the current module is compiled.</p><p>Accepts a module or a <code class="inline">{module, function_name}</code> tuple. The function
+must take two arguments: the module environment and its bytecode.
+When just a module is provided, the function is assumed to be
+<code class="inline">__after_compile__/2</code>.</p><p>Callbacks will run in the order they are registered.</p><p><a href="Module.html"><code class="inline">Module</code></a> functions expecting not yet compiled modules (such as <a href="#definitions_in/1"><code class="inline">definitions_in/1</code></a>)
+are still available at the time <code class="inline">@after_compile</code> is invoked.</p><h4>Example</h4><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="3328108722-1">do</span><span class="w">
+  </span><span class="na">@after_compile</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">__after_compile__</span><span class="p" data-group-id="3328108722-2">(</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="c">_bytecode</span><span class="p" data-group-id="3328108722-2">)</span><span class="w"> </span><span class="k" data-group-id="3328108722-3">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="3328108722-4">(</span><span class="n">env</span><span class="p" data-group-id="3328108722-4">)</span><span class="w">
+  </span><span class="k" data-group-id="3328108722-3">end</span><span class="w">
+</span><span class="k" data-group-id="3328108722-1">end</span></code></pre><h3 id="module-after_verify" class="section-heading">
+  <a href="#module-after_verify" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">@after_verify</code></span>
+</h3>
+<p>A hook that will be invoked right after the current module is verified for
+undefined functions, deprecations, etc. A module is always verified after
+it is compiled. In Mix projects, a module is also verified when any of its
+runtime dependencies change. Therefore this is useful to perform verification
+of the current module while avoiding compile-time dependencies. Given the
+callback is invoked under different scenarios, Elixir provides no guarantees
+of when in the compilation cycle nor in which process the callback runs.</p><p>Accepts a module or a <code class="inline">{module, function_name}</code> tuple. The function
+must take one argument: the module name. When just a module is provided,
+the function is assumed to be <code class="inline">__after_verify__/1</code>.</p><p>Callbacks will run in the order they are registered.</p><p><a href="Module.html"><code class="inline">Module</code></a> functions expecting not yet compiled modules are no longer available
+at the time <code class="inline">@after_verify</code> is invoked.</p><h4>Example</h4><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="7689729845-1">do</span><span class="w">
+  </span><span class="na">@after_verify</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">__after_verify__</span><span class="p" data-group-id="7689729845-2">(</span><span class="n">module</span><span class="p" data-group-id="7689729845-2">)</span><span class="w"> </span><span class="k" data-group-id="7689729845-3">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="7689729845-4">(</span><span class="n">module</span><span class="p" data-group-id="7689729845-4">)</span><span class="w">
+    </span><span class="ss">:ok</span><span class="w">
+  </span><span class="k" data-group-id="7689729845-3">end</span><span class="w">
+</span><span class="k" data-group-id="7689729845-1">end</span></code></pre><h2 id="module-compile-options" class="section-heading">
+  <a href="#module-compile-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Compile options</span>
+</h2>
+<p>The <code class="inline">@compile</code> attribute accepts different options that are used by both
+Elixir and Erlang compilers. Some of the common use cases are documented
+below:</p><ul><li><p><code class="inline">@compile :debug_info</code> - includes <code class="inline">:debug_info</code> regardless of the
+corresponding setting in <a href="Code.html#get_compiler_option/1"><code class="inline">Code.get_compiler_option/1</code></a></p></li><li><p><code class="inline">@compile {:debug_info, false}</code> - disables <code class="inline">:debug_info</code> regardless
+of the corresponding setting in <a href="Code.html#get_compiler_option/1"><code class="inline">Code.get_compiler_option/1</code></a>. Note
+disabling <code class="inline">:debug_info</code> is not recommended as it removes the ability
+of the Elixir compiler and other tools to static analyse the code.
+If you want to remove the <code class="inline">:debug_info</code> while deploying, tools like
+<a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html"><code class="inline">mix release</code></a> already do such by default.</p></li><li><p><code class="inline">@compile {:inline, some_fun: 2, other_fun: 3}</code> - inlines the given
+name/arity pairs. Inlining is applied locally, calls from another
+module are not affected by this option</p></li><li><p><code class="inline">@compile {:autoload, false}</code> - disables automatic loading of
+modules after compilation. Instead, the module will be loaded after
+it is dispatched to</p></li><li><p><code class="inline">@compile {:no_warn_undefined, Mod}</code> or
+<code class="inline">@compile {:no_warn_undefined, {Mod, fun, arity}}</code> - does not warn if
+the given module or the given <code class="inline">Mod.fun/arity</code> are not defined</p></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:def_kind/0" data-no-tooltip="" translate="no">def_kind()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:definition/0" data-no-tooltip="" translate="no">definition()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:__info__/1" data-no-tooltip="" translate="no">__info__(atom)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Provides runtime information about functions, macros, and other information
+defined by the module.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#attributes_in/1" data-no-tooltip="" translate="no">attributes_in(module)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns all module attributes names defined in <code class="inline">module</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#concat/1" data-no-tooltip="" translate="no">concat(list)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Concatenates a list of aliases and returns a new alias.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#concat/2" data-no-tooltip="" translate="no">concat(left, right)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Concatenates two aliases and returns a new alias.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create/3" data-no-tooltip="" translate="no">create(module, quoted, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a module with the given name and defined by
+the given quoted expressions.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#defines?/2" data-no-tooltip="" translate="no">defines?(module, tuple)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the module defines the given function or macro.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#defines?/3" data-no-tooltip="" translate="no">defines?(module, tuple, def_kind)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the module defines a function or macro of the
+given <code class="inline">kind</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#defines_type?/2" data-no-tooltip="" translate="no">defines_type?(module, definition)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the current module defines the given type (private, opaque or not).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#definitions_in/1" data-no-tooltip="" translate="no">definitions_in(module)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns all functions and macros defined in <code class="inline">module</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#definitions_in/2" data-no-tooltip="" translate="no">definitions_in(module, kind)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns all functions defined in <code class="inline">module</code>, according
+to its kind.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_attribute/2" data-no-tooltip="" translate="no">delete_attribute(module, key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes the entry (or entries) for the given module attribute.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_definition/2" data-no-tooltip="" translate="no">delete_definition(module, arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Deletes a definition from a module.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#eval_quoted/4" data-no-tooltip="" translate="no">eval_quoted(module_or_env, quoted, binding \\ [], opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Evaluates the quoted contents in the given module's context.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_attribute/3" data-no-tooltip="" translate="no">get_attribute(module, key, default \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the given attribute from a module.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_definition/3" data-no-tooltip="" translate="no">get_definition(module, arg, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the definition for the given name-arity pair.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_last_attribute/3" data-no-tooltip="" translate="no">get_last_attribute(module, key, default \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the last set value of a given attribute from a module.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#has_attribute?/2" data-no-tooltip="" translate="no">has_attribute?(module, key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the given attribute has been defined.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#make_overridable/2" data-no-tooltip="" translate="no">make_overridable(module, tuples)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Makes the given functions in <code class="inline">module</code> overridable.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open?/1" data-no-tooltip="" translate="no">open?(module)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if a module is open.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#overridable?/2" data-no-tooltip="" translate="no">overridable?(module, tuple)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if <code class="inline">tuple</code> in <code class="inline">module</code> was marked as overridable
+at some point.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#overridables_in/1" data-no-tooltip="" translate="no">overridables_in(module)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns all overridable definitions in <code class="inline">module</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_attribute/3" data-no-tooltip="" translate="no">put_attribute(module, key, value)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Puts a module attribute with <code class="inline">key</code> and <code class="inline">value</code> in the given <code class="inline">module</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#register_attribute/3" data-no-tooltip="" translate="no">register_attribute(module, attribute, options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Registers an attribute.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reserved_attributes/0" data-no-tooltip="" translate="no">reserved_attributes()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns information about module attributes used by Elixir.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#safe_concat/1" data-no-tooltip="" translate="no">safe_concat(list)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Concatenates a list of aliases and returns a new alias only if the alias
+was already referenced.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#safe_concat/2" data-no-tooltip="" translate="no">safe_concat(left, right)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Concatenates two aliases and returns a new alias only if the alias was
+already referenced.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spec_to_callback/2" data-no-tooltip="" translate="no">spec_to_callback(module, definition)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Copies the given spec as a callback.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#split/1" data-no-tooltip="" translate="no">split(module)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Splits the given module name into binary parts.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:def_kind/0">
+
+  <div class="detail-header">
+    <a href="#t:def_kind/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">def_kind()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L596" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> def_kind() :: :def | :defp | :defmacro | :defmacrop</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:definition/0">
+
+  <div class="detail-header">
+    <a href="#t:definition/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">definition()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L595" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> definition() :: {<a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">arity</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:__info__/1">
+
+  <div class="detail-header">
+    <a href="#c:__info__/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">__info__(atom)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L625" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> __info__(:attributes) :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+          <pre translate="no"><span class="attribute">@callback</span> __info__(:compile) :: [<a href="typespecs.html#built-in-types">term</a>()]</pre>
+
+          <pre translate="no"><span class="attribute">@callback</span> __info__(:functions) :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+          <pre translate="no"><span class="attribute">@callback</span> __info__(:macros) :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+          <pre translate="no"><span class="attribute">@callback</span> __info__(:md5) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+          <pre translate="no"><span class="attribute">@callback</span> __info__(:module) :: <a href="typespecs.html#built-in-types">module</a>()</pre>
+
+          <pre translate="no"><span class="attribute">@callback</span> __info__(:struct) :: [%{field: <a href="typespecs.html#basic-types">atom</a>(), required: <a href="typespecs.html#built-in-types">boolean</a>()}] | nil</pre>
+
+      </div>
+
+<p>Provides runtime information about functions, macros, and other information
+defined by the module.</p><p>Each module gets an <code class="inline">__info__/1</code> function when it's compiled. The function
+takes one of the following items:</p><ul><li><p><code class="inline">:attributes</code> - a keyword list with all persisted attributes</p></li><li><p><code class="inline">:compile</code> - a list with compiler metadata</p></li><li><p><code class="inline">:functions</code> - a keyword list of public functions and their arities</p></li><li><p><code class="inline">:macros</code> - a keyword list of public macros and their arities</p></li><li><p><code class="inline">:md5</code> - the MD5 of the module</p></li><li><p><code class="inline">:module</code> - the module atom name</p></li><li><p><code class="inline">:struct</code> - (since v1.14.0) if the module defines a struct and if so each field in order</p></li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="attributes_in/1">
+
+  <div class="detail-header">
+    <a href="#attributes_in/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">attributes_in(module)</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1241" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> attributes_in(<a href="typespecs.html#built-in-types">module</a>()) :: [<a href="typespecs.html#basic-types">atom</a>()]</pre>
+
+      </div>
+
+<p>Returns all module attributes names defined in <code class="inline">module</code>.</p><p>This function can only be used on modules that have not yet been compiled.</p><h2 id="attributes_in/1-examples" class="section-heading">
+  <a href="#attributes_in/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="6037051350-1">do</span><span class="w">
+  </span><span class="na">@foo</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">register_attribute</span><span class="p" data-group-id="6037051350-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">accumulate</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6037051350-2">)</span><span class="w">
+
+  </span><span class="ss">:foo</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nc">Module</span><span class="o">.</span><span class="n">attributes_in</span><span class="p" data-group-id="6037051350-3">(</span><span class="bp">__MODULE__</span><span class="p" data-group-id="6037051350-3">)</span><span class="w">
+  </span><span class="c1">#=&gt; true</span><span class="w">
+
+  </span><span class="ss">:bar</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nc">Module</span><span class="o">.</span><span class="n">attributes_in</span><span class="p" data-group-id="6037051350-4">(</span><span class="bp">__MODULE__</span><span class="p" data-group-id="6037051350-4">)</span><span class="w">
+  </span><span class="c1">#=&gt; true</span><span class="w">
+</span><span class="k" data-group-id="6037051350-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="concat/1">
+
+  <div class="detail-header">
+    <a href="#concat/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">concat(list)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L903" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> concat([<a href="typespecs.html#built-in-types">binary</a>() | <a href="typespecs.html#basic-types">atom</a>()]) :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+<p>Concatenates a list of aliases and returns a new alias.</p><p>It handles binaries and atoms.</p><h2 id="concat/1-examples" class="section-heading">
+  <a href="#concat/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">concat</span><span class="p" data-group-id="6121296006-1">(</span><span class="p" data-group-id="6121296006-2">[</span><span class="nc">Foo</span><span class="p">,</span><span class="w"> </span><span class="nc">Bar</span><span class="p" data-group-id="6121296006-2">]</span><span class="p" data-group-id="6121296006-1">)</span><span class="w">
+</span><span class="nc">Foo.Bar</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">concat</span><span class="p" data-group-id="6121296006-3">(</span><span class="p" data-group-id="6121296006-4">[</span><span class="nc">Foo</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bar&quot;</span><span class="p" data-group-id="6121296006-4">]</span><span class="p" data-group-id="6121296006-3">)</span><span class="w">
+</span><span class="nc">Foo.Bar</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="concat/2">
+
+  <div class="detail-header">
+    <a href="#concat/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">concat(left, right)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L922" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> concat(<a href="typespecs.html#built-in-types">binary</a>() | <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">binary</a>() | <a href="typespecs.html#basic-types">atom</a>()) :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+<p>Concatenates two aliases and returns a new alias.</p><p>It handles binaries and atoms.</p><h2 id="concat/2-examples" class="section-heading">
+  <a href="#concat/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">concat</span><span class="p" data-group-id="9890614401-1">(</span><span class="nc">Foo</span><span class="p">,</span><span class="w"> </span><span class="nc">Bar</span><span class="p" data-group-id="9890614401-1">)</span><span class="w">
+</span><span class="nc">Foo.Bar</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">concat</span><span class="p" data-group-id="9890614401-2">(</span><span class="nc">Foo</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bar&quot;</span><span class="p" data-group-id="9890614401-2">)</span><span class="w">
+</span><span class="nc">Foo.Bar</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="create/3">
+
+  <div class="detail-header">
+    <a href="#create/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create(module, quoted, opts)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L867" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> create(<a href="typespecs.html#built-in-types">module</a>(), <a href="Macro.html#t:t/0">Macro.t</a>(), <a href="Macro.Env.html#t:t/0">Macro.Env.t</a>() | <a href="typespecs.html#built-in-types">keyword</a>()) ::
+  {:module, <a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#built-in-types">binary</a>(), <a href="typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Creates a module with the given name and defined by
+the given quoted expressions.</p><p>The line where the module is defined and its file <strong>must</strong>
+be passed as options.</p><p>It returns a tuple of shape <code class="inline">{:module, module, binary, term}</code>
+where <code class="inline">module</code> is the module name, <code class="inline">binary</code> is the module
+bytecode and <code class="inline">term</code> is the result of the last expression in
+<code class="inline">quoted</code>.</p><p>Similar to <a href="Kernel.html#defmodule/2"><code class="inline">Kernel.defmodule/2</code></a>, the binary will only be
+written to disk as a <code class="inline">.beam</code> file if <a href="#create/3"><code class="inline">Module.create/3</code></a> is
+invoked in a file that is currently being compiled.</p><h2 id="create/3-examples" class="section-heading">
+  <a href="#create/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w">
+  </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="4011018498-1">do</span><span class="w">
+    </span><span class="kd">def</span><span class="w"> </span><span class="nf">world</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="k" data-group-id="4011018498-1">end</span><span class="w">
+
+</span><span class="nc">Module</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="4011018498-2">(</span><span class="nc">Hello</span><span class="p">,</span><span class="w"> </span><span class="n">contents</span><span class="p">,</span><span class="w"> </span><span class="nc">Macro.Env</span><span class="o">.</span><span class="n">location</span><span class="p" data-group-id="4011018498-3">(</span><span class="bp">__ENV__</span><span class="p" data-group-id="4011018498-3">)</span><span class="p" data-group-id="4011018498-2">)</span><span class="w">
+
+</span><span class="nc">Hello</span><span class="o">.</span><span class="n">world</span><span class="p" data-group-id="4011018498-4">(</span><span class="p" data-group-id="4011018498-4">)</span><span class="w">
+</span><span class="c1">#=&gt; true</span></code></pre><h2 id="create/3-differences-from-defmodule" class="section-heading">
+  <a href="#create/3-differences-from-defmodule" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Differences from <code class="inline">defmodule</code></span>
+</h2>
+<p><a href="#create/3"><code class="inline">Module.create/3</code></a> works similarly to <a href="Kernel.html#defmodule/2"><code class="inline">Kernel.defmodule/2</code></a>
+and return the same results. While one could also use
+<a href="Kernel.html#defmodule/2"><code class="inline">Kernel.defmodule/2</code></a> to define modules dynamically, this function
+is preferred when the module body is given by a quoted
+expression.</p><p>Another important distinction is that <a href="#create/3"><code class="inline">Module.create/3</code></a>
+allows you to control the environment variables used
+when defining the module, while <a href="Kernel.html#defmodule/2"><code class="inline">Kernel.defmodule/2</code></a>
+automatically uses the environment it is invoked at.</p>
+  </section>
+</section>
+<section class="detail" id="defines?/2">
+
+  <div class="detail-header">
+    <a href="#defines?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">defines?(module, tuple)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1156" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> defines?(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:definition/0">definition</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if the module defines the given function or macro.</p><p>Use <a href="#defines?/3"><code class="inline">defines?/3</code></a> to assert for a specific type.</p><p>This function can only be used on modules that have not yet been compiled.
+Use <a href="Kernel.html#function_exported?/3"><code class="inline">Kernel.function_exported?/3</code></a> and <a href="Kernel.html#macro_exported?/3"><code class="inline">Kernel.macro_exported?/3</code></a> to check for
+public functions and macros respectively in compiled modules.</p><p>Note that <code class="inline">defines?</code> returns <code class="inline">false</code> for functions and macros that have
+been defined but then marked as overridable and no other implementation
+has been provided. You can check the overridable status by calling
+<a href="#overridable?/2"><code class="inline">overridable?/2</code></a>.</p><h2 id="defines?/2-examples" class="section-heading">
+  <a href="#defines?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="6862924651-1">do</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">defines?</span><span class="p" data-group-id="6862924651-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6862924651-3">{</span><span class="ss">:version</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6862924651-3">}</span><span class="p" data-group-id="6862924651-2">)</span><span class="w"> </span><span class="c1">#=&gt; false</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">version</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">defines?</span><span class="p" data-group-id="6862924651-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6862924651-5">{</span><span class="ss">:version</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6862924651-5">}</span><span class="p" data-group-id="6862924651-4">)</span><span class="w"> </span><span class="c1">#=&gt; true</span><span class="w">
+</span><span class="k" data-group-id="6862924651-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="defines?/3">
+
+  <div class="detail-header">
+    <a href="#defines?/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">defines?(module, tuple, def_kind)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1183" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> defines?(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:definition/0">definition</a>(), <a href="#t:def_kind/0">def_kind</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if the module defines a function or macro of the
+given <code class="inline">kind</code>.</p><p><code class="inline">kind</code> can be any of <code class="inline">:def</code>, <code class="inline">:defp</code>, <code class="inline">:defmacro</code>, or <code class="inline">:defmacrop</code>.</p><p>This function can only be used on modules that have not yet been compiled.
+Use <a href="Kernel.html#function_exported?/3"><code class="inline">Kernel.function_exported?/3</code></a> and <a href="Kernel.html#macro_exported?/3"><code class="inline">Kernel.macro_exported?/3</code></a> to check for
+public functions and macros respectively in compiled modules.</p><h2 id="defines?/3-examples" class="section-heading">
+  <a href="#defines?/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="5902757565-1">do</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">defines?</span><span class="p" data-group-id="5902757565-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5902757565-3">{</span><span class="ss">:version</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="5902757565-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:def</span><span class="p" data-group-id="5902757565-2">)</span><span class="w"> </span><span class="c1">#=&gt; false</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">version</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">defines?</span><span class="p" data-group-id="5902757565-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5902757565-5">{</span><span class="ss">:version</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="5902757565-5">}</span><span class="p">,</span><span class="w"> </span><span class="ss">:def</span><span class="p" data-group-id="5902757565-4">)</span><span class="w"> </span><span class="c1">#=&gt; true</span><span class="w">
+</span><span class="k" data-group-id="5902757565-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="defines_type?/2">
+
+  <div class="detail-header">
+    <a href="#defines_type?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">defines_type?(module, definition)</h1>
+
+        <span class="note">(since 1.7.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1203" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> defines_type?(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:definition/0">definition</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if the current module defines the given type (private, opaque or not).</p><p>This function is only available for modules being compiled.</p>
+  </section>
+</section>
+<section class="detail" id="definitions_in/1">
+
+  <div class="detail-header">
+    <a href="#definitions_in/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">definitions_in(module)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1295" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> definitions_in(<a href="typespecs.html#built-in-types">module</a>()) :: [<a href="#t:definition/0">definition</a>()]</pre>
+
+      </div>
+
+<p>Returns all functions and macros defined in <code class="inline">module</code>.</p><p>It returns a list with all defined functions and macros, public and private,
+in the shape of <code class="inline">[{name, arity}, ...]</code>.</p><p>This function can only be used on modules that have not yet been compiled.
+Use the <a href="#c:__info__/1"><code class="inline">Module.__info__/1</code></a> callback to get the public functions and macros in
+compiled modules.</p><h2 id="definitions_in/1-examples" class="section-heading">
+  <a href="#definitions_in/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="7386216464-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">version</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="kd">defmacrop</span><span class="w"> </span><span class="nf">test</span><span class="p" data-group-id="7386216464-2">(</span><span class="n">arg</span><span class="p" data-group-id="7386216464-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">arg</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">definitions_in</span><span class="p" data-group-id="7386216464-3">(</span><span class="bp">__MODULE__</span><span class="p" data-group-id="7386216464-3">)</span><span class="w"> </span><span class="c1">#=&gt; [{:version, 0}, {:test, 1}]</span><span class="w">
+</span><span class="k" data-group-id="7386216464-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="definitions_in/2">
+
+  <div class="detail-header">
+    <a href="#definitions_in/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">definitions_in(module, kind)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1319" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> definitions_in(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:def_kind/0">def_kind</a>()) :: [<a href="#t:definition/0">definition</a>()]</pre>
+
+      </div>
+
+<p>Returns all functions defined in <code class="inline">module</code>, according
+to its kind.</p><p>This function can only be used on modules that have not yet been compiled.
+Use the <a href="#c:__info__/1"><code class="inline">Module.__info__/1</code></a> callback to get the public functions and macros in
+compiled modules.</p><h2 id="definitions_in/2-examples" class="section-heading">
+  <a href="#definitions_in/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="0240448871-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">version</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">definitions_in</span><span class="p" data-group-id="0240448871-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:def</span><span class="p" data-group-id="0240448871-2">)</span><span class="w">  </span><span class="c1">#=&gt; [{:version, 0}]</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">definitions_in</span><span class="p" data-group-id="0240448871-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:defp</span><span class="p" data-group-id="0240448871-3">)</span><span class="w"> </span><span class="c1">#=&gt; []</span><span class="w">
+</span><span class="k" data-group-id="0240448871-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="delete_attribute/2">
+
+  <div class="detail-header">
+    <a href="#delete_attribute/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_attribute(module, key)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1640" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> delete_attribute(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>()) :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Deletes the entry (or entries) for the given module attribute.</p><p>It returns the deleted attribute value. If the attribute has not
+been set nor configured to accumulate, it returns <code class="inline">nil</code>.</p><p>If the attribute is set to accumulate, then this function always
+returns a list. Deleting the attribute removes existing entries
+but the attribute will still accumulate.</p><h2 id="delete_attribute/2-examples" class="section-heading">
+  <a href="#delete_attribute/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="1470344357-1">do</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="1470344357-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:custom_threshold_for_lib</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="1470344357-2">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">delete_attribute</span><span class="p" data-group-id="1470344357-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:custom_threshold_for_lib</span><span class="p" data-group-id="1470344357-3">)</span><span class="w">
+</span><span class="k" data-group-id="1470344357-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="delete_definition/2">
+
+  <div class="detail-header">
+    <a href="#delete_definition/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_definition(module, arg)</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1381" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> delete_definition(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:definition/0">definition</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Deletes a definition from a module.</p><p>It returns <code class="inline">true</code> if the definition exists and it was removed,
+otherwise it returns <code class="inline">false</code>.</p>
+  </section>
+</section>
+<section class="detail" id="eval_quoted/4">
+
+    <span id="eval_quoted/2"></span>
+
+    <span id="eval_quoted/3"></span>
+
+  <div class="detail-header">
+    <a href="#eval_quoted/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">eval_quoted(module_or_env, quoted, binding \\ [], opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L800" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> eval_quoted(
+  <a href="typespecs.html#built-in-types">module</a>() | <a href="Macro.Env.html#t:t/0">Macro.Env.t</a>(),
+  <a href="Macro.html#t:t/0">Macro.t</a>(),
+  <a href="typespecs.html#built-in-types">list</a>(),
+  <a href="typespecs.html#built-in-types">keyword</a>() | <a href="Macro.Env.html#t:t/0">Macro.Env.t</a>()
+) :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Evaluates the quoted contents in the given module's context.</p><p>A list of environment options can also be given as argument.
+See <a href="Code.html#eval_string/3"><code class="inline">Code.eval_string/3</code></a> for more information.</p><p>Raises an error if the module was already compiled.</p><h2 id="eval_quoted/4-examples" class="section-heading">
+  <a href="#eval_quoted/4-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Foo</span><span class="w"> </span><span class="k" data-group-id="3263686072-1">do</span><span class="w">
+  </span><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="3263686072-2">do</span><span class="w">
+      </span><span class="kd">def</span><span class="w"> </span><span class="nf">sum</span><span class="p" data-group-id="3263686072-3">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="3263686072-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w">
+    </span><span class="k" data-group-id="3263686072-2">end</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">eval_quoted</span><span class="p" data-group-id="3263686072-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">contents</span><span class="p" data-group-id="3263686072-4">)</span><span class="w">
+</span><span class="k" data-group-id="3263686072-1">end</span><span class="w">
+
+</span><span class="nc">Foo</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="3263686072-5">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="3263686072-5">)</span><span class="w">
+</span><span class="c1">#=&gt; 3</span></code></pre><p>For convenience, you can pass any <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> struct, such
+as  <a href="Kernel.SpecialForms.html#__ENV__/0"><code class="inline">__ENV__/0</code></a>, as the first argument or as options. Both
+the module and all options will be automatically extracted
+from the environment:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Foo</span><span class="w"> </span><span class="k" data-group-id="4766166207-1">do</span><span class="w">
+  </span><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="4766166207-2">do</span><span class="w">
+      </span><span class="kd">def</span><span class="w"> </span><span class="nf">sum</span><span class="p" data-group-id="4766166207-3">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="4766166207-3">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w">
+    </span><span class="k" data-group-id="4766166207-2">end</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">eval_quoted</span><span class="p" data-group-id="4766166207-4">(</span><span class="bp">__ENV__</span><span class="p">,</span><span class="w"> </span><span class="n">contents</span><span class="p" data-group-id="4766166207-4">)</span><span class="w">
+</span><span class="k" data-group-id="4766166207-1">end</span><span class="w">
+
+</span><span class="nc">Foo</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="4766166207-5">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="4766166207-5">)</span><span class="w">
+</span><span class="c1">#=&gt; 3</span></code></pre><p>Note that if you pass a <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> struct as first argument
+while also passing <code class="inline">opts</code>, they will be merged with <code class="inline">opts</code>
+having precedence.</p>
+  </section>
+</section>
+<section class="detail" id="get_attribute/3">
+
+    <span id="get_attribute/2"></span>
+
+  <div class="detail-header">
+    <a href="#get_attribute/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_attribute(module, key, default \\ nil)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1546" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_attribute(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Gets the given attribute from a module.</p><p>If the attribute was marked with <code class="inline">accumulate</code> with
+<a href="#register_attribute/3"><code class="inline">Module.register_attribute/3</code></a>, a list is always returned.
+<code class="inline">nil</code> is returned if the attribute has not been marked with
+<code class="inline">accumulate</code> and has not been set to any value.</p><p>The <code class="inline">@</code> macro compiles to a call to this function. For example,
+the following code:</p><pre><code class="makeup elixir" translate="no"><span class="na">@foo</span></code></pre><p>Expands to something akin to:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Module</span><span class="o">.</span><span class="n">get_attribute</span><span class="p" data-group-id="2584851553-1">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:foo</span><span class="p" data-group-id="2584851553-1">)</span></code></pre><p>This function can only be used on modules that have not yet been compiled.
+Use the <a href="#c:__info__/1"><code class="inline">Module.__info__/1</code></a> callback to get all persisted attributes, or
+<a href="Code.html#fetch_docs/1"><code class="inline">Code.fetch_docs/1</code></a> to retrieve all documentation related attributes in
+compiled modules.</p><h2 id="get_attribute/3-examples" class="section-heading">
+  <a href="#get_attribute/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Foo</span><span class="w"> </span><span class="k" data-group-id="1858462785-1">do</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="1858462785-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1858462785-2">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_attribute</span><span class="p" data-group-id="1858462785-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p" data-group-id="1858462785-3">)</span><span class="w"> </span><span class="c1">#=&gt; 1</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_attribute</span><span class="p" data-group-id="1858462785-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="1858462785-4">)</span><span class="w"> </span><span class="c1">#=&gt; 1</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_attribute</span><span class="p" data-group-id="1858462785-5">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_found</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="1858462785-5">)</span><span class="w"> </span><span class="c1">#=&gt; :default</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">register_attribute</span><span class="p" data-group-id="1858462785-6">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p">,</span><span class="w"> </span><span class="ss">accumulate</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="1858462785-6">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="1858462785-7">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1858462785-7">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_attribute</span><span class="p" data-group-id="1858462785-8">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p" data-group-id="1858462785-8">)</span><span class="w"> </span><span class="c1">#=&gt; [1]</span><span class="w">
+</span><span class="k" data-group-id="1858462785-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get_definition/3">
+
+    <span id="get_definition/2"></span>
+
+  <div class="detail-header">
+    <a href="#get_definition/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_definition(module, arg, options \\ [])</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1354" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_definition(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:definition/0">definition</a>(), <a href="typespecs.html#built-in-types">keyword</a>()) ::
+  {:v1, <a href="#t:def_kind/0">def_kind</a>(), meta :: <a href="typespecs.html#built-in-types">keyword</a>(),
+   [
+     {meta :: <a href="typespecs.html#built-in-types">keyword</a>(), arguments :: [<a href="Macro.html#t:t/0">Macro.t</a>()], guards :: [<a href="Macro.html#t:t/0">Macro.t</a>()],
+      <a href="Macro.html#t:t/0">Macro.t</a>()}
+   ]}
+  | nil</pre>
+
+      </div>
+
+<p>Returns the definition for the given name-arity pair.</p><p>It returns a tuple with the <code class="inline">version</code>, the <code class="inline">kind</code>,
+the definition <code class="inline">metadata</code>, and a list with each clause.
+Each clause is a four-element tuple with metadata,
+the arguments, the guards, and the clause AST.</p><p>The clauses are returned in the Elixir AST but a subset
+that has already been expanded and normalized. This makes
+it useful for analyzing code but it cannot be reinjected
+into the module as it will have lost some of its original
+context. Given this AST representation is mostly internal,
+it is versioned and it may change at any time. Therefore,
+<strong>use this API with caution</strong>.</p><h2 id="get_definition/3-options" class="section-heading">
+  <a href="#get_definition/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:skip_clauses</code> (since v1.14.0) - returns <code class="inline">[]</code> instead
+of returning the clauses. This is useful when there is
+only an interest in fetching the kind and the metadata</li></ul>
+  </section>
+</section>
+<section class="detail" id="get_last_attribute/3">
+
+    <span id="get_last_attribute/2"></span>
+
+  <div class="detail-header">
+    <a href="#get_last_attribute/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_last_attribute(module, key, default \\ nil)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1581" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> get_last_attribute(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Gets the last set value of a given attribute from a module.</p><p>If the attribute was marked with <code class="inline">accumulate</code> with
+<a href="#register_attribute/3"><code class="inline">Module.register_attribute/3</code></a>, the previous value to have been set will be
+returned. If the attribute does not accumulate, this call is the same as
+calling <a href="#get_attribute/3"><code class="inline">Module.get_attribute/3</code></a>.</p><p>This function can only be used on modules that have not yet been compiled.
+Use the <a href="#c:__info__/1"><code class="inline">Module.__info__/1</code></a> callback to get all persisted attributes, or
+<a href="Code.html#fetch_docs/1"><code class="inline">Code.fetch_docs/1</code></a> to retrieve all documentation related attributes in
+compiled modules.</p><h2 id="get_last_attribute/3-examples" class="section-heading">
+  <a href="#get_last_attribute/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Foo</span><span class="w"> </span><span class="k" data-group-id="6837885078-1">do</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="6837885078-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6837885078-2">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_last_attribute</span><span class="p" data-group-id="6837885078-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p" data-group-id="6837885078-3">)</span><span class="w"> </span><span class="c1">#=&gt; 1</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_last_attribute</span><span class="p" data-group-id="6837885078-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_found</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="p" data-group-id="6837885078-4">)</span><span class="w"> </span><span class="c1">#=&gt; :default</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">register_attribute</span><span class="p" data-group-id="6837885078-5">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:acc</span><span class="p">,</span><span class="w"> </span><span class="ss">accumulate</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6837885078-5">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="6837885078-6">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:acc</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6837885078-6">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_last_attribute</span><span class="p" data-group-id="6837885078-7">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:acc</span><span class="p" data-group-id="6837885078-7">)</span><span class="w"> </span><span class="c1">#=&gt; 1</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="6837885078-8">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:acc</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6837885078-8">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">get_last_attribute</span><span class="p" data-group-id="6837885078-9">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:acc</span><span class="p" data-group-id="6837885078-9">)</span><span class="w"> </span><span class="c1">#=&gt; 2</span><span class="w">
+</span><span class="k" data-group-id="6837885078-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="has_attribute?/2">
+
+  <div class="detail-header">
+    <a href="#has_attribute?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">has_attribute?(module, key)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1614" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> has_attribute?(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if the given attribute has been defined.</p><p>An attribute is defined if it has been registered with <a href="#register_attribute/3"><code class="inline">register_attribute/3</code></a>
+or assigned a value. If an attribute has been deleted with <a href="#delete_attribute/2"><code class="inline">delete_attribute/2</code></a>
+it is no longer considered defined.</p><p>This function can only be used on modules that have not yet been compiled.</p><h2 id="has_attribute?/2-examples" class="section-heading">
+  <a href="#has_attribute?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="3945324402-1">do</span><span class="w">
+  </span><span class="na">@value</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">register_attribute</span><span class="p" data-group-id="3945324402-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:other_value</span><span class="p" data-group-id="3945324402-2">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="3945324402-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:another_value</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3945324402-3">)</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">has_attribute?</span><span class="p" data-group-id="3945324402-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p" data-group-id="3945324402-4">)</span><span class="w"> </span><span class="c1">#=&gt; true</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">has_attribute?</span><span class="p" data-group-id="3945324402-5">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:other_value</span><span class="p" data-group-id="3945324402-5">)</span><span class="w"> </span><span class="c1">#=&gt; true</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">has_attribute?</span><span class="p" data-group-id="3945324402-6">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:another_value</span><span class="p" data-group-id="3945324402-6">)</span><span class="w"> </span><span class="c1">#=&gt; true</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">has_attribute?</span><span class="p" data-group-id="3945324402-7">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:undefined</span><span class="p" data-group-id="3945324402-7">)</span><span class="w"> </span><span class="c1">#=&gt; false</span><span class="w">
+
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">delete_attribute</span><span class="p" data-group-id="3945324402-8">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p" data-group-id="3945324402-8">)</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">has_attribute?</span><span class="p" data-group-id="3945324402-9">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:value</span><span class="p" data-group-id="3945324402-9">)</span><span class="w"> </span><span class="c1">#=&gt; false</span><span class="w">
+</span><span class="k" data-group-id="3945324402-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="make_overridable/2">
+
+  <div class="detail-header">
+    <a href="#make_overridable/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">make_overridable(module, tuples)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1408" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> make_overridable(<a href="typespecs.html#built-in-types">module</a>(), [<a href="#t:definition/0">definition</a>()]) :: :ok</pre>
+
+          <pre translate="no"><span class="attribute">@spec</span> make_overridable(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#built-in-types">module</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Makes the given functions in <code class="inline">module</code> overridable.</p><p>An overridable function is lazily defined, allowing a
+developer to customize it. See <a href="Kernel.html#defoverridable/1"><code class="inline">Kernel.defoverridable/1</code></a> for
+more information and documentation.</p><p>Once a function or a macro is marked as overridable, it will
+no longer be listed under <a href="#definitions_in/1"><code class="inline">definitions_in/1</code></a> or return true
+when given to <a href="#defines?/2"><code class="inline">defines?/2</code></a> until another implementation is
+given.</p>
+  </section>
+</section>
+<section class="detail" id="open?/1">
+
+  <div class="detail-header">
+    <a href="#open?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open?(module)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L752" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> open?(<a href="typespecs.html#built-in-types">module</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Checks if a module is open.</p><p>A module is &quot;open&quot; if it is currently being defined and its attributes and
+functions can be modified.</p>
+  </section>
+</section>
+<section class="detail" id="overridable?/2">
+
+  <div class="detail-header">
+    <a href="#overridable?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">overridable?(module, tuple)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1488" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> overridable?(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:definition/0">definition</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if <code class="inline">tuple</code> in <code class="inline">module</code> was marked as overridable
+at some point.</p><p>Note <a href="#overridable?/2"><code class="inline">overridable?/2</code></a> returns <code class="inline">true</code> even if the definition was
+already overridden. You can use <a href="#defines?/2"><code class="inline">defines?/2</code></a> to see if a definition
+exists or one is pending.</p>
+  </section>
+</section>
+<section class="detail" id="overridables_in/1">
+
+  <div class="detail-header">
+    <a href="#overridables_in/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">overridables_in(module)</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1270" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> overridables_in(<a href="typespecs.html#built-in-types">module</a>()) :: [<a href="typespecs.html#basic-types">atom</a>()]</pre>
+
+      </div>
+
+<p>Returns all overridable definitions in <code class="inline">module</code>.</p><p>Note a definition is included even if it was was already overridden.
+You can use <a href="#defines?/2"><code class="inline">defines?/2</code></a> to see if a definition exists or one is pending.</p><p>This function can only be used on modules that have not yet been compiled.</p><h2 id="overridables_in/1-examples" class="section-heading">
+  <a href="#overridables_in/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="8349226572-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">bar</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+
+  </span><span class="n">defoverridable</span><span class="w"> </span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+
+  </span><span class="p" data-group-id="8349226572-2">[</span><span class="ss">bar</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8349226572-2">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Module</span><span class="o">.</span><span class="n">overridables_in</span><span class="p" data-group-id="8349226572-3">(</span><span class="bp">__MODULE__</span><span class="p" data-group-id="8349226572-3">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort</span><span class="p" data-group-id="8349226572-4">(</span><span class="p" data-group-id="8349226572-4">)</span><span class="w">
+</span><span class="k" data-group-id="8349226572-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="put_attribute/3">
+
+  <div class="detail-header">
+    <a href="#put_attribute/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_attribute(module, key, value)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1504" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> put_attribute(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Puts a module attribute with <code class="inline">key</code> and <code class="inline">value</code> in the given <code class="inline">module</code>.</p><h2 id="put_attribute/3-examples" class="section-heading">
+  <a href="#put_attribute/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="6166893326-1">do</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">put_attribute</span><span class="p" data-group-id="6166893326-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:custom_threshold_for_lib</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="6166893326-2">)</span><span class="w">
+</span><span class="k" data-group-id="6166893326-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="register_attribute/3">
+
+  <div class="detail-header">
+    <a href="#register_attribute/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">register_attribute(module, attribute, options)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1694" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> register_attribute(<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), accumulate: <a href="typespecs.html#built-in-types">boolean</a>(), persist: <a href="typespecs.html#built-in-types">boolean</a>()) ::
+  :ok</pre>
+
+      </div>
+
+<p>Registers an attribute.</p><p>By registering an attribute, a developer is able to customize
+how Elixir will store and accumulate the attribute values.</p><h2 id="register_attribute/3-options" class="section-heading">
+  <a href="#register_attribute/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>When registering an attribute, two options can be given:</p><ul><li><p><code class="inline">:accumulate</code> - several calls to the same attribute will
+accumulate instead of overriding the previous one. New attributes
+are always added to the top of the accumulated list.</p></li><li><p><code class="inline">:persist</code> - the attribute will be persisted in the Erlang
+Abstract Format. Useful when interfacing with Erlang libraries.</p></li></ul><p>By default, both options are <code class="inline">false</code>. Once an attribute has been
+set to accumulate or persist, the behaviour cannot be reverted.</p><h2 id="register_attribute/3-examples" class="section-heading">
+  <a href="#register_attribute/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyModule</span><span class="w"> </span><span class="k" data-group-id="0494718631-1">do</span><span class="w">
+  </span><span class="nc">Module</span><span class="o">.</span><span class="n">register_attribute</span><span class="p" data-group-id="0494718631-2">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:custom_threshold_for_lib</span><span class="p">,</span><span class="w"> </span><span class="ss">accumulate</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="0494718631-2">)</span><span class="w">
+
+  </span><span class="na">@custom_threshold_for_lib</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="na">@custom_threshold_for_lib</span><span class="w"> </span><span class="mi">20</span><span class="w">
+  </span><span class="na">@custom_threshold_for_lib</span><span class="w"> </span><span class="c1">#=&gt; [20, 10]</span><span class="w">
+</span><span class="k" data-group-id="0494718631-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="reserved_attributes/0">
+
+  <div class="detail-header">
+    <a href="#reserved_attributes/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reserved_attributes()</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L650" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reserved_attributes() :: <a href="typespecs.html#basic-types">map</a>()</pre>
+
+      </div>
+
+<p>Returns information about module attributes used by Elixir.</p><p>See the &quot;Module attributes&quot; section in the module documentation for more
+information on each attribute.</p><h2 id="reserved_attributes/0-examples" class="section-heading">
+  <a href="#reserved_attributes/0-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Module</span><span class="o">.</span><span class="n">reserved_attributes</span><span class="p" data-group-id="5528938623-1">(</span><span class="p" data-group-id="5528938623-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Map</span><span class="o">.</span><span class="n">has_key?</span><span class="p" data-group-id="5528938623-2">(</span><span class="n">map</span><span class="p">,</span><span class="w"> </span><span class="ss">:moduledoc</span><span class="p" data-group-id="5528938623-2">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Map</span><span class="o">.</span><span class="n">has_key?</span><span class="p" data-group-id="5528938623-3">(</span><span class="n">map</span><span class="p">,</span><span class="w"> </span><span class="ss">:doc</span><span class="p" data-group-id="5528938623-3">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="safe_concat/1">
+
+  <div class="detail-header">
+    <a href="#safe_concat/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">safe_concat(list)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L941" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> safe_concat([<a href="typespecs.html#built-in-types">binary</a>() | <a href="typespecs.html#basic-types">atom</a>()]) :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+<p>Concatenates a list of aliases and returns a new alias only if the alias
+was already referenced.</p><p>If the alias was not referenced yet, fails with <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a>.
+It handles binaries and atoms.</p><h2 id="safe_concat/1-examples" class="section-heading">
+  <a href="#safe_concat/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">safe_concat</span><span class="p" data-group-id="7643571448-1">(</span><span class="p" data-group-id="7643571448-2">[</span><span class="nc">List</span><span class="p">,</span><span class="w"> </span><span class="nc">Chars</span><span class="p" data-group-id="7643571448-2">]</span><span class="p" data-group-id="7643571448-1">)</span><span class="w">
+</span><span class="nc">List.Chars</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="safe_concat/2">
+
+  <div class="detail-header">
+    <a href="#safe_concat/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">safe_concat(left, right)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L959" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> safe_concat(<a href="typespecs.html#built-in-types">binary</a>() | <a href="typespecs.html#basic-types">atom</a>(), <a href="typespecs.html#built-in-types">binary</a>() | <a href="typespecs.html#basic-types">atom</a>()) :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+<p>Concatenates two aliases and returns a new alias only if the alias was
+already referenced.</p><p>If the alias was not referenced yet, fails with <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a>.
+It handles binaries and atoms.</p><h2 id="safe_concat/2-examples" class="section-heading">
+  <a href="#safe_concat/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">safe_concat</span><span class="p" data-group-id="8200360847-1">(</span><span class="nc">List</span><span class="p">,</span><span class="w"> </span><span class="nc">Chars</span><span class="p" data-group-id="8200360847-1">)</span><span class="w">
+</span><span class="nc">List.Chars</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="spec_to_callback/2">
+
+  <div class="detail-header">
+    <a href="#spec_to_callback/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">spec_to_callback(module, definition)</h1>
+
+        <span class="note">(since 1.7.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1216" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> spec_to_callback(<a href="typespecs.html#built-in-types">module</a>(), <a href="#t:definition/0">definition</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Copies the given spec as a callback.</p><p>Returns <code class="inline">true</code> if there is such a spec and it was copied as a callback.
+If the function associated to the spec has documentation defined prior to
+invoking this function, the docs are copied too.</p>
+  </section>
+</section>
+<section class="detail" id="split/1">
+
+  <div class="detail-header">
+    <a href="#split/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">split(module)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/module.ex#L1732" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> split(<a href="typespecs.html#built-in-types">module</a>() | <a href="String.html#t:t/0">String.t</a>()) :: [<a href="String.html#t:t/0">String.t</a>(), ...]</pre>
+
+      </div>
+
+<p>Splits the given module name into binary parts.</p><p><code class="inline">module</code> has to be an Elixir module, as <a href="#split/1"><code class="inline">split/1</code></a> won't work with Erlang-style
+modules (for example, <code class="inline">split(:lists)</code> raises an error).</p><p><a href="#split/1"><code class="inline">split/1</code></a> also supports splitting the string representation of Elixir modules
+(that is, the result of calling <a href="Atom.html#to_string/1"><code class="inline">Atom.to_string/1</code></a> with the module name).</p><h2 id="split/1-examples" class="section-heading">
+  <a href="#split/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4020531584-1">(</span><span class="nc">Very.Long.Module.Name.And.Even.Longer</span><span class="p" data-group-id="4020531584-1">)</span><span class="w">
+</span><span class="p" data-group-id="4020531584-2">[</span><span class="s">&quot;Very&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Long&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Module&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;And&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Even&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Longer&quot;</span><span class="p" data-group-id="4020531584-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Module</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4020531584-3">(</span><span class="s">&quot;Elixir.String.Chars&quot;</span><span class="p" data-group-id="4020531584-3">)</span><span class="w">
+</span><span class="p" data-group-id="4020531584-4">[</span><span class="s">&quot;String&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Chars&quot;</span><span class="p" data-group-id="4020531584-4">]</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

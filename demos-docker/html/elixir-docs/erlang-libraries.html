@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Erlang libraries — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/erlang-libraries.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Erlang libraries</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/erlang-libraries.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir provides excellent interoperability with Erlang libraries. In fact, Elixir discourages simply wrapping Erlang libraries in favor of directly interfacing with Erlang code. In this section, we will present some of the most common and useful Erlang functionality that is not found in Elixir.</p><p>Erlang modules have a different naming convention than in Elixir and start in lowercase. In both cases, module names are atoms and we invoke functions by dispatching to the module name:</p><pre class="elixir" data-code-id="34343932"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_atom(String)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.first(&quot;hello&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;h&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_atom(:binary)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:binary.first(&quot;hello&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 104</p></pre><p>As you grow more proficient in Elixir, you may want to explore the Erlang <a href="http://www.erlang.org/doc/apps/stdlib/index.html">STDLIB Reference Manual</a> in more detail.</p><h2 id="the-binary-module" class="section-heading">
+  <a href="#the-binary-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The binary module</span>
+</h2>
+<p>The built-in Elixir String module handles binaries that are UTF-8 encoded. <a href="https://www.erlang.org/doc/apps/stdlib/binary.html">The <code class="inline">:binary</code> module</a> is useful when you are dealing with binary data that is not necessarily UTF-8 encoded.</p><pre class="elixir" data-code-id="34353536"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.to_charlist(&quot;Ø&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [216]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:binary.bin_to_list(&quot;Ø&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [195, 152]</p></pre><p>The above example shows the difference; the <a href="String.html"><code class="inline">String</code></a> module returns Unicode codepoints, while <code class="inline">:binary</code> deals with raw data bytes.</p><h2 id="formatted-text-output" class="section-heading">
+  <a href="#formatted-text-output" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Formatted text output</span>
+</h2>
+<p>Elixir does not contain a function similar to <code class="inline">printf</code> found in C and other languages. Luckily, the Erlang standard library functions <a href="https://www.erlang.org/doc/apps/stdlib/io.html#format/2"><code class="inline">:io.format/2</code></a> and <a href="https://www.erlang.org/doc/apps/stdlib/io_lib.html#format/2"><code class="inline">:io_lib.format/2</code></a> may be used. The first formats to terminal output, while the second formats to an iolist. The format specifiers differ from <code class="inline">printf</code>, <a href="https://www.erlang.org/doc/apps/stdlib/io.html#format/2">refer to the Erlang documentation for details</a>.</p><pre class="elixir" data-code-id="34363230"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:io.format(&quot;Pi is approximately given by:~10.3f~n&quot;, [:math.pi])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># Pi is approximately given by:     3.142</p><p class="output output-initial" data-code-type="output"># :ok</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">to_string(:io_lib.format(&quot;Pi is approximately given by:~10.3f~n&quot;, [:math.pi]))</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;Pi is approximately given by:     3.142\n&quot;</p></pre><h2 id="the-crypto-module" class="section-heading">
+  <a href="#the-crypto-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The crypto module</span>
+</h2>
+<p><a href="https://www.erlang.org/doc/apps/crypto/crypto.html">The <code class="inline">:crypto</code> module</a> contains hashing functions, digital signatures, encryption and more:</p><pre class="elixir" data-code-id="34363834"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Base.encode16(:crypto.hash(:sha256, &quot;Elixir&quot;))</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;3315715A7A3AD57428298676C5AE465DADA38D951BDFAC9348A8A31E9C7401CB&quot;</p></pre><p>The <code class="inline">:crypto</code> module is part of the <code class="inline">:crypto</code> application that ships with Erlang. This means you must list the <code class="inline">:crypto</code> application as an additional application in your project configuration. To do this, edit your <code class="inline">mix.exs</code> file to include:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">application</span><span class="w"> </span><span class="k" data-group-id="6002396734-1">do</span><span class="w">
+  </span><span class="p" data-group-id="6002396734-2">[</span><span class="ss">extra_applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6002396734-3">[</span><span class="ss">:crypto</span><span class="p" data-group-id="6002396734-3">]</span><span class="p" data-group-id="6002396734-2">]</span><span class="w">
+</span><span class="k" data-group-id="6002396734-1">end</span></code></pre><p>Any module that is not part of the <code class="inline">:kernel</code> or <code class="inline">:stdlib</code> Erlang applications must have their application explicitly listed in your <code class="inline">mix.exs</code>. You can find the application name of any Erlang module in the Erlang documentation, immediately below the Erlang logo in the sidebar.</p><h2 id="the-digraph-module" class="section-heading">
+  <a href="#the-digraph-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The digraph module</span>
+</h2>
+<p>The <a href="https://www.erlang.org/doc/apps/stdlib/digraph.html"><code class="inline">:digraph</code></a> and <a href="https://www.erlang.org/doc/apps/stdlib/digraph_utils.html"><code class="inline">:digraph_utils</code></a> modules contain functions for dealing with directed graphs built of vertices and edges. After constructing the graph, the algorithms in there will help find, for instance, the shortest path between two vertices, or loops in the graph.</p><p>Given three vertices, find the shortest path from the first to the last.</p><pre class="elixir" data-code-id="34373438"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">digraph = :digraph.new()</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">coords = [{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}]</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[v0, v1, v2] = (for c &lt;- coords, do: :digraph.add_vertex(digraph, c))</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:digraph.add_edge(digraph, v0, v1)</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:digraph.add_edge(digraph, v1, v2)</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:digraph.get_short_path(digraph, v0, v2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}]</p></pre><p>Note that the functions in <code class="inline">:digraph</code> alter the graph structure in-place, this
+is possible because they are implemented as ETS tables, explained next.</p><h2 id="erlang-term-storage" class="section-heading">
+  <a href="#erlang-term-storage" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Erlang Term Storage</span>
+</h2>
+<p>The modules <a href="https://www.erlang.org/doc/apps/stdlib/ets.html"><code class="inline">:ets</code></a> and <a href="https://www.erlang.org/doc/apps/stdlib/dets.html"><code class="inline">:dets</code></a> handle storage of large data structures in memory or on disk respectively.</p><p>ETS lets you create a table containing tuples. By default, ETS tables are protected, which means only the owner process may write to the table but any other process can read. ETS has some functionality to allow a table to be used as a simple database, a key-value store or as a cache mechanism.</p><p>The functions in the <code class="inline">ets</code> module will modify the state of the table as a side-effect.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:ets</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="0010951747-1">(</span><span class="ss">:ets_test</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0010951747-2">[</span><span class="p" data-group-id="0010951747-2">]</span><span class="p" data-group-id="0010951747-1">)</span><span class="w">
+</span><span class="c1"># Store as tuples with {name, population}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">insert</span><span class="p" data-group-id="0010951747-3">(</span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0010951747-4">{</span><span class="s">&quot;China&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1_374_000_000</span><span class="p" data-group-id="0010951747-4">}</span><span class="p" data-group-id="0010951747-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">insert</span><span class="p" data-group-id="0010951747-5">(</span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0010951747-6">{</span><span class="s">&quot;India&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1_284_000_000</span><span class="p" data-group-id="0010951747-6">}</span><span class="p" data-group-id="0010951747-5">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">insert</span><span class="p" data-group-id="0010951747-7">(</span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0010951747-8">{</span><span class="s">&quot;USA&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">322_000_000</span><span class="p" data-group-id="0010951747-8">}</span><span class="p" data-group-id="0010951747-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:ets</span><span class="o">.</span><span class="n">i</span><span class="p" data-group-id="0010951747-9">(</span><span class="n">table</span><span class="p" data-group-id="0010951747-9">)</span><span class="w">
+</span><span class="o">&lt;</span><span class="mi">1</span><span class="w">   </span><span class="o">&gt;</span><span class="w"> </span><span class="p" data-group-id="0010951747-10">{</span><span class="p" data-group-id="0010951747-11">&lt;&lt;</span><span class="s">&quot;India&quot;</span><span class="p" data-group-id="0010951747-11">&gt;&gt;</span><span class="p">,</span><span class="mi">1284000000</span><span class="p" data-group-id="0010951747-10">}</span><span class="w">
+</span><span class="o">&lt;</span><span class="mi">2</span><span class="w">   </span><span class="o">&gt;</span><span class="w"> </span><span class="p" data-group-id="0010951747-12">{</span><span class="p" data-group-id="0010951747-13">&lt;&lt;</span><span class="s">&quot;USA&quot;</span><span class="p" data-group-id="0010951747-13">&gt;&gt;</span><span class="p">,</span><span class="mi">322000000</span><span class="p" data-group-id="0010951747-12">}</span><span class="w">
+</span><span class="o">&lt;</span><span class="mi">3</span><span class="w">   </span><span class="o">&gt;</span><span class="w"> </span><span class="p" data-group-id="0010951747-14">{</span><span class="p" data-group-id="0010951747-15">&lt;&lt;</span><span class="s">&quot;China&quot;</span><span class="p" data-group-id="0010951747-15">&gt;&gt;</span><span class="p">,</span><span class="mi">1374000000</span><span class="p" data-group-id="0010951747-14">}</span></code></pre><h2 id="the-math-module" class="section-heading">
+  <a href="#the-math-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The math module</span>
+</h2>
+<p>The <a href="https://www.erlang.org/doc/apps/stdlib/math.html"><code class="inline">:math</code></a> module contains common mathematical operations covering trigonometry, exponential, and logarithmic functions.</p><pre class="elixir" data-code-id="34383132"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">angle_45_deg = :math.pi() * 45.0 / 180.0</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:math.sin(angle_45_deg)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 0.7071067811865475</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:math.exp(55.0)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 7.694785265142018e23</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:math.log(7.694785265142018e23)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 55.0</p></pre><h2 id="the-queue-module" class="section-heading">
+  <a href="#the-queue-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The queue module</span>
+</h2>
+<p>The <a href="https://www.erlang.org/doc/apps/stdlib/queue.html"><code class="inline">:queue</code></a> module provides a data structure that implements (double-ended) FIFO (first-in first-out) queues efficiently:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:queue</span><span class="o">.</span><span class="n">new</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:queue</span><span class="o">.</span><span class="n">in</span><span class="p" data-group-id="4051199260-1">(</span><span class="s">&quot;A&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p" data-group-id="4051199260-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:queue</span><span class="o">.</span><span class="n">in</span><span class="p" data-group-id="4051199260-2">(</span><span class="s">&quot;B&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p" data-group-id="4051199260-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="4051199260-3">{</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p" data-group-id="4051199260-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:queue</span><span class="o">.</span><span class="n">out</span><span class="p" data-group-id="4051199260-4">(</span><span class="n">q</span><span class="p" data-group-id="4051199260-4">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">value</span><span class="w">
+</span><span class="p" data-group-id="4051199260-5">{</span><span class="ss">:value</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;A&quot;</span><span class="p" data-group-id="4051199260-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="4051199260-6">{</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p" data-group-id="4051199260-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:queue</span><span class="o">.</span><span class="n">out</span><span class="p" data-group-id="4051199260-7">(</span><span class="n">q</span><span class="p" data-group-id="4051199260-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">value</span><span class="w">
+</span><span class="p" data-group-id="4051199260-8">{</span><span class="ss">:value</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;B&quot;</span><span class="p" data-group-id="4051199260-8">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="4051199260-9">{</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p" data-group-id="4051199260-9">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:queue</span><span class="o">.</span><span class="n">out</span><span class="p" data-group-id="4051199260-10">(</span><span class="n">q</span><span class="p" data-group-id="4051199260-10">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">value</span><span class="w">
+</span><span class="ss">:empty</span></code></pre><h2 id="the-rand-module" class="section-heading">
+  <a href="#the-rand-module" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The rand module</span>
+</h2>
+<p>The <a href="https://www.erlang.org/doc/apps/stdlib/rand.html"><code class="inline">:rand</code></a> has functions for returning random values and setting the random seed.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">:rand</span><span class="o">.</span><span class="n">uniform</span><span class="p" data-group-id="3403421479-1">(</span><span class="p" data-group-id="3403421479-1">)</span><span class="w">
+</span><span class="mf">0.8175669086010815</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="bp">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:rand</span><span class="o">.</span><span class="n">seed</span><span class="p" data-group-id="3403421479-2">(</span><span class="ss">:exs1024</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3403421479-3">{</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">123534</span><span class="p">,</span><span class="w"> </span><span class="mi">345345</span><span class="p" data-group-id="3403421479-3">}</span><span class="p" data-group-id="3403421479-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:rand</span><span class="o">.</span><span class="n">uniform</span><span class="p" data-group-id="3403421479-4">(</span><span class="p" data-group-id="3403421479-4">)</span><span class="w">
+</span><span class="mf">0.5820506340260994</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:rand</span><span class="o">.</span><span class="n">uniform</span><span class="p" data-group-id="3403421479-5">(</span><span class="mi">6</span><span class="p" data-group-id="3403421479-5">)</span><span class="w">
+</span><span class="mi">6</span></code></pre><h2 id="the-zip-and-zlib-modules" class="section-heading">
+  <a href="#the-zip-and-zlib-modules" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The zip and zlib modules</span>
+</h2>
+<p>The <a href="https://www.erlang.org/doc/apps/stdlib/zip.html"><code class="inline">:zip</code></a> module lets you read and write ZIP files to and from disk or memory, as well as extracting file information.</p><p>This code counts the number of files in a ZIP file:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">:zip</span><span class="o">.</span><span class="n">foldl</span><span class="p" data-group-id="5976365170-1">(</span><span class="k" data-group-id="5976365170-2">fn</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k" data-group-id="5976365170-2">end</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nc">:binary</span><span class="o">.</span><span class="n">bin_to_list</span><span class="p" data-group-id="5976365170-3">(</span><span class="s">&quot;file.zip&quot;</span><span class="p" data-group-id="5976365170-3">)</span><span class="p" data-group-id="5976365170-1">)</span><span class="w">
+</span><span class="p" data-group-id="5976365170-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mi">633</span><span class="p" data-group-id="5976365170-4">}</span></code></pre><p>The <a href="https://www.erlang.org/doc/apps/erts/zlib.html"><code class="inline">:zlib</code></a> module deals with data compression in zlib format, as found in the <code class="inline">gzip</code> command line utility found in Unix systems.</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">song</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;</span><span class="gp unselectable">
+...&gt; </span><span class="s">Mary had a little lamb,</span><span class="gp unselectable">
+...&gt; </span><span class="s">His fleece was white as snow,</span><span class="gp unselectable">
+...&gt; </span><span class="s">And everywhere that Mary went,</span><span class="gp unselectable">
+...&gt; </span><span class="s">The lamb was sure to go.&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:zlib</span><span class="o">.</span><span class="n">compress</span><span class="p" data-group-id="0206839902-1">(</span><span class="n">song</span><span class="p" data-group-id="0206839902-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">byte_size</span><span class="p" data-group-id="0206839902-2">(</span><span class="n">song</span><span class="p" data-group-id="0206839902-2">)</span><span class="w">
+</span><span class="mi">110</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">byte_size</span><span class="p" data-group-id="0206839902-3">(</span><span class="n">compressed</span><span class="p" data-group-id="0206839902-3">)</span><span class="w">
+</span><span class="mi">99</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">:zlib</span><span class="o">.</span><span class="n">uncompress</span><span class="p" data-group-id="0206839902-4">(</span><span class="n">compressed</span><span class="p" data-group-id="0206839902-4">)</span><span class="w">
+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">Mary had a little lamb,</span><span class="se">\n</span><span class="s">His fleece was white as snow,</span><span class="se">\n</span><span class="s">And everywhere that Mary went,</span><span class="se">\n</span><span class="s">The lamb was sure to go.&quot;</span></code></pre><h2 id="learning-erlang" class="section-heading">
+  <a href="#learning-erlang" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Learning Erlang</span>
+</h2>
+<p>If you want to get deeper into Erlang, here's a list of online resources that cover Erlang's fundamentals and its more advanced features:</p><ul><li><p>This <a href="https://elixir-lang.org/crash-course.html">Erlang Syntax: A Crash Course</a> provides a concise intro to Erlang's syntax. Each code snippet is accompanied by equivalent code in Elixir. This is an opportunity for you to not only get some exposure to Erlang's syntax but also review what you learned about Elixir.</p></li><li><p>Erlang's official website has a short <a href="https://www.erlang.org/course">tutorial</a>. There is a chapter with pictures briefly describing Erlang's primitives for <a href="https://www.erlang.org/course/concurrent_programming.html">concurrent programming</a>.</p></li><li><p><a href="http://learnyousomeerlang.com/">Learn You Some Erlang for Great Good!</a> is an excellent introduction to Erlang, its design principles, standard library, best practices, and much more. Once you have read through the crash course mentioned above, you'll be able to safely skip the first couple of chapters in the book that mostly deal with the syntax. When you reach <a href="http://learnyousomeerlang.com/the-hitchhikers-guide-to-concurrency">The Hitchhiker's Guide to Concurrency</a> chapter, that's where the real fun starts.</p></li></ul><p>Our last step is to take a look at existing Elixir (and Erlang) libraries you might use while debugging.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="optional-syntax.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Optional syntax sheet
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="debugging.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Debugging
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

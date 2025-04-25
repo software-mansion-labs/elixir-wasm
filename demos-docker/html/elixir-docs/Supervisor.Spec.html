@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Supervisor.Spec — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Supervisor.Spec.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Supervisor.Spec</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+    <div class="deprecated">
+      This module is deprecated. Use the new child specifications outlined in the Supervisor module instead.
+    </div>
+
+
+    <section id="moduledoc">
+<p>Outdated functions for building child specifications.</p><p>The functions in this module are deprecated and they do not work
+with the module-based child specs introduced in Elixir v1.5.
+Please see the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> documentation instead.</p><p>Convenience functions for defining supervisor specifications.</p><h2 id="module-example" class="section-heading">
+  <a href="#module-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<p>By using the functions in this module one can specify the children
+to be used under a supervisor, started with <a href="Supervisor.html#start_link/2"><code class="inline">Supervisor.start_link/2</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Supervisor.Spec</span><span class="w">
+
+</span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8182553135-1">[</span><span class="w">
+  </span><span class="n">worker</span><span class="p" data-group-id="8182553135-2">(</span><span class="nc">MyWorker</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8182553135-3">[</span><span class="n">arg1</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="p">,</span><span class="w"> </span><span class="n">arg3</span><span class="p" data-group-id="8182553135-3">]</span><span class="p" data-group-id="8182553135-2">)</span><span class="p">,</span><span class="w">
+  </span><span class="n">supervisor</span><span class="p" data-group-id="8182553135-4">(</span><span class="nc">MySupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8182553135-5">[</span><span class="n">arg1</span><span class="p" data-group-id="8182553135-5">]</span><span class="p" data-group-id="8182553135-4">)</span><span class="w">
+</span><span class="p" data-group-id="8182553135-1">]</span><span class="w">
+
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="8182553135-6">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="8182553135-6">)</span></code></pre><p>Sometimes, it may be handy to define supervisors backed
+by a module:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MySupervisor</span><span class="w"> </span><span class="k" data-group-id="1975266372-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Supervisor</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="1975266372-2">(</span><span class="n">arg</span><span class="p" data-group-id="1975266372-2">)</span><span class="w"> </span><span class="k" data-group-id="1975266372-3">do</span><span class="w">
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="1975266372-4">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p" data-group-id="1975266372-4">)</span><span class="w">
+  </span><span class="k" data-group-id="1975266372-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="1975266372-5">(</span><span class="n">arg</span><span class="p" data-group-id="1975266372-5">)</span><span class="w"> </span><span class="k" data-group-id="1975266372-6">do</span><span class="w">
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1975266372-7">[</span><span class="w">
+      </span><span class="n">worker</span><span class="p" data-group-id="1975266372-8">(</span><span class="nc">MyWorker</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1975266372-9">[</span><span class="n">arg</span><span class="p" data-group-id="1975266372-9">]</span><span class="p">,</span><span class="w"> </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:temporary</span><span class="p" data-group-id="1975266372-8">)</span><span class="w">
+    </span><span class="p" data-group-id="1975266372-7">]</span><span class="w">
+
+    </span><span class="n">supervise</span><span class="p" data-group-id="1975266372-10">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:simple_one_for_one</span><span class="p" data-group-id="1975266372-10">)</span><span class="w">
+  </span><span class="k" data-group-id="1975266372-6">end</span><span class="w">
+</span><span class="k" data-group-id="1975266372-1">end</span></code></pre><p>Note that in this case we don't have to explicitly import
+<a href="Supervisor.Spec.html"><code class="inline">Supervisor.Spec</code></a> since <code class="inline">use Supervisor</code> automatically does so.
+Defining a module-based supervisor can be useful, for example,
+to perform initialization tasks in the <a href="Supervisor.html#c:init/1"><code class="inline">Supervisor.init/1</code></a> callback.</p><h2 id="module-supervisor-and-worker-options" class="section-heading">
+  <a href="#module-supervisor-and-worker-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Supervisor and worker options</span>
+</h2>
+<p>In the example above, we defined specs for workers and supervisors.
+These specs (both for workers as well as supervisors) accept the
+following options:</p><ul><li><p><code class="inline">:id</code> - a name used to identify the child specification
+internally by the supervisor; defaults to the given module
+name for the child worker/supervisor</p></li><li><p><code class="inline">:function</code> - the function to invoke on the child to start it</p></li><li><p><code class="inline">:restart</code> - an atom that defines when a terminated child process should
+be restarted (see the &quot;Restart values&quot; section below)</p></li><li><p><code class="inline">:shutdown</code> - an atom that defines how a child process should be
+terminated (see the &quot;Shutdown values&quot; section below)</p></li><li><p><code class="inline">:modules</code> - it should be a list with one element <code class="inline">[module]</code>,
+where module is the name of the callback module only if the
+child process is a <a href="Supervisor.html"><code class="inline">Supervisor</code></a> or <a href="GenServer.html"><code class="inline">GenServer</code></a>; if the child
+process is a <a href="GenEvent.html"><code class="inline">GenEvent</code></a>, <code class="inline">:modules</code> should be <code class="inline">:dynamic</code></p></li></ul><h3 id="module-restart-values-restart" class="section-heading">
+  <a href="#module-restart-values-restart" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Restart values (:restart)</span>
+</h3>
+<p>The following restart values are supported in the <code class="inline">:restart</code> option:</p><ul><li><p><code class="inline">:permanent</code> - the child process is always restarted</p></li><li><p><code class="inline">:temporary</code> - the child process is never restarted (not even
+when the supervisor's strategy is <code class="inline">:rest_for_one</code> or <code class="inline">:one_for_all</code>)</p></li><li><p><code class="inline">:transient</code> - the child process is restarted only if it
+terminates abnormally, i.e., with an exit reason other than
+<code class="inline">:normal</code>, <code class="inline">:shutdown</code> or <code class="inline">{:shutdown, term}</code></p></li></ul><p>Note that supervisor that reached maximum restart intensity will exit with <code class="inline">:shutdown</code> reason.
+In this case the supervisor will only restart if its child specification was defined with
+the <code class="inline">:restart</code> option set to <code class="inline">:permanent</code> (the default).</p><h3 id="module-shutdown-values-shutdown" class="section-heading">
+  <a href="#module-shutdown-values-shutdown" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Shutdown values (<code class="inline">:shutdown</code>)</span>
+</h3>
+<p>The following shutdown values are supported in the <code class="inline">:shutdown</code> option:</p><ul><li><p><code class="inline">:brutal_kill</code> - the child process is unconditionally terminated
+using <code class="inline">Process.exit(child, :kill)</code></p></li><li><p><code class="inline">:infinity</code> - if the child process is a supervisor, this is a mechanism
+to give the subtree enough time to shut down; it can also be used with
+workers with care</p></li><li><p>a non-negative integer - the amount of time in milliseconds
+that the supervisor tells the child process to terminate by calling
+<code class="inline">Process.exit(child, :shutdown)</code> and then waits for an exit signal back.
+If no exit signal is received within the specified time,
+the child process is unconditionally terminated
+using <code class="inline">Process.exit(child, :kill)</code></p></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:child_id/0" data-no-tooltip="" translate="no">child_id()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported ID values</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:modules/0" data-no-tooltip="" translate="no">modules()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported module values</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:restart/0" data-no-tooltip="" translate="no">restart()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported restart values</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:shutdown/0" data-no-tooltip="" translate="no">shutdown()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported shutdown values</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:spec/0" data-no-tooltip="" translate="no">spec()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The supervisor specification</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:strategy/0" data-no-tooltip="" translate="no">strategy()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported strategies</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:worker/0" data-no-tooltip="" translate="no">worker()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Supported worker values</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#supervise/2" data-no-tooltip="" translate="no">supervise(children, options)</a>
+
+          <span class="deprecated" title="Use the new child specifications outlined in the Supervisor module instead">deprecated</span>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a list of <code class="inline">children</code> (workers or supervisors) to
+supervise and a set of <code class="inline">options</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#supervisor/3" data-no-tooltip="" translate="no">supervisor(module, args, options \\ [])</a>
+
+          <span class="deprecated" title="Use the new child specifications outlined in the Supervisor module instead">deprecated</span>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Defines the given <code class="inline">module</code> as a supervisor which will be started
+with the given arguments.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#worker/3" data-no-tooltip="" translate="no">worker(module, args, options \\ [])</a>
+
+          <span class="deprecated" title="Use the new child specifications outlined in the Supervisor module instead">deprecated</span>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Defines the given <code class="inline">module</code> as a worker which will be started
+with the given arguments.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:child_id/0">
+
+  <div class="detail-header">
+    <a href="#t:child_id/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">child_id()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L128" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> child_id() :: <a href="typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Supported ID values</p>
+  </section>
+</section>
+<section class="detail" id="t:modules/0">
+
+  <div class="detail-header">
+    <a href="#t:modules/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">modules()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L125" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> modules() :: :dynamic | [<a href="typespecs.html#built-in-types">module</a>()]</pre>
+
+      </div>
+
+<p>Supported module values</p>
+  </section>
+</section>
+<section class="detail" id="t:restart/0">
+
+  <div class="detail-header">
+    <a href="#t:restart/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">restart()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L116" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> restart() :: :permanent | :transient | :temporary</pre>
+
+      </div>
+
+<p>Supported restart values</p>
+  </section>
+</section>
+<section class="detail" id="t:shutdown/0">
+
+  <div class="detail-header">
+    <a href="#t:shutdown/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shutdown()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L119" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> shutdown() :: <a href="typespecs.html#built-in-types">timeout</a>() | :brutal_kill</pre>
+
+      </div>
+
+<p>Supported shutdown values</p>
+  </section>
+</section>
+<section class="detail" id="t:spec/0">
+
+  <div class="detail-header">
+    <a href="#t:spec/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">spec()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L131" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> spec() ::
+  {<a href="#t:child_id/0">child_id</a>(), start_fun :: {<a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), [<a href="typespecs.html#built-in-types">term</a>()]}, <a href="#t:restart/0">restart</a>(), <a href="#t:shutdown/0">shutdown</a>(),
+   <a href="#t:worker/0">worker</a>(), <a href="#t:modules/0">modules</a>()}</pre>
+
+      </div>
+
+<p>The supervisor specification</p>
+  </section>
+</section>
+<section class="detail" id="t:strategy/0">
+
+  <div class="detail-header">
+    <a href="#t:strategy/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">strategy()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L113" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> strategy() :: :simple_one_for_one | :one_for_one | :one_for_all | :rest_for_one</pre>
+
+      </div>
+
+<p>Supported strategies</p>
+  </section>
+</section>
+<section class="detail" id="t:worker/0">
+
+  <div class="detail-header">
+    <a href="#t:worker/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">worker()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L122" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> worker() :: :worker | :supervisor</pre>
+
+      </div>
+
+<p>Supported worker values</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="supervise/2">
+
+  <div class="detail-header">
+    <a href="#supervise/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">supervise(children, options)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L170" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This function is deprecated. Use the new child specifications outlined in the Supervisor module instead.
+    </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> supervise([<a href="#t:spec/0">spec</a>()],
+  strategy: <a href="#t:strategy/0">strategy</a>(),
+  max_restarts: <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  max_seconds: <a href="typespecs.html#basic-types">pos_integer</a>()
+) :: {:ok, <a href="typespecs.html#basic-types">tuple</a>()}</pre>
+
+      </div>
+
+<p>Receives a list of <code class="inline">children</code> (workers or supervisors) to
+supervise and a set of <code class="inline">options</code>.</p><p>Returns a tuple containing the supervisor specification. This tuple can be
+used as the return value of the <a href="Supervisor.html#c:init/1"><code class="inline">Supervisor.init/1</code></a> callback when implementing a
+module-based supervisor.</p><h2 id="supervise/2-examples" class="section-heading">
+  <a href="#supervise/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="n">supervise</span><span class="p" data-group-id="1856320095-1">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="1856320095-1">)</span></code></pre><h2 id="supervise/2-options" class="section-heading">
+  <a href="#supervise/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:strategy</code> - the restart strategy option. It can be either
+<code class="inline">:one_for_one</code>, <code class="inline">:rest_for_one</code>, <code class="inline">:one_for_all</code>, or
+<code class="inline">:simple_one_for_one</code>. You can learn more about strategies
+in the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module docs.</p></li><li><p><code class="inline">:max_restarts</code> - the maximum number of restarts allowed in
+a time frame. Defaults to <code class="inline">3</code>.</p></li><li><p><code class="inline">:max_seconds</code> - the time frame in which <code class="inline">:max_restarts</code> applies.
+Defaults to <code class="inline">5</code>.</p></li></ul><p>The <code class="inline">:strategy</code> option is required and by default a maximum of 3 restarts is
+allowed within 5 seconds. Check the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> module for a detailed
+description of the available strategies.</p>
+  </section>
+</section>
+<section class="detail" id="supervisor/3">
+
+    <span id="supervisor/2"></span>
+
+  <div class="detail-header">
+    <a href="#supervisor/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">supervisor(module, args, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L272" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This function is deprecated. Use the new child specifications outlined in the Supervisor module instead.
+    </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> supervisor(
+  <a href="typespecs.html#built-in-types">module</a>(),
+  [<a href="typespecs.html#built-in-types">term</a>()],
+  restart: <a href="#t:restart/0">restart</a>(),
+  shutdown: <a href="#t:shutdown/0">shutdown</a>(),
+  id: <a href="typespecs.html#built-in-types">term</a>(),
+  function: <a href="typespecs.html#basic-types">atom</a>(),
+  modules: <a href="#t:modules/0">modules</a>()
+) :: <a href="#t:spec/0">spec</a>()</pre>
+
+      </div>
+
+<p>Defines the given <code class="inline">module</code> as a supervisor which will be started
+with the given arguments.</p><pre><code class="makeup elixir" translate="no"><span class="n">supervisor</span><span class="p" data-group-id="7387923787-1">(</span><span class="n">module</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7387923787-2">[</span><span class="p" data-group-id="7387923787-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="7387923787-1">)</span></code></pre><p>By default, the function <code class="inline">start_link</code> is invoked on the given
+module. Overall, the default values for the options are:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7187505154-1">[</span><span class="w">
+  </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="n">module</span><span class="p">,</span><span class="w">
+  </span><span class="ss">function</span><span class="p">:</span><span class="w"> </span><span class="ss">:start_link</span><span class="p">,</span><span class="w">
+  </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p">,</span><span class="w">
+  </span><span class="ss">shutdown</span><span class="p">:</span><span class="w"> </span><span class="ss">:infinity</span><span class="p">,</span><span class="w">
+  </span><span class="ss">modules</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7187505154-2">[</span><span class="n">module</span><span class="p" data-group-id="7187505154-2">]</span><span class="w">
+</span><span class="p" data-group-id="7187505154-1">]</span></code></pre><p>See the &quot;Supervisor and worker options&quot; section in the <a href="Supervisor.Spec.html"><code class="inline">Supervisor.Spec</code></a> module for more
+information on the available options.</p>
+  </section>
+</section>
+<section class="detail" id="worker/3">
+
+    <span id="worker/2"></span>
+
+  <div class="detail-header">
+    <a href="#worker/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">worker(module, args, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/supervisor/spec.ex#L238" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This function is deprecated. Use the new child specifications outlined in the Supervisor module instead.
+    </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> worker(
+  <a href="typespecs.html#built-in-types">module</a>(),
+  [<a href="typespecs.html#built-in-types">term</a>()],
+  restart: <a href="#t:restart/0">restart</a>(),
+  shutdown: <a href="#t:shutdown/0">shutdown</a>(),
+  id: <a href="typespecs.html#built-in-types">term</a>(),
+  function: <a href="typespecs.html#basic-types">atom</a>(),
+  modules: <a href="#t:modules/0">modules</a>()
+) :: <a href="#t:spec/0">spec</a>()</pre>
+
+      </div>
+
+<p>Defines the given <code class="inline">module</code> as a worker which will be started
+with the given arguments.</p><pre><code class="makeup elixir" translate="no"><span class="n">worker</span><span class="p" data-group-id="2998480832-1">(</span><span class="nc">ExUnit.Runner</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2998480832-2">[</span><span class="p" data-group-id="2998480832-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="2998480832-1">)</span></code></pre><p>By default, the function <code class="inline">start_link</code> is invoked on the given
+module. Overall, the default values for the options are:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3147415737-1">[</span><span class="w">
+  </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="n">module</span><span class="p">,</span><span class="w">
+  </span><span class="ss">function</span><span class="p">:</span><span class="w"> </span><span class="ss">:start_link</span><span class="p">,</span><span class="w">
+  </span><span class="ss">restart</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p">,</span><span class="w">
+  </span><span class="ss">shutdown</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+  </span><span class="ss">modules</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3147415737-2">[</span><span class="n">module</span><span class="p" data-group-id="3147415737-2">]</span><span class="w">
+</span><span class="p" data-group-id="3147415737-1">]</span></code></pre><p>See the &quot;Supervisor and worker options&quot; section in the <a href="Supervisor.Spec.html"><code class="inline">Supervisor.Spec</code></a> module for more
+information on the available options.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

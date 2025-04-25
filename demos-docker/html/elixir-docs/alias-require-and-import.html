@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>alias, require, import, and use — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/alias-require-and-import.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>alias, require, import, and use</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/alias-require-and-import.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In order to facilitate software reuse, Elixir provides three directives (<code class="inline">alias</code>, <code class="inline">require</code>, and <code class="inline">import</code>) plus a macro called <code class="inline">use</code> summarized below:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Alias the module so it can be called as Bar instead of Foo.Bar</span><span class="w">
+</span><span class="kn">alias</span><span class="w"> </span><span class="nc">Foo.Bar</span><span class="p">,</span><span class="w"> </span><span class="ss">as</span><span class="p">:</span><span class="w"> </span><span class="nc">Bar</span><span class="w">
+
+</span><span class="c1"># Require the module in order to use its macros</span><span class="w">
+</span><span class="kn">require</span><span class="w"> </span><span class="nc">Foo</span><span class="w">
+
+</span><span class="c1"># Import functions from Foo so they can be called without the `Foo.` prefix</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nc">Foo</span><span class="w">
+
+</span><span class="c1"># Invokes the custom code defined in Foo as an extension point</span><span class="w">
+</span><span class="kn">use</span><span class="w"> </span><span class="nc">Foo</span></code></pre><p>We are going to explore them in detail now. Keep in mind the first three are called directives because they have <em>lexical scope</em>, while <code class="inline">use</code> is a common extension point that allows the used module to inject code.</p><h2 id="alias" class="section-heading">
+  <a href="#alias" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">alias</span>
+</h2>
+<p><code class="inline">alias</code> allows you to set up aliases for any given module name.</p><p>Imagine a module uses a specialized list implemented in <code class="inline">Math.List</code>. The <code class="inline">alias</code> directive allows referring to <code class="inline">Math.List</code> just as <a href="List.html"><code class="inline">List</code></a> within the module definition:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Stats</span><span class="w"> </span><span class="k" data-group-id="4154504508-1">do</span><span class="w">
+  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Math.List</span><span class="p">,</span><span class="w"> </span><span class="ss">as</span><span class="p">:</span><span class="w"> </span><span class="nc">List</span><span class="w">
+  </span><span class="c1"># In the remaining module definition List expands to Math.List.</span><span class="w">
+</span><span class="k" data-group-id="4154504508-1">end</span></code></pre><p>The original <a href="List.html"><code class="inline">List</code></a> can still be accessed within <code class="inline">Stats</code> by the fully-qualified name <a href="List.html"><code class="inline">Elixir.List</code></a>.</p><blockquote><p>All modules defined in Elixir are defined inside the main <code class="inline">Elixir</code> namespace, such as <a href="String.html"><code class="inline">Elixir.String</code></a>. However, for convenience, you can omit &quot;Elixir.&quot; when referencing them.</p></blockquote><p>Aliases are frequently used to define shortcuts. In fact, calling <code class="inline">alias</code> without an <code class="inline">:as</code> option sets the alias automatically to the last part of the module name, for example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Math.List</span></code></pre><p>Is the same as:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">Math.List</span><span class="p">,</span><span class="w"> </span><span class="ss">as</span><span class="p">:</span><span class="w"> </span><span class="nc">List</span></code></pre><p>Note that <code class="inline">alias</code> is <em>lexically scoped</em>, which allows you to set aliases inside specific functions:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Math</span><span class="w"> </span><span class="k" data-group-id="7403041495-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">plus</span><span class="p" data-group-id="7403041495-2">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="7403041495-2">)</span><span class="w"> </span><span class="k" data-group-id="7403041495-3">do</span><span class="w">
+    </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Math.List</span><span class="w">
+    </span><span class="c1"># ...</span><span class="w">
+  </span><span class="k" data-group-id="7403041495-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">minus</span><span class="p" data-group-id="7403041495-4">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="7403041495-4">)</span><span class="w"> </span><span class="k" data-group-id="7403041495-5">do</span><span class="w">
+    </span><span class="c1"># ...</span><span class="w">
+  </span><span class="k" data-group-id="7403041495-5">end</span><span class="w">
+</span><span class="k" data-group-id="7403041495-1">end</span></code></pre><p>In the example above, since we are invoking <code class="inline">alias</code> inside the function <code class="inline">plus/2</code>, the alias will be valid only inside the function <code class="inline">plus/2</code>. <code class="inline">minus/2</code> won't be affected at all.</p><h2 id="require" class="section-heading">
+  <a href="#require" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">require</span>
+</h2>
+<p>Elixir provides macros as a mechanism for meta-programming (writing code that generates code). Macros are expanded at compile time.</p><p>Public functions in modules are globally available, but in order to use macros, you need to opt-in by requiring the module they are defined in.</p><pre class="elixir" data-code-id="32333132"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Integer.is_odd(3)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (UndefinedFunctionError) function Integer.is_odd/1 is undefined or private. However, there is a macro with the same name and arity. Be sure to require Integer if you intend to invoke this macro</p><p class="output output-initial" data-code-type="output">#     (elixir) Integer.is_odd(3)</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">require Integer</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># Integer</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Integer.is_odd(3)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>In Elixir, <a href="Integer.html#is_odd/1"><code class="inline">Integer.is_odd/1</code></a> is defined as a macro so that it can be used as a guard. This means that, in order to invoke <a href="Integer.html#is_odd/1"><code class="inline">Integer.is_odd/1</code></a>, we need to first require the <a href="Integer.html"><code class="inline">Integer</code></a> module.</p><p>Note that like the <code class="inline">alias</code> directive, <code class="inline">require</code> is also lexically scoped. We will talk more about macros in a later chapter.</p><h2 id="import" class="section-heading">
+  <a href="#import" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">import</span>
+</h2>
+<p>We use <code class="inline">import</code> whenever we want to access functions or macros from other modules without using the fully-qualified name. Note we can only import public functions, as private functions are never accessible externally.</p><p>For example, if we want to use the <code class="inline">duplicate/2</code> function from the <a href="List.html"><code class="inline">List</code></a> module several times, we can import it:</p><pre class="elixir" data-code-id="32333736"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">import List, only: [duplicate: 2]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># List</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">duplicate(:ok, 3)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [:ok, :ok, :ok]</p></pre><p>We imported only the function <code class="inline">duplicate</code> (with arity 2) from <a href="List.html"><code class="inline">List</code></a>. Although <code class="inline">:only</code> is optional, its usage is recommended in order to avoid importing all the functions of a given module inside the current scope. <code class="inline">:except</code> could also be given as an option in order to import everything in a module except a list of functions.</p><p>Note that <code class="inline">import</code> is <em>lexically scoped</em> too. This means that we can import specific macros or functions inside function definitions:</p><pre class="elixir" data-code-id="32343430"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def some_function do</p><p class="output output-initial" data-code-type="output">#     import List, only: [duplicate: 2]</p><p class="output output-initial" data-code-type="output">#     duplicate(:ok, 10)</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>In the example above, the imported <a href="List.html#duplicate/2"><code class="inline">List.duplicate/2</code></a> is only visible within that specific function. <code class="inline">duplicate/2</code> won't be available in any other function in that module (or any other module for that matter).</p><p>While <code class="inline">import</code>s can be a useful for frameworks and libraries to build abstractions, developers should generally prefer <code class="inline">alias</code> to <code class="inline">import</code> on their own codebases, as aliases make the origin of the function being invoked clearer.</p><h2 id="use" class="section-heading">
+  <a href="#use" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">use</span>
+</h2>
+<p>The <code class="inline">use</code> macro is frequently used as an extension point. This means that, when you <code class="inline">use</code> a module <code class="inline">FooBar</code>, you allow that module to inject <em>any</em> code in the current module, such as importing itself or other modules, defining new functions, setting a module state, etc.</p><p>For example, in order to write tests using the ExUnit framework, a developer should use the <a href="https://hexdocs.pm/ex_unit/ExUnit.Case.html"><code class="inline">ExUnit.Case</code></a> module:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">AssertionTest</span><span class="w"> </span><span class="k" data-group-id="1664574941-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;always pass&quot;</span><span class="w"> </span><span class="k" data-group-id="1664574941-2">do</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="k" data-group-id="1664574941-2">end</span><span class="w">
+</span><span class="k" data-group-id="1664574941-1">end</span></code></pre><p>Behind the scenes, <code class="inline">use</code> requires the given module and then calls the <code class="inline">__using__/1</code> callback on it allowing the module to inject some code into the current context. Some modules (for example, the above <a href="https://hexdocs.pm/ex_unit/ExUnit.Case.html"><code class="inline">ExUnit.Case</code></a>, but also <a href="Supervisor.html"><code class="inline">Supervisor</code></a> and <a href="GenServer.html"><code class="inline">GenServer</code></a>) use this mechanism to populate your module with some basic behaviour, which your module is intended to override or complete.</p><p>Generally speaking, the following module:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="4399931966-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Feature</span><span class="p">,</span><span class="w"> </span><span class="ss">option</span><span class="p">:</span><span class="w"> </span><span class="ss">:value</span><span class="w">
+</span><span class="k" data-group-id="4399931966-1">end</span></code></pre><p>is compiled into</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Example</span><span class="w"> </span><span class="k" data-group-id="0494212470-1">do</span><span class="w">
+  </span><span class="kn">require</span><span class="w"> </span><span class="nc">Feature</span><span class="w">
+  </span><span class="nc">Feature</span><span class="o">.</span><span class="c">__using__</span><span class="p" data-group-id="0494212470-2">(</span><span class="ss">option</span><span class="p">:</span><span class="w"> </span><span class="ss">:value</span><span class="p" data-group-id="0494212470-2">)</span><span class="w">
+</span><span class="k" data-group-id="0494212470-1">end</span></code></pre><p>Since <code class="inline">use</code> allows any code to run, we can't really know the side-effects of using a module without reading its documentation. Therefore use this function with care and only if strictly required. Don't use <code class="inline">use</code> where an <code class="inline">import</code> or <code class="inline">alias</code> would do.</p><h2 id="understanding-aliases" class="section-heading">
+  <a href="#understanding-aliases" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Understanding Aliases</span>
+</h2>
+<p>At this point, you may be wondering: what exactly is an Elixir alias and how is it represented?</p><p>An alias in Elixir is a capitalized identifier (like <a href="String.html"><code class="inline">String</code></a>, <a href="Keyword.html"><code class="inline">Keyword</code></a>, etc) which is converted to an atom during compilation. For instance, the <a href="String.html"><code class="inline">String</code></a> alias translates by default to the atom <code class="inline">:&quot;Elixir.String&quot;</code>:</p><pre class="elixir" data-code-id="32353034"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_atom(String)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">to_string(String)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;Elixir.String&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:&quot;Elixir.String&quot; == String</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>By using the <a href="Kernel.SpecialForms.html#alias/2"><code class="inline">alias/2</code></a> directive, we are changing the atom the alias expands to.</p><p>Aliases expand to atoms because in the Erlang Virtual Machine (and consequently Elixir) modules are always represented by atoms:</p><pre class="elixir" data-code-id="32353638"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">List.flatten([1, [2], 3])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:&quot;Elixir.List&quot;.flatten([1, [2], 3])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p></pre><p>That's the mechanism we use to call Erlang modules:</p><pre class="elixir" data-code-id="32363332"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">:lists.flatten([1, [2], 3])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 2, 3]</p></pre><h2 id="module-nesting" class="section-heading">
+  <a href="#module-nesting" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Module nesting</span>
+</h2>
+<p>Now that we have talked about aliases, we can talk about nesting and how it works in Elixir. Consider the following example:</p><pre class="elixir" data-code-id="32363936"><p class="output output-initial" data-code-type="output"># defmodule Foo do</p><p class="output output-initial" data-code-type="output">#   defmodule Bar do</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>The example above will define two modules: <code class="inline">Foo</code> and <code class="inline">Foo.Bar</code>. The second can be accessed as <code class="inline">Bar</code> inside <code class="inline">Foo</code> as long as they are in the same lexical scope.</p><p>If, later, the <code class="inline">Bar</code> module is moved outside the <code class="inline">Foo</code> module definition, it must be referenced by its full name (<code class="inline">Foo.Bar</code>) or an alias must be set using the <code class="inline">alias</code> directive discussed above.</p><p><strong>Note</strong>: in Elixir, you don't have to define the <code class="inline">Foo</code> module before being able to define the <code class="inline">Foo.Bar</code> module, as they are effectively independent. The above could also be written as:</p><pre class="elixir" data-code-id="32373630"><p class="output output-initial" data-code-type="output"># defmodule Foo.Bar do</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># defmodule Foo do</p><p class="output output-initial" data-code-type="output">#   alias Foo.Bar</p><p class="output output-initial" data-code-type="output">#   # Can still access it as `Bar`</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>Aliasing a nested module does not bring parent modules into scope. Consider the following example:</p><pre class="elixir" data-code-id="32383234"><p class="output output-initial" data-code-type="output"># defmodule Foo do</p><p class="output output-initial" data-code-type="output">#   defmodule Bar do</p><p class="output output-initial" data-code-type="output">#     defmodule Baz do</p><p class="output output-initial" data-code-type="output">#     end</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># alias Foo.Bar.Baz</p><p class="comment" data-code-type="comment"># The module `Foo.Bar.Baz` is now available as `Baz`</p><p class="comment" data-code-type="comment"># However, the module `Foo.Bar` is *not* available as `Bar`</p></pre><p>As we will see in later chapters, aliases also play a crucial role in macros, to guarantee they are hygienic.</p><h2 id="multi-alias-import-require-use" class="section-heading">
+  <a href="#multi-alias-import-require-use" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Multi alias/import/require/use</span>
+</h2>
+<p>It is possible to <code class="inline">alias</code>, <code class="inline">import</code>, <code class="inline">require</code>, or <code class="inline">use</code> multiple modules at once. This is particularly useful once we start nesting modules, which is very common when building Elixir applications. For example, imagine you have an application where all modules are nested under <code class="inline">MyApp</code>, you can alias the modules <code class="inline">MyApp.Foo</code>, <code class="inline">MyApp.Bar</code> and <code class="inline">MyApp.Baz</code> at once as follows:</p><pre><code class="makeup elixir" translate="no"><span class="kn">alias</span><span class="w"> </span><span class="nc">MyApp</span><span class="o">.</span><span class="p" data-group-id="1540073392-1">{</span><span class="nc">Foo</span><span class="p">,</span><span class="w"> </span><span class="nc">Bar</span><span class="p">,</span><span class="w"> </span><span class="nc">Baz</span><span class="p" data-group-id="1540073392-1">}</span></code></pre><p>With this, we have finished our tour of Elixir modules. The next topic to cover is module attributes.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="io-and-the-file-system.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+IO and the file system
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="module-attributes.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Module attributes
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Modules and functions — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/modules-and-functions.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Modules and functions</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/modules-and-functions.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In Elixir we group several functions into modules. We've already used many different modules in the previous chapters, such as the <a href="String.html"><code class="inline">String</code></a> module:</p><pre class="elixir" data-code-id="353836"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.length(&quot;hello&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 5</p></pre><p>In order to create our own modules in Elixir, we use the <code class="inline">defmodule</code> macro. The first letter of the module must be in uppercase. We use the <code class="inline">def</code> macro to define functions in that module. The first letter of every function must be in lowercase (or underscore):</p><pre class="elixir" data-code-id="363530"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">defmodule Math do
+  def sum(a, b) do
+    a + b
+  end
+end</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Math.sum(1, 2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p></pre><p>In this chapter we will define our own modules, with different levels of complexity. As our examples get longer in size, it can be tricky to type them all in the shell. It's about time for us to learn how to compile Elixir code and also how to run Elixir scripts.</p><h2 id="compilation" class="section-heading">
+  <a href="#compilation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Compilation</span>
+</h2>
+<p>Most of the time it is convenient to write modules into files so they can be compiled and reused. Let's assume we have a file named <code class="inline">math.ex</code> with the following contents:</p><pre class="elixir" data-code-id="373134"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def sum(a, b) do</p><p class="output output-initial" data-code-type="output">#     a + b</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>This file can be compiled using <code class="inline">elixirc</code>:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">elixirc math.ex
+</span></code></pre><p>This will generate a file named <code class="inline">Elixir.Math.beam</code> containing the bytecode for the defined module. If we start <code class="inline">iex</code> again, our module definition will be available (provided that <code class="inline">iex</code> is started in the same directory the bytecode file is in):</p><pre class="elixir" data-code-id="373738"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Math.sum(1, 2)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 3</p></pre><p>Elixir projects are usually organized into three directories:</p><ul><li><code class="inline">_build</code> - contains compilation artifacts</li><li><code class="inline">lib</code> - contains Elixir code (usually <code class="inline">.ex</code> files)</li><li><code class="inline">test</code> - contains tests (usually <code class="inline">.exs</code> files)</li></ul><p>When working on actual projects, the build tool called <code class="inline">mix</code> will be responsible for compiling and setting up the proper paths for you. For learning and convenience purposes, Elixir also supports a scripting mode which is more flexible and does not generate any compiled artifacts.</p><h2 id="scripting-mode" class="section-heading">
+  <a href="#scripting-mode" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Scripting mode</span>
+</h2>
+<p>In addition to the Elixir file extension <code class="inline">.ex</code>, Elixir also supports <code class="inline">.exs</code> files for scripting. Elixir treats both files exactly the same way, the only difference is in intention. <code class="inline">.ex</code> files are meant to be compiled while <code class="inline">.exs</code> files are used for scripting. This convention is followed by projects like <code class="inline">mix</code>.</p><p>For instance, we can create a file called <code class="inline">math.exs</code>:</p><pre class="elixir" data-code-id="383432"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def sum(a, b) do</p><p class="output output-initial" data-code-type="output">#     a + b</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># IO.puts Math.sum(1, 2)</p></pre><p>And execute it as:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">elixir math.exs
+</span></code></pre><p>Because we used <code class="inline">elixir</code> instead of <code class="inline">elixirc</code>, the module was compiled and loaded into memory, but no <code class="inline">.beam</code> file was written to disk. In the following examples, we recommend you write your code into script files and execute them as shown above.</p><h2 id="function-definition" class="section-heading">
+  <a href="#function-definition" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Function definition</span>
+</h2>
+<p>Inside a module, we can define functions with <a href="Kernel.html#def/2"><code class="inline">def/2</code></a> and private functions with <a href="Kernel.html#defp/2"><code class="inline">defp/2</code></a>. A function defined with <a href="Kernel.html#def/2"><code class="inline">def/2</code></a> can be invoked from other modules while a private function can only be invoked locally.</p><pre class="elixir" data-code-id="393036"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def sum(a, b) do</p><p class="output output-initial" data-code-type="output">#     do_sum(a, b)</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output">#   defp do_sum(a, b) do</p><p class="output output-initial" data-code-type="output">#     a + b</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># IO.puts Math.sum(1, 2)    #=&gt; 3</p><p class="output output-initial" data-code-type="output"># IO.puts Math.do_sum(1, 2) #=&gt; ** (UndefinedFunctionError)</p></pre><p>Function declarations also support guards and multiple clauses. If a function has several clauses, Elixir will try each clause until it finds one that matches. Here is an implementation of a function that checks if the given number is zero or not:</p><pre class="elixir" data-code-id="393730"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def zero?(0) do</p><p class="output output-initial" data-code-type="output">#     true</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output">#   def zero?(x) when is_integer(x) do</p><p class="output output-initial" data-code-type="output">#     false</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># IO.puts Math.zero?(0)         #=&gt; true</p><p class="output output-initial" data-code-type="output"># IO.puts Math.zero?(1)         #=&gt; false</p><p class="output output-initial" data-code-type="output"># IO.puts Math.zero?([1, 2, 3]) #=&gt; ** (FunctionClauseError)</p><p class="output output-initial" data-code-type="output"># IO.puts Math.zero?(0.0)       #=&gt; ** (FunctionClauseError)</p></pre><p>The trailing question mark in <code class="inline">zero?</code> means that this function returns a boolean. To learn more about the naming conventions for modules, function names, variables and more in Elixir, see <a href="naming-conventions.html">Naming Conventions</a>.</p><p>Giving an argument that does not match any of the clauses raises an error.</p><p>Similar to constructs like <code class="inline">if</code>, function definitions support both <code class="inline">do:</code> and <code class="inline">do</code>-block syntax, as <a href="keywords-and-maps.html#do-blocks-and-keywords">we learned in the previous chapter</a>. For example, we can edit <code class="inline">math.exs</code> to look like this:</p><pre class="elixir" data-code-id="31303334"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   def zero?(0), do: true</p><p class="output output-initial" data-code-type="output">#   def zero?(x) when is_integer(x), do: false</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>And it will provide the same behavior. You may use <code class="inline">do:</code> for one-liners but always use <code class="inline">do</code>-blocks for functions spanning multiple lines. If you prefer to be consistent, you can use <code class="inline">do</code>-blocks throughout your codebase.</p><h2 id="default-arguments" class="section-heading">
+  <a href="#default-arguments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Default arguments</span>
+</h2>
+<p>Function definitions in Elixir also support default arguments:</p><pre class="elixir" data-code-id="31303938"><p class="output output-initial" data-code-type="output"># defmodule Concat do</p><p class="output output-initial" data-code-type="output">#   def join(a, b, sep \\ &quot; &quot;) do</p><p class="output output-initial" data-code-type="output">#     a &lt;&gt; sep &lt;&gt; b</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># IO.puts Concat.join(&quot;Hello&quot;, &quot;world&quot;)      #=&gt; Hello world</p><p class="output output-initial" data-code-type="output"># IO.puts Concat.join(&quot;Hello&quot;, &quot;world&quot;, &quot;_&quot;) #=&gt; Hello_world</p></pre><p>Any expression is allowed to serve as a default value, but it won't be evaluated during the function definition. Every time the function is invoked and any of its default values have to be used, the expression for that default value will be evaluated:</p><pre class="elixir" data-code-id="31313632"><p class="output output-initial" data-code-type="output"># defmodule DefaultTest do</p><p class="output output-initial" data-code-type="output">#   def dowork(x \\ &quot;hello&quot;) do</p><p class="output output-initial" data-code-type="output">#     x</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p></pre><pre class="elixir" data-code-id="31323236"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">DefaultTest.dowork()</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">DefaultTest.dowork(123)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 123</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">DefaultTest.dowork()</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p></pre><p>If a function with default values has multiple clauses, it is required to create a function head (a function definition without a body) for declaring defaults:</p><pre class="elixir" data-code-id="31323930"><p class="output output-initial" data-code-type="output"># defmodule Concat do</p><p class="output output-initial" data-code-type="output">#   # A function head declaring defaults</p><p class="output output-initial" data-code-type="output">#   def join(a, b \\ nil, sep \\ &quot; &quot;)</p><p class="output output-initial" data-code-type="output">#   def join(a, b, _sep) when is_nil(b) do</p><p class="output output-initial" data-code-type="output">#     a</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output">#   def join(a, b, sep) do</p><p class="output output-initial" data-code-type="output">#     a &lt;&gt; sep &lt;&gt; b</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># IO.puts Concat.join(&quot;Hello&quot;, &quot;world&quot;)      #=&gt; Hello world</p><p class="output output-initial" data-code-type="output"># IO.puts Concat.join(&quot;Hello&quot;, &quot;world&quot;, &quot;_&quot;) #=&gt; Hello_world</p><p class="output output-initial" data-code-type="output"># IO.puts Concat.join(&quot;Hello&quot;)               #=&gt; Hello</p></pre><p>When a variable is not used by a function or a clause, we add a leading underscore (<code class="inline">_</code>) to its name to signal this intent. This rule is also covered in our <a href="naming-conventions.html#underscore-_foo">Naming Conventions</a> document.</p><p>When using default values, one must be careful to avoid overlapping function definitions. Consider the following example:</p><pre class="elixir" data-code-id="31333534"><p class="output output-initial" data-code-type="output"># defmodule Concat do</p><p class="output output-initial" data-code-type="output">#   def join(a, b) do</p><p class="output output-initial" data-code-type="output">#     IO.puts &quot;***First join&quot;</p><p class="output output-initial" data-code-type="output">#     a &lt;&gt; b</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output">#   def join(a, b, sep \\ &quot; &quot;) do</p><p class="output output-initial" data-code-type="output">#     IO.puts &quot;***Second join&quot;</p><p class="output output-initial" data-code-type="output">#     a &lt;&gt; sep &lt;&gt; b</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>Elixir will emit the following warning:</p><pre><code class="text">warning: this clause cannot match because a previous clause at line 2 always matches
+    concat.ex:7: Concat</code></pre><p>The compiler is telling us that invoking the <code class="inline">join</code> function with two arguments will always choose the first definition of <code class="inline">join</code> whereas the second one will only be invoked when three arguments are passed:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex concat.ex
+</span></code></pre><pre class="elixir" data-code-id="31343138"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Concat.join &quot;Hello&quot;, &quot;world&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ***First join</p><p class="output output-initial" data-code-type="output"># &quot;Helloworld&quot;</p></pre><pre class="elixir" data-code-id="31343832"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Concat.join &quot;Hello&quot;, &quot;world&quot;, &quot;_&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ***Second join</p><p class="output output-initial" data-code-type="output"># &quot;Hello_world&quot;</p></pre><p>Removing the default argument in this case will fix the warning.</p><p>This finishes our short introduction to modules. In the next chapters, we will learn how to use function definitions for recursion and later on explore more functionality related to modules.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="keywords-and-maps.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Keyword lists and maps
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="recursion.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Recursion
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

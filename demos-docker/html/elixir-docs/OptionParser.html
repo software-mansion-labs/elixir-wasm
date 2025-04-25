@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>OptionParser — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/OptionParser.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">OptionParser</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Functions for parsing command line arguments.</p><p>When calling a command, it's possible to pass command line options
+to modify what the command does. In this documentation, those are
+called &quot;switches&quot;, in other situations they may be called &quot;flags&quot;
+or simply &quot;options&quot;. A switch can be given a value, also called an
+&quot;argument&quot;.</p><p>The main function in this module is <a href="#parse/2"><code class="inline">parse/2</code></a>, which parses a list
+of command line options and arguments into a keyword list:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="5797262661-1">(</span><span class="p" data-group-id="5797262661-2">[</span><span class="s">&quot;--debug&quot;</span><span class="p" data-group-id="5797262661-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5797262661-3">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="5797262661-3">]</span><span class="p" data-group-id="5797262661-1">)</span><span class="w">
+</span><span class="p" data-group-id="5797262661-4">{</span><span class="p" data-group-id="5797262661-5">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5797262661-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5797262661-6">[</span><span class="p" data-group-id="5797262661-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5797262661-7">[</span><span class="p" data-group-id="5797262661-7">]</span><span class="p" data-group-id="5797262661-4">}</span></code></pre><p><a href="OptionParser.html"><code class="inline">OptionParser</code></a> provides some conveniences out of the box,
+such as aliases and automatic handling of negation switches.</p><p>The <a href="#parse_head/2"><code class="inline">parse_head/2</code></a> function is an alternative to <a href="#parse/2"><code class="inline">parse/2</code></a>
+which stops parsing as soon as it finds a value that is not
+a switch nor a value for a previous switch.</p><p>This module also provides low-level functions, such as <a href="#next/2"><code class="inline">next/2</code></a>,
+for parsing switches manually, as well as <a href="#split/1"><code class="inline">split/1</code></a> and <a href="#to_argv/1"><code class="inline">to_argv/1</code></a>
+for parsing from and converting switches to strings.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:argv/0" data-no-tooltip="" translate="no">argv()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:errors/0" data-no-tooltip="" translate="no">errors()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:options/0" data-no-tooltip="" translate="no">options()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:parsed/0" data-no-tooltip="" translate="no">parsed()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#next/2" data-no-tooltip="" translate="no">next(argv, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Low-level function that parses one option.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#parse/2" data-no-tooltip="" translate="no">parse(argv, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses <code class="inline">argv</code> into a keyword list.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#parse!/2" data-no-tooltip="" translate="no">parse!(argv, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#parse/2"><code class="inline">parse/2</code></a> but raises an <a href="OptionParser.ParseError.html"><code class="inline">OptionParser.ParseError</code></a>
+exception if any invalid options are given.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#parse_head/2" data-no-tooltip="" translate="no">parse_head(argv, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Similar to <a href="#parse/2"><code class="inline">parse/2</code></a> but only parses the head of <code class="inline">argv</code>;
+as soon as it finds a non-switch, it stops parsing.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#parse_head!/2" data-no-tooltip="" translate="no">parse_head!(argv, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The same as <a href="#parse_head/2"><code class="inline">parse_head/2</code></a> but raises an <a href="OptionParser.ParseError.html"><code class="inline">OptionParser.ParseError</code></a>
+exception if any invalid options are given.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#split/1" data-no-tooltip="" translate="no">split(string)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Splits a string into <a href="#t:argv/0"><code class="inline">argv/0</code></a> chunks.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_argv/2" data-no-tooltip="" translate="no">to_argv(enum, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a key-value enumerable and converts it to <a href="#t:argv/0"><code class="inline">argv/0</code></a>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:argv/0">
+
+  <div class="detail-header">
+    <a href="#t:argv/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">argv()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L29" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> argv() :: [<a href="String.html#t:t/0">String.t</a>()]</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:errors/0">
+
+  <div class="detail-header">
+    <a href="#t:errors/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">errors()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L31" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> errors() :: [{<a href="String.html#t:t/0">String.t</a>(), <a href="String.html#t:t/0">String.t</a>() | nil}]</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:options/0">
+
+  <div class="detail-header">
+    <a href="#t:options/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">options()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L32" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> options() :: [
+  switches: <a href="typespecs.html#built-in-types">keyword</a>(),
+  strict: <a href="typespecs.html#built-in-types">keyword</a>(),
+  aliases: <a href="typespecs.html#built-in-types">keyword</a>(),
+  allow_nonexistent_atoms: <a href="typespecs.html#built-in-types">boolean</a>(),
+  return_separator: <a href="typespecs.html#built-in-types">boolean</a>()
+]</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:parsed/0">
+
+  <div class="detail-header">
+    <a href="#t:parsed/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parsed()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L30" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> parsed() :: <a href="typespecs.html#built-in-types">keyword</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="next/2">
+
+    <span id="next/1"></span>
+
+  <div class="detail-header">
+    <a href="#next/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">next(argv, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L437" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> next(<a href="#t:argv/0">argv</a>(), <a href="#t:options/0">options</a>()) ::
+  {:ok, key :: <a href="typespecs.html#basic-types">atom</a>(), value :: <a href="typespecs.html#built-in-types">term</a>(), <a href="#t:argv/0">argv</a>()}
+  | {:invalid, <a href="String.html#t:t/0">String.t</a>(), <a href="String.html#t:t/0">String.t</a>() | nil, <a href="#t:argv/0">argv</a>()}
+  | {:undefined, <a href="String.html#t:t/0">String.t</a>(), <a href="String.html#t:t/0">String.t</a>() | nil, <a href="#t:argv/0">argv</a>()}
+  | {:error, <a href="#t:argv/0">argv</a>()}</pre>
+
+      </div>
+
+<p>Low-level function that parses one option.</p><p>It accepts the same options as <a href="#parse/2"><code class="inline">parse/2</code></a> and <a href="#parse_head/2"><code class="inline">parse_head/2</code></a>
+as both functions are built on top of this function. This function
+may return:</p><ul><li><p><code class="inline">{:ok, key, value, rest}</code> - the option <code class="inline">key</code> with <code class="inline">value</code> was
+successfully parsed</p></li><li><p><code class="inline">{:invalid, key, value, rest}</code> - the option <code class="inline">key</code> is invalid with <code class="inline">value</code>
+(returned when the value cannot be parsed according to the switch type)</p></li><li><p><code class="inline">{:undefined, key, value, rest}</code> - the option <code class="inline">key</code> is undefined
+(returned in strict mode when the switch is unknown or on nonexistent atoms)</p></li><li><p><code class="inline">{:error, rest}</code> - there are no switches at the head of the given <code class="inline">argv</code></p></li></ul>
+  </section>
+</section>
+<section class="detail" id="parse/2">
+
+    <span id="parse/1"></span>
+
+  <div class="detail-header">
+    <a href="#parse/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse(argv, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L261" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> parse(<a href="#t:argv/0">argv</a>(), <a href="#t:options/0">options</a>()) :: {<a href="#t:parsed/0">parsed</a>(), <a href="#t:argv/0">argv</a>(), <a href="#t:errors/0">errors</a>()}</pre>
+
+      </div>
+
+<p>Parses <code class="inline">argv</code> into a keyword list.</p><p>It returns a three-element tuple with the form <code class="inline">{parsed, args, invalid}</code>, where:</p><ul><li><code class="inline">parsed</code> is a keyword list of parsed switches with <code class="inline">{switch_name, value}</code>
+tuples in it; <code class="inline">switch_name</code> is the atom representing the switch name while
+<code class="inline">value</code> is the value for that switch parsed according to <code class="inline">opts</code> (see the
+&quot;Examples&quot; section for more information)</li><li><code class="inline">args</code> is a list of the remaining arguments in <code class="inline">argv</code> as strings</li><li><code class="inline">invalid</code> is a list of invalid options as <code class="inline">{option_name, value}</code> where
+<code class="inline">option_name</code> is the raw option and <code class="inline">value</code> is <code class="inline">nil</code> if the option wasn't
+expected or the string value if the value didn't have the expected type for
+the corresponding option</li></ul><p>Elixir converts switches to underscored atoms, so <code class="inline">--source-path</code> becomes
+<code class="inline">:source_path</code>. This is done to better suit Elixir conventions. However, this
+means that switches can't contain underscores and switches that do contain
+underscores are always returned in the list of invalid switches.</p><p>When parsing, it is common to list switches and their expected types:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3404738649-1">(</span><span class="p" data-group-id="3404738649-2">[</span><span class="s">&quot;--debug&quot;</span><span class="p" data-group-id="3404738649-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3404738649-3">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="3404738649-3">]</span><span class="p" data-group-id="3404738649-1">)</span><span class="w">
+</span><span class="p" data-group-id="3404738649-4">{</span><span class="p" data-group-id="3404738649-5">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3404738649-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3404738649-6">[</span><span class="p" data-group-id="3404738649-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3404738649-7">[</span><span class="p" data-group-id="3404738649-7">]</span><span class="p" data-group-id="3404738649-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3404738649-8">(</span><span class="p" data-group-id="3404738649-9">[</span><span class="s">&quot;--source&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="3404738649-9">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3404738649-10">[</span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="ss">:string</span><span class="p" data-group-id="3404738649-10">]</span><span class="p" data-group-id="3404738649-8">)</span><span class="w">
+</span><span class="p" data-group-id="3404738649-11">{</span><span class="p" data-group-id="3404738649-12">[</span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="3404738649-12">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3404738649-13">[</span><span class="p" data-group-id="3404738649-13">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3404738649-14">[</span><span class="p" data-group-id="3404738649-14">]</span><span class="p" data-group-id="3404738649-11">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="3404738649-15">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3404738649-16">[</span><span class="s">&quot;--source-path&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--verbose&quot;</span><span class="p" data-group-id="3404738649-16">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3404738649-17">[</span><span class="ss">source_path</span><span class="p">:</span><span class="w"> </span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="3404738649-17">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="3404738649-15">)</span><span class="w">
+</span><span class="p" data-group-id="3404738649-18">{</span><span class="p" data-group-id="3404738649-19">[</span><span class="ss">source_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3404738649-19">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3404738649-20">[</span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p" data-group-id="3404738649-20">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3404738649-21">[</span><span class="p" data-group-id="3404738649-21">]</span><span class="p" data-group-id="3404738649-18">}</span></code></pre><p>We will explore the valid switches and operation modes of option parser below.</p><h2 id="parse/2-options" class="section-heading">
+  <a href="#parse/2-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<p>The following options are supported:</p><ul><li><code class="inline">:switches</code> or <code class="inline">:strict</code> - see the &quot;Switch definitions&quot; section below</li><li><code class="inline">:allow_nonexistent_atoms</code> - see the &quot;Parsing unknown switches&quot; section below</li><li><code class="inline">:aliases</code> - see the &quot;Aliases&quot; section below</li><li><code class="inline">:return_separator</code> - see the &quot;Return separator&quot; section below</li></ul><h2 id="parse/2-switch-definitions" class="section-heading">
+  <a href="#parse/2-switch-definitions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Switch definitions</span>
+</h2>
+<p>Switches can be specified via one of two options:</p><ul><li><p><code class="inline">:strict</code> - defines strict switches and their types. Any switch
+in <code class="inline">argv</code> that is not specified in the list is returned in the
+invalid options list. This is the preferred way to parse options.</p></li><li><p><code class="inline">:switches</code> - defines switches and their types. This function
+still attempts to parse switches that are not in this list.</p></li></ul><p>Both these options accept a keyword list where the key is an atom
+defining the name of the switch and value is the <code class="inline">type</code> of the
+switch (see the &quot;Types&quot; section below for more information).</p><p>Note that you should only supply the <code class="inline">:switches</code> or the <code class="inline">:strict</code> option.
+If you supply both, an <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> exception will be raised.</p><h3 id="parse/2-types" class="section-heading">
+  <a href="#parse/2-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Types</span>
+</h3>
+<p>Switches parsed by <a href="OptionParser.html"><code class="inline">OptionParser</code></a> may take zero or one arguments.</p><p>The following switches types take no arguments:</p><ul><li><code class="inline">:boolean</code> - sets the value to <code class="inline">true</code> when given (see also the
+&quot;Negation switches&quot; section below)</li><li><code class="inline">:count</code> - counts the number of times the switch is given</li></ul><p>The following switches take one argument:</p><ul><li><code class="inline">:integer</code> - parses the value as an integer</li><li><code class="inline">:float</code> - parses the value as a float</li><li><code class="inline">:string</code> - parses the value as a string</li></ul><p>If a switch can't be parsed according to the given type, it is
+returned in the invalid options list.</p><h3 id="parse/2-modifiers" class="section-heading">
+  <a href="#parse/2-modifiers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Modifiers</span>
+</h3>
+<p>Switches can be specified with modifiers, which change how
+they behave. The following modifiers are supported:</p><ul><li><code class="inline">:keep</code> - keeps duplicate elements instead of overriding them;
+works with all types except <code class="inline">:count</code>. Specifying <code class="inline">switch_name: :keep</code>
+assumes the type of <code class="inline">:switch_name</code> will be <code class="inline">:string</code>.</li></ul><p>To use <code class="inline">:keep</code> with a type other than <code class="inline">:string</code>, use a list as the type
+for the switch. For example: <code class="inline">[foo: [:integer, :keep]]</code>.</p><h3 id="parse/2-negation-switches" class="section-heading">
+  <a href="#parse/2-negation-switches" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Negation switches</span>
+</h3>
+<p>In case a switch <code class="inline">SWITCH</code> is specified to have type <code class="inline">:boolean</code>, it may be
+passed as <code class="inline">--no-SWITCH</code> as well which will set the option to <code class="inline">false</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7501807446-1">(</span><span class="p" data-group-id="7501807446-2">[</span><span class="s">&quot;--no-op&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="7501807446-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7501807446-3">[</span><span class="ss">op</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="7501807446-3">]</span><span class="p" data-group-id="7501807446-1">)</span><span class="w">
+</span><span class="p" data-group-id="7501807446-4">{</span><span class="p" data-group-id="7501807446-5">[</span><span class="ss">op</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="7501807446-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7501807446-6">[</span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="7501807446-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7501807446-7">[</span><span class="p" data-group-id="7501807446-7">]</span><span class="p" data-group-id="7501807446-4">}</span></code></pre><h3 id="parse/2-parsing-unknown-switches" class="section-heading">
+  <a href="#parse/2-parsing-unknown-switches" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Parsing unknown switches</span>
+</h3>
+<p>When the <code class="inline">:switches</code> option is given, <a href="OptionParser.html"><code class="inline">OptionParser</code></a> will attempt to parse
+unknown switches.</p><p>Switches without an argument will be set to <code class="inline">true</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4802396872-1">(</span><span class="p" data-group-id="4802396872-2">[</span><span class="s">&quot;--debug&quot;</span><span class="p" data-group-id="4802396872-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4802396872-3">[</span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="ss">:string</span><span class="p" data-group-id="4802396872-3">]</span><span class="p" data-group-id="4802396872-1">)</span><span class="w">
+</span><span class="p" data-group-id="4802396872-4">{</span><span class="p" data-group-id="4802396872-5">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="4802396872-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4802396872-6">[</span><span class="p" data-group-id="4802396872-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4802396872-7">[</span><span class="p" data-group-id="4802396872-7">]</span><span class="p" data-group-id="4802396872-4">}</span></code></pre><p>Even though we haven't specified <code class="inline">--debug</code> in the list of switches, it is part
+of the returned options. The same happens for switches followed by another switch:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7909948792-1">(</span><span class="p" data-group-id="7909948792-2">[</span><span class="s">&quot;--debug&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--ok&quot;</span><span class="p" data-group-id="7909948792-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7909948792-3">[</span><span class="p" data-group-id="7909948792-3">]</span><span class="p" data-group-id="7909948792-1">)</span><span class="w">
+</span><span class="p" data-group-id="7909948792-4">{</span><span class="p" data-group-id="7909948792-5">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7909948792-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7909948792-6">[</span><span class="p" data-group-id="7909948792-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7909948792-7">[</span><span class="p" data-group-id="7909948792-7">]</span><span class="p" data-group-id="7909948792-4">}</span></code></pre><p>Switches followed by a value will be assigned the value, as a string:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="4525649915-1">(</span><span class="p" data-group-id="4525649915-2">[</span><span class="s">&quot;--debug&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p" data-group-id="4525649915-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4525649915-3">[</span><span class="ss">key</span><span class="p">:</span><span class="w"> </span><span class="ss">:string</span><span class="p" data-group-id="4525649915-3">]</span><span class="p" data-group-id="4525649915-1">)</span><span class="w">
+</span><span class="p" data-group-id="4525649915-4">{</span><span class="p" data-group-id="4525649915-5">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p" data-group-id="4525649915-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4525649915-6">[</span><span class="p" data-group-id="4525649915-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4525649915-7">[</span><span class="p" data-group-id="4525649915-7">]</span><span class="p" data-group-id="4525649915-4">}</span></code></pre><p>Since we cannot assert the type of the switch value, it is preferred to use the
+<code class="inline">:strict</code> option that accepts only known switches and always verify their types.</p><p>If you do want to parse unknown switches, remember that Elixir converts switches
+to atoms. Since atoms are not garbage-collected, to avoid creating new ones,
+OptionParser by default only parses switches that translate to existing atoms.
+The code below discards the <code class="inline">--option-parser-example</code> switch because the
+<code class="inline">:option_parser_example</code> atom is never used anywhere:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6340776841-1">(</span><span class="p" data-group-id="6340776841-2">[</span><span class="s">&quot;--option-parser-example&quot;</span><span class="p" data-group-id="6340776841-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6340776841-3">[</span><span class="p" data-group-id="6340776841-3">]</span><span class="p" data-group-id="6340776841-1">)</span><span class="w">
+</span><span class="p" data-group-id="6340776841-4">{</span><span class="p" data-group-id="6340776841-5">[</span><span class="p" data-group-id="6340776841-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6340776841-6">[</span><span class="p" data-group-id="6340776841-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6340776841-7">[</span><span class="p" data-group-id="6340776841-7">]</span><span class="p" data-group-id="6340776841-4">}</span></code></pre><p>If a switch corresponds to an existing Elixir atom, whether from your
+code, a dependency or from Elixir itself, it will be accepted. However,
+it is best to not rely on external code, and always define the atoms
+you want to parse in the same module that calls <a href="OptionParser.html"><code class="inline">OptionParser</code></a> itself,
+as direct arguments to the <code class="inline">:switches</code> or <code class="inline">:strict</code> options.</p><p>If you would like to parse all switches, regardless if they exist or not,
+you can force creation of atoms by passing <code class="inline">allow_nonexistent_atoms: true</code>
+as option. Use this option with care. It is only useful when you are building
+command-line applications that receive dynamically-named arguments and must
+be avoided in long-running systems.</p><h2 id="parse/2-aliases" class="section-heading">
+  <a href="#parse/2-aliases" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Aliases</span>
+</h2>
+<p>A set of aliases can be specified in the <code class="inline">:aliases</code> option:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7285822061-1">(</span><span class="p" data-group-id="7285822061-2">[</span><span class="s">&quot;-d&quot;</span><span class="p" data-group-id="7285822061-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">aliases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7285822061-3">[</span><span class="ss">d</span><span class="p">:</span><span class="w"> </span><span class="ss">:debug</span><span class="p" data-group-id="7285822061-3">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7285822061-4">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="7285822061-4">]</span><span class="p" data-group-id="7285822061-1">)</span><span class="w">
+</span><span class="p" data-group-id="7285822061-5">{</span><span class="p" data-group-id="7285822061-6">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="7285822061-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7285822061-7">[</span><span class="p" data-group-id="7285822061-7">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7285822061-8">[</span><span class="p" data-group-id="7285822061-8">]</span><span class="p" data-group-id="7285822061-5">}</span></code></pre><h2 id="parse/2-examples" class="section-heading">
+  <a href="#parse/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Here are some examples of working with different types and modifiers:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-1">(</span><span class="p" data-group-id="6065560695-2">[</span><span class="s">&quot;--unlock&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="6065560695-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-3">[</span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="6065560695-3">]</span><span class="p" data-group-id="6065560695-1">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-4">{</span><span class="p" data-group-id="6065560695-5">[</span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6065560695-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-6">[</span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="6065560695-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-7">[</span><span class="p" data-group-id="6065560695-7">]</span><span class="p" data-group-id="6065560695-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-8">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6065560695-9">[</span><span class="s">&quot;--unlock&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--limit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="6065560695-9">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-10">[</span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="6065560695-10">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="6065560695-8">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-11">{</span><span class="p" data-group-id="6065560695-12">[</span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6065560695-12">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-13">[</span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="6065560695-13">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-14">[</span><span class="p" data-group-id="6065560695-14">]</span><span class="p" data-group-id="6065560695-11">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-15">(</span><span class="p" data-group-id="6065560695-16">[</span><span class="s">&quot;--limit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;3&quot;</span><span class="p" data-group-id="6065560695-16">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-17">[</span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="6065560695-17">]</span><span class="p" data-group-id="6065560695-15">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-18">{</span><span class="p" data-group-id="6065560695-19">[</span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6065560695-19">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-20">[</span><span class="p" data-group-id="6065560695-20">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-21">[</span><span class="p" data-group-id="6065560695-21">]</span><span class="p" data-group-id="6065560695-18">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-22">(</span><span class="p" data-group-id="6065560695-23">[</span><span class="s">&quot;--limit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="6065560695-23">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-24">[</span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="6065560695-24">]</span><span class="p" data-group-id="6065560695-22">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-25">{</span><span class="p" data-group-id="6065560695-26">[</span><span class="p" data-group-id="6065560695-26">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-27">[</span><span class="p" data-group-id="6065560695-27">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-28">[</span><span class="p" data-group-id="6065560695-29">{</span><span class="s">&quot;--limit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="6065560695-29">}</span><span class="p" data-group-id="6065560695-28">]</span><span class="p" data-group-id="6065560695-25">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-30">(</span><span class="p" data-group-id="6065560695-31">[</span><span class="s">&quot;--verbose&quot;</span><span class="p" data-group-id="6065560695-31">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-32">[</span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="ss">:count</span><span class="p" data-group-id="6065560695-32">]</span><span class="p" data-group-id="6065560695-30">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-33">{</span><span class="p" data-group-id="6065560695-34">[</span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6065560695-34">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-35">[</span><span class="p" data-group-id="6065560695-35">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-36">[</span><span class="p" data-group-id="6065560695-36">]</span><span class="p" data-group-id="6065560695-33">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-37">(</span><span class="p" data-group-id="6065560695-38">[</span><span class="s">&quot;-v&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-v&quot;</span><span class="p" data-group-id="6065560695-38">]</span><span class="p">,</span><span class="w"> </span><span class="ss">aliases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-39">[</span><span class="ss">v</span><span class="p">:</span><span class="w"> </span><span class="ss">:verbose</span><span class="p" data-group-id="6065560695-39">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-40">[</span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="ss">:count</span><span class="p" data-group-id="6065560695-40">]</span><span class="p" data-group-id="6065560695-37">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-41">{</span><span class="p" data-group-id="6065560695-42">[</span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6065560695-42">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-43">[</span><span class="p" data-group-id="6065560695-43">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-44">[</span><span class="p" data-group-id="6065560695-44">]</span><span class="p" data-group-id="6065560695-41">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-45">(</span><span class="p" data-group-id="6065560695-46">[</span><span class="s">&quot;--unknown&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="6065560695-46">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-47">[</span><span class="p" data-group-id="6065560695-47">]</span><span class="p" data-group-id="6065560695-45">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-48">{</span><span class="p" data-group-id="6065560695-49">[</span><span class="p" data-group-id="6065560695-49">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-50">[</span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="6065560695-50">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-51">[</span><span class="p" data-group-id="6065560695-52">{</span><span class="s">&quot;--unknown&quot;</span><span class="p">,</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="6065560695-52">}</span><span class="p" data-group-id="6065560695-51">]</span><span class="p" data-group-id="6065560695-48">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-53">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6065560695-54">[</span><span class="s">&quot;--limit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--unknown&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="6065560695-54">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-55">[</span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="6065560695-55">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="6065560695-53">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-56">{</span><span class="p" data-group-id="6065560695-57">[</span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">unknown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="6065560695-57">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-58">[</span><span class="p" data-group-id="6065560695-58">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-59">[</span><span class="p" data-group-id="6065560695-59">]</span><span class="p" data-group-id="6065560695-56">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="6065560695-60">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6065560695-61">[</span><span class="s">&quot;--unlock&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--unlock&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/another/file&quot;</span><span class="p" data-group-id="6065560695-61">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6065560695-62">[</span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="ss">:keep</span><span class="p" data-group-id="6065560695-62">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="6065560695-60">)</span><span class="w">
+</span><span class="p" data-group-id="6065560695-63">{</span><span class="p" data-group-id="6065560695-64">[</span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/file&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/another/file&quot;</span><span class="p" data-group-id="6065560695-64">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-65">[</span><span class="p" data-group-id="6065560695-65">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6065560695-66">[</span><span class="p" data-group-id="6065560695-66">]</span><span class="p" data-group-id="6065560695-63">}</span></code></pre><h2 id="parse/2-return-separator" class="section-heading">
+  <a href="#parse/2-return-separator" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Return separator</span>
+</h2>
+<p>The separator <code class="inline">--</code> implies options should no longer be processed.
+By default, the separator is not returned as parts of the arguments,
+but that can be changed via the <code class="inline">:return_separator</code> option:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1632092451-1">(</span><span class="p" data-group-id="1632092451-2">[</span><span class="s">&quot;--&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="1632092451-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">return_separator</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1632092451-3">[</span><span class="p" data-group-id="1632092451-3">]</span><span class="p" data-group-id="1632092451-1">)</span><span class="w">
+</span><span class="p" data-group-id="1632092451-4">{</span><span class="p" data-group-id="1632092451-5">[</span><span class="p" data-group-id="1632092451-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1632092451-6">[</span><span class="s">&quot;--&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="1632092451-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1632092451-7">[</span><span class="p" data-group-id="1632092451-7">]</span><span class="p" data-group-id="1632092451-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1632092451-8">(</span><span class="p" data-group-id="1632092451-9">[</span><span class="s">&quot;--no-halt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="1632092451-9">]</span><span class="p">,</span><span class="w"> </span><span class="ss">return_separator</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1632092451-10">[</span><span class="ss">halt</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="1632092451-10">]</span><span class="p" data-group-id="1632092451-8">)</span><span class="w">
+</span><span class="p" data-group-id="1632092451-11">{</span><span class="p" data-group-id="1632092451-12">[</span><span class="ss">halt</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="1632092451-12">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1632092451-13">[</span><span class="s">&quot;--&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="1632092451-13">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1632092451-14">[</span><span class="p" data-group-id="1632092451-14">]</span><span class="p" data-group-id="1632092451-11">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1632092451-15">(</span><span class="p" data-group-id="1632092451-16">[</span><span class="s">&quot;script.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--no-halt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="1632092451-16">]</span><span class="p">,</span><span class="w"> </span><span class="ss">return_separator</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1632092451-17">[</span><span class="ss">halt</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="1632092451-17">]</span><span class="p" data-group-id="1632092451-15">)</span><span class="w">
+</span><span class="p" data-group-id="1632092451-18">{</span><span class="p" data-group-id="1632092451-19">[</span><span class="p" data-group-id="1632092451-20">{</span><span class="ss">:halt</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="1632092451-20">}</span><span class="p" data-group-id="1632092451-19">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1632092451-21">[</span><span class="s">&quot;script.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p" data-group-id="1632092451-21">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1632092451-22">[</span><span class="p" data-group-id="1632092451-22">]</span><span class="p" data-group-id="1632092451-18">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="parse!/2">
+
+    <span id="parse!/1"></span>
+
+  <div class="detail-header">
+    <a href="#parse!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse!(argv, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L298" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> parse!(<a href="#t:argv/0">argv</a>(), <a href="#t:options/0">options</a>()) :: {<a href="#t:parsed/0">parsed</a>(), <a href="#t:argv/0">argv</a>()}</pre>
+
+      </div>
+
+<p>The same as <a href="#parse/2"><code class="inline">parse/2</code></a> but raises an <a href="OptionParser.ParseError.html"><code class="inline">OptionParser.ParseError</code></a>
+exception if any invalid options are given.</p><p>If there are no errors, returns a <code class="inline">{parsed, rest}</code> tuple where:</p><ul><li><code class="inline">parsed</code> is the list of parsed switches (same as in <a href="#parse/2"><code class="inline">parse/2</code></a>)</li><li><code class="inline">rest</code> is the list of arguments (same as in <a href="#parse/2"><code class="inline">parse/2</code></a>)</li></ul><h2 id="parse!/2-examples" class="section-heading">
+  <a href="#parse!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse!</span><span class="p" data-group-id="5822911863-1">(</span><span class="p" data-group-id="5822911863-2">[</span><span class="s">&quot;--debug&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="5822911863-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5822911863-3">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="5822911863-3">]</span><span class="p" data-group-id="5822911863-1">)</span><span class="w">
+</span><span class="p" data-group-id="5822911863-4">{</span><span class="p" data-group-id="5822911863-5">[</span><span class="ss">debug</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5822911863-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5822911863-6">[</span><span class="s">&quot;path/to/file&quot;</span><span class="p" data-group-id="5822911863-6">]</span><span class="p" data-group-id="5822911863-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse!</span><span class="p" data-group-id="5822911863-7">(</span><span class="p" data-group-id="5822911863-8">[</span><span class="s">&quot;--limit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="5822911863-8">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5822911863-9">[</span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="5822911863-9">]</span><span class="p" data-group-id="5822911863-7">)</span><span class="w">
+</span><span class="gt">** (OptionParser.ParseError) 1 error found!</span><span class="w">
+</span><span class="o">--</span><span class="n">limit</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Expected</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse!</span><span class="p" data-group-id="5822911863-10">(</span><span class="p" data-group-id="5822911863-11">[</span><span class="s">&quot;--unknown&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p" data-group-id="5822911863-11">]</span><span class="p">,</span><span class="w"> </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5822911863-12">[</span><span class="p" data-group-id="5822911863-12">]</span><span class="p" data-group-id="5822911863-10">)</span><span class="w">
+</span><span class="gt">** (OptionParser.ParseError) 1 error found!</span><span class="w">
+</span><span class="o">--</span><span class="n">unknown</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Unknown</span><span class="w"> </span><span class="n">option</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse!</span><span class="p" data-group-id="5822911863-13">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="5822911863-14">[</span><span class="s">&quot;-l&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-f&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="5822911863-14">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5822911863-15">[</span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="5822911863-15">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">aliases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5822911863-16">[</span><span class="ss">l</span><span class="p">:</span><span class="w"> </span><span class="ss">:limit</span><span class="p">,</span><span class="w"> </span><span class="ss">f</span><span class="p">:</span><span class="w"> </span><span class="ss">:foo</span><span class="p" data-group-id="5822911863-16">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="5822911863-13">)</span><span class="w">
+</span><span class="gt">** (OptionParser.ParseError) 2 errors found!</span><span class="w">
+</span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Expected</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="s">&quot;xyz&quot;</span><span class="w">
+</span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Expected</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="s">&quot;bar&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="parse_head/2">
+
+    <span id="parse_head/1"></span>
+
+  <div class="detail-header">
+    <a href="#parse_head/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse_head(argv, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L327" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> parse_head(<a href="#t:argv/0">argv</a>(), <a href="#t:options/0">options</a>()) :: {<a href="#t:parsed/0">parsed</a>(), <a href="#t:argv/0">argv</a>(), <a href="#t:errors/0">errors</a>()}</pre>
+
+      </div>
+
+<p>Similar to <a href="#parse/2"><code class="inline">parse/2</code></a> but only parses the head of <code class="inline">argv</code>;
+as soon as it finds a non-switch, it stops parsing.</p><p>See <a href="#parse/2"><code class="inline">parse/2</code></a> for more information.</p><h2 id="parse_head/2-example" class="section-heading">
+  <a href="#parse_head/2-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse_head</span><span class="p" data-group-id="6727182934-1">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6727182934-2">[</span><span class="s">&quot;--source&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--verbose&quot;</span><span class="p" data-group-id="6727182934-2">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6727182934-3">[</span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="6727182934-3">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="6727182934-1">)</span><span class="w">
+</span><span class="p" data-group-id="6727182934-4">{</span><span class="p" data-group-id="6727182934-5">[</span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="6727182934-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6727182934-6">[</span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--verbose&quot;</span><span class="p" data-group-id="6727182934-6">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6727182934-7">[</span><span class="p" data-group-id="6727182934-7">]</span><span class="p" data-group-id="6727182934-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse_head</span><span class="p" data-group-id="6727182934-8">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6727182934-9">[</span><span class="s">&quot;--verbose&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--source&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--unlock&quot;</span><span class="p" data-group-id="6727182934-9">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6727182934-10">[</span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p">,</span><span class="w"> </span><span class="ss">unlock</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="6727182934-10">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="6727182934-8">)</span><span class="w">
+</span><span class="p" data-group-id="6727182934-11">{</span><span class="p" data-group-id="6727182934-12">[</span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="6727182934-12">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6727182934-13">[</span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--unlock&quot;</span><span class="p" data-group-id="6727182934-13">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6727182934-14">[</span><span class="p" data-group-id="6727182934-14">]</span><span class="p" data-group-id="6727182934-11">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="parse_head!/2">
+
+    <span id="parse_head!/1"></span>
+
+  <div class="detail-header">
+    <a href="#parse_head!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse_head!(argv, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L365" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> parse_head!(<a href="#t:argv/0">argv</a>(), <a href="#t:options/0">options</a>()) :: {<a href="#t:parsed/0">parsed</a>(), <a href="#t:argv/0">argv</a>()}</pre>
+
+      </div>
+
+<p>The same as <a href="#parse_head/2"><code class="inline">parse_head/2</code></a> but raises an <a href="OptionParser.ParseError.html"><code class="inline">OptionParser.ParseError</code></a>
+exception if any invalid options are given.</p><p>If there are no errors, returns a <code class="inline">{parsed, rest}</code> tuple where:</p><ul><li><code class="inline">parsed</code> is the list of parsed switches (same as in <a href="#parse_head/2"><code class="inline">parse_head/2</code></a>)</li><li><code class="inline">rest</code> is the list of arguments (same as in <a href="#parse_head/2"><code class="inline">parse_head/2</code></a>)</li></ul><h2 id="parse_head!/2-examples" class="section-heading">
+  <a href="#parse_head!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse_head!</span><span class="p" data-group-id="0102691041-1">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="0102691041-2">[</span><span class="s">&quot;--source&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--verbose&quot;</span><span class="p" data-group-id="0102691041-2">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0102691041-3">[</span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="ss">:boolean</span><span class="p" data-group-id="0102691041-3">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="0102691041-1">)</span><span class="w">
+</span><span class="p" data-group-id="0102691041-4">{</span><span class="p" data-group-id="0102691041-5">[</span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="0102691041-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0102691041-6">[</span><span class="s">&quot;path/to/file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--verbose&quot;</span><span class="p" data-group-id="0102691041-6">]</span><span class="p" data-group-id="0102691041-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse_head!</span><span class="p" data-group-id="0102691041-7">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="0102691041-8">[</span><span class="s">&quot;--number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--verbose&quot;</span><span class="p" data-group-id="0102691041-8">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0102691041-9">[</span><span class="ss">number</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="0102691041-9">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="0102691041-7">)</span><span class="w">
+</span><span class="gt">** (OptionParser.ParseError) 1 error found!</span><span class="w">
+</span><span class="o">--</span><span class="n">number</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Expected</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">parse_head!</span><span class="p" data-group-id="0102691041-10">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="0102691041-11">[</span><span class="s">&quot;--verbose&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--source&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test/enum_test.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--unlock&quot;</span><span class="p" data-group-id="0102691041-11">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="ss">strict</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0102691041-12">[</span><span class="ss">verbose</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p">,</span><span class="w"> </span><span class="ss">source</span><span class="p">:</span><span class="w"> </span><span class="ss">:integer</span><span class="p" data-group-id="0102691041-12">]</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="0102691041-10">)</span><span class="w">
+</span><span class="gt">** (OptionParser.ParseError) 2 errors found!</span><span class="w">
+</span><span class="o">--</span><span class="n">verbose</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Missing</span><span class="w"> </span><span class="n">argument</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">integer</span><span class="w">
+</span><span class="o">--</span><span class="n">source</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">Expected</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="s">&quot;lib&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="split/1">
+
+  <div class="detail-header">
+    <a href="#split/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">split(string)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L590" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> split(<a href="String.html#t:t/0">String.t</a>()) :: <a href="#t:argv/0">argv</a>()</pre>
+
+      </div>
+
+<p>Splits a string into <a href="#t:argv/0"><code class="inline">argv/0</code></a> chunks.</p><p>This function splits the given <code class="inline">string</code> into a list of strings in a similar
+way to many shells.</p><h2 id="split/1-examples" class="section-heading">
+  <a href="#split/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4947532864-1">(</span><span class="s">&quot;foo bar&quot;</span><span class="p" data-group-id="4947532864-1">)</span><span class="w">
+</span><span class="p" data-group-id="4947532864-2">[</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p" data-group-id="4947532864-2">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4947532864-3">(</span><span class="s">&quot;foo </span><span class="se">\&quot;</span><span class="s">bar baz</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p" data-group-id="4947532864-3">)</span><span class="w">
+</span><span class="p" data-group-id="4947532864-4">[</span><span class="s">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar baz&quot;</span><span class="p" data-group-id="4947532864-4">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_argv/2">
+
+    <span id="to_argv/1"></span>
+
+  <div class="detail-header">
+    <a href="#to_argv/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_argv(enum, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/option_parser.ex#L551" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_argv(<a href="Enumerable.html#t:t/0">Enumerable.t</a>(), <a href="#t:options/0">options</a>()) :: <a href="#t:argv/0">argv</a>()</pre>
+
+      </div>
+
+<p>Receives a key-value enumerable and converts it to <a href="#t:argv/0"><code class="inline">argv/0</code></a>.</p><p>Keys must be atoms. Keys with <code class="inline">nil</code> value are discarded,
+boolean values are converted to <code class="inline">--key</code> or <code class="inline">--no-key</code>
+(if the value is <code class="inline">true</code> or <code class="inline">false</code>, respectively),
+and all other values are converted using <a href="Kernel.html#to_string/1"><code class="inline">to_string/1</code></a>.</p><p>It is advised to pass to <a href="#to_argv/2"><code class="inline">to_argv/2</code></a> the same set of <code class="inline">options</code>
+given to <a href="#parse/2"><code class="inline">parse/2</code></a>. Some switches can only be reconstructed
+correctly with the <code class="inline">:switches</code> information in hand.</p><h2 id="to_argv/2-examples" class="section-heading">
+  <a href="#to_argv/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">to_argv</span><span class="p" data-group-id="1332886308-1">(</span><span class="ss">foo_bar</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;baz&quot;</span><span class="p" data-group-id="1332886308-1">)</span><span class="w">
+</span><span class="p" data-group-id="1332886308-2">[</span><span class="s">&quot;--foo-bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;baz&quot;</span><span class="p" data-group-id="1332886308-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">to_argv</span><span class="p" data-group-id="1332886308-3">(</span><span class="ss">bool</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">bool</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w"> </span><span class="ss">discarded</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="1332886308-3">)</span><span class="w">
+</span><span class="p" data-group-id="1332886308-4">[</span><span class="s">&quot;--bool&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--no-bool&quot;</span><span class="p" data-group-id="1332886308-4">]</span></code></pre><p>Some switches will output different values based on the switches
+types:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">to_argv</span><span class="p" data-group-id="2806516829-1">(</span><span class="p" data-group-id="2806516829-2">[</span><span class="ss">number</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="2806516829-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2806516829-3">[</span><span class="p" data-group-id="2806516829-3">]</span><span class="p" data-group-id="2806516829-1">)</span><span class="w">
+</span><span class="p" data-group-id="2806516829-4">[</span><span class="s">&quot;--number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p" data-group-id="2806516829-4">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">OptionParser</span><span class="o">.</span><span class="n">to_argv</span><span class="p" data-group-id="2806516829-5">(</span><span class="p" data-group-id="2806516829-6">[</span><span class="ss">number</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="2806516829-6">]</span><span class="p">,</span><span class="w"> </span><span class="ss">switches</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2806516829-7">[</span><span class="ss">number</span><span class="p">:</span><span class="w"> </span><span class="ss">:count</span><span class="p" data-group-id="2806516829-7">]</span><span class="p" data-group-id="2806516829-5">)</span><span class="w">
+</span><span class="p" data-group-id="2806516829-8">[</span><span class="s">&quot;--number&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;--number&quot;</span><span class="p" data-group-id="2806516829-8">]</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Configuration and releases — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/config-and-releases.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Configuration and releases</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/config-and-releases.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this last guide, we will make the routing table for our distributed key-value store configurable, and then finally package the software for production.</p><p>Let's do this.</p><h2 id="application-environment" class="section-heading">
+  <a href="#application-environment" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Application environment</span>
+</h2>
+<p>So far we have hard-coded the routing table into the <code class="inline">KV.Router</code> module. However, we would like to make the table dynamic. This allows us not only to configure development/test/production, but also to allow different nodes to run with different entries in the routing table. There is a feature of OTP that does exactly that: the application environment.</p><p>Each application has an environment that stores the application's specific configuration by key. For example, we could store the routing table in the <code class="inline">:kv</code> application environment, giving it a default value and allowing other applications to change the table as needed.</p><p>Open up <code class="inline">apps/kv/mix.exs</code> and change the <code class="inline">application/0</code> function to return the following:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">application</span><span class="w"> </span><span class="k" data-group-id="6405294927-1">do</span><span class="w">
+  </span><span class="p" data-group-id="6405294927-2">[</span><span class="w">
+    </span><span class="ss">extra_applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6405294927-3">[</span><span class="ss">:logger</span><span class="p" data-group-id="6405294927-3">]</span><span class="p">,</span><span class="w">
+    </span><span class="ss">env</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6405294927-4">[</span><span class="ss">routing_table</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6405294927-5">[</span><span class="p" data-group-id="6405294927-5">]</span><span class="p" data-group-id="6405294927-4">]</span><span class="p">,</span><span class="w">
+    </span><span class="ss">mod</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6405294927-6">{</span><span class="nc">KV</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6405294927-7">[</span><span class="p" data-group-id="6405294927-7">]</span><span class="p" data-group-id="6405294927-6">}</span><span class="w">
+  </span><span class="p" data-group-id="6405294927-2">]</span><span class="w">
+</span><span class="k" data-group-id="6405294927-1">end</span></code></pre><p>We have added a new <code class="inline">:env</code> key to the application. It returns the application default environment, which has an entry of key <code class="inline">:routing_table</code> and value of an empty list. It makes sense for the application environment to ship with an empty table, as the specific routing table depends on the testing/deployment structure.</p><p>In order to use the application environment in our code, we need to replace <code class="inline">KV.Router.table/0</code> with the definition below:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+The routing table.
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">table</span><span class="w"> </span><span class="k" data-group-id="1336256849-1">do</span><span class="w">
+  </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="1336256849-2">(</span><span class="ss">:kv</span><span class="p">,</span><span class="w"> </span><span class="ss">:routing_table</span><span class="p" data-group-id="1336256849-2">)</span><span class="w">
+</span><span class="k" data-group-id="1336256849-1">end</span></code></pre><p>We use <a href="Application.html#fetch_env!/2"><code class="inline">Application.fetch_env!/2</code></a> to read the entry for <code class="inline">:routing_table</code> in <code class="inline">:kv</code>'s environment. You can find more information and other functions to manipulate the app environment in the <a href="Application.html"><code class="inline">Application</code></a> module.</p><p>Since our routing table is now empty, our distributed tests should fail. Restart the apps and re-run tests to see the failure:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex --sname bar -S mix
+</span><span class="gp unselectable">$ </span><span class="">elixir --sname foo -S mix test --only distributed
+</span></code></pre><p>We need a way to configure the application environment. That's when we use configuration files.</p><h2 id="configuration" class="section-heading">
+  <a href="#configuration" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Configuration</span>
+</h2>
+<p>Configuration files provide a mechanism for us to configure the environment of any application. Elixir provides two configuration entry points:</p><ul><li><p><code class="inline">config/config.exs</code> — this file is read at build time, before we compile our application and before we even load our dependencies. This means we can't access the code in our application nor in our dependencies. However, it means we can control how they are compiled</p></li><li><p><code class="inline">config/runtime.exs</code> — this file is read after our application and dependencies are compiled and therefore it can configure how our application works at runtime. If you want to read system environment variables (via <a href="System.html#get_env/1"><code class="inline">System.get_env/1</code></a>) or any sort of external configuration, this is the appropriate place to do so</p></li></ul><p>For example, we can configure IEx default prompt to another value. Let's create the <code class="inline">config/runtime.exs</code> file with the following content:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Config</span><span class="w">
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:iex</span><span class="p">,</span><span class="w"> </span><span class="ss">default_prompt</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;&gt;&gt;&quot;</span></code></pre><p>Start IEx with <code class="inline">iex -S mix</code> and you can see that the IEx prompt has changed.</p><p>This means we can also configure our <code class="inline">:routing_table</code> directly in the <code class="inline">config/runtime.exs</code> file. However, which configuration value should we use?</p><p>Currently we have two tests tagged with <code class="inline">@tag :distributed</code>. The &quot;server interaction&quot; test in <code class="inline">KVServerTest</code>, and the &quot;route requests across nodes&quot; in <code class="inline">KV.RouterTest</code>. Both tests are failing since they require a routing table, which is currently empty.</p><p>For simplicity, we will define a routing table that always points to the current node. That's the table we will use for development and most of our tests. Back in <code class="inline">config/runtime.exs</code>, add this line:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:kv</span><span class="p">,</span><span class="w"> </span><span class="ss">:routing_table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6290341759-1">[</span><span class="p" data-group-id="6290341759-2">{</span><span class="sc">?a</span><span class="o">..</span><span class="sc">?z</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p" data-group-id="6290341759-3">(</span><span class="p" data-group-id="6290341759-3">)</span><span class="p" data-group-id="6290341759-2">}</span><span class="p" data-group-id="6290341759-1">]</span></code></pre><p>With such a simple table available, we can now remove <code class="inline">@tag :distributed</code> from the test in <code class="inline">test/kv_server_test.exs</code>. If you run the complete suite, the test should now pass.</p><p>However, for the tests in <code class="inline">KV.RouterTest</code>, we effectively need two nodes in our routing table. To do so, we will write a setup block that runs before all tests in that file. The setup block will change the application environment and revert it back once we are done, like this:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.RouterTest</span><span class="w"> </span><span class="k" data-group-id="8905272926-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="w">
+
+  </span><span class="n">setup_all</span><span class="w"> </span><span class="k" data-group-id="8905272926-2">do</span><span class="w">
+    </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">get_env</span><span class="p" data-group-id="8905272926-3">(</span><span class="ss">:kv</span><span class="p">,</span><span class="w"> </span><span class="ss">:routing_table</span><span class="p" data-group-id="8905272926-3">)</span><span class="w">
+
+    </span><span class="nc">Application</span><span class="o">.</span><span class="n">put_env</span><span class="p" data-group-id="8905272926-4">(</span><span class="ss">:kv</span><span class="p">,</span><span class="w"> </span><span class="ss">:routing_table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8905272926-5">[</span><span class="w">
+      </span><span class="p" data-group-id="8905272926-6">{</span><span class="sc">?a</span><span class="o">..</span><span class="sc">?m</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p" data-group-id="8905272926-6">}</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="8905272926-7">{</span><span class="sc">?n</span><span class="o">..</span><span class="sc">?z</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;bar@computer-name&quot;</span><span class="p" data-group-id="8905272926-7">}</span><span class="w">
+    </span><span class="p" data-group-id="8905272926-5">]</span><span class="p" data-group-id="8905272926-4">)</span><span class="w">
+
+    </span><span class="n">on_exit</span><span class="w"> </span><span class="k" data-group-id="8905272926-8">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">put_env</span><span class="p" data-group-id="8905272926-9">(</span><span class="ss">:kv</span><span class="p">,</span><span class="w"> </span><span class="ss">:routing_table</span><span class="p">,</span><span class="w"> </span><span class="n">current</span><span class="p" data-group-id="8905272926-9">)</span><span class="w"> </span><span class="k" data-group-id="8905272926-8">end</span><span class="w">
+  </span><span class="k" data-group-id="8905272926-2">end</span><span class="w">
+
+  </span><span class="na">@tag</span><span class="w"> </span><span class="ss">:distributed</span><span class="w">
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;route requests across nodes&quot;</span><span class="w"> </span><span class="k" data-group-id="8905272926-10">do</span></code></pre><p>Note we removed <code class="inline">async: true</code> from <code class="inline">use ExUnit.Case</code>. Since the application environment is a global storage, tests that modify it cannot run concurrently. With all changes in place, all tests should pass, including the distributed one.</p><h2 id="releases" class="section-heading">
+  <a href="#releases" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Releases</span>
+</h2>
+<p>Now that our application runs distributed, you may be wondering how we can package our application to run in production. After all, all of our code so far depends on Erlang and Elixir versions that are installed in your current system. To achieve this goal, Elixir provides releases.</p><p>A release is a self-contained directory that consists of your application code, all of its dependencies, plus the whole Erlang Virtual Machine (VM) and runtime. Once a release is assembled, it can be packaged and deployed to a target as long as the target runs on the same operating system (OS) distribution and version as the machine that assembled the release.</p><p>In a regular project, we can assemble a release by simply running <a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html"><code class="inline">mix release</code></a>. However, we have an umbrella project, and in such cases Elixir requires some extra input from us. Let's see what is necessary:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">MIX_ENV=prod mix release
+</span><span class="">** (Mix) Umbrella projects require releases to be explicitly defined with a non-empty applications key that chooses which umbrella children should be part of the releases:
+</span><span class="">
+</span><span class="">releases: [
+</span><span class="">  foo: [
+</span><span class="">    applications: [child_app_foo: :permanent]
+</span><span class="">  ],
+</span><span class="">  bar: [
+</span><span class="">    applications: [child_app_bar: :permanent]
+</span><span class="">  ]
+</span><span class="">]
+</span><span class="">
+</span><span class="">Alternatively you can perform the release from the children applications
+</span></code></pre><p>That's because an umbrella project gives us plenty of options when deploying the software. We can:</p><ul><li><p>deploy all applications in the umbrella to a node that will work as both TCP server and key-value storage</p></li><li><p>deploy the <code class="inline">:kv_server</code> application to work only as a TCP server as long as the routing table points only to other nodes</p></li><li><p>deploy only the <code class="inline">:kv</code> application when we want a node to work only as storage (no TCP access)</p></li></ul><p>As a starting point, let's define a release that includes both <code class="inline">:kv_server</code> and <code class="inline">:kv</code> applications. We will also add a version to it. Open up the <code class="inline">mix.exs</code> in the umbrella root and add inside <code class="inline">def project</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">releases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1653959906-1">[</span><span class="w">
+  </span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1653959906-2">[</span><span class="w">
+    </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.0.1&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1653959906-3">[</span><span class="ss">kv_server</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="ss">kv</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="1653959906-3">]</span><span class="w">
+  </span><span class="p" data-group-id="1653959906-2">]</span><span class="w">
+</span><span class="p" data-group-id="1653959906-1">]</span></code></pre><p>That defines a release named <code class="inline">foo</code> with both <code class="inline">kv_server</code> and <code class="inline">kv</code> applications. Their mode is set to <code class="inline">:permanent</code>, which means that, if those applications crash, the whole node terminates. That's reasonable since those applications are essential to our system.</p><p>Before we assemble the release, let's also define our routing table for production. Given we expect to have two nodes, we need to update <code class="inline">config/runtime.exs</code> to look like this:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Config</span><span class="w">
+
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:kv</span><span class="p">,</span><span class="w"> </span><span class="ss">:routing_table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6400897778-1">[</span><span class="p" data-group-id="6400897778-2">{</span><span class="sc">?a</span><span class="o">..</span><span class="sc">?z</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p" data-group-id="6400897778-3">(</span><span class="p" data-group-id="6400897778-3">)</span><span class="p" data-group-id="6400897778-2">}</span><span class="p" data-group-id="6400897778-1">]</span><span class="w">
+
+</span><span class="k">if</span><span class="w"> </span><span class="n">config_env</span><span class="p" data-group-id="6400897778-4">(</span><span class="p" data-group-id="6400897778-4">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:prod</span><span class="w"> </span><span class="k" data-group-id="6400897778-5">do</span><span class="w">
+  </span><span class="n">config</span><span class="w"> </span><span class="ss">:kv</span><span class="p">,</span><span class="w"> </span><span class="ss">:routing_table</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6400897778-6">[</span><span class="w">
+    </span><span class="p" data-group-id="6400897778-7">{</span><span class="sc">?a</span><span class="o">..</span><span class="sc">?m</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;foo@computer-name&quot;</span><span class="p" data-group-id="6400897778-7">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="6400897778-8">{</span><span class="sc">?n</span><span class="o">..</span><span class="sc">?z</span><span class="p">,</span><span class="w"> </span><span class="ss">:&quot;bar@computer-name&quot;</span><span class="p" data-group-id="6400897778-8">}</span><span class="w">
+  </span><span class="p" data-group-id="6400897778-6">]</span><span class="w">
+</span><span class="k" data-group-id="6400897778-5">end</span></code></pre><p>We have hard-coded the table and node names, which is good enough for our example, but you would likely move it to an external configuration system in an actual production setup. We have also wrapped it in a <code class="inline">config_env() == :prod</code> check, so this configuration does not apply to other environments.</p><p>With the configuration in place, let's give assembling the release another try:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">MIX_ENV=prod mix release foo
+</span><span class="">* assembling foo-0.0.1 on MIX_ENV=prod
+</span><span class="">* skipping runtime configuration (config/runtime.exs not found)
+</span><span class="">
+</span><span class="">Release created at _build/prod/rel/foo!
+</span><span class="">
+</span><span class="">    # To start your system
+</span><span class="">    _build/prod/rel/foo/bin/foo start
+</span><span class="">
+</span><span class="">Once the release is running:
+</span><span class="">
+</span><span class="">    # To connect to it remotely
+</span><span class="">    _build/prod/rel/foo/bin/foo remote
+</span><span class="">
+</span><span class="">    # To stop it gracefully (you may also send SIGINT/SIGTERM)
+</span><span class="">    _build/prod/rel/foo/bin/foo stop
+</span><span class="">
+</span><span class="">To list all commands:
+</span><span class="">
+</span><span class="">    _build/prod/rel/foo/bin/foo
+</span></code></pre><p>Excellent! A release was assembled in <code class="inline">_build/prod/rel/foo</code>. Inside the release, there will be a <code class="inline">bin/foo</code> file which is the entry point to your system. It supports multiple commands, such as:</p><ul><li><p><code class="inline">bin/foo start</code>, <code class="inline">bin/foo start_iex</code>, <code class="inline">bin/foo restart</code>, and <code class="inline">bin/foo stop</code> — for general management of the release</p></li><li><p><code class="inline">bin/foo rpc COMMAND</code> and <code class="inline">bin/foo remote</code> — for running commands on the running system or to connect to the running system</p></li><li><p><code class="inline">bin/foo eval COMMAND</code> — to start a fresh system that runs a single command and then shuts down</p></li><li><p><code class="inline">bin/foo daemon</code> and <code class="inline">bin/foo daemon_iex</code> — to start the system as a daemon on Unix-like systems</p></li><li><p><code class="inline">bin/foo install</code> — to install the system as a service on Windows machines</p></li></ul><p>If you run <code class="inline">bin/foo start</code>, it will start the system using a short name (<code class="inline">--sname</code>) equal to the release name, which in this case is <code class="inline">foo</code>. The next step is to start a system named <code class="inline">bar</code>, so we can connect <code class="inline">foo</code> and <code class="inline">bar</code> together, like we did in the previous chapter. But before we achieve this, let's talk a bit about the benefits of releases.</p><h2 id="why-releases" class="section-heading">
+  <a href="#why-releases" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Why releases?</span>
+</h2>
+<p>Releases allow developers to precompile and package all of their code and the runtime into a single unit. The benefits of releases are:</p><ul><li><p>Code preloading. The VM has two mechanisms for loading code: interactive and embedded. By default, it runs in the interactive mode which dynamically loads modules when they are used for the first time. The first time your application calls <a href="Enum.html#map/2"><code class="inline">Enum.map/2</code></a>, the VM will find the <a href="Enum.html"><code class="inline">Enum</code></a> module and load it. There's a downside. When you start a new server in production, it may need to load many other modules, causing the first requests to have an unusual spike in response time. Releases run in embedded mode, which loads all available modules upfront, guaranteeing your system is ready to handle requests after booting.</p></li><li><p>Configuration and customization. Releases give developers fine grained control over system configuration and the VM flags used to start the system.</p></li><li><p>Self-contained. A release does not require the source code to be included in your production artifacts. All of the code is precompiled and packaged. Releases do not even require Erlang or Elixir on your servers, as they include the Erlang VM and its runtime by default. Furthermore, both Erlang and Elixir standard libraries are stripped to bring only the parts you are actually using.</p></li><li><p>Multiple releases. You can assemble different releases with different configuration per application or even with different applications altogether.</p></li></ul><p>We have written extensive documentation on releases, so <a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html">please check the official documentation for more information</a>. For now, we will continue exploring some of the features outlined above.</p><h2 id="assembling-multiple-releases" class="section-heading">
+  <a href="#assembling-multiple-releases" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Assembling multiple releases</span>
+</h2>
+<p>So far, we have assembled a release named <code class="inline">foo</code>, but our routing table contains information for both <code class="inline">foo</code> and <code class="inline">bar</code>. Let's start <code class="inline">foo</code>:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">_build/prod/rel/foo/bin/foo start
+</span><span class="">16:58:58.508 [info]  Accepting connections on port 4040
+</span></code></pre><p>And let's connect to it and issue a request in another terminal:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">telnet 127.0.0.1 4040
+</span><span class="">Trying 127.0.0.1...
+</span><span class="">Connected to localhost.
+</span><span class="">Escape character is &#39;^]&#39;.
+</span><span class="">CREATE bitsandpieces
+</span><span class="">OK
+</span><span class="">PUT bitsandpieces sword 1
+</span><span class="">OK
+</span><span class="">GET bitsandpieces sword
+</span><span class="">1
+</span><span class="">OK
+</span><span class="">GET shopping foo
+</span><span class="">Connection closed by foreign host.
+</span></code></pre><p>Our application works already when we operate on the bucket named &quot;bitsandpieces&quot;. But since the &quot;shopping&quot; bucket would be stored on <code class="inline">bar</code>, the request fails as <code class="inline">bar</code> is not available. If you go back to the terminal running <code class="inline">foo</code>, you will see:</p><pre><code class="makeup elixir" translate="no"><span class="mi">17</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mf">19.555</span><span class="w"> </span><span class="p" data-group-id="3477269234-1">[</span><span class="n">error</span><span class="p" data-group-id="3477269234-1">]</span><span class="w"> </span><span class="nc">Task</span><span class="w"> </span><span class="p" data-group-id="3477269234-2">#</span><span class="nc" data-group-id="3477269234-2">PID</span><span class="p" data-group-id="3477269234-2">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">622</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="3477269234-2">&gt;</span><span class="w"> </span><span class="n">started</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p" data-group-id="3477269234-3">#</span><span class="nc" data-group-id="3477269234-3">PID</span><span class="p" data-group-id="3477269234-3">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">620</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="3477269234-3">&gt;</span><span class="w"> </span><span class="n">terminating</span><span class="w">
+</span><span class="gt">** (stop) exited in: GenServer.call({KV.RouterTasks, :&quot;bar@computer-name&quot;}, {:start_task, [{:&quot;foo@josemac-2&quot;, #PID&lt;0.622.0&gt;, #PID&lt;0.622.0&gt;}, [#PID&lt;0.622.0&gt;, #PID&lt;0.620.0&gt;, #PID&lt;0.618.0&gt;], :monitor, {KV.Router, :route, [&quot;shopping&quot;, KV.Registry, :lookup, [KV.Registry, &quot;shopping&quot;]]}], :temporary, nil}, :infinity)
+    ** (EXIT) no connection to bar@computer-name
+    (elixir) lib/gen_server.ex:1010: GenServer.call/3
+    (elixir) lib/task/supervisor.ex:454: Task.Supervisor.async/6
+    (kv) lib/kv/router.ex:21: KV.Router.route/4
+    (kv_server) lib/kv_server/command.ex:74: KVServer.Command.lookup/2
+    (kv_server) lib/kv_server.ex:29: KVServer.serve/1
+    (elixir) lib/task/supervised.ex:90: Task.Supervised.invoke_mfa/2
+    (stdlib) proc_lib.erl:249: :proc_lib.init_p_do_apply/3</span><span class="w">
+</span><span class="ss">Function</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3477269234-4">#</span><span class="nc" data-group-id="3477269234-4">Function</span><span class="p" data-group-id="3477269234-4">&lt;</span><span class="mf">0.128611034</span><span class="o">/</span><span class="mi">0</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nc">KVServer</span><span class="o">.</span><span class="n">loop_acceptor</span><span class="o">/</span><span class="mi">1</span><span class="p" data-group-id="3477269234-4">&gt;</span><span class="w">
+    </span><span class="ss">Args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3477269234-5">[</span><span class="p" data-group-id="3477269234-5">]</span></code></pre><p>Let's now define a release for <code class="inline">:bar</code>. One first step could be to define a release exactly like <code class="inline">foo</code> inside <code class="inline">mix.exs</code>. Additionally we will set the <code class="inline">cookie</code> option on both releases to <code class="inline">weknoweachother</code> in order for them to allow connections from each other. See the <a href="http://www.erlang.org/doc/reference_manual/distributed.html">Distributed Erlang Documentation</a> for further information on this topic:</p><pre><code class="makeup elixir" translate="no"><span class="ss">releases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6468367669-1">[</span><span class="w">
+  </span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6468367669-2">[</span><span class="w">
+    </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.0.1&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6468367669-3">[</span><span class="ss">kv_server</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="ss">kv</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="6468367669-3">]</span><span class="p">,</span><span class="w">
+    </span><span class="ss">cookie</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;weknoweachother&quot;</span><span class="w">
+  </span><span class="p" data-group-id="6468367669-2">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">bar</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6468367669-4">[</span><span class="w">
+    </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.0.1&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6468367669-5">[</span><span class="ss">kv_server</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="ss">kv</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="6468367669-5">]</span><span class="p">,</span><span class="w">
+    </span><span class="ss">cookie</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;weknoweachother&quot;</span><span class="w">
+  </span><span class="p" data-group-id="6468367669-4">]</span><span class="w">
+</span><span class="p" data-group-id="6468367669-1">]</span></code></pre><p>And now let's assemble both releases:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">MIX_ENV=prod mix release foo
+</span><span class="gp unselectable">$ </span><span class="">MIX_ENV=prod mix release bar
+</span></code></pre><p>Stop <code class="inline">foo</code> if it's still running and re-start it to load the <code class="inline">cookie</code>:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">_build/prod/rel/foo/bin/foo start
+</span></code></pre><p>And start <code class="inline">bar</code> in another terminal:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">_build/prod/rel/bar/bin/bar start
+</span></code></pre><p>You should see an error like the error below happen 5 times, before the application finally shuts down:</p><pre><code class="text">    17:21:57.567 [error] Task #PID&lt;0.620.0&gt; started from KVServer.Supervisor terminating
+    ** (MatchError) no match of right hand side value: {:error, :eaddrinuse}
+        (kv_server) lib/kv_server.ex:12: KVServer.accept/1
+        (elixir) lib/task/supervised.ex:90: Task.Supervised.invoke_mfa/2
+        (stdlib) proc_lib.erl:249: :proc_lib.init_p_do_apply/3
+    Function: #Function&lt;0.98032413/0 in KVServer.Application.start/2&gt;
+        Args: []</code></pre><p>That's happening because the release <code class="inline">foo</code> is already listening on port <code class="inline">4040</code> and <code class="inline">bar</code> is trying to do the same! One option could be to move the <code class="inline">:port</code> configuration to the application environment, like we did for the routing table, and setup different ports per node.</p><p>But let's try something else. Let's make it so the <code class="inline">bar</code> release contains only the <code class="inline">:kv</code> application. So it works as a storage but it won't have a front-end. Change the <code class="inline">:bar</code> information to this:</p><pre><code class="makeup elixir" translate="no"><span class="ss">releases</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2090149478-1">[</span><span class="w">
+  </span><span class="ss">foo</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2090149478-2">[</span><span class="w">
+    </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.0.1&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2090149478-3">[</span><span class="ss">kv_server</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p">,</span><span class="w"> </span><span class="ss">kv</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="2090149478-3">]</span><span class="p">,</span><span class="w">
+    </span><span class="ss">cookie</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;weknoweachother&quot;</span><span class="w">
+  </span><span class="p" data-group-id="2090149478-2">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">bar</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2090149478-4">[</span><span class="w">
+    </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.0.1&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="ss">applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2090149478-5">[</span><span class="ss">kv</span><span class="p">:</span><span class="w"> </span><span class="ss">:permanent</span><span class="p" data-group-id="2090149478-5">]</span><span class="p">,</span><span class="w">
+    </span><span class="ss">cookie</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;weknoweachother&quot;</span><span class="w">
+  </span><span class="p" data-group-id="2090149478-4">]</span><span class="w">
+</span><span class="p" data-group-id="2090149478-1">]</span></code></pre><p>And now let's assemble <code class="inline">bar</code> once more:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">MIX_ENV=prod mix release bar
+</span></code></pre><p>And finally successfully boot it:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">_build/prod/rel/bar/bin/bar start
+</span></code></pre><p>If you connect to localhost once again and perform another request, now everything should work, as long as the routing table contains the correct node names. Outstanding!</p><p>With releases, we were able to &quot;cut different slices&quot; of our project and prepared them to run in production, all packaged into a single directory.</p><h2 id="configuring-releases" class="section-heading">
+  <a href="#configuring-releases" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Configuring releases</span>
+</h2>
+<p>Releases also provide built-in hooks for configuring almost every need of the production system:</p><ul><li><p><code class="inline">config/config.exs</code> — provides build-time application configuration, which is executed before our application compiles. This file often imports configuration files based on the environment, such as <code class="inline">config/dev.exs</code> and <code class="inline">config/prod.exs</code>.</p></li><li><p><code class="inline">config/runtime.exs</code> — provides runtime application configuration. It is executed every time the release boots and is further extensible via config providers.</p></li><li><p><code class="inline">rel/env.sh.eex</code> and <code class="inline">rel/env.bat.eex</code> — template files that are copied into every release and executed on every command to set up environment variables, including ones specific to the VM, and the general environment.</p></li><li><p><code class="inline">rel/vm.args.eex</code> — a template file that is copied into every release and provides static configuration of the Erlang Virtual Machine and other runtime flags.</p></li></ul><p>As we have seen, <code class="inline">config/config.exs</code> and <code class="inline">config/runtime.exs</code> are loaded during releases and regular Mix commands. On the other hand, <code class="inline">rel/env.sh.eex</code> and <code class="inline">rel/vm.args.eex</code> are specific to releases. Let's take a look.</p><h3 id="operating-system-environment-configuration" class="section-heading">
+  <a href="#operating-system-environment-configuration" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Operating System environment configuration</span>
+</h3>
+<p>Every release contains an environment file, named <code class="inline">env.sh</code> on Unix-like systems and <code class="inline">env.bat</code> on Windows machines, that executes before the Elixir system starts. In this file, you can execute any OS-level code, such as invoke other applications, set environment variables and so on. Some of those environment variables can even configure how the release itself runs.</p><p>For instance, releases run using short-names (<code class="inline">--sname</code>). However, if you want to actually run a distributed key-value store in production, you will need multiple nodes and start the release with the <code class="inline">--name</code> option. We can achieve this by setting the <code class="inline">RELEASE_DISTRIBUTION</code> environment variable inside the <code class="inline">env.sh</code> and <code class="inline">env.bat</code> files. Mix already has a template for said files which we can customize, so let's ask Mix to copy them to our application:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">mix release.init
+</span><span class="">* creating rel/vm.args.eex
+</span><span class="">* creating rel/remote.vm.args.eex
+</span><span class="">* creating rel/env.sh.eex
+</span><span class="">* creating rel/env.bat.eex
+</span></code></pre><p>If you open up <code class="inline">rel/env.sh.eex</code>, you will see:</p><pre><code class="makeup shell" translate="no"><span class="">#!/bin/sh
+</span><span class="">
+</span><span class=""># # Sets and enables heart (recommended only in daemon mode)
+</span><span class=""># case $RELEASE_COMMAND in
+</span><span class="">#   daemon*)
+</span><span class="">#     HEART_COMMAND=&quot;$RELEASE_ROOT/bin/$RELEASE_NAME $RELEASE_COMMAND&quot;
+</span><span class="">#     export HEART_COMMAND
+</span><span class="">#     export ELIXIR_ERL_OPTIONS=&quot;-heart&quot;
+</span><span class="">#     ;;
+</span><span class="">#   *)
+</span><span class="">#     ;;
+</span><span class=""># esac
+</span><span class="">
+</span><span class=""># # Set the release to load code on demand (interactive) instead of preloading (embedded).
+</span><span class=""># export RELEASE_MODE=interactive
+</span><span class="">
+</span><span class=""># # Set the release to work across nodes.
+</span><span class=""># # RELEASE_DISTRIBUTION must be &quot;sname&quot; (local), &quot;name&quot; (distributed) or &quot;none&quot;.
+</span><span class=""># export RELEASE_DISTRIBUTION=name
+</span><span class=""># export RELEASE_NODE=&lt;%= @release.name %&gt;
+</span></code></pre><p>The steps necessary to work across nodes is already commented out as an example. You can enable full distribution by uncommenting the last two lines by removing the leading <code class="inline">#</code>.</p><p>If you are on Windows, you will have to open up <code class="inline">rel/env.bat.eex</code>, where you will find this:</p><pre><code class="bat">@echo off
+rem Set the release to load code on demand (interactive) instead of preloading (embedded).
+rem set RELEASE_MODE=interactive
+
+rem Set the release to work across nodes.
+rem RELEASE_DISTRIBUTION must be &quot;sname&quot; (local), &quot;name&quot; (distributed) or &quot;none&quot;.
+rem set RELEASE_DISTRIBUTION=name
+rem set RELEASE_NODE=&lt;%= @release.name %&gt;</code></pre><p>Once again, uncomment the last two lines by removing the leading <code class="inline">rem</code> to enable full distribution. And that's all!</p><h3 id="vm-arguments" class="section-heading">
+  <a href="#vm-arguments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">VM arguments</span>
+</h3>
+<p>The <code class="inline">rel/vm.args.eex</code> allows you to specify low-level flags that control how the Erlang VM and its runtime operate. You specify entries as if you were specifying arguments in the command line with code comments also supported. Here is the default generated file:</p><pre><code class="makeup elixir" translate="no"><span class="c1">## Customize flags given to the VM: https://www.erlang.org/doc/man/erl.html</span><span class="w">
+</span><span class="c1">## -mode/-name/-sname/-setcookie are configured via env vars, do not set them here</span><span class="w">
+
+</span><span class="c1">## Increase number of concurrent ports/sockets</span><span class="w">
+</span><span class="c1">##+Q 65536</span><span class="w">
+
+</span><span class="c1">## Tweak GC to run more often</span><span class="w">
+</span><span class="c1">##-env ERL_FULLSWEEP_AFTER 10</span></code></pre><p>You can see <a href="http://www.erlang.org/doc/man/erl.html">a complete list of VM arguments and flags in the Erlang documentation</a>.</p><h2 id="summing-up" class="section-heading">
+  <a href="#summing-up" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Summing up</span>
+</h2>
+<p>Throughout the guide, we have built a very simple distributed key-value store as an opportunity to explore many constructs like generic servers, supervisors, tasks, agents, applications and more. Not only that, we have written tests for the whole application, got familiar with ExUnit, and learned how to use the Mix build tool to accomplish a wide range of tasks.</p><p>If you are looking for a distributed key-value store to use in production, you should definitely look into <a href="http://riak.com/products/riak-kv/">Riak</a>, which also runs in the Erlang VM. In Riak, the buckets are replicated, to avoid data loss, and instead of a router, they use <a href="https://en.wikipedia.org/wiki/Consistent_hashing">consistent hashing</a> to map a bucket to a node. A consistent hashing algorithm helps reduce the amount of data that needs to be migrated when new storage nodes are added to your live system.</p><p>Of course, Elixir can be used for much more than distributed key-value stores. Embedded systems, data-processing and data-ingestion, web applications, audio/video streaming systems, and others are many of the different domains Elixir excels at. We hope this guide has prepared you to explore any of those domains or any future domain you may desire to bring Elixir into.</p><p>Happy coding!</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="distributed-tasks.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Distributed tasks and tags
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="compatibility-and-deprecations.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Compatibility and deprecations
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

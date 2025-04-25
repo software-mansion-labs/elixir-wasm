@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Task.Supervisor — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Task.Supervisor.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Task.Supervisor</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A task supervisor.</p><p>This module defines a supervisor which can be used to dynamically
+supervise tasks.</p><p>A task supervisor is started with no children, often under a
+supervisor and a name:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8893773301-1">[</span><span class="w">
+  </span><span class="p" data-group-id="8893773301-2">{</span><span class="nc">Task.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.TaskSupervisor</span><span class="p" data-group-id="8893773301-2">}</span><span class="w">
+</span><span class="p" data-group-id="8893773301-1">]</span><span class="w">
+
+</span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="8893773301-3">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p" data-group-id="8893773301-3">)</span></code></pre><p>The options given in the child specification are documented in <a href="#start_link/1"><code class="inline">start_link/1</code></a>.</p><p>Once started, you can start tasks directly under the supervisor, for example:</p><pre><code class="makeup elixir" translate="no"><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async</span><span class="p" data-group-id="1112832632-1">(</span><span class="nc">MyApp.TaskSupervisor</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1112832632-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="ss">:do_some_work</span><span class="w">
+</span><span class="k" data-group-id="1112832632-2">end</span><span class="p" data-group-id="1112832632-1">)</span></code></pre><p>See the <a href="Task.html"><code class="inline">Task</code></a> module for more examples.</p><h2 id="module-scalability-and-partitioning" class="section-heading">
+  <a href="#module-scalability-and-partitioning" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Scalability and partitioning</span>
+</h2>
+<p>The <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> is a single process responsible for starting
+other processes. In some applications, the <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> may
+become a bottleneck. To address this, you can start multiple instances
+of the <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> and then pick a random instance to start
+the task on.</p><p>Instead of:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9287062833-1">[</span><span class="w">
+  </span><span class="p" data-group-id="9287062833-2">{</span><span class="nc">Task.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.TaskSupervisor</span><span class="p" data-group-id="9287062833-2">}</span><span class="w">
+</span><span class="p" data-group-id="9287062833-1">]</span></code></pre><p>and:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async</span><span class="p" data-group-id="8706891873-1">(</span><span class="nc">MyApp.TaskSupervisor</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8706891873-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:do_some_work</span><span class="w"> </span><span class="k" data-group-id="8706891873-2">end</span><span class="p" data-group-id="8706891873-1">)</span></code></pre><p>You can do this:</p><pre><code class="makeup elixir" translate="no"><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5514232924-1">[</span><span class="w">
+  </span><span class="p" data-group-id="5514232924-2">{</span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w">
+   </span><span class="ss">child_spec</span><span class="p">:</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="p">,</span><span class="w">
+   </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.TaskSupervisors</span><span class="p" data-group-id="5514232924-2">}</span><span class="w">
+</span><span class="p" data-group-id="5514232924-1">]</span></code></pre><p>and then:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async</span><span class="p" data-group-id="5877472484-1">(</span><span class="w">
+  </span><span class="p" data-group-id="5877472484-2">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">PartitionSupervisor</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5877472484-3">{</span><span class="nc">MyApp.TaskSupervisors</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p" data-group-id="5877472484-4">(</span><span class="p" data-group-id="5877472484-4">)</span><span class="p" data-group-id="5877472484-3">}</span><span class="p" data-group-id="5877472484-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="k" data-group-id="5877472484-5">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:do_some_work</span><span class="w"> </span><span class="k" data-group-id="5877472484-5">end</span><span class="w">
+</span><span class="p" data-group-id="5877472484-1">)</span></code></pre><p>In the code above, we start a partition supervisor that will by default
+start a dynamic supervisor for each core in your machine. Then, instead
+of calling the <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> by name, you call it through the
+partition supervisor using the <code class="inline">{:via, PartitionSupervisor, {name, key}}</code>
+format, where <code class="inline">name</code> is the name of the partition supervisor and <code class="inline">key</code>
+is the routing key. We picked <code class="inline">self()</code> as the routing key, which means
+each process will be assigned one of the existing task supervisors.
+Read the <a href="PartitionSupervisor.html"><code class="inline">PartitionSupervisor</code></a> docs for more information.</p><h2 id="module-name-registration" class="section-heading">
+  <a href="#module-name-registration" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Name registration</span>
+</h2>
+<p>A <a href="Task.Supervisor.html"><code class="inline">Task.Supervisor</code></a> is bound to the same name registration rules as a
+<a href="GenServer.html"><code class="inline">GenServer</code></a>. Read more about them in the <a href="GenServer.html"><code class="inline">GenServer</code></a> docs.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:async_stream_option/0" data-no-tooltip="" translate="no">async_stream_option()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Options given to <code class="inline">async_stream</code> and <code class="inline">async_stream_nolink</code> functions.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:option/0" data-no-tooltip="" translate="no">option()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Option values used by <code class="inline">start_link</code></p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async/3" data-no-tooltip="" translate="no">async(supervisor, fun, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a task that can be awaited on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async/5" data-no-tooltip="" translate="no">async(supervisor, module, fun, args, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a task that can be awaited on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async_nolink/3" data-no-tooltip="" translate="no">async_nolink(supervisor, fun, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a task that can be awaited on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async_nolink/5" data-no-tooltip="" translate="no">async_nolink(supervisor, module, fun, args, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a task that can be awaited on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async_stream/4" data-no-tooltip="" translate="no">async_stream(supervisor, enumerable, fun, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a stream that runs the given function <code class="inline">fun</code> concurrently
+on each element in <code class="inline">enumerable</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async_stream/6" data-no-tooltip="" translate="no">async_stream(supervisor, enumerable, module, function, args, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a stream where the given function (<code class="inline">module</code> and <code class="inline">function</code>)
+is mapped concurrently on each element in <code class="inline">enumerable</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async_stream_nolink/4" data-no-tooltip="" translate="no">async_stream_nolink(supervisor, enumerable, fun, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a stream that runs the given <code class="inline">function</code> concurrently on each
+element in <code class="inline">enumerable</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#async_stream_nolink/6" data-no-tooltip="" translate="no">async_stream_nolink(supervisor, enumerable, module, function, args, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a stream where the given function (<code class="inline">module</code> and <code class="inline">function</code>)
+is mapped concurrently on each element in <code class="inline">enumerable</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#children/1" data-no-tooltip="" translate="no">children(supervisor)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns all children PIDs except those that are restarting.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_child/3" data-no-tooltip="" translate="no">start_child(supervisor, fun, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a task as a child of the given <code class="inline">supervisor</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_child/5" data-no-tooltip="" translate="no">start_child(supervisor, module, fun, args, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a task as a child of the given <code class="inline">supervisor</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_link/1" data-no-tooltip="" translate="no">start_link(options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a new supervisor.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#terminate_child/2" data-no-tooltip="" translate="no">terminate_child(supervisor, pid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Terminates the child with the given <code class="inline">pid</code>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:async_stream_option/0">
+
+  <div class="detail-header">
+    <a href="#t:async_stream_option/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async_stream_option()</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L84" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> async_stream_option() ::
+  <a href="Task.html#t:async_stream_option/0">Task.async_stream_option</a>() | {:shutdown, <a href="Supervisor.html#t:shutdown/0">Supervisor.shutdown</a>()}</pre>
+
+      </div>
+
+<p>Options given to <code class="inline">async_stream</code> and <code class="inline">async_stream_nolink</code> functions.</p>
+  </section>
+</section>
+<section class="detail" id="t:option/0">
+
+  <div class="detail-header">
+    <a href="#t:option/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">option()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L76" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> option() :: <a href="DynamicSupervisor.html#t:option/0">DynamicSupervisor.option</a>() | <a href="DynamicSupervisor.html#t:init_option/0">DynamicSupervisor.init_option</a>()</pre>
+
+      </div>
+
+<p>Option values used by <code class="inline">start_link</code></p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="async/3">
+
+    <span id="async/2"></span>
+
+  <div class="detail-header">
+    <a href="#async/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async(supervisor, fun, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L175" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), (-&gt; <a href="typespecs.html#basic-types">any</a>()), <a href="Keyword.html#t:t/0">Keyword.t</a>()) :: <a href="Task.html#t:t/0">Task.t</a>()</pre>
+
+      </div>
+
+<p>Starts a task that can be awaited on.</p><p>The <code class="inline">supervisor</code> must be a reference as defined in <a href="Supervisor.html"><code class="inline">Supervisor</code></a>.
+The task will still be linked to the caller, see <a href="Task.html#async/1"><code class="inline">Task.async/1</code></a> for
+more information and <a href="#async_nolink/3"><code class="inline">async_nolink/3</code></a> for a non-linked variant.</p><p>Raises an error if <code class="inline">supervisor</code> has reached the maximum number of
+children.</p><h2 id="async/3-options" class="section-heading">
+  <a href="#async/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:shutdown</code> - <code class="inline">:brutal_kill</code> if the tasks must be killed directly on shutdown
+or an integer indicating the timeout value, defaults to 5000 milliseconds.
+The tasks must trap exits for the timeout to have an effect.</li></ul>
+  </section>
+</section>
+<section class="detail" id="async/5">
+
+    <span id="async/4"></span>
+
+  <div class="detail-header">
+    <a href="#async/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async(supervisor, module, fun, args, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L197" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), <a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), [<a href="typespecs.html#built-in-types">term</a>()], <a href="Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="Task.html#t:t/0">Task.t</a>()</pre>
+
+      </div>
+
+<p>Starts a task that can be awaited on.</p><p>The <code class="inline">supervisor</code> must be a reference as defined in <a href="Supervisor.html"><code class="inline">Supervisor</code></a>.
+The task will still be linked to the caller, see <a href="Task.html#async/1"><code class="inline">Task.async/1</code></a> for
+more information and <a href="#async_nolink/3"><code class="inline">async_nolink/3</code></a> for a non-linked variant.</p><p>Raises an error if <code class="inline">supervisor</code> has reached the maximum number of
+children.</p><h2 id="async/5-options" class="section-heading">
+  <a href="#async/5-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:shutdown</code> - <code class="inline">:brutal_kill</code> if the tasks must be killed directly on shutdown
+or an integer indicating the timeout value, defaults to 5000 milliseconds.
+The tasks must trap exits for the timeout to have an effect.</li></ul>
+  </section>
+</section>
+<section class="detail" id="async_nolink/3">
+
+    <span id="async_nolink/2"></span>
+
+  <div class="detail-header">
+    <a href="#async_nolink/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async_nolink(supervisor, fun, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L284" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async_nolink(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), (-&gt; <a href="typespecs.html#basic-types">any</a>()), <a href="Keyword.html#t:t/0">Keyword.t</a>()) :: <a href="Task.html#t:t/0">Task.t</a>()</pre>
+
+      </div>
+
+<p>Starts a task that can be awaited on.</p><p>The <code class="inline">supervisor</code> must be a reference as defined in <a href="Supervisor.html"><code class="inline">Supervisor</code></a>.
+The task won't be linked to the caller, see <a href="Task.html#async/1"><code class="inline">Task.async/1</code></a> for
+more information.</p><p>Raises an error if <code class="inline">supervisor</code> has reached the maximum number of
+children.</p><p>Note this function requires the task supervisor to have <code class="inline">:temporary</code>
+as the <code class="inline">:restart</code> option (the default), as <a href="#async_nolink/3"><code class="inline">async_nolink/3</code></a> keeps a
+direct reference to the task which is lost if the task is restarted.</p><h2 id="async_nolink/3-options" class="section-heading">
+  <a href="#async_nolink/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><code class="inline">:shutdown</code> - <code class="inline">:brutal_kill</code> if the tasks must be killed directly on shutdown
+or an integer indicating the timeout value, defaults to 5000 milliseconds.
+The tasks must trap exits for the timeout to have an effect.</li></ul><h2 id="async_nolink/3-compatibility-with-otp-behaviours" class="section-heading">
+  <a href="#async_nolink/3-compatibility-with-otp-behaviours" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Compatibility with OTP behaviours</span>
+</h2>
+<p>If you create a task using <code class="inline">async_nolink</code> inside an OTP behaviour
+like <a href="GenServer.html"><code class="inline">GenServer</code></a>, you should match on the message coming from the
+task inside your <a href="GenServer.html#c:handle_info/2"><code class="inline">GenServer.handle_info/2</code></a> callback.</p><p>The reply sent by the task will be in the format <code class="inline">{ref, result}</code>,
+where <code class="inline">ref</code> is the monitor reference held by the task struct
+and <code class="inline">result</code> is the return value of the task function.</p><p>Keep in mind that, regardless of how the task created with <code class="inline">async_nolink</code>
+terminates, the caller's process will always receive a <code class="inline">:DOWN</code> message
+with the same <code class="inline">ref</code> value that is held by the task struct. If the task
+terminates normally, the reason in the <code class="inline">:DOWN</code> message will be <code class="inline">:normal</code>.</p><h2 id="async_nolink/3-examples" class="section-heading">
+  <a href="#async_nolink/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Typically, you use <a href="#async_nolink/3"><code class="inline">async_nolink/3</code></a> when there is a reasonable expectation that
+the task may fail, and you don't want it to take down the caller. Let's see an
+example where a <a href="GenServer.html"><code class="inline">GenServer</code></a> is meant to run a single task and track its status:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Server</span><span class="w"> </span><span class="k" data-group-id="8306716806-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="c1"># ...</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_task</span><span class="w"> </span><span class="k" data-group-id="8306716806-2">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="8306716806-3">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="ss">:start_task</span><span class="p" data-group-id="8306716806-3">)</span><span class="w">
+  </span><span class="k" data-group-id="8306716806-2">end</span><span class="w">
+
+  </span><span class="c1"># In this case the task is already running, so we just return :ok.</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="8306716806-4">(</span><span class="ss">:start_task</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-5">%{</span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="n">ref</span><span class="p" data-group-id="8306716806-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8306716806-4">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_reference</span><span class="p" data-group-id="8306716806-6">(</span><span class="n">ref</span><span class="p" data-group-id="8306716806-6">)</span><span class="w"> </span><span class="k" data-group-id="8306716806-7">do</span><span class="w">
+    </span><span class="p" data-group-id="8306716806-8">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8306716806-8">}</span><span class="w">
+  </span><span class="k" data-group-id="8306716806-7">end</span><span class="w">
+
+  </span><span class="c1"># The task is not running yet, so let&#39;s start it.</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="8306716806-9">(</span><span class="ss">:start_task</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-10">%{</span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="8306716806-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8306716806-9">)</span><span class="w"> </span><span class="k" data-group-id="8306716806-11">do</span><span class="w">
+    </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w">
+      </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async_nolink</span><span class="p" data-group-id="8306716806-12">(</span><span class="nc">MyApp.TaskSupervisor</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8306716806-13">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="n">...</span><span class="w">
+      </span><span class="k" data-group-id="8306716806-13">end</span><span class="p" data-group-id="8306716806-12">)</span><span class="w">
+
+    </span><span class="c1"># We return :ok and the server will continue running</span><span class="w">
+    </span><span class="p" data-group-id="8306716806-14">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-15">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="n">task</span><span class="o">.</span><span class="n">ref</span><span class="p" data-group-id="8306716806-15">}</span><span class="p" data-group-id="8306716806-14">}</span><span class="w">
+  </span><span class="k" data-group-id="8306716806-11">end</span><span class="w">
+
+  </span><span class="c1"># The task completed successfully</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_info</span><span class="p" data-group-id="8306716806-16">(</span><span class="p" data-group-id="8306716806-17">{</span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="n">answer</span><span class="p" data-group-id="8306716806-17">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-18">%{</span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="n">ref</span><span class="p" data-group-id="8306716806-18">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8306716806-16">)</span><span class="w"> </span><span class="k" data-group-id="8306716806-19">do</span><span class="w">
+    </span><span class="c1"># We don&#39;t care about the DOWN message now, so let&#39;s demonitor and flush it</span><span class="w">
+    </span><span class="nc">Process</span><span class="o">.</span><span class="n">demonitor</span><span class="p" data-group-id="8306716806-20">(</span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-21">[</span><span class="ss">:flush</span><span class="p" data-group-id="8306716806-21">]</span><span class="p" data-group-id="8306716806-20">)</span><span class="w">
+    </span><span class="c1"># Do something with the result and then return</span><span class="w">
+    </span><span class="p" data-group-id="8306716806-22">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-23">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="8306716806-23">}</span><span class="p" data-group-id="8306716806-22">}</span><span class="w">
+  </span><span class="k" data-group-id="8306716806-19">end</span><span class="w">
+
+  </span><span class="c1"># The task failed</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_info</span><span class="p" data-group-id="8306716806-24">(</span><span class="p" data-group-id="8306716806-25">{</span><span class="ss">:DOWN</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="ss">:process</span><span class="p">,</span><span class="w"> </span><span class="c">_pid</span><span class="p">,</span><span class="w"> </span><span class="c">_reason</span><span class="p" data-group-id="8306716806-25">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-26">%{</span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="n">ref</span><span class="p" data-group-id="8306716806-26">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8306716806-24">)</span><span class="w"> </span><span class="k" data-group-id="8306716806-27">do</span><span class="w">
+    </span><span class="c1"># Log and possibly restart the task...</span><span class="w">
+    </span><span class="p" data-group-id="8306716806-28">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8306716806-29">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="8306716806-29">}</span><span class="p" data-group-id="8306716806-28">}</span><span class="w">
+  </span><span class="k" data-group-id="8306716806-27">end</span><span class="w">
+</span><span class="k" data-group-id="8306716806-1">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="async_nolink/5">
+
+    <span id="async_nolink/4"></span>
+
+  <div class="detail-header">
+    <a href="#async_nolink/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async_nolink(supervisor, module, fun, args, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L303" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async_nolink(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), <a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), [<a href="typespecs.html#built-in-types">term</a>()], <a href="Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="Task.html#t:t/0">Task.t</a>()</pre>
+
+      </div>
+
+<p>Starts a task that can be awaited on.</p><p>The <code class="inline">supervisor</code> must be a reference as defined in <a href="Supervisor.html"><code class="inline">Supervisor</code></a>.
+The task won't be linked to the caller, see <a href="Task.html#async/1"><code class="inline">Task.async/1</code></a> for
+more information.</p><p>Raises an error if <code class="inline">supervisor</code> has reached the maximum number of
+children.</p><p>Note this function requires the task supervisor to have <code class="inline">:temporary</code>
+as the <code class="inline">:restart</code> option (the default), as <a href="#async_nolink/5"><code class="inline">async_nolink/5</code></a> keeps a
+direct reference to the task which is lost if the task is restarted.</p>
+  </section>
+</section>
+<section class="detail" id="async_stream/4">
+
+    <span id="async_stream/3"></span>
+
+  <div class="detail-header">
+    <a href="#async_stream/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async_stream(supervisor, enumerable, fun, options \\ [])</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L395" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async_stream(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), <a href="Enumerable.html#t:t/0">Enumerable.t</a>(), (<a href="typespecs.html#built-in-types">term</a>() -&gt; <a href="typespecs.html#built-in-types">term</a>()), [
+  <a href="#t:async_stream_option/0">async_stream_option</a>()
+]) ::
+  <a href="Enumerable.html#t:t/0">Enumerable.t</a>()</pre>
+
+      </div>
+
+<p>Returns a stream that runs the given function <code class="inline">fun</code> concurrently
+on each element in <code class="inline">enumerable</code>.</p><p>Each element in <code class="inline">enumerable</code> is passed as argument to the given function <code class="inline">fun</code>
+and processed by its own task. The tasks will be spawned under the given
+<code class="inline">supervisor</code> and linked to the caller process, similarly to <a href="#async/3"><code class="inline">async/3</code></a>.</p><p>See <a href="#async_stream/6"><code class="inline">async_stream/6</code></a> for discussion, options, and examples.</p>
+  </section>
+</section>
+<section class="detail" id="async_stream/6">
+
+    <span id="async_stream/5"></span>
+
+  <div class="detail-header">
+    <a href="#async_stream/6" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async_stream(supervisor, enumerable, module, function, args, options \\ [])</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L373" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async_stream(
+  <a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(),
+  <a href="Enumerable.html#t:t/0">Enumerable.t</a>(),
+  <a href="typespecs.html#built-in-types">module</a>(),
+  <a href="typespecs.html#basic-types">atom</a>(),
+  [<a href="typespecs.html#built-in-types">term</a>()],
+  [
+    <a href="#t:async_stream_option/0">async_stream_option</a>()
+  ]
+) :: <a href="Enumerable.html#t:t/0">Enumerable.t</a>()</pre>
+
+      </div>
+
+<p>Returns a stream where the given function (<code class="inline">module</code> and <code class="inline">function</code>)
+is mapped concurrently on each element in <code class="inline">enumerable</code>.</p><p>Each element will be prepended to the given <code class="inline">args</code> and processed by its
+own task. The tasks will be spawned under the given <code class="inline">supervisor</code> and
+linked to the caller process, similarly to <a href="#async/5"><code class="inline">async/5</code></a>.</p><p>When streamed, each task will emit <code class="inline">{:ok, value}</code> upon successful
+completion or <code class="inline">{:exit, reason}</code> if the caller is trapping exits.
+The order of results depends on the value of the <code class="inline">:ordered</code> option.</p><p>The level of concurrency and the time tasks are allowed to run can
+be controlled via options (see the &quot;Options&quot; section below).</p><p>If you find yourself trapping exits to handle exits inside
+the async stream, consider using <a href="#async_stream_nolink/6"><code class="inline">async_stream_nolink/6</code></a> to start tasks
+that are not linked to the calling process.</p><h2 id="async_stream/6-options" class="section-heading">
+  <a href="#async_stream/6-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:max_concurrency</code> - sets the maximum number of tasks to run
+at the same time. Defaults to <a href="System.html#schedulers_online/0"><code class="inline">System.schedulers_online/0</code></a>.</p></li><li><p><code class="inline">:ordered</code> - whether the results should be returned in the same order
+as the input stream. This option is useful when you have large
+streams and don't want to buffer results before they are delivered.
+This is also useful when you're using the tasks for side effects.
+Defaults to <code class="inline">true</code>.</p></li><li><p><code class="inline">:timeout</code> - the maximum amount of time to wait (in milliseconds)
+without receiving a task reply (across all running tasks).
+Defaults to <code class="inline">5000</code>.</p></li><li><p><code class="inline">:on_timeout</code> - what do to when a task times out. The possible
+values are:</p><ul><li><code class="inline">:exit</code> (default) - the process that spawned the tasks exits.</li><li><code class="inline">:kill_task</code> - the task that timed out is killed. The value
+emitted for that task is <code class="inline">{:exit, :timeout}</code>.</li></ul></li><li><p><code class="inline">:zip_input_on_exit</code> - (since v1.14.0) adds the original
+input to <code class="inline">:exit</code> tuples. The value emitted for that task is
+<code class="inline">{:exit, {input, reason}}</code>, where <code class="inline">input</code> is the collection element
+that caused an exited during processing. Defaults to <code class="inline">false</code>.</p></li><li><p><code class="inline">:shutdown</code> - <code class="inline">:brutal_kill</code> if the tasks must be killed directly on shutdown
+or an integer indicating the timeout value. Defaults to <code class="inline">5000</code> milliseconds.
+The tasks must trap exits for the timeout to have an effect.</p></li></ul><h2 id="async_stream/6-examples" class="section-heading">
+  <a href="#async_stream/6-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Let's build a stream and then enumerate it:</p><pre><code class="makeup elixir" translate="no"><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async_stream</span><span class="p" data-group-id="3040775109-1">(</span><span class="nc">MySupervisor</span><span class="p">,</span><span class="w"> </span><span class="n">collection</span><span class="p">,</span><span class="w"> </span><span class="nc">Mod</span><span class="p">,</span><span class="w"> </span><span class="ss">:expensive_fun</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3040775109-2">[</span><span class="p" data-group-id="3040775109-2">]</span><span class="p" data-group-id="3040775109-1">)</span><span class="w">
+</span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="3040775109-3">(</span><span class="n">stream</span><span class="p" data-group-id="3040775109-3">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="async_stream_nolink/4">
+
+    <span id="async_stream_nolink/3"></span>
+
+  <div class="detail-header">
+    <a href="#async_stream_nolink/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async_stream_nolink(supervisor, enumerable, fun, options \\ [])</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L473" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async_stream_nolink(
+  <a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(),
+  <a href="Enumerable.html#t:t/0">Enumerable.t</a>(),
+  (<a href="typespecs.html#built-in-types">term</a>() -&gt; <a href="typespecs.html#built-in-types">term</a>()),
+  [
+    <a href="#t:async_stream_option/0">async_stream_option</a>()
+  ]
+) :: <a href="Enumerable.html#t:t/0">Enumerable.t</a>()</pre>
+
+      </div>
+
+<p>Returns a stream that runs the given <code class="inline">function</code> concurrently on each
+element in <code class="inline">enumerable</code>.</p><p>Each element in <code class="inline">enumerable</code> is passed as argument to the given function <code class="inline">fun</code>
+and processed by its own task. The tasks will be spawned under the given
+<code class="inline">supervisor</code> and will not be linked to the caller process, similarly
+to <a href="#async_nolink/3"><code class="inline">async_nolink/3</code></a>.</p><p>See <a href="#async_stream/6"><code class="inline">async_stream/6</code></a> for discussion and examples.</p><h2 id="async_stream_nolink/4-error-handling-and-cleanup" class="section-heading">
+  <a href="#async_stream_nolink/4-error-handling-and-cleanup" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Error handling and cleanup</span>
+</h2>
+<p>Even if tasks are not linked to the caller, there is no risk of leaving dangling tasks
+running after the stream halts.</p><p>Consider the following example:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async_stream_nolink</span><span class="p" data-group-id="7593450362-1">(</span><span class="nc">MySupervisor</span><span class="p">,</span><span class="w"> </span><span class="n">collection</span><span class="p">,</span><span class="w"> </span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="ss">on_timeout</span><span class="p">:</span><span class="w"> </span><span class="ss">:kill_task</span><span class="p">,</span><span class="w"> </span><span class="ss">ordered</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="7593450362-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">each</span><span class="p" data-group-id="7593450362-2">(</span><span class="k" data-group-id="7593450362-3">fn</span><span class="w">
+  </span><span class="p" data-group-id="7593450362-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="7593450362-4">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:ok</span><span class="w">
+  </span><span class="p" data-group-id="7593450362-5">{</span><span class="ss">:exit</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="7593450362-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">raise</span><span class="w"> </span><span class="s">&quot;Task exited: </span><span class="si" data-group-id="7593450362-6">#{</span><span class="nc">Exception</span><span class="o">.</span><span class="n">format_exit</span><span class="p" data-group-id="7593450362-7">(</span><span class="n">reason</span><span class="p" data-group-id="7593450362-7">)</span><span class="si" data-group-id="7593450362-6">}</span><span class="s">&quot;</span><span class="w">
+</span><span class="k" data-group-id="7593450362-3">end</span><span class="p" data-group-id="7593450362-2">)</span></code></pre><p>If one task raises or times out:</p><ol><li>the second clause gets called</li><li>an exception is raised</li><li>the stream halts</li><li>all ongoing tasks will be shut down</li></ol><p>Here is another example:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">async_stream_nolink</span><span class="p" data-group-id="5776293072-1">(</span><span class="nc">MySupervisor</span><span class="p">,</span><span class="w"> </span><span class="n">collection</span><span class="p">,</span><span class="w"> </span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="ss">on_timeout</span><span class="p">:</span><span class="w"> </span><span class="ss">:kill_task</span><span class="p">,</span><span class="w"> </span><span class="ss">ordered</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="5776293072-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Stream</span><span class="o">.</span><span class="n">filter</span><span class="p" data-group-id="5776293072-2">(</span><span class="o">&amp;</span><span class="n">match?</span><span class="p" data-group-id="5776293072-3">(</span><span class="p" data-group-id="5776293072-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5776293072-4">}</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="p" data-group-id="5776293072-3">)</span><span class="p" data-group-id="5776293072-2">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take</span><span class="p" data-group-id="5776293072-5">(</span><span class="mi">3</span><span class="p" data-group-id="5776293072-5">)</span></code></pre><p>This will return the three first tasks to succeed, ignoring timeouts and errors, and shut down
+every ongoing task.</p><p>Just running the stream with <a href="Stream.html#run/1"><code class="inline">Stream.run/1</code></a> on the other hand would ignore errors and process the whole stream.</p>
+  </section>
+</section>
+<section class="detail" id="async_stream_nolink/6">
+
+    <span id="async_stream_nolink/5"></span>
+
+  <div class="detail-header">
+    <a href="#async_stream_nolink/6" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">async_stream_nolink(supervisor, enumerable, module, function, args, options \\ [])</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L418" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> async_stream_nolink(
+  <a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(),
+  <a href="Enumerable.html#t:t/0">Enumerable.t</a>(),
+  <a href="typespecs.html#built-in-types">module</a>(),
+  <a href="typespecs.html#basic-types">atom</a>(),
+  [<a href="typespecs.html#built-in-types">term</a>()],
+  [
+    <a href="#t:async_stream_option/0">async_stream_option</a>()
+  ]
+) :: <a href="Enumerable.html#t:t/0">Enumerable.t</a>()</pre>
+
+      </div>
+
+<p>Returns a stream where the given function (<code class="inline">module</code> and <code class="inline">function</code>)
+is mapped concurrently on each element in <code class="inline">enumerable</code>.</p><p>Each element in <code class="inline">enumerable</code> will be prepended to the given <code class="inline">args</code> and processed
+by its own task. The tasks will be spawned under the given <code class="inline">supervisor</code> and
+will not be linked to the caller process, similarly to <a href="#async_nolink/5"><code class="inline">async_nolink/5</code></a>.</p><p>See <a href="#async_stream/6"><code class="inline">async_stream/6</code></a> for discussion, options, and examples.</p>
+  </section>
+</section>
+<section class="detail" id="children/1">
+
+  <div class="detail-header">
+    <a href="#children/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">children(supervisor)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L493" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> children(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>()) :: [<a href="typespecs.html#basic-types">pid</a>()]</pre>
+
+      </div>
+
+<p>Returns all children PIDs except those that are restarting.</p><p>Note that calling this function when supervising a large number
+of children under low memory conditions can cause an out of memory
+exception.</p>
+  </section>
+</section>
+<section class="detail" id="start_child/3">
+
+    <span id="start_child/2"></span>
+
+  <div class="detail-header">
+    <a href="#start_child/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_child(supervisor, fun, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L524" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_child(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), (-&gt; <a href="typespecs.html#basic-types">any</a>()), <a href="typespecs.html#built-in-types">keyword</a>()) ::
+  <a href="DynamicSupervisor.html#t:on_start_child/0">DynamicSupervisor.on_start_child</a>()</pre>
+
+      </div>
+
+<p>Starts a task as a child of the given <code class="inline">supervisor</code>.</p><pre><code class="makeup elixir" translate="no"><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p" data-group-id="1258035474-1">(</span><span class="nc">MyTaskSupervisor</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1258035474-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="w"> </span><span class="s">&quot;I am running in a task&quot;</span><span class="w">
+</span><span class="k" data-group-id="1258035474-2">end</span><span class="p" data-group-id="1258035474-1">)</span></code></pre><p>Note that the spawned process is not linked to the caller, but
+only to the supervisor. This command is useful in case the
+task needs to perform side-effects (like I/O) and you have no
+interest in its results nor if it completes successfully.</p><h2 id="start_child/3-options" class="section-heading">
+  <a href="#start_child/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:restart</code> - the restart strategy, may be <code class="inline">:temporary</code> (the default),
+<code class="inline">:transient</code> or <code class="inline">:permanent</code>. <code class="inline">:temporary</code> means the task is never
+restarted, <code class="inline">:transient</code> means it is restarted if the exit is not
+<code class="inline">:normal</code>, <code class="inline">:shutdown</code> or <code class="inline">{:shutdown, reason}</code>. A <code class="inline">:permanent</code> restart
+strategy means it is always restarted.</p></li><li><p><code class="inline">:shutdown</code> - <code class="inline">:brutal_kill</code> if the task must be killed directly on shutdown
+or an integer indicating the timeout value, defaults to 5000 milliseconds.
+The task must trap exits for the timeout to have an effect.</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="start_child/5">
+
+    <span id="start_child/4"></span>
+
+  <div class="detail-header">
+    <a href="#start_child/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_child(supervisor, module, fun, args, options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L539" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_child(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), <a href="typespecs.html#built-in-types">module</a>(), <a href="typespecs.html#basic-types">atom</a>(), [<a href="typespecs.html#built-in-types">term</a>()], <a href="typespecs.html#built-in-types">keyword</a>()) ::
+  <a href="DynamicSupervisor.html#t:on_start_child/0">DynamicSupervisor.on_start_child</a>()</pre>
+
+      </div>
+
+<p>Starts a task as a child of the given <code class="inline">supervisor</code>.</p><p>Similar to <a href="#start_child/3"><code class="inline">start_child/3</code></a> except the task is specified
+by the given <code class="inline">module</code>, <code class="inline">fun</code> and <code class="inline">args</code>.</p>
+  </section>
+</section>
+<section class="detail" id="start_link/1">
+
+    <span id="start_link/0"></span>
+
+  <div class="detail-header">
+    <a href="#start_link/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_link(options \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L134" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_link([<a href="#t:option/0">option</a>()]) :: <a href="Supervisor.html#t:on_start/0">Supervisor.on_start</a>()</pre>
+
+      </div>
+
+<p>Starts a new supervisor.</p><h2 id="start_link/1-examples" class="section-heading">
+  <a href="#start_link/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>A task supervisor is typically started under a supervision tree using
+the tuple format:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1094186886-1">{</span><span class="nc">Task.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.TaskSupervisor</span><span class="p" data-group-id="1094186886-1">}</span></code></pre><p>You can also start it by calling <a href="#start_link/1"><code class="inline">start_link/1</code></a> directly:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Task.Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="4427367584-1">(</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp.TaskSupervisor</span><span class="p" data-group-id="4427367584-1">)</span></code></pre><p>But this is recommended only for scripting and should be avoided in
+production code. Generally speaking, processes should always be started
+inside supervision trees.</p><h2 id="start_link/1-options" class="section-heading">
+  <a href="#start_link/1-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Options</span>
+</h2>
+<ul><li><p><code class="inline">:name</code> - used to register a supervisor name, the supported values are
+described under the <code class="inline">Name Registration</code> section in the <a href="GenServer.html"><code class="inline">GenServer</code></a> module
+docs;</p></li><li><p><code class="inline">:max_restarts</code>, <code class="inline">:max_seconds</code>, and <code class="inline">:max_children</code> - as specified in
+<a href="DynamicSupervisor.html"><code class="inline">DynamicSupervisor</code></a>;</p></li></ul><p>This function could also receive <code class="inline">:restart</code> and <code class="inline">:shutdown</code> as options
+but those two options have been deprecated and it is now preferred to
+give them directly to <code class="inline">start_child</code>.</p>
+  </section>
+</section>
+<section class="detail" id="terminate_child/2">
+
+  <div class="detail-header">
+    <a href="#terminate_child/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">terminate_child(supervisor, pid)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/task/supervisor.ex#L481" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> terminate_child(<a href="Supervisor.html#t:supervisor/0">Supervisor.supervisor</a>(), <a href="typespecs.html#basic-types">pid</a>()) :: :ok | {:error, :not_found}</pre>
+
+      </div>
+
+<p>Terminates the child with the given <code class="inline">pid</code>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

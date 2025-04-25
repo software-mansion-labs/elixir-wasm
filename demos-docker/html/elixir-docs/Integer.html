@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Integer — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Integer.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Integer</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Functions for working with integers.</p><p>Some functions that work on integers are found in <a href="Kernel.html"><code class="inline">Kernel</code></a>:</p><ul><li><a href="Kernel.html#abs/1"><code class="inline">Kernel.abs/1</code></a></li><li><a href="Kernel.html#div/2"><code class="inline">Kernel.div/2</code></a></li><li><a href="Kernel.html#max/2"><code class="inline">Kernel.max/2</code></a></li><li><a href="Kernel.html#min/2"><code class="inline">Kernel.min/2</code></a></li><li><a href="Kernel.html#rem/2"><code class="inline">Kernel.rem/2</code></a></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-guards summary">
+  <h2>
+    <a href="#guards">Guards</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#is_even/1" data-no-tooltip="" translate="no">is_even(integer)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Determines if an <code class="inline">integer</code> is even.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#is_odd/1" data-no-tooltip="" translate="no">is_odd(integer)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Determines if <code class="inline">integer</code> is odd.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#digits/2" data-no-tooltip="" translate="no">digits(integer, base \\ 10)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the ordered digits for the given <code class="inline">integer</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#extended_gcd/2" data-no-tooltip="" translate="no">extended_gcd(a, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the extended greatest common divisor of the two given integers.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#floor_div/2" data-no-tooltip="" translate="no">floor_div(dividend, divisor)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Performs a floored integer division.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#gcd/2" data-no-tooltip="" translate="no">gcd(integer1, integer2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the greatest common divisor of the two given integers.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mod/2" data-no-tooltip="" translate="no">mod(dividend, divisor)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Computes the modulo remainder of an integer division.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#parse/2" data-no-tooltip="" translate="no">parse(binary, base \\ 10)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses a text representation of an integer.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pow/2" data-no-tooltip="" translate="no">pow(base, exponent)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Computes <code class="inline">base</code> raised to power of <code class="inline">exponent</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_charlist/2" data-no-tooltip="" translate="no">to_charlist(integer, base \\ 10)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a charlist which corresponds to the text representation
+of <code class="inline">integer</code> in the given <code class="inline">base</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_string/2" data-no-tooltip="" translate="no">to_string(integer, base \\ 10)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a binary which corresponds to the text representation
+of <code class="inline">integer</code> in the given <code class="inline">base</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#undigits/2" data-no-tooltip="" translate="no">undigits(digits, base \\ 10)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the integer represented by the ordered <code class="inline">digits</code>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="guards" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#guards">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Guards</span>
+    </h1>
+    <div class="guards-list">
+<section class="detail" id="is_even/1">
+
+  <div class="detail-header">
+    <a href="#is_even/1" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">is_even(integer)</h1>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L65" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Determines if an <code class="inline">integer</code> is even.</p><p>Returns <code class="inline">true</code> if the given <code class="inline">integer</code> is an even number,
+otherwise it returns <code class="inline">false</code>.</p><p>Allowed in guard clauses.</p><h2 id="is_even/1-examples" class="section-heading">
+  <a href="#is_even/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_even</span><span class="p" data-group-id="9441507704-1">(</span><span class="mi">10</span><span class="p" data-group-id="9441507704-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_even</span><span class="p" data-group-id="9441507704-2">(</span><span class="mi">5</span><span class="p" data-group-id="9441507704-2">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_even</span><span class="p" data-group-id="9441507704-3">(</span><span class="o">-</span><span class="mi">10</span><span class="p" data-group-id="9441507704-3">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_even</span><span class="p" data-group-id="9441507704-4">(</span><span class="mi">0</span><span class="p" data-group-id="9441507704-4">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="is_odd/1">
+
+  <div class="detail-header">
+    <a href="#is_odd/1" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">is_odd(integer)</h1>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L40" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Determines if <code class="inline">integer</code> is odd.</p><p>Returns <code class="inline">true</code> if the given <code class="inline">integer</code> is an odd number,
+otherwise it returns <code class="inline">false</code>.</p><p>Allowed in guard clauses.</p><h2 id="is_odd/1-examples" class="section-heading">
+  <a href="#is_odd/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_odd</span><span class="p" data-group-id="5967550570-1">(</span><span class="mi">5</span><span class="p" data-group-id="5967550570-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_odd</span><span class="p" data-group-id="5967550570-2">(</span><span class="mi">6</span><span class="p" data-group-id="5967550570-2">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_odd</span><span class="p" data-group-id="5967550570-3">(</span><span class="o">-</span><span class="mi">5</span><span class="p" data-group-id="5967550570-3">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">is_odd</span><span class="p" data-group-id="5967550570-4">(</span><span class="mi">0</span><span class="p" data-group-id="5967550570-4">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="digits/2">
+
+    <span id="digits/1"></span>
+
+  <div class="detail-header">
+    <a href="#digits/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">digits(integer, base \\ 10)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L190" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> digits(<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">pos_integer</a>()) :: [<a href="typespecs.html#basic-types">integer</a>(), ...]</pre>
+
+      </div>
+
+<p>Returns the ordered digits for the given <code class="inline">integer</code>.</p><p>An optional <code class="inline">base</code> value may be provided representing the radix for the returned
+digits. This one must be an integer &gt;= 2.</p><h2 id="digits/2-examples" class="section-heading">
+  <a href="#digits/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">digits</span><span class="p" data-group-id="7391623270-1">(</span><span class="mi">123</span><span class="p" data-group-id="7391623270-1">)</span><span class="w">
+</span><span class="p" data-group-id="7391623270-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7391623270-2">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">digits</span><span class="p" data-group-id="7391623270-3">(</span><span class="mi">170</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7391623270-3">)</span><span class="w">
+</span><span class="p" data-group-id="7391623270-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7391623270-4">]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">digits</span><span class="p" data-group-id="7391623270-5">(</span><span class="o">-</span><span class="mi">170</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7391623270-5">)</span><span class="w">
+</span><span class="p" data-group-id="7391623270-6">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7391623270-6">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="extended_gcd/2">
+
+  <div class="detail-header">
+    <a href="#extended_gcd/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">extended_gcd(a, b)</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L464" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> extended_gcd(<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">integer</a>()) :: {<a href="typespecs.html#basic-types">non_neg_integer</a>(), <a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">integer</a>()}</pre>
+
+      </div>
+
+<p>Returns the extended greatest common divisor of the two given integers.</p><p>This function uses the extended Euclidean algorithm to return a three-element tuple with the <code class="inline">gcd</code>
+and the coefficients <code class="inline">m</code> and <code class="inline">n</code> of Bézout's identity such that:</p><pre><code class="makeup elixir" translate="no"><span class="n">gcd</span><span class="p" data-group-id="0091803165-1">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="0091803165-1">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="o">*</span><span class="n">b</span></code></pre><p>By convention, <code class="inline">extended_gcd(0, 0)</code> returns <code class="inline">{0, 0, 0}</code>.</p><h2 id="extended_gcd/2-examples" class="section-heading">
+  <a href="#extended_gcd/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-1">(</span><span class="mi">240</span><span class="p">,</span><span class="w"> </span><span class="mi">46</span><span class="p" data-group-id="1575170975-1">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-2">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">47</span><span class="p" data-group-id="1575170975-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-3">(</span><span class="mi">46</span><span class="p">,</span><span class="w"> </span><span class="mi">240</span><span class="p" data-group-id="1575170975-3">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-4">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">9</span><span class="p" data-group-id="1575170975-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-5">(</span><span class="o">-</span><span class="mi">46</span><span class="p">,</span><span class="w"> </span><span class="mi">240</span><span class="p" data-group-id="1575170975-5">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-6">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">47</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">9</span><span class="p" data-group-id="1575170975-6">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-7">(</span><span class="o">-</span><span class="mi">46</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">240</span><span class="p" data-group-id="1575170975-7">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-8">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">47</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p" data-group-id="1575170975-8">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-9">(</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p" data-group-id="1575170975-9">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-10">{</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1575170975-10">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-11">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1575170975-11">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-12">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1575170975-12">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-13">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="1575170975-13">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-14">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1575170975-14">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">extended_gcd</span><span class="p" data-group-id="1575170975-15">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1575170975-15">)</span><span class="w">
+</span><span class="p" data-group-id="1575170975-16">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1575170975-16">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="floor_div/2">
+
+  <div class="detail-header">
+    <a href="#floor_div/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">floor_div(dividend, divisor)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L163" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> floor_div(<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">neg_integer</a>() | <a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Performs a floored integer division.</p><p>Raises an <a href="ArithmeticError.html"><code class="inline">ArithmeticError</code></a> exception if one of the arguments is not an
+integer, or when the <code class="inline">divisor</code> is <code class="inline">0</code>.</p><p>This function performs a <em>floored</em> integer division, which means that
+the result will always be rounded towards negative infinity.</p><p>If you want to perform truncated integer division (rounding towards zero),
+use <a href="Kernel.html#div/2"><code class="inline">Kernel.div/2</code></a> instead.</p><h2 id="floor_div/2-examples" class="section-heading">
+  <a href="#floor_div/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">floor_div</span><span class="p" data-group-id="5804851697-1">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5804851697-1">)</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">floor_div</span><span class="p" data-group-id="5804851697-2">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">4</span><span class="p" data-group-id="5804851697-2">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">floor_div</span><span class="p" data-group-id="5804851697-3">(</span><span class="o">-</span><span class="mi">99</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5804851697-3">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">50</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="gcd/2">
+
+  <div class="detail-header">
+    <a href="#gcd/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">gcd(integer1, integer2)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L422" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> gcd(<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">integer</a>()) :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Returns the greatest common divisor of the two given integers.</p><p>The greatest common divisor (GCD) of <code class="inline">integer1</code> and <code class="inline">integer2</code> is the largest positive
+integer that divides both <code class="inline">integer1</code> and <code class="inline">integer2</code> without leaving a remainder.</p><p>By convention, <code class="inline">gcd(0, 0)</code> returns <code class="inline">0</code>.</p><h2 id="gcd/2-examples" class="section-heading">
+  <a href="#gcd/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">gcd</span><span class="p" data-group-id="0552464593-1">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0552464593-1">)</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">gcd</span><span class="p" data-group-id="0552464593-2">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="0552464593-2">)</span><span class="w">
+</span><span class="mi">4</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">gcd</span><span class="p" data-group-id="0552464593-3">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">12</span><span class="p" data-group-id="0552464593-3">)</span><span class="w">
+</span><span class="mi">4</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">gcd</span><span class="p" data-group-id="0552464593-4">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0552464593-4">)</span><span class="w">
+</span><span class="mi">10</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">gcd</span><span class="p" data-group-id="0552464593-5">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p" data-group-id="0552464593-5">)</span><span class="w">
+</span><span class="mi">7</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">gcd</span><span class="p" data-group-id="0552464593-6">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0552464593-6">)</span><span class="w">
+</span><span class="mi">0</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="mod/2">
+
+  <div class="detail-header">
+    <a href="#mod/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mod(dividend, divisor)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> mod(<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">neg_integer</a>() | <a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Computes the modulo remainder of an integer division.</p><p>This function performs a <a href="#floor_div/2">floored division</a>, which means that
+the result will always have the sign of the <code class="inline">divisor</code>.</p><p>Raises an <a href="ArithmeticError.html"><code class="inline">ArithmeticError</code></a> exception if one of the arguments is not an
+integer, or when the <code class="inline">divisor</code> is <code class="inline">0</code>.</p><h2 id="mod/2-examples" class="section-heading">
+  <a href="#mod/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">mod</span><span class="p" data-group-id="1541116148-1">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1541116148-1">)</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">mod</span><span class="p" data-group-id="1541116148-2">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">4</span><span class="p" data-group-id="1541116148-2">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">2</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="parse/2">
+
+    <span id="parse/1"></span>
+
+  <div class="detail-header">
+    <a href="#parse/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">parse(binary, base \\ 10)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L273" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> parse(<a href="typespecs.html#built-in-types">binary</a>(), 2..36) :: {<a href="typespecs.html#basic-types">integer</a>(), remainder_of_binary :: <a href="typespecs.html#built-in-types">binary</a>()} | :error</pre>
+
+      </div>
+
+<p>Parses a text representation of an integer.</p><p>An optional <code class="inline">base</code> to the corresponding integer can be provided.
+If <code class="inline">base</code> is not given, 10 will be used.</p><p>If successful, returns a tuple in the form of <code class="inline">{integer, remainder_of_binary}</code>.
+Otherwise <code class="inline">:error</code>.</p><p>Raises an error if <code class="inline">base</code> is less than 2 or more than 36.</p><p>If you want to convert a string-formatted integer directly to an integer,
+<a href="String.html#to_integer/1"><code class="inline">String.to_integer/1</code></a> or <a href="String.html#to_integer/2"><code class="inline">String.to_integer/2</code></a> can be used instead.</p><h2 id="parse/2-examples" class="section-heading">
+  <a href="#parse/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-1">(</span><span class="s">&quot;34&quot;</span><span class="p" data-group-id="7511797703-1">)</span><span class="w">
+</span><span class="p" data-group-id="7511797703-2">{</span><span class="mi">34</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="7511797703-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-3">(</span><span class="s">&quot;34.5&quot;</span><span class="p" data-group-id="7511797703-3">)</span><span class="w">
+</span><span class="p" data-group-id="7511797703-4">{</span><span class="mi">34</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.5&quot;</span><span class="p" data-group-id="7511797703-4">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-5">(</span><span class="s">&quot;three&quot;</span><span class="p" data-group-id="7511797703-5">)</span><span class="w">
+</span><span class="ss">:error</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-6">(</span><span class="s">&quot;34&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="7511797703-6">)</span><span class="w">
+</span><span class="p" data-group-id="7511797703-7">{</span><span class="mi">34</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="7511797703-7">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-8">(</span><span class="s">&quot;f4&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="7511797703-8">)</span><span class="w">
+</span><span class="p" data-group-id="7511797703-9">{</span><span class="mi">244</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="7511797703-9">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-10">(</span><span class="s">&quot;Awww++&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">36</span><span class="p" data-group-id="7511797703-10">)</span><span class="w">
+</span><span class="p" data-group-id="7511797703-11">{</span><span class="mi">509216</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;++&quot;</span><span class="p" data-group-id="7511797703-11">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-12">(</span><span class="s">&quot;fab&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="7511797703-12">)</span><span class="w">
+</span><span class="ss">:error</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="7511797703-13">(</span><span class="s">&quot;a2&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">38</span><span class="p" data-group-id="7511797703-13">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) invalid base 38</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="pow/2">
+
+  <div class="detail-header">
+    <a href="#pow/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pow(base, exponent)</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L105" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> pow(<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Computes <code class="inline">base</code> raised to power of <code class="inline">exponent</code>.</p><p>Both <code class="inline">base</code> and <code class="inline">exponent</code> must be integers.
+The exponent must be zero or positive.</p><p>See <a href="Float.html#pow/2"><code class="inline">Float.pow/2</code></a> for exponentiation of negative
+exponents as well as floats.</p><h2 id="pow/2-examples" class="section-heading">
+  <a href="#pow/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-1">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7214399184-1">)</span><span class="w">
+</span><span class="mi">1</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-2">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7214399184-2">)</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-3">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="7214399184-3">)</span><span class="w">
+</span><span class="mi">1024</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-4">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="7214399184-4">)</span><span class="w">
+</span><span class="mi">2048</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-5">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p" data-group-id="7214399184-5">)</span><span class="w">
+</span><span class="mh">0x10000000000000000</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-6">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="7214399184-6">)</span><span class="w">
+</span><span class="mi">81</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-7">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7214399184-7">)</span><span class="w">
+</span><span class="mi">64</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-8">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7214399184-8">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">8</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-9">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="7214399184-9">)</span><span class="w">
+</span><span class="mi">16</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">pow</span><span class="p" data-group-id="7214399184-10">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="7214399184-10">)</span><span class="w">
+</span><span class="gt">** (ArithmeticError) bad argument in arithmetic expression</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_charlist/2">
+
+    <span id="to_charlist/1"></span>
+
+  <div class="detail-header">
+    <a href="#to_charlist/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_charlist(integer, base \\ 10)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L387" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_charlist(<a href="typespecs.html#basic-types">integer</a>(), 2..36) :: <a href="typespecs.html#built-in-types">charlist</a>()</pre>
+
+      </div>
+
+<p>Returns a charlist which corresponds to the text representation
+of <code class="inline">integer</code> in the given <code class="inline">base</code>.</p><p><code class="inline">base</code> can be an integer between 2 and 36. If no <code class="inline">base</code> is given,
+it defaults to <code class="inline">10</code>.</p><p>Inlined by the compiler.</p><h2 id="to_charlist/2-examples" class="section-heading">
+  <a href="#to_charlist/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_charlist</span><span class="p" data-group-id="8273123647-1">(</span><span class="mi">123</span><span class="p" data-group-id="8273123647-1">)</span><span class="w">
+</span><span class="s">~c&quot;123&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_charlist</span><span class="p" data-group-id="8273123647-2">(</span><span class="o">+</span><span class="mi">456</span><span class="p" data-group-id="8273123647-2">)</span><span class="w">
+</span><span class="s">~c&quot;456&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_charlist</span><span class="p" data-group-id="8273123647-3">(</span><span class="o">-</span><span class="mi">789</span><span class="p" data-group-id="8273123647-3">)</span><span class="w">
+</span><span class="s">~c&quot;-789&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_charlist</span><span class="p" data-group-id="8273123647-4">(</span><span class="mi">0123</span><span class="p" data-group-id="8273123647-4">)</span><span class="w">
+</span><span class="s">~c&quot;123&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_charlist</span><span class="p" data-group-id="8273123647-5">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="8273123647-5">)</span><span class="w">
+</span><span class="s">~c&quot;64&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_charlist</span><span class="p" data-group-id="8273123647-6">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="8273123647-6">)</span><span class="w">
+</span><span class="s">~c&quot;-64&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_charlist</span><span class="p" data-group-id="8273123647-7">(</span><span class="mi">882_681_651</span><span class="p">,</span><span class="w"> </span><span class="mi">36</span><span class="p" data-group-id="8273123647-7">)</span><span class="w">
+</span><span class="s">~c&quot;ELIXIR&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_string/2">
+
+    <span id="to_string/1"></span>
+
+  <div class="detail-header">
+    <a href="#to_string/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_string(integer, base \\ 10)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L349" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="typespecs.html#basic-types">integer</a>(), 2..36) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Returns a binary which corresponds to the text representation
+of <code class="inline">integer</code> in the given <code class="inline">base</code>.</p><p><code class="inline">base</code> can be an integer between 2 and 36. If no <code class="inline">base</code> is given,
+it defaults to <code class="inline">10</code>.</p><p>Inlined by the compiler.</p><h2 id="to_string/2-examples" class="section-heading">
+  <a href="#to_string/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7454683393-1">(</span><span class="mi">123</span><span class="p" data-group-id="7454683393-1">)</span><span class="w">
+</span><span class="s">&quot;123&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7454683393-2">(</span><span class="o">+</span><span class="mi">456</span><span class="p" data-group-id="7454683393-2">)</span><span class="w">
+</span><span class="s">&quot;456&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7454683393-3">(</span><span class="o">-</span><span class="mi">789</span><span class="p" data-group-id="7454683393-3">)</span><span class="w">
+</span><span class="s">&quot;-789&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7454683393-4">(</span><span class="mi">0123</span><span class="p" data-group-id="7454683393-4">)</span><span class="w">
+</span><span class="s">&quot;123&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7454683393-5">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="7454683393-5">)</span><span class="w">
+</span><span class="s">&quot;64&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7454683393-6">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="7454683393-6">)</span><span class="w">
+</span><span class="s">&quot;-64&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7454683393-7">(</span><span class="mi">882_681_651</span><span class="p">,</span><span class="w"> </span><span class="mi">36</span><span class="p" data-group-id="7454683393-7">)</span><span class="w">
+</span><span class="s">&quot;ELIXIR&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="undigits/2">
+
+    <span id="undigits/1"></span>
+
+  <div class="detail-header">
+    <a href="#undigits/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">undigits(digits, base \\ 10)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/integer.ex#L219" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> undigits([<a href="typespecs.html#basic-types">integer</a>()], <a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Returns the integer represented by the ordered <code class="inline">digits</code>.</p><p>An optional <code class="inline">base</code> value may be provided representing the radix for the <code class="inline">digits</code>.
+Base has to be an integer greater than or equal to <code class="inline">2</code>.</p><h2 id="undigits/2-examples" class="section-heading">
+  <a href="#undigits/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">undigits</span><span class="p" data-group-id="2599451855-1">(</span><span class="p" data-group-id="2599451855-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="2599451855-2">]</span><span class="p" data-group-id="2599451855-1">)</span><span class="w">
+</span><span class="mi">123</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">undigits</span><span class="p" data-group-id="2599451855-3">(</span><span class="p" data-group-id="2599451855-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="2599451855-4">]</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="2599451855-3">)</span><span class="w">
+</span><span class="mi">20</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Integer</span><span class="o">.</span><span class="n">undigits</span><span class="p" data-group-id="2599451855-5">(</span><span class="p" data-group-id="2599451855-6">[</span><span class="p" data-group-id="2599451855-6">]</span><span class="p" data-group-id="2599451855-5">)</span><span class="w">
+</span><span class="mi">0</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

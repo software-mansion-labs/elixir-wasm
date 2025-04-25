@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Comprehensions — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/comprehensions.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Comprehensions</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/comprehensions.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In Elixir, it is common to loop over an Enumerable, often filtering out some results and mapping values into another list. Comprehensions are syntactic sugar for such constructs: they group those common tasks into the <code class="inline">for</code> special form.</p><p>For example, we can map a list of integers into their squared values:</p><pre class="elixir" data-code-id="31323931"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for n &lt;- [1, 2, 3, 4], do: n * n</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 4, 9, 16]</p></pre><p>A comprehension is made of three parts: generators, filters, and collectables.</p><h2 id="generators-and-filters" class="section-heading">
+  <a href="#generators-and-filters" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Generators and filters</span>
+</h2>
+<p>In the expression above, <code class="inline">n &lt;- [1, 2, 3, 4]</code> is the <strong>generator</strong>. It is literally generating values to be used in the comprehension. Any enumerable can be passed on the right-hand side of the generator expression:</p><pre class="elixir" data-code-id="31333535"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for n &lt;- 1..4, do: n * n</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 4, 9, 16]</p></pre><p>Generator expressions also support pattern matching on their left-hand side; all non-matching patterns are <em>ignored</em>. Imagine that, instead of a range, we have a keyword list where the key is the atom <code class="inline">:good</code> or <code class="inline">:bad</code> and we only want to compute the square of the <code class="inline">:good</code> values:</p><pre class="elixir" data-code-id="31343139"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">values = [good: 1, good: 2, bad: 3, good: 4]</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for {:good, n} &lt;- values, do: n * n</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [1, 4, 16]</p></pre><p>Alternatively to pattern matching, filters can be used to select some particular elements. For example, we can select the multiples of 3 and discard all others:</p><pre class="elixir" data-code-id="31343833"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for n &lt;- 0..5, rem(n, 3) == 0, do: n * n</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [0, 9]</p></pre><p>Comprehensions discard all elements for which the filter expression returns <code class="inline">false</code> or <code class="inline">nil</code>; all other values are selected.</p><p>Comprehensions generally provide a much more concise representation than using the equivalent functions from the <a href="Enum.html"><code class="inline">Enum</code></a> and <a href="Stream.html"><code class="inline">Stream</code></a> modules. Furthermore, comprehensions also allow multiple generators and filters to be given. Here is an example that receives a list of directories and gets the size of each file in those directories:</p><pre><code class="makeup elixir" translate="no"><span class="n">dirs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6240969123-1">[</span><span class="s">&quot;/home/mikey&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/home/james&quot;</span><span class="p" data-group-id="6240969123-1">]</span><span class="w">
+
+</span><span class="k">for</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dirs</span><span class="p">,</span><span class="w">
+    </span><span class="n">file</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">ls!</span><span class="p" data-group-id="6240969123-2">(</span><span class="n">dir</span><span class="p" data-group-id="6240969123-2">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="6240969123-3">(</span><span class="n">dir</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="p" data-group-id="6240969123-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">File</span><span class="o">.</span><span class="n">regular?</span><span class="p" data-group-id="6240969123-4">(</span><span class="n">path</span><span class="p" data-group-id="6240969123-4">)</span><span class="w"> </span><span class="k" data-group-id="6240969123-5">do</span><span class="w">
+  </span><span class="nc">File</span><span class="o">.</span><span class="n">stat!</span><span class="p" data-group-id="6240969123-6">(</span><span class="n">path</span><span class="p" data-group-id="6240969123-6">)</span><span class="o">.</span><span class="n">size</span><span class="w">
+</span><span class="k" data-group-id="6240969123-5">end</span></code></pre><p>Multiple generators can also be used to calculate the Cartesian product of two lists:</p><pre class="elixir" data-code-id="31353437"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for i &lt;- [:a, :b, :c], j &lt;- [1, 2], do:  {i, j}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [a: 1, a: 2, b: 1, b: 2, c: 1, c: 2]</p></pre><p>Finally, keep in mind that variable assignments inside the comprehension, be it in generators, filters or inside the block, are not reflected outside of the comprehension.</p><h2 id="bitstring-generators" class="section-heading">
+  <a href="#bitstring-generators" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Bitstring generators</span>
+</h2>
+<p>Bitstring generators are also supported and are very useful when you need to comprehend over bitstring streams. The example below receives a list of pixels from a binary with their respective red, green and blue values and converts them into tuples of three elements each:</p><pre class="elixir" data-code-id="31363131"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">pixels = &lt;&lt;213, 45, 132, 64, 76, 32, 76, 0, 0, 234, 32, 15&gt;&gt;</span><span class="info"></span></div><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for &lt;&lt;r::8, g::8, b::8 &lt;- pixels&gt;&gt;, do: {r, g, b}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [{213, 45, 132}, {64, 76, 32}, {76, 0, 0}, {234, 32, 15}]</p></pre><p>A bitstring generator can be mixed with &quot;regular&quot; enumerable generators, and supports filters as well.</p><h2 id="the-into-option" class="section-heading">
+  <a href="#the-into-option" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The <code class="inline">:into</code> option</span>
+</h2>
+<p>In the examples above, all the comprehensions returned lists as their result. However, the result of a comprehension can be inserted into different data structures by passing the <code class="inline">:into</code> option to the comprehension.</p><p>For example, a bitstring generator can be used with the <code class="inline">:into</code> option in order to easily remove all spaces in a string:</p><pre class="elixir" data-code-id="31363735"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for &lt;&lt;c &lt;- &quot; hello world &quot;&gt;&gt;, c != ?\s, into: &quot;&quot;, do: &lt;&lt;c&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;helloworld&quot;</p></pre><p>Sets, maps, and other dictionaries can also be given to the <code class="inline">:into</code> option. In general, <code class="inline">:into</code> accepts any structure that implements the <a href="Collectable.html"><code class="inline">Collectable</code></a> protocol.</p><p>A common use case of <code class="inline">:into</code> can be transforming values in a map:</p><pre class="elixir" data-code-id="31373339"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">for {key, val} &lt;- %{&quot;a&quot; =&gt; 1, &quot;b&quot; =&gt; 2}, into: %{}, do: {key, val * val}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{&quot;a&quot; =&gt; 1, &quot;b&quot; =&gt; 4}</p></pre><p>Let's make another example using streams. Since the <a href="IO.html"><code class="inline">IO</code></a> module provides streams (that are both <a href="Enumerable.html"><code class="inline">Enumerable</code></a>s and <a href="Collectable.html"><code class="inline">Collectable</code></a>s), an echo terminal that echoes back the upcased version of whatever is typed can be implemented using comprehensions:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">stream</span><span class="p" data-group-id="1511681680-1">(</span><span class="ss">:stdio</span><span class="p">,</span><span class="w"> </span><span class="ss">:line</span><span class="p" data-group-id="1511681680-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">into</span><span class="p">:</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="k" data-group-id="1511681680-2">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">String</span><span class="o">.</span><span class="n">upcase</span><span class="p" data-group-id="1511681680-3">(</span><span class="n">line</span><span class="p" data-group-id="1511681680-3">)</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="1511681680-2">end</span></code></pre><p>Now type any string into the terminal and you will see that the same value will be printed in upper-case. Unfortunately, this example also got your IEx shell stuck in the comprehension, so you will need to hit <code class="inline">Ctrl+C</code> twice to get out of it. :)</p><h2 id="other-options" class="section-heading">
+  <a href="#other-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Other options</span>
+</h2>
+<p>Comprehensions support other options, such as <code class="inline">:reduce</code> and <code class="inline">:uniq</code>. Here are additional resources to learn more about comprehensions:</p><ul><li><a href="Kernel.SpecialForms.html#for/1"><code class="inline">for</code> official reference in Elixir documentation</a></li><li><a href="https://www.mitchellhanberg.com/the-comprehensive-guide-to-elixirs-for-comprehension/">Mitchell Hanberg's comprehensive guide to Elixir's comprehensions</a></li></ul>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="protocols.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Protocols
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="sigils.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Sigils
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

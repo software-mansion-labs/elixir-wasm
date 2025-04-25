@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Process-related anti-patterns — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/process-anti-patterns.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Process-related anti-patterns</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/anti-patterns/process-anti-patterns.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This document outlines potential anti-patterns related to processes and process-based abstractions.</p><h2 id="code-organization-by-process" class="section-heading">
+  <a href="#code-organization-by-process" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Code organization by process</span>
+</h2>
+<h4>Problem</h4><p>This anti-pattern refers to code that is unnecessarily organized by processes. A process itself does not represent an anti-pattern, but it should only be used to model runtime properties (such as concurrency, access to shared resources, error isolation, etc). When you use a process for code organization, it can create bottlenecks in the system.</p><h4>Example</h4><p>An example of this anti-pattern, as shown below, is a module that implements arithmetic operations (like <code class="inline">add</code> and <code class="inline">subtract</code>) by means of a <a href="GenServer.html"><code class="inline">GenServer</code></a> process. If the number of calls to this single process grows, this code organization can compromise the system performance, therefore becoming a bottleneck.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Calculator</span><span class="w"> </span><span class="k" data-group-id="8346294343-1">do</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Calculator that performs basic arithmetic operations.
+
+  This code is unnecessarily organized in a GenServer process.
+  &quot;&quot;&quot;</span><span class="w">
+
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">add</span><span class="p" data-group-id="8346294343-2">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="8346294343-2">)</span><span class="w"> </span><span class="k" data-group-id="8346294343-3">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="8346294343-4">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8346294343-5">{</span><span class="ss">:add</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="8346294343-5">}</span><span class="p" data-group-id="8346294343-4">)</span><span class="w">
+  </span><span class="k" data-group-id="8346294343-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p" data-group-id="8346294343-6">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="8346294343-6">)</span><span class="w"> </span><span class="k" data-group-id="8346294343-7">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="8346294343-8">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8346294343-9">{</span><span class="ss">:subtract</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="8346294343-9">}</span><span class="p" data-group-id="8346294343-8">)</span><span class="w">
+  </span><span class="k" data-group-id="8346294343-7">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="8346294343-10">(</span><span class="n">init_arg</span><span class="p" data-group-id="8346294343-10">)</span><span class="w"> </span><span class="k" data-group-id="8346294343-11">do</span><span class="w">
+    </span><span class="p" data-group-id="8346294343-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">init_arg</span><span class="p" data-group-id="8346294343-12">}</span><span class="w">
+  </span><span class="k" data-group-id="8346294343-11">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="8346294343-13">(</span><span class="p" data-group-id="8346294343-14">{</span><span class="ss">:add</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="8346294343-14">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8346294343-13">)</span><span class="w"> </span><span class="k" data-group-id="8346294343-15">do</span><span class="w">
+    </span><span class="p" data-group-id="8346294343-16">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8346294343-16">}</span><span class="w">
+  </span><span class="k" data-group-id="8346294343-15">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="8346294343-17">(</span><span class="p" data-group-id="8346294343-18">{</span><span class="ss">:subtract</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="8346294343-18">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8346294343-17">)</span><span class="w"> </span><span class="k" data-group-id="8346294343-19">do</span><span class="w">
+    </span><span class="p" data-group-id="8346294343-20">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p" data-group-id="8346294343-20">}</span><span class="w">
+  </span><span class="k" data-group-id="8346294343-19">end</span><span class="w">
+</span><span class="k" data-group-id="8346294343-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="3435762467-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="3435762467-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="3435762467-2">(</span><span class="nc">Calculator</span><span class="p">,</span><span class="w"> </span><span class="ss">:init</span><span class="p" data-group-id="3435762467-2">)</span><span class="w">
+</span><span class="p" data-group-id="3435762467-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3435762467-4">#</span><span class="nc" data-group-id="3435762467-4">PID</span><span class="p" data-group-id="3435762467-4">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">132</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="3435762467-4">&gt;</span><span class="p" data-group-id="3435762467-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calculator</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="3435762467-5">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="3435762467-5">)</span><span class="w">
+</span><span class="mi">6</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calculator</span><span class="o">.</span><span class="n">subtract</span><span class="p" data-group-id="3435762467-6">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="3435762467-6">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">1</span></code></pre><h4>Refactoring</h4><p>In Elixir, as shown next, code organization must be done only through modules and functions. Whenever possible, a library should not impose specific behavior (such as parallelization) on its users. It is better to delegate this behavioral decision to the developers of clients, thus increasing the potential for code reuse of a library.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Calculator</span><span class="w"> </span><span class="k" data-group-id="3920699211-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">add</span><span class="p" data-group-id="3920699211-2">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="3920699211-2">)</span><span class="w"> </span><span class="k" data-group-id="3920699211-3">do</span><span class="w">
+    </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w">
+  </span><span class="k" data-group-id="3920699211-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p" data-group-id="3920699211-4">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="3920699211-4">)</span><span class="w"> </span><span class="k" data-group-id="3920699211-5">do</span><span class="w">
+    </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="w">
+  </span><span class="k" data-group-id="3920699211-5">end</span><span class="w">
+</span><span class="k" data-group-id="3920699211-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Calculator</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="3520326492-1">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="3520326492-1">)</span><span class="w">
+</span><span class="mi">6</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Calculator</span><span class="o">.</span><span class="n">subtract</span><span class="p" data-group-id="3520326492-2">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3520326492-2">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">1</span></code></pre><h2 id="scattered-process-interfaces" class="section-heading">
+  <a href="#scattered-process-interfaces" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Scattered process interfaces</span>
+</h2>
+<h4>Problem</h4><p>In Elixir, the use of an <a href="Agent.html"><code class="inline">Agent</code></a>, a <a href="GenServer.html"><code class="inline">GenServer</code></a>, or any other process abstraction is not an anti-pattern in itself. However, when the responsibility for direct interaction with a process is spread throughout the entire system, it can become problematic. This bad practice can increase the difficulty of code maintenance and make the code more prone to bugs.</p><h4>Example</h4><p>The following code seeks to illustrate this anti-pattern. The responsibility for interacting directly with the <a href="Agent.html"><code class="inline">Agent</code></a> is spread across four different modules (<code class="inline">A</code>, <code class="inline">B</code>, <code class="inline">C</code>, and <code class="inline">D</code>).</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="k" data-group-id="7581175627-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="p" data-group-id="7581175627-2">(</span><span class="n">process</span><span class="p" data-group-id="7581175627-2">)</span><span class="w"> </span><span class="k" data-group-id="7581175627-3">do</span><span class="w">
+    </span><span class="c1"># Some other code...</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="7581175627-4">(</span><span class="n">process</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7581175627-5">fn</span><span class="w"> </span><span class="c">_list</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="k" data-group-id="7581175627-5">end</span><span class="p" data-group-id="7581175627-4">)</span><span class="w">
+  </span><span class="k" data-group-id="7581175627-3">end</span><span class="w">
+</span><span class="k" data-group-id="7581175627-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">B</span><span class="w"> </span><span class="k" data-group-id="6233185174-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="p" data-group-id="6233185174-2">(</span><span class="n">process</span><span class="p" data-group-id="6233185174-2">)</span><span class="w"> </span><span class="k" data-group-id="6233185174-3">do</span><span class="w">
+    </span><span class="c1"># Some other code...</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="6233185174-4">(</span><span class="n">process</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6233185174-5">fn</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6233185174-6">%{</span><span class="ss">a</span><span class="p">:</span><span class="w"> </span><span class="n">content</span><span class="p" data-group-id="6233185174-6">}</span><span class="w"> </span><span class="k" data-group-id="6233185174-5">end</span><span class="p" data-group-id="6233185174-4">)</span><span class="w">
+  </span><span class="k" data-group-id="6233185174-3">end</span><span class="w">
+</span><span class="k" data-group-id="6233185174-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">C</span><span class="w"> </span><span class="k" data-group-id="4259796402-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="p" data-group-id="4259796402-2">(</span><span class="n">process</span><span class="p" data-group-id="4259796402-2">)</span><span class="w"> </span><span class="k" data-group-id="4259796402-3">do</span><span class="w">
+    </span><span class="c1"># Some other code...</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="4259796402-4">(</span><span class="n">process</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4259796402-5">fn</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="4259796402-6">[</span><span class="ss">:atom_value</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">content</span><span class="p" data-group-id="4259796402-6">]</span><span class="w"> </span><span class="k" data-group-id="4259796402-5">end</span><span class="p" data-group-id="4259796402-4">)</span><span class="w">
+  </span><span class="k" data-group-id="4259796402-3">end</span><span class="w">
+</span><span class="k" data-group-id="4259796402-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">D</span><span class="w"> </span><span class="k" data-group-id="1849874257-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">get</span><span class="p" data-group-id="1849874257-2">(</span><span class="n">process</span><span class="p" data-group-id="1849874257-2">)</span><span class="w"> </span><span class="k" data-group-id="1849874257-3">do</span><span class="w">
+    </span><span class="c1"># Some other code...</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1849874257-4">(</span><span class="n">process</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1849874257-5">fn</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="k" data-group-id="1849874257-5">end</span><span class="p" data-group-id="1849874257-4">)</span><span class="w">
+  </span><span class="k" data-group-id="1849874257-3">end</span><span class="w">
+</span><span class="k" data-group-id="1849874257-1">end</span></code></pre><p>This spreading of responsibility can generate duplicated code and make code maintenance more difficult. Also, due to the lack of control over the format of the shared data, complex composed data can be shared. This freedom to use any format of data is dangerous and can induce developers to introduce bugs.</p><pre><code class="makeup elixir" translate="no"><span class="c1"># start an agent with initial state of an empty list</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="1198351069-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">agent</span><span class="p" data-group-id="1198351069-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Agent</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="1198351069-2">(</span><span class="k" data-group-id="1198351069-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1198351069-4">[</span><span class="p" data-group-id="1198351069-4">]</span><span class="w"> </span><span class="k" data-group-id="1198351069-3">end</span><span class="p" data-group-id="1198351069-2">)</span><span class="w">
+</span><span class="p" data-group-id="1198351069-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1198351069-6">#</span><span class="nc" data-group-id="1198351069-6">PID</span><span class="p" data-group-id="1198351069-6">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">135</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="1198351069-6">&gt;</span><span class="p" data-group-id="1198351069-5">}</span><span class="w">
+
+</span><span class="c1"># many data formats (for example, List, Map, Integer, Atom) are</span><span class="w">
+</span><span class="c1"># combined through direct access spread across the entire system</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">A</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="1198351069-7">(</span><span class="n">agent</span><span class="p" data-group-id="1198351069-7">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">B</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="1198351069-8">(</span><span class="n">agent</span><span class="p" data-group-id="1198351069-8">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">C</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="1198351069-9">(</span><span class="n">agent</span><span class="p" data-group-id="1198351069-9">)</span><span class="w">
+
+</span><span class="c1"># state of shared information</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">D</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1198351069-10">(</span><span class="n">agent</span><span class="p" data-group-id="1198351069-10">)</span><span class="w">
+</span><span class="p" data-group-id="1198351069-11">[</span><span class="ss">:atom_value</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1198351069-12">%{</span><span class="ss">a</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="1198351069-12">}</span><span class="p" data-group-id="1198351069-11">]</span></code></pre><p>For a <a href="GenServer.html"><code class="inline">GenServer</code></a> and other behaviours, this anti-pattern will manifest when scattering calls to <a href="GenServer.html#call/3"><code class="inline">GenServer.call/3</code></a> and <a href="GenServer.html#cast/2"><code class="inline">GenServer.cast/2</code></a> throughout multiple modules, instead of encapsulating all the interaction with the <a href="GenServer.html"><code class="inline">GenServer</code></a> in a single place.</p><h4>Refactoring</h4><p>Instead of spreading direct access to a process abstraction, such as <a href="Agent.html"><code class="inline">Agent</code></a>, over many places in the code, it is better to refactor this code by centralizing the responsibility for interacting with a process in a single module. This refactoring improves maintainability by removing duplicated code; it also allows you to limit the accepted format for shared data, reducing bug-proneness. As shown below, the module <code class="inline">Foo.Bucket</code> is centralizing the responsibility for interacting with the <a href="Agent.html"><code class="inline">Agent</code></a>. Any other place in the code that needs to access shared data must now delegate this action to <code class="inline">Foo.Bucket</code>. Also, <code class="inline">Foo.Bucket</code> now only allows data to be shared in <a href="Map.html"><code class="inline">Map</code></a> format.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Foo.Bucket</span><span class="w"> </span><span class="k" data-group-id="9545572951-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Agent</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="9545572951-2">(</span><span class="c">_opts</span><span class="p" data-group-id="9545572951-2">)</span><span class="w"> </span><span class="k" data-group-id="9545572951-3">do</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="9545572951-4">(</span><span class="k" data-group-id="9545572951-5">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9545572951-6">%{</span><span class="p" data-group-id="9545572951-6">}</span><span class="w"> </span><span class="k" data-group-id="9545572951-5">end</span><span class="p" data-group-id="9545572951-4">)</span><span class="w">
+  </span><span class="k" data-group-id="9545572951-3">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">get</span><span class="p" data-group-id="9545572951-7">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="9545572951-7">)</span><span class="w"> </span><span class="k" data-group-id="9545572951-8">do</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9545572951-9">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="9545572951-10">(</span><span class="ni">&amp;1</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="9545572951-10">)</span><span class="p" data-group-id="9545572951-9">)</span><span class="w">
+  </span><span class="k" data-group-id="9545572951-8">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">put</span><span class="p" data-group-id="9545572951-11">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="9545572951-11">)</span><span class="w"> </span><span class="k" data-group-id="9545572951-12">do</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="9545572951-13">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Map</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="9545572951-14">(</span><span class="ni">&amp;1</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="9545572951-14">)</span><span class="p" data-group-id="9545572951-13">)</span><span class="w">
+  </span><span class="k" data-group-id="9545572951-12">end</span><span class="w">
+</span><span class="k" data-group-id="9545572951-1">end</span></code></pre><p>The following are examples of how to delegate access to shared data (provided by an <a href="Agent.html"><code class="inline">Agent</code></a>) to <code class="inline">Foo.Bucket</code>.</p><pre><code class="makeup elixir" translate="no"><span class="c1"># start an agent through `Foo.Bucket`</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="0138135140-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="0138135140-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Foo.Bucket</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="0138135140-2">(</span><span class="p" data-group-id="0138135140-3">%{</span><span class="p" data-group-id="0138135140-3">}</span><span class="p" data-group-id="0138135140-2">)</span><span class="w">
+</span><span class="p" data-group-id="0138135140-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0138135140-5">#</span><span class="nc" data-group-id="0138135140-5">PID</span><span class="p" data-group-id="0138135140-5">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">114</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="0138135140-5">&gt;</span><span class="p" data-group-id="0138135140-4">}</span><span class="w">
+
+</span><span class="c1"># add shared values to the keys `milk` and `beer`</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Foo.Bucket</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="0138135140-6">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0138135140-6">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Foo.Bucket</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="0138135140-7">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beer&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p" data-group-id="0138135140-7">)</span><span class="w">
+
+</span><span class="c1"># access shared data of specific keys</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Foo.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="0138135140-8">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beer&quot;</span><span class="p" data-group-id="0138135140-8">)</span><span class="w">
+</span><span class="mi">7</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Foo.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="0138135140-9">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p" data-group-id="0138135140-9">)</span><span class="w">
+</span><span class="mi">3</span></code></pre><h4>Additional remarks</h4><p>This anti-pattern was formerly known as <a href="https://github.com/lucasvegi/Elixir-Code-Smells/tree/main#agent-obsession">Agent obsession</a>.</p><h2 id="sending-unnecessary-data" class="section-heading">
+  <a href="#sending-unnecessary-data" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Sending unnecessary data</span>
+</h2>
+<h4>Problem</h4><p>Sending a message to a process can be an expensive operation if the message is big enough. That's because that message will be fully copied to the receiving process, which may be CPU and memory intensive. This is due to Erlang's &quot;share nothing&quot; architecture, where each process has its own memory, which simplifies and speeds up garbage collection.</p><p>This is more obvious when using <a href="Kernel.html#send/2"><code class="inline">send/2</code></a>, <a href="GenServer.html#call/3"><code class="inline">GenServer.call/3</code></a>, or the initial data in <a href="GenServer.html#start_link/3"><code class="inline">GenServer.start_link/3</code></a>. Notably this also happens when using <a href="Kernel.html#spawn/1"><code class="inline">spawn/1</code></a>, <a href="Task.html#async/1"><code class="inline">Task.async/1</code></a>, <a href="Task.html#async_stream/3"><code class="inline">Task.async_stream/3</code></a>, and so on. It is more subtle here as the anonymous function passed to these functions captures the variables it references, and all captured variables will be copied over. By doing this, you can accidentally send way more data to a process than you actually need.</p><h4>Example</h4><p>Imagine you were to implement some simple reporting of IP addresses that made requests against your application. You want to do this asynchronously and not block processing, so you decide to use <a href="Kernel.html#spawn/1"><code class="inline">spawn/1</code></a>. It may seem like a good idea to hand over the whole connection because we might need more data later. However passing the connection results in copying a lot of unnecessary data like the request body, params, etc.</p><pre><code class="makeup elixir" translate="no"><span class="c1"># log_request_ip send the ip to some external service</span><span class="w">
+</span><span class="n">spawn</span><span class="p" data-group-id="2752720603-1">(</span><span class="k" data-group-id="2752720603-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">log_request_ip</span><span class="p" data-group-id="2752720603-3">(</span><span class="n">conn</span><span class="p" data-group-id="2752720603-3">)</span><span class="w"> </span><span class="k" data-group-id="2752720603-2">end</span><span class="p" data-group-id="2752720603-1">)</span></code></pre><p>This problem also occurs when accessing only the relevant parts:</p><pre><code class="makeup elixir" translate="no"><span class="n">spawn</span><span class="p" data-group-id="1407524901-1">(</span><span class="k" data-group-id="1407524901-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">log_request_ip</span><span class="p" data-group-id="1407524901-3">(</span><span class="n">conn</span><span class="o">.</span><span class="n">remote_ip</span><span class="p" data-group-id="1407524901-3">)</span><span class="w"> </span><span class="k" data-group-id="1407524901-2">end</span><span class="p" data-group-id="1407524901-1">)</span></code></pre><p>This will still copy over all of <code class="inline">conn</code>, because the <code class="inline">conn</code> variable is being captured inside the spawned function. The function then extracts the <code class="inline">remote_ip</code> field, but only after the whole <code class="inline">conn</code> has been copied over.</p><p><a href="Kernel.html#send/2"><code class="inline">send/2</code></a> and the <a href="GenServer.html"><code class="inline">GenServer</code></a> APIs also rely on message passing. In the example below, the <code class="inline">conn</code> is once again copied to the underlying <a href="GenServer.html"><code class="inline">GenServer</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="nc">GenServer</span><span class="o">.</span><span class="n">cast</span><span class="p" data-group-id="0067381198-1">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0067381198-2">{</span><span class="ss">:report_ip_address</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p" data-group-id="0067381198-2">}</span><span class="p" data-group-id="0067381198-1">)</span></code></pre><h4>Refactoring</h4><p>This anti-pattern has many potential remedies:</p><ul><li><p>Limit the data you send to the absolute necessary minimum instead of sending an entire struct. For example, don't send an entire <code class="inline">conn</code> struct if all you need is a couple of fields.</p></li><li><p>If the only process that needs data is the one you are sending to, consider making the process fetch that data instead of passing it.</p></li><li><p>Some abstractions, such as <a href="https://www.erlang.org/doc/man/persistent_term.html"><code class="inline">:persistent_term</code></a>, allows you to share data between processes, as long as such data changes infrequently.</p></li></ul><p>In our case, limiting the input data is a reasonable strategy. If all we need <em>right now</em> is the IP address, then let's only work with that and make sure we're only passing the IP address into the closure, like so:</p><pre><code class="makeup elixir" translate="no"><span class="n">ip_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="o">.</span><span class="n">remote_ip</span><span class="w">
+</span><span class="n">spawn</span><span class="p" data-group-id="5580142466-1">(</span><span class="k" data-group-id="5580142466-2">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">log_request_ip</span><span class="p" data-group-id="5580142466-3">(</span><span class="n">ip_address</span><span class="p" data-group-id="5580142466-3">)</span><span class="w"> </span><span class="k" data-group-id="5580142466-2">end</span><span class="p" data-group-id="5580142466-1">)</span></code></pre><p>Or in the <a href="GenServer.html"><code class="inline">GenServer</code></a> case:</p><pre><code class="makeup elixir" translate="no"><span class="nc">GenServer</span><span class="o">.</span><span class="n">cast</span><span class="p" data-group-id="2721199454-1">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2721199454-2">{</span><span class="ss">:report_ip_address</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="o">.</span><span class="n">remote_ip</span><span class="p" data-group-id="2721199454-2">}</span><span class="p" data-group-id="2721199454-1">)</span></code></pre><h2 id="unsupervised-processes" class="section-heading">
+  <a href="#unsupervised-processes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unsupervised processes</span>
+</h2>
+<h4>Problem</h4><p>In Elixir, creating a process outside a supervision tree is not an anti-pattern in itself. However, when you spawn many long-running processes outside of supervision trees, this can make visibility and monitoring of these processes difficult, preventing developers from fully controlling their applications.</p><h4>Example</h4><p>The following code example seeks to illustrate a library responsible for maintaining a numerical <code class="inline">Counter</code> through a <a href="GenServer.html"><code class="inline">GenServer</code></a> process <em>outside a supervision tree</em>. Multiple counters can be created simultaneously by a client (one process for each counter), making these <em>unsupervised</em> processes difficult to manage. This can cause problems with the initialization, restart, and shutdown of a system.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Counter</span><span class="w"> </span><span class="k" data-group-id="5397163540-1">do</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Global counter implemented through a GenServer process.
+  &quot;&quot;&quot;</span><span class="w">
+
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;Starts a counter process.&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="5397163540-2">(</span><span class="n">opts</span><span class="w"> </span><span class="o">\\</span><span class="w"> </span><span class="p" data-group-id="5397163540-3">[</span><span class="p" data-group-id="5397163540-3">]</span><span class="p" data-group-id="5397163540-2">)</span><span class="w"> </span><span class="k" data-group-id="5397163540-4">do</span><span class="w">
+    </span><span class="n">initial_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="5397163540-5">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="ss">:initial_value</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="5397163540-5">)</span><span class="w">
+    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Keyword</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="5397163540-6">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="p" data-group-id="5397163540-6">)</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="5397163540-7">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">initial_value</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p" data-group-id="5397163540-7">)</span><span class="w">
+  </span><span class="k" data-group-id="5397163540-4">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;Gets the current value of the given counter.&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">get</span><span class="p" data-group-id="5397163540-8">(</span><span class="n">pid_name</span><span class="w"> </span><span class="o">\\</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="p" data-group-id="5397163540-8">)</span><span class="w"> </span><span class="k" data-group-id="5397163540-9">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="5397163540-10">(</span><span class="n">pid_name</span><span class="p">,</span><span class="w"> </span><span class="ss">:get</span><span class="p" data-group-id="5397163540-10">)</span><span class="w">
+  </span><span class="k" data-group-id="5397163540-9">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;Bumps the value of the given counter.&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">bump</span><span class="p" data-group-id="5397163540-11">(</span><span class="n">pid_name</span><span class="w"> </span><span class="o">\\</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="5397163540-11">)</span><span class="w"> </span><span class="k" data-group-id="5397163540-12">do</span><span class="w">
+    </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p" data-group-id="5397163540-13">(</span><span class="n">pid_name</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5397163540-14">{</span><span class="ss">:bump</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="5397163540-14">}</span><span class="p" data-group-id="5397163540-13">)</span><span class="w">
+  </span><span class="k" data-group-id="5397163540-12">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="5397163540-15">(</span><span class="n">counter</span><span class="p" data-group-id="5397163540-15">)</span><span class="w"> </span><span class="k" data-group-id="5397163540-16">do</span><span class="w">
+    </span><span class="p" data-group-id="5397163540-17">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="5397163540-17">}</span><span class="w">
+  </span><span class="k" data-group-id="5397163540-16">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="5397163540-18">(</span><span class="ss">:get</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="5397163540-18">)</span><span class="w"> </span><span class="k" data-group-id="5397163540-19">do</span><span class="w">
+    </span><span class="p" data-group-id="5397163540-20">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="5397163540-20">}</span><span class="w">
+  </span><span class="k" data-group-id="5397163540-19">end</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">handle_call</span><span class="p" data-group-id="5397163540-21">(</span><span class="p" data-group-id="5397163540-22">{</span><span class="ss">:bump</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="5397163540-22">}</span><span class="p">,</span><span class="w"> </span><span class="c">_from</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p" data-group-id="5397163540-21">)</span><span class="w"> </span><span class="k" data-group-id="5397163540-23">do</span><span class="w">
+    </span><span class="p" data-group-id="5397163540-24">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="5397163540-24">}</span><span class="w">
+  </span><span class="k" data-group-id="5397163540-23">end</span><span class="w">
+</span><span class="k" data-group-id="5397163540-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="3218488628-1">(</span><span class="p" data-group-id="3218488628-1">)</span><span class="w">
+</span><span class="p" data-group-id="3218488628-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3218488628-3">#</span><span class="nc" data-group-id="3218488628-3">PID</span><span class="p" data-group-id="3218488628-3">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">115</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="3218488628-3">&gt;</span><span class="p" data-group-id="3218488628-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3218488628-4">(</span><span class="p" data-group-id="3218488628-4">)</span><span class="w">
+</span><span class="mi">0</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="3218488628-5">(</span><span class="ss">initial_value</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="ss">:other_counter</span><span class="p" data-group-id="3218488628-5">)</span><span class="w">
+</span><span class="p" data-group-id="3218488628-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3218488628-7">#</span><span class="nc" data-group-id="3218488628-7">PID</span><span class="p" data-group-id="3218488628-7">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">120</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="3218488628-7">&gt;</span><span class="p" data-group-id="3218488628-6">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3218488628-8">(</span><span class="ss">:other_counter</span><span class="p" data-group-id="3218488628-8">)</span><span class="w">
+</span><span class="mi">15</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">bump</span><span class="p" data-group-id="3218488628-9">(</span><span class="ss">:other_counter</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="p" data-group-id="3218488628-9">)</span><span class="w">
+</span><span class="mi">12</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">bump</span><span class="p" data-group-id="3218488628-10">(</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p" data-group-id="3218488628-10">)</span><span class="w">
+</span><span class="mi">7</span></code></pre><h4>Refactoring</h4><p>To ensure that clients of a library have full control over their systems, regardless of the number of processes used and the lifetime of each one, all processes must be started inside a supervision tree. As shown below, this code uses a <a href="Supervisor.html"><code class="inline">Supervisor</code></a> as a supervision tree. When this Elixir application is started, two different counters (<code class="inline">Counter</code> and <code class="inline">:other_counter</code>) are also started as child processes of the <a href="Supervisor.html"><code class="inline">Supervisor</code></a> named <code class="inline">App.Supervisor</code>. One is initialized with <code class="inline">0</code>, the other with <code class="inline">15</code>. By means of this supervision tree, it is possible to manage the life cycle of all child processes (stopping or restarting each one), improving the visibility of the entire app.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">SupervisedProcess.Application</span><span class="w"> </span><span class="k" data-group-id="6839702449-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Application</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start</span><span class="p" data-group-id="6839702449-2">(</span><span class="c">_type</span><span class="p">,</span><span class="w"> </span><span class="c">_args</span><span class="p" data-group-id="6839702449-2">)</span><span class="w"> </span><span class="k" data-group-id="6839702449-3">do</span><span class="w">
+    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6839702449-4">[</span><span class="w">
+      </span><span class="c1"># With the default values for counter and name</span><span class="w">
+      </span><span class="nc">Counter</span><span class="p">,</span><span class="w">
+      </span><span class="c1"># With custom values for counter, name, and a custom ID</span><span class="w">
+      </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">child_spec</span><span class="p" data-group-id="6839702449-5">(</span><span class="w">
+        </span><span class="p" data-group-id="6839702449-6">{</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="ss">:other_counter</span><span class="p">,</span><span class="w"> </span><span class="ss">initial_value</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="6839702449-6">}</span><span class="p">,</span><span class="w">
+        </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="ss">:other_counter</span><span class="w">
+      </span><span class="p" data-group-id="6839702449-5">)</span><span class="w">
+    </span><span class="p" data-group-id="6839702449-4">]</span><span class="w">
+
+    </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="6839702449-7">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">App.Supervisor</span><span class="p" data-group-id="6839702449-7">)</span><span class="w">
+  </span><span class="k" data-group-id="6839702449-3">end</span><span class="w">
+</span><span class="k" data-group-id="6839702449-1">end</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">count_children</span><span class="p" data-group-id="7070324335-1">(</span><span class="nc">App.Supervisor</span><span class="p" data-group-id="7070324335-1">)</span><span class="w">
+</span><span class="p" data-group-id="7070324335-2">%{</span><span class="ss">active</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">specs</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">supervisors</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">workers</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7070324335-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7070324335-3">(</span><span class="nc">Counter</span><span class="p" data-group-id="7070324335-3">)</span><span class="w">
+</span><span class="mi">0</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7070324335-4">(</span><span class="ss">:other_counter</span><span class="p" data-group-id="7070324335-4">)</span><span class="w">
+</span><span class="mi">15</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">bump</span><span class="p" data-group-id="7070324335-5">(</span><span class="nc">Counter</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p" data-group-id="7070324335-5">)</span><span class="w">
+</span><span class="mi">7</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">terminate_child</span><span class="p" data-group-id="7070324335-6">(</span><span class="nc">App.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="nc">Counter</span><span class="p" data-group-id="7070324335-6">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">count_children</span><span class="p" data-group-id="7070324335-7">(</span><span class="nc">App.Supervisor</span><span class="p" data-group-id="7070324335-7">)</span><span class="w"> </span><span class="c1"># Only one active child</span><span class="w">
+</span><span class="p" data-group-id="7070324335-8">%{</span><span class="ss">active</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">specs</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">supervisors</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">workers</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7070324335-8">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7070324335-9">(</span><span class="nc">Counter</span><span class="p" data-group-id="7070324335-9">)</span><span class="w"> </span><span class="c1"># The process was terminated</span><span class="w">
+</span><span class="gt">** (EXIT) no process: the process is not alive...</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">restart_child</span><span class="p" data-group-id="7070324335-10">(</span><span class="nc">App.Supervisor</span><span class="p">,</span><span class="w"> </span><span class="nc">Counter</span><span class="p" data-group-id="7070324335-10">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Counter</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7070324335-11">(</span><span class="nc">Counter</span><span class="p" data-group-id="7070324335-11">)</span><span class="w"> </span><span class="c1"># After the restart, this process can be used again</span><span class="w">
+</span><span class="mi">0</span></code></pre>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="design-anti-patterns.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Design-related anti-patterns
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="macro-anti-patterns.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Meta-programming anti-patterns
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

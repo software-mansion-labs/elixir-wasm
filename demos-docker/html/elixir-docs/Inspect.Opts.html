@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Inspect.Opts — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Inspect.Opts.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Inspect.Opts</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/inspect/algebra.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Defines the options used by the <a href="Inspect.html"><code class="inline">Inspect</code></a> protocol.</p><p>The following fields are available:</p><ul><li><p><code class="inline">:base</code> - prints integers and binaries as <code class="inline">:binary</code>, <code class="inline">:octal</code>, <code class="inline">:decimal</code>,
+or <code class="inline">:hex</code>. Defaults to <code class="inline">:decimal</code>.</p></li><li><p><code class="inline">:binaries</code> - when <code class="inline">:as_binaries</code> all binaries will be printed in bit
+syntax.</p><p>When <code class="inline">:as_strings</code> all binaries will be printed as strings, non-printable
+bytes will be escaped.</p><p>When the default <code class="inline">:infer</code>, the binary will be printed as a string if <code class="inline">:base</code>
+is <code class="inline">:decimal</code> and if it is printable, otherwise in bit syntax. See
+<a href="String.html#printable?/1"><code class="inline">String.printable?/1</code></a> to learn when a string is printable.</p></li><li><p><code class="inline">:charlists</code> - when <code class="inline">:as_charlists</code> all lists will be printed as charlists,
+non-printable elements will be escaped.</p><p>When <code class="inline">:as_lists</code> all lists will be printed as lists.</p><p>When the default <code class="inline">:infer</code>, the list will be printed as a charlist if it
+is printable, otherwise as list. See <a href="List.html#ascii_printable?/1"><code class="inline">List.ascii_printable?/1</code></a> to learn
+when a charlist is printable.</p></li><li><p><code class="inline">:custom_options</code> (since v1.9.0) - a keyword list storing custom user-defined
+options. Useful when implementing the <a href="Inspect.html"><code class="inline">Inspect</code></a> protocol for nested structs
+to pass the custom options through.</p><p>It supports some pre-defined keys:</p><ul><li><code class="inline">:sort_maps</code> (since v1.14.4) - if set to <code class="inline">true</code>, sorts key-value pairs
+in maps. This can be helpful to make map inspection deterministic for
+testing, given maps key order is random.</li></ul></li><li><p><code class="inline">:inspect_fun</code> (since v1.9.0) - a function to build algebra documents.
+Defaults to <a href="#default_inspect_fun/0"><code class="inline">Inspect.Opts.default_inspect_fun/0</code></a>.</p></li><li><p><code class="inline">:limit</code> - limits the number of items that are inspected for tuples,
+bitstrings, maps, lists and any other collection of items, with the exception of
+printable strings and printable charlists which use the <code class="inline">:printable_limit</code> option.
+If you don't want to limit the number of items to a particular number,
+use <code class="inline">:infinity</code>. It accepts a positive integer or <code class="inline">:infinity</code>.
+Defaults to <code class="inline">50</code>.</p></li><li><p><code class="inline">:pretty</code> - if set to <code class="inline">true</code> enables pretty printing. Defaults to <code class="inline">false</code>.</p></li><li><p><code class="inline">:printable_limit</code> - limits the number of characters that are inspected
+on printable strings and printable charlists. You can use <a href="String.html#printable?/1"><code class="inline">String.printable?/1</code></a>
+and <a href="List.html#ascii_printable?/1"><code class="inline">List.ascii_printable?/1</code></a> to check if a given string or charlist is
+printable. If you don't want to limit the number of characters to a particular
+number, use <code class="inline">:infinity</code>. It accepts a positive integer or <code class="inline">:infinity</code>.
+Defaults to <code class="inline">4096</code>.</p></li><li><p><code class="inline">:safe</code> - when <code class="inline">false</code>, failures while inspecting structs will be raised
+as errors instead of being wrapped in the <a href="Inspect.Error.html"><code class="inline">Inspect.Error</code></a> exception. This
+is useful when debugging failures and crashes for custom inspect
+implementations. Defaults to <code class="inline">true</code>.</p></li><li><p><code class="inline">:structs</code> - when <code class="inline">false</code>, structs are not formatted by the inspect
+protocol, they are instead printed as maps. Defaults to <code class="inline">true</code>.</p></li><li><p><code class="inline">:syntax_colors</code> - when set to a keyword list of colors the output is
+colorized. The keys are types and the values are the colors to use for
+each type (for example, <code class="inline">[number: :red, atom: :blue]</code>). Types can include
+<code class="inline">:atom</code>, <code class="inline">:binary</code>, <code class="inline">:boolean</code>, <code class="inline">:list</code>, <code class="inline">:map</code>, <code class="inline">:number</code>, <code class="inline">:regex</code>,
+<code class="inline">:string</code>, <code class="inline">:tuple</code>, or some types to represent AST like <code class="inline">:variable</code>,
+<code class="inline">:call</code>, and <code class="inline">:operator</code>.
+Custom data types may provide their own options.
+Colors can be any <a href="IO.ANSI.html#t:ansidata/0"><code class="inline">IO.ANSI.ansidata/0</code></a> as accepted by <a href="IO.ANSI.html#format/1"><code class="inline">IO.ANSI.format/1</code></a>.
+A default list of colors can be retrieved from <a href="IO.ANSI.html#syntax_colors/0"><code class="inline">IO.ANSI.syntax_colors/0</code></a>.</p></li><li><p><code class="inline">:width</code> - number of characters per line used when pretty is <code class="inline">true</code> or when
+printing to IO devices. Set to <code class="inline">0</code> to force each item to be printed on its
+own line. If you don't want to limit the number of items to a particular
+number, use <code class="inline">:infinity</code>. Defaults to <code class="inline">80</code>.</p></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:color_key/0" data-no-tooltip="" translate="no">color_key()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#default_inspect_fun/0" data-no-tooltip="" translate="no">default_inspect_fun()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the default inspect function.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#default_inspect_fun/1" data-no-tooltip="" translate="no">default_inspect_fun(fun)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the default inspect function.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/1" data-no-tooltip="" translate="no">new(opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds an <a href="Inspect.Opts.html"><code class="inline">Inspect.Opts</code></a> struct.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:color_key/0">
+
+  <div class="detail-header">
+    <a href="#t:color_key/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">color_key()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/inspect/algebra.ex#L98" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> color_key() :: <a href="typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/inspect/algebra.ex#L100" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Inspect.Opts{
+  base: :decimal | :binary | :hex | :octal,
+  binaries: :infer | :as_binaries | :as_strings,
+  char_lists: <a href="typespecs.html#built-in-types">term</a>(),
+  charlists: :infer | :as_lists | :as_charlists,
+  custom_options: <a href="typespecs.html#built-in-types">keyword</a>(),
+  inspect_fun: (<a href="typespecs.html#basic-types">any</a>(), <a href="#t:t/0">t</a>() -&gt; <a href="Inspect.Algebra.html#t:t/0">Inspect.Algebra.t</a>()),
+  limit: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :infinity,
+  pretty: <a href="typespecs.html#built-in-types">boolean</a>(),
+  printable_limit: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :infinity,
+  safe: <a href="typespecs.html#built-in-types">boolean</a>(),
+  structs: <a href="typespecs.html#built-in-types">boolean</a>(),
+  syntax_colors: [{<a href="#t:color_key/0">color_key</a>(), <a href="IO.ANSI.html#t:ansidata/0">IO.ANSI.ansidata</a>()}],
+  width: <a href="typespecs.html#basic-types">non_neg_integer</a>() | :infinity
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="default_inspect_fun/0">
+
+  <div class="detail-header">
+    <a href="#default_inspect_fun/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">default_inspect_fun()</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/inspect/algebra.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> default_inspect_fun() :: (<a href="typespecs.html#built-in-types">term</a>(), <a href="#t:t/0">t</a>() -&gt; <a href="Inspect.Algebra.html#t:t/0">Inspect.Algebra.t</a>())</pre>
+
+      </div>
+
+<p>Returns the default inspect function.</p>
+  </section>
+</section>
+<section class="detail" id="default_inspect_fun/1">
+
+  <div class="detail-header">
+    <a href="#default_inspect_fun/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">default_inspect_fun(fun)</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/inspect/algebra.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> default_inspect_fun((<a href="typespecs.html#built-in-types">term</a>(), <a href="#t:t/0">t</a>() -&gt; <a href="Inspect.Algebra.html#t:t/0">Inspect.Algebra.t</a>())) :: :ok</pre>
+
+      </div>
+
+<p>Sets the default inspect function.</p><p>Set this option with care as it will change how all values
+in the system are inspected. The main use of this functionality
+is to provide an entry point to filter inspected values,
+in order for entities to comply with rules and legislations
+on data security and data privacy.</p><p>It is <strong>extremely discouraged</strong> for libraries to set their own
+function as this must be controlled by applications. Libraries
+should instead define their own structs with custom inspect
+implementations. If a library must change the default inspect
+function, then it is best to ask users of your library to explicitly
+call <a href="#default_inspect_fun/1"><code class="inline">default_inspect_fun/1</code></a> with your function of choice.</p><p>The default is <a href="Inspect.html#inspect/2"><code class="inline">Inspect.inspect/2</code></a>.</p><h2 id="default_inspect_fun/1-examples" class="section-heading">
+  <a href="#default_inspect_fun/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="n">previous_fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Inspect.Opts</span><span class="o">.</span><span class="n">default_inspect_fun</span><span class="p" data-group-id="6350123287-1">(</span><span class="p" data-group-id="6350123287-1">)</span><span class="w">
+
+</span><span class="nc">Inspect.Opts</span><span class="o">.</span><span class="n">default_inspect_fun</span><span class="p" data-group-id="6350123287-2">(</span><span class="k" data-group-id="6350123287-3">fn</span><span class="w">
+  </span><span class="p" data-group-id="6350123287-4">%{</span><span class="ss">address</span><span class="p">:</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="6350123287-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">previous_fun</span><span class="o">.</span><span class="p" data-group-id="6350123287-5">(</span><span class="p" data-group-id="6350123287-6">%{</span><span class="n">map</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[REDACTED]&quot;</span><span class="p" data-group-id="6350123287-6">}</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="6350123287-5">)</span><span class="w">
+
+  </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">previous_fun</span><span class="o">.</span><span class="p" data-group-id="6350123287-7">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="6350123287-7">)</span><span class="w">
+</span><span class="k" data-group-id="6350123287-3">end</span><span class="p" data-group-id="6350123287-2">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/1">
+
+  <div class="detail-header">
+    <a href="#new/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(opts)</h1>
+
+        <span class="note">(since 1.13.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/inspect/algebra.ex#L120" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="typespecs.html#built-in-types">keyword</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Builds an <a href="Inspect.Opts.html"><code class="inline">Inspect.Opts</code></a> struct.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

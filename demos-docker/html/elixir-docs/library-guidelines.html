@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Library guidelines — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/library-guidelines.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Library guidelines</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/references/library-guidelines.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>This document outlines general guidelines for those writing and publishing
+Elixir libraries meant to be consumed by other developers.</p><h2 id="getting-started" class="section-heading">
+  <a href="#getting-started" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Getting started</span>
+</h2>
+<p>You can create a new Elixir library by running the <a href="https://hexdocs.pm/mix/Mix.Tasks.New.html"><code class="inline">mix new</code></a> command:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">mix new my_library
+</span></code></pre><p>The project name is given in the <code class="inline">snake_case</code> convention where all letters are lowercase and words are separate with underscores. This is the same convention used by variables, function names and atoms in Elixir. See the <a href="naming-conventions.html">Naming Conventions</a> document for more information.</p><p>Every project has a <code class="inline">mix.exs</code> file, with instructions on how to build, compile, run tests, and so on. Libraries commonly have a <code class="inline">lib</code> directory, which includes Elixir source code, and a <code class="inline">test</code> directory. A <code class="inline">src</code> directory may also exist for Erlang sources.</p><p>The <a href="https://hexdocs.pm/mix/Mix.Tasks.New.html"><code class="inline">mix new</code></a> command also allows the <code class="inline">--sup</code> option to scaffold a new project with a supervision tree out of the box. For more information on running your project, see the official <a href="introduction-to-mix.html">Mix &amp; OTP guide</a> or <a href="https://hexdocs.pm/mix/Mix.html">Mix documentation</a>.</p><h2 id="publishing" class="section-heading">
+  <a href="#publishing" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Publishing</span>
+</h2>
+<p>Writing code is only the first of many steps to publish a package. We strongly recommend developers to:</p><ul><li><p>Choose a versioning schema. Elixir requires versions to be in the format <code class="inline">MAJOR.MINOR.PATCH</code> but the meaning of those numbers is up to you. Most projects choose <a href="https://semver.org/">Semantic Versioning</a>.</p></li><li><p>Choose a <a href="https://choosealicense.com/">license</a>. The most common licenses in the Elixir community are the <a href="https://choosealicense.com/licenses/mit/">MIT License</a> and the <a href="https://choosealicense.com/licenses/apache-2.0/">Apache License 2.0</a>. The latter is also the one used by Elixir itself.</p></li><li><p>Run the <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html">code formatter</a>. The code formatter formats your code according to a consistent style shared by your library and the whole community, making it easier for other developers to understand your code and contribute.</p></li><li><p>Write tests. Elixir ships with a test-framework named <a href="https://hexdocs.pm/ex_unit/ExUnit.html">ExUnit</a>. The project generated by <a href="https://hexdocs.pm/mix/Mix.Tasks.New.html"><code class="inline">mix new</code></a> includes sample tests and doctests.</p></li><li><p>Write documentation. The Elixir community is proud of treating documentation as a first-class citizen and making documentation easily accessible. Libraries contribute to the status quo by providing complete API documentation with examples for their modules, types and functions. See the <a href="writing-documentation.html">Writing documentation</a> chapter of the Getting Started guide for more information. Projects like <a href="https://github.com/elixir-lang/ex_doc">ExDoc</a> can be used to generate HTML and EPUB documents from the documentation. ExDoc also supports &quot;extra pages&quot;, like this one that you are reading. Such pages augment the documentation with tutorials, guides, references, and even cheat-sheets.</p></li><li><p>Follow best practices. The Elixir project documents <a href="what-anti-patterns.html">a series of anti-patterns</a> that you may want to avoid in your code. The <a href="process-anti-patterns.html">process-related anti-patterns</a> and <a href="macro-anti-patterns.html">meta-programming anti-patterns</a> are of special attention to library authors.</p></li></ul><p>Projects are often made available to other developers <a href="https://hex.pm/docs/publish">by publishing a Hex package</a>. Hex also <a href="https://hex.pm/pricing">supports private packages for organizations</a>. If ExDoc is configured for the Mix project, publishing a package on Hex will also automatically publish the generated documentation to <a href="https://hexdocs.pm">HexDocs</a>.</p><h2 id="dependency-handling" class="section-heading">
+  <a href="#dependency-handling" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Dependency handling</span>
+</h2>
+<p>When your library is published and used as a dependency, its <a href="https://hexdocs.pm/mix/Mix.Project.html#module-configuration">lockfile</a> (usually named <code class="inline">mix.lock</code>) is <em>ignored by the host project</em>. Running <a href="https://hexdocs.pm/mix/Mix.Tasks.Deps.Get.html"><code class="inline">mix deps.get</code></a> in the host project attempts to get the latest possible versions of your library’s dependencies, as specified by the requirements in the <code class="inline">deps</code> section of your <code class="inline">mix.exs</code>. These versions might be greater than those stored in your <code class="inline">mix.lock</code> (and hence used in your tests / CI).</p><p>On the other hand, contributors of your library, need a deterministic build, which implies the presence of <code class="inline">mix.lock</code> in your Version Control System (VCS).</p><p>The best practice of handling <code class="inline">mix.lock</code> file therefore would be to keep it in VCS, and run two different Continuous Integration (CI) workflows: the usual deterministic one, and another one, that starts with <code class="inline">mix deps.unlock --all</code> and always compiles your library and runs tests against latest versions of dependencies. The latter one might be even run nightly or otherwise recurrently to stay notified about any possible issue in regard to dependencies updates.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="gradual-set-theoretic-types.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Gradual set-theoretic types
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="naming-conventions.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Naming conventions
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

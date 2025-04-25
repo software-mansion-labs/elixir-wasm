@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Tuple — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Tuple.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Tuple</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Functions for working with tuples.</p><p>Please note the following functions for tuples are found in <a href="Kernel.html"><code class="inline">Kernel</code></a>:</p><ul><li><a href="Kernel.html#elem/2"><code class="inline">elem/2</code></a> - accesses a tuple by index</li><li><a href="Kernel.html#put_elem/3"><code class="inline">put_elem/3</code></a> - inserts a value into a tuple by index</li><li><a href="Kernel.html#tuple_size/1"><code class="inline">tuple_size/1</code></a> - gets the number of elements in a tuple</li></ul><p>Tuples are intended as fixed-size containers for multiple elements.
+To manipulate a collection of elements, use a list instead. <a href="Enum.html"><code class="inline">Enum</code></a>
+functions do not work on tuples.</p><p>Tuples are denoted with curly braces:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="0551554552-1">{</span><span class="p" data-group-id="0551554552-1">}</span><span class="w">
+</span><span class="p" data-group-id="0551554552-2">{</span><span class="p" data-group-id="0551554552-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="0551554552-3">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">:two</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;three&quot;</span><span class="p" data-group-id="0551554552-3">}</span><span class="w">
+</span><span class="p" data-group-id="0551554552-4">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">:two</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;three&quot;</span><span class="p" data-group-id="0551554552-4">}</span></code></pre><p>A tuple may contain elements of different types, which are stored
+contiguously in memory. Accessing any element takes constant time,
+but modifying a tuple, which produces a shallow copy, takes linear time.
+Tuples are good for reading data while lists are better for traversals.</p><p>Tuples are typically used either when a function has multiple return values
+or for error handling. <a href="File.html#read/1"><code class="inline">File.read/1</code></a> returns <code class="inline">{:ok, contents}</code> if reading
+the given file is successful, or else <code class="inline">{:error, reason}</code> such as when
+the file does not exist.</p><p>The functions in this module that add and remove elements from tuples are
+rarely used in practice, as they typically imply tuples are being used as
+collections. To append to a tuple, it is preferable to extract the elements
+from the old tuple with pattern matching, and then create a new tuple:</p><pre><code class="makeup elixir" translate="no"><span class="n">tuple</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7096077925-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:example</span><span class="p" data-group-id="7096077925-1">}</span><span class="w">
+
+</span><span class="c1"># Avoid</span><span class="w">
+</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">insert_at</span><span class="p" data-group-id="7096077925-2">(</span><span class="n">tuple</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7096077925-3">%{</span><span class="p" data-group-id="7096077925-3">}</span><span class="p" data-group-id="7096077925-2">)</span><span class="w">
+
+</span><span class="c1"># Prefer</span><span class="w">
+</span><span class="p" data-group-id="7096077925-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">atom</span><span class="p" data-group-id="7096077925-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tuple</span><span class="w">
+</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7096077925-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">atom</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7096077925-6">%{</span><span class="p" data-group-id="7096077925-6">}</span><span class="p" data-group-id="7096077925-5">}</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append/2" data-no-tooltip="" translate="no">append(tuple, value)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Inserts an element at the end of a tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_at/2" data-no-tooltip="" translate="no">delete_at(tuple, index)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Removes an element from a tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#duplicate/2" data-no-tooltip="" translate="no">duplicate(data, size)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a new tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#insert_at/3" data-no-tooltip="" translate="no">insert_at(tuple, index, value)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Inserts an element into a tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#product/1" data-no-tooltip="" translate="no">product(tuple)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Computes a product of tuple elements.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#sum/1" data-no-tooltip="" translate="no">sum(tuple)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Computes a sum of tuple elements.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_list/1" data-no-tooltip="" translate="no">to_list(tuple)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a tuple to a list.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="append/2">
+
+  <div class="detail-header">
+    <a href="#append/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">append(tuple, value)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L106" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> append(<a href="typespecs.html#basic-types">tuple</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: <a href="typespecs.html#basic-types">tuple</a>()</pre>
+
+      </div>
+
+<p>Inserts an element at the end of a tuple.</p><p>Returns a new tuple with the element appended at the end, and contains
+the elements in <code class="inline">tuple</code> followed by <code class="inline">value</code> as the last element.</p><p>Inlined by the compiler.</p><h2 id="append/2-examples" class="section-heading">
+  <a href="#append/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">tuple</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2657947215-1">{</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p" data-group-id="2657947215-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">append</span><span class="p" data-group-id="2657947215-2">(</span><span class="n">tuple</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="2657947215-2">)</span><span class="w">
+</span><span class="p" data-group-id="2657947215-3">{</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="2657947215-3">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="delete_at/2">
+
+  <div class="detail-header">
+    <a href="#delete_at/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_at(tuple, index)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> delete_at(<a href="typespecs.html#basic-types">tuple</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="typespecs.html#basic-types">tuple</a>()</pre>
+
+      </div>
+
+<p>Removes an element from a tuple.</p><p>Deletes the element at the given <code class="inline">index</code> from <code class="inline">tuple</code>.
+Raises an <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> if <code class="inline">index</code> is negative or greater than
+or equal to the length of <code class="inline">tuple</code>. Index is zero-based.</p><p>Inlined by the compiler.</p><h2 id="delete_at/2-examples" class="section-heading">
+  <a href="#delete_at/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">tuple</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3150205289-1">{</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="3150205289-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">delete_at</span><span class="p" data-group-id="3150205289-2">(</span><span class="n">tuple</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3150205289-2">)</span><span class="w">
+</span><span class="p" data-group-id="3150205289-3">{</span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="3150205289-3">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="duplicate/2">
+
+  <div class="detail-header">
+    <a href="#duplicate/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">duplicate(data, size)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L63" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> duplicate(<a href="typespecs.html#built-in-types">term</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="typespecs.html#basic-types">tuple</a>()</pre>
+
+      </div>
+
+<p>Creates a new tuple.</p><p>Creates a tuple of <code class="inline">size</code> containing the
+given <code class="inline">data</code> at every position.</p><p>Inlined by the compiler.</p><h2 id="duplicate/2-examples" class="section-heading">
+  <a href="#duplicate/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">duplicate</span><span class="p" data-group-id="5916827877-1">(</span><span class="ss">:hello</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="5916827877-1">)</span><span class="w">
+</span><span class="p" data-group-id="5916827877-2">{</span><span class="ss">:hello</span><span class="p">,</span><span class="w"> </span><span class="ss">:hello</span><span class="p">,</span><span class="w"> </span><span class="ss">:hello</span><span class="p" data-group-id="5916827877-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="insert_at/3">
+
+  <div class="detail-header">
+    <a href="#insert_at/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">insert_at(tuple, index, value)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L86" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> insert_at(<a href="typespecs.html#basic-types">tuple</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>(), <a href="typespecs.html#built-in-types">term</a>()) :: <a href="typespecs.html#basic-types">tuple</a>()</pre>
+
+      </div>
+
+<p>Inserts an element into a tuple.</p><p>Inserts <code class="inline">value</code> into <code class="inline">tuple</code> at the given <code class="inline">index</code>.
+Raises an <a href="ArgumentError.html"><code class="inline">ArgumentError</code></a> if <code class="inline">index</code> is negative or greater than the
+length of <code class="inline">tuple</code>. Index is zero-based.</p><p>Inlined by the compiler.</p><h2 id="insert_at/3-examples" class="section-heading">
+  <a href="#insert_at/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">tuple</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9529529373-1">{</span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="9529529373-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">insert_at</span><span class="p" data-group-id="9529529373-2">(</span><span class="n">tuple</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">:foo</span><span class="p" data-group-id="9529529373-2">)</span><span class="w">
+</span><span class="p" data-group-id="9529529373-3">{</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="9529529373-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">insert_at</span><span class="p" data-group-id="9529529373-4">(</span><span class="n">tuple</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">:bong</span><span class="p" data-group-id="9529529373-4">)</span><span class="w">
+</span><span class="p" data-group-id="9529529373-5">{</span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p">,</span><span class="w"> </span><span class="ss">:bong</span><span class="p" data-group-id="9529529373-5">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="product/1">
+
+  <div class="detail-header">
+    <a href="#product/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">product(tuple)</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L164" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> product(<a href="typespecs.html#basic-types">tuple</a>()) :: <a href="typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>Computes a product of tuple elements.</p><h2 id="product/1-examples" class="section-heading">
+  <a href="#product/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">product</span><span class="p" data-group-id="3725579443-1">(</span><span class="p" data-group-id="3725579443-2">{</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p" data-group-id="3725579443-2">}</span><span class="p" data-group-id="3725579443-1">)</span><span class="w">
+</span><span class="mi">65025</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">product</span><span class="p" data-group-id="3725579443-3">(</span><span class="p" data-group-id="3725579443-4">{</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="3725579443-4">}</span><span class="p" data-group-id="3725579443-3">)</span><span class="w">
+</span><span class="mf">255.0</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">product</span><span class="p" data-group-id="3725579443-5">(</span><span class="p" data-group-id="3725579443-6">{</span><span class="p" data-group-id="3725579443-6">}</span><span class="p" data-group-id="3725579443-5">)</span><span class="w">
+</span><span class="mi">1</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="sum/1">
+
+  <div class="detail-header">
+    <a href="#sum/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sum(tuple)</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L145" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> sum(<a href="typespecs.html#basic-types">tuple</a>()) :: <a href="typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>Computes a sum of tuple elements.</p><h2 id="sum/1-examples" class="section-heading">
+  <a href="#sum/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="7177812159-1">(</span><span class="p" data-group-id="7177812159-2">{</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p" data-group-id="7177812159-2">}</span><span class="p" data-group-id="7177812159-1">)</span><span class="w">
+</span><span class="mi">510</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="7177812159-3">(</span><span class="p" data-group-id="7177812159-4">{</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p" data-group-id="7177812159-4">}</span><span class="p" data-group-id="7177812159-3">)</span><span class="w">
+</span><span class="mf">255.0</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="7177812159-5">(</span><span class="p" data-group-id="7177812159-6">{</span><span class="p" data-group-id="7177812159-6">}</span><span class="p" data-group-id="7177812159-5">)</span><span class="w">
+</span><span class="mi">0</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_list/1">
+
+  <div class="detail-header">
+    <a href="#to_list/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_list(tuple)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/tuple.ex#L184" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_list(<a href="typespecs.html#basic-types">tuple</a>()) :: <a href="typespecs.html#built-in-types">list</a>()</pre>
+
+      </div>
+
+<p>Converts a tuple to a list.</p><p>Returns a new list with all the tuple elements.</p><p>Inlined by the compiler.</p><h2 id="to_list/1-examples" class="section-heading">
+  <a href="#to_list/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">tuple</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4242020712-1">{</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="4242020712-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Tuple</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="4242020712-2">(</span><span class="n">tuple</span><span class="p" data-group-id="4242020712-2">)</span><span class="w">
+</span><span class="p" data-group-id="4242020712-3">[</span><span class="ss">:foo</span><span class="p">,</span><span class="w"> </span><span class="ss">:bar</span><span class="p">,</span><span class="w"> </span><span class="ss">:baz</span><span class="p" data-group-id="4242020712-3">]</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

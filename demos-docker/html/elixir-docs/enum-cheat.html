@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Enum cheatsheet — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/enum-cheat.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-cheatmd" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Enum cheatsheet</h1>
+
+      <button onclick="window.print()" title="Print Cheatsheet" class="icon-action" rel="print">
+        <i class="ri-printer-line" aria-hidden="true"></i>
+        <span class="sr-only">Print Cheatsheet</span>
+      </button>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/cheatsheets/enum-cheat.cheatmd#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>A quick reference into the <a href="Enum.html"><code class="inline">Enum</code></a> module, a module for working with collections (known as enumerables). Most of the examples below use the following data structure:</p><pre><code class="makeup elixir" translate="no"><span class="n">cart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7745936408-1">[</span><span class="w">
+  </span><span class="p" data-group-id="7745936408-2">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7745936408-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7745936408-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7745936408-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7745936408-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7745936408-4">}</span><span class="w">
+</span><span class="p" data-group-id="7745936408-1">]</span></code></pre><p>Some examples use the <a href="Kernel.html#=~/2"><code class="inline">string =~ part</code></a> operator, which checks the string on the left contains the part on the right.</p><section class="h2 col-2"><h2 id="predicates" class="col-2 section-heading">
+  <a href="#predicates" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Predicates</span>
+</h2>
+<section class="h3"><h3 id="any-enum-fun" class="section-heading">
+  <a href="#any-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#any?/2"><code class="inline">any?(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">any?</span><span class="p" data-group-id="4889758809-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="4889758809-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">any?</span><span class="p" data-group-id="4889758809-2">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;pear&quot;</span><span class="p" data-group-id="4889758809-2">)</span><span class="w">
+</span><span class="no">false</span></code></pre><p><code class="inline">any?</code> with an empty collection is always false:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">any?</span><span class="p" data-group-id="4408625974-1">(</span><span class="p" data-group-id="4408625974-2">[</span><span class="p" data-group-id="4408625974-2">]</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="4408625974-1">)</span><span class="w">
+</span><span class="no">false</span></code></pre></section><section class="h3"><h3 id="all-enum-fun" class="section-heading">
+  <a href="#all-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#all?/2"><code class="inline">all?(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">all?</span><span class="p" data-group-id="9197310026-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9197310026-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">all?</span><span class="p" data-group-id="9197310026-2">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9197310026-2">)</span><span class="w">
+</span><span class="no">false</span></code></pre><p><code class="inline">all?</code> with an empty collection is always true:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">all?</span><span class="p" data-group-id="8927295425-1">(</span><span class="p" data-group-id="8927295425-2">[</span><span class="p" data-group-id="8927295425-2">]</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8927295425-1">)</span><span class="w">
+</span><span class="no">true</span></code></pre></section><section class="h3"><h3 id="member-enum-value" class="section-heading">
+  <a href="#member-enum-value" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#member?/2"><code class="inline">member?(enum, value)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">member?</span><span class="p" data-group-id="0950317681-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0950317681-2">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0950317681-2">}</span><span class="p" data-group-id="0950317681-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">member?</span><span class="p" data-group-id="0950317681-3">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="ss">:something_else</span><span class="p" data-group-id="0950317681-3">)</span><span class="w">
+</span><span class="no">false</span></code></pre><p><code class="inline">item in enum</code> is equivalent to <code class="inline">Enum.member?(enum, item)</code>:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="4580652595-1">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="4580652595-1">}</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">cart</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="ss">:something_else</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">cart</span><span class="w">
+</span><span class="no">false</span></code></pre></section><section class="h3"><h3 id="empty-enum" class="section-heading">
+  <a href="#empty-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#empty?/1"><code class="inline">empty?(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">empty?</span><span class="p" data-group-id="0458277969-1">(</span><span class="n">cart</span><span class="p" data-group-id="0458277969-1">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">empty?</span><span class="p" data-group-id="0458277969-2">(</span><span class="p" data-group-id="0458277969-3">[</span><span class="p" data-group-id="0458277969-3">]</span><span class="p" data-group-id="0458277969-2">)</span><span class="w">
+</span><span class="no">true</span></code></pre></section></section><section class="h2 col-2"><h2 id="filtering" class="col-2 section-heading">
+  <a href="#filtering" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Filtering</span>
+</h2>
+<section class="h3"><h3 id="filter-enum-fun" class="section-heading">
+  <a href="#filter-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#filter/2"><code class="inline">filter(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">filter</span><span class="p" data-group-id="3465170934-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="3465170934-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;o&quot;</span><span class="p" data-group-id="3465170934-2">)</span><span class="p" data-group-id="3465170934-1">)</span><span class="w">
+</span><span class="p" data-group-id="3465170934-3">[</span><span class="p" data-group-id="3465170934-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3465170934-4">}</span><span class="p" data-group-id="3465170934-3">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">filter</span><span class="p" data-group-id="3465170934-5">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="3465170934-6">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p" data-group-id="3465170934-6">)</span><span class="p" data-group-id="3465170934-5">)</span><span class="w">
+</span><span class="p" data-group-id="3465170934-7">[</span><span class="w">
+  </span><span class="p" data-group-id="3465170934-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3465170934-8">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3465170934-9">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3465170934-9">}</span><span class="w">
+</span><span class="p" data-group-id="3465170934-7">]</span></code></pre></section><section class="h3"><h3 id="reject-enum-fun" class="section-heading">
+  <a href="#reject-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#reject/2"><code class="inline">reject(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reject</span><span class="p" data-group-id="3533317526-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="3533317526-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;o&quot;</span><span class="p" data-group-id="3533317526-2">)</span><span class="p" data-group-id="3533317526-1">)</span><span class="w">
+</span><span class="p" data-group-id="3533317526-3">[</span><span class="w">
+  </span><span class="p" data-group-id="3533317526-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3533317526-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3533317526-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3533317526-5">}</span><span class="w">
+</span><span class="p" data-group-id="3533317526-3">]</span></code></pre></section><section class="h3"><h3 id="comprehension" class="section-heading">
+  <a href="#comprehension" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Kernel.SpecialForms.html#for/1"><code class="inline">Comprehension</code></a></span>
+</h3>
+<p>Filtering can also be done with comprehensions:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="w"> </span><span class="k" data-group-id="2769764759-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">item</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="2769764759-1">end</span><span class="w">
+</span><span class="p" data-group-id="2769764759-2">[</span><span class="w">
+  </span><span class="p" data-group-id="2769764759-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="2769764759-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2769764759-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="2769764759-4">}</span><span class="w">
+</span><span class="p" data-group-id="2769764759-2">]</span></code></pre><p>Pattern-matching in comprehensions acts as a filter as well:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="p" data-group-id="2550322184-1">%{</span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="n">fruit</span><span class="p" data-group-id="2550322184-1">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="w"> </span><span class="k" data-group-id="2550322184-2">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">fruit</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="2550322184-2">end</span><span class="w">
+</span><span class="p" data-group-id="2550322184-3">[</span><span class="s">&quot;banana&quot;</span><span class="p" data-group-id="2550322184-3">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="mapping" class="col-2 section-heading">
+  <a href="#mapping" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Mapping</span>
+</h2>
+<section class="h3"><h3 id="map-enum-fun" class="section-heading">
+  <a href="#map-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#map/2"><code class="inline">map(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="3392653930-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="3392653930-1">)</span><span class="w">
+</span><span class="p" data-group-id="3392653930-2">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="3392653930-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="3392653930-3">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3392653930-4">fn</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3392653930-5">%{</span><span class="n">item</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="3392653930-5">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="3392653930-4">end</span><span class="p" data-group-id="3392653930-3">)</span><span class="w">
+</span><span class="p" data-group-id="3392653930-6">[</span><span class="w">
+  </span><span class="p" data-group-id="3392653930-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="3392653930-7">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3392653930-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="3392653930-8">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3392653930-9">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="3392653930-9">}</span><span class="w">
+</span><span class="p" data-group-id="3392653930-6">]</span></code></pre></section><section class="h3"><h3 id="map_every-enum-nth-fun" class="section-heading">
+  <a href="#map_every-enum-nth-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#map_every/3"><code class="inline">map_every(enum, nth, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map_every</span><span class="p" data-group-id="1846567844-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1846567844-2">fn</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="1846567844-3">%{</span><span class="n">item</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="1846567844-3">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="1846567844-2">end</span><span class="p" data-group-id="1846567844-1">)</span><span class="w">
+</span><span class="p" data-group-id="1846567844-4">[</span><span class="w">
+  </span><span class="p" data-group-id="1846567844-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p" data-group-id="1846567844-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1846567844-6">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1846567844-6">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1846567844-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="1846567844-7">}</span><span class="w">
+</span><span class="p" data-group-id="1846567844-4">]</span></code></pre></section><section class="h3"><h3 id="comprehension-1" class="section-heading">
+  <a href="#comprehension-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Kernel.SpecialForms.html#for/1"><code class="inline">Comprehension</code></a></span>
+</h3>
+<p>Mapping can also be done with comprehensions:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="w"> </span><span class="k" data-group-id="7999562435-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="7999562435-1">end</span><span class="w">
+</span><span class="p" data-group-id="7999562435-2">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="7999562435-2">]</span></code></pre><p>You can also filter and map at once:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="w"> </span><span class="k" data-group-id="3920558630-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="3920558630-1">end</span><span class="w">
+</span><span class="p" data-group-id="3920558630-2">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="3920558630-2">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="side-effects" class="col-2 section-heading">
+  <a href="#side-effects" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Side-effects</span>
+</h2>
+<section class="h3"><h3 id="each-enum-fun" class="section-heading">
+  <a href="#each-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#each/2"><code class="inline">each(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">each</span><span class="p" data-group-id="1699075061-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="1699075061-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="1699075061-2">)</span><span class="p" data-group-id="1699075061-1">)</span><span class="w">
+</span><span class="n">apple</span><span class="w">
+</span><span class="n">banana</span><span class="w">
+</span><span class="n">orange</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><p><a href="Enum.html#each/2"><code class="inline">Enum.each/2</code></a> is used exclusively for side-effects.</p></section></section><section class="h2 col-2"><h2 id="accumulating" class="col-2 section-heading">
+  <a href="#accumulating" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Accumulating</span>
+</h2>
+<section class="h3"><h3 id="reduce-enum-acc-fun" class="section-heading">
+  <a href="#reduce-enum-acc-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#reduce/3"><code class="inline">reduce(enum, acc, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reduce</span><span class="p" data-group-id="1466763869-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1466763869-2">fn</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">acc</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="1466763869-2">end</span><span class="p" data-group-id="1466763869-1">)</span><span class="w">
+</span><span class="mi">10</span></code></pre></section><section class="h3"><h3 id="map_reduce-enum-acc-fun" class="section-heading">
+  <a href="#map_reduce-enum-acc-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#map_reduce/3"><code class="inline">map_reduce(enum, acc, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map_reduce</span><span class="p" data-group-id="4127225199-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4127225199-2">fn</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="4127225199-3">{</span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">acc</span><span class="p" data-group-id="4127225199-3">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="4127225199-2">end</span><span class="p" data-group-id="4127225199-1">)</span><span class="w">
+</span><span class="p" data-group-id="4127225199-4">{</span><span class="p" data-group-id="4127225199-5">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="4127225199-5">]</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="4127225199-4">}</span></code></pre></section><section class="h3"><h3 id="scan-enum-acc-fun" class="section-heading">
+  <a href="#scan-enum-acc-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#scan/3"><code class="inline">scan(enum, acc, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="5861345797-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5861345797-2">fn</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">acc</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="5861345797-2">end</span><span class="p" data-group-id="5861345797-1">)</span><span class="w">
+</span><span class="p" data-group-id="5861345797-3">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="5861345797-3">]</span></code></pre></section><section class="h3"><h3 id="reduce_while-enum-acc-fun" class="section-heading">
+  <a href="#reduce_while-enum-acc-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#reduce_while/3"><code class="inline">reduce_while(enum, acc, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reduce_while</span><span class="p" data-group-id="9286177746-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9286177746-2">fn</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="w"> </span><span class="k" data-group-id="9286177746-3">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="p" data-group-id="9286177746-4">{</span><span class="ss">:halt</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="p" data-group-id="9286177746-4">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="9286177746-3">else</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="p" data-group-id="9286177746-5">{</span><span class="ss">:cont</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">acc</span><span class="p" data-group-id="9286177746-5">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="9286177746-3">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="9286177746-2">end</span><span class="p" data-group-id="9286177746-1">)</span><span class="w">
+</span><span class="mi">4</span></code></pre></section><section class="h3"><h3 id="comprehension-2" class="section-heading">
+  <a href="#comprehension-2" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Kernel.SpecialForms.html#for/1"><code class="inline">Comprehension</code></a></span>
+</h3>
+<p>Reducing can also be done with comprehensions:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="ss">reduce</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k" data-group-id="3012071238-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">acc</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="3012071238-1">end</span><span class="w">
+</span><span class="mi">10</span></code></pre><p>You can also filter and reduce at once:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">reduce</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k" data-group-id="2450804193-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">acc</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="2450804193-1">end</span><span class="w">
+</span><span class="mi">9</span></code></pre></section></section><section class="h2 col-2"><h2 id="aggregations" class="col-2 section-heading">
+  <a href="#aggregations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Aggregations</span>
+</h2>
+<section class="h3"><h3 id="count-enum" class="section-heading">
+  <a href="#count-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#count/1"><code class="inline">count(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="6871493139-1">(</span><span class="n">cart</span><span class="p" data-group-id="6871493139-1">)</span><span class="w">
+</span><span class="mi">3</span></code></pre><p>See <a href="Enum.html#count_until/2"><code class="inline">Enum.count_until/2</code></a> to count until a limit.</p></section><section class="h3"><h3 id="frequencies-enum" class="section-heading">
+  <a href="#frequencies-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#frequencies/1"><code class="inline">frequencies(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">frequencies</span><span class="p" data-group-id="7365088864-1">(</span><span class="p" data-group-id="7365088864-2">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p" data-group-id="7365088864-2">]</span><span class="p" data-group-id="7365088864-1">)</span><span class="w">
+</span><span class="p" data-group-id="7365088864-3">%{</span><span class="s">&quot;apple&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7365088864-3">}</span></code></pre></section><section class="h3"><h3 id="frequencies_by-enum-key_fun" class="section-heading">
+  <a href="#frequencies_by-enum-key_fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#frequencies_by/2"><code class="inline">frequencies_by(enum, key_fun)</code></a></span>
+</h3>
+<p>Frequencies of the last letter of the fruit:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">frequencies_by</span><span class="p" data-group-id="8149958585-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">String</span><span class="o">.</span><span class="n">last</span><span class="p" data-group-id="8149958585-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="8149958585-2">)</span><span class="p" data-group-id="8149958585-1">)</span><span class="w">
+</span><span class="p" data-group-id="8149958585-3">%{</span><span class="s">&quot;a&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8149958585-3">}</span></code></pre></section><section class="h3"><h3 id="count-enum-fun" class="section-heading">
+  <a href="#count-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#count/2"><code class="inline">count(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="0181481911-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="0181481911-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p" data-group-id="0181481911-2">)</span><span class="p" data-group-id="0181481911-1">)</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="0181481911-3">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="0181481911-4">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;y&quot;</span><span class="p" data-group-id="0181481911-4">)</span><span class="p" data-group-id="0181481911-3">)</span><span class="w">
+</span><span class="mi">0</span></code></pre><p>See <a href="Enum.html#count_until/3"><code class="inline">Enum.count_until/3</code></a> to count until a limit with a function.</p></section><section class="h3"><h3 id="sum-enum" class="section-heading">
+  <a href="#sum-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#sum/1"><code class="inline">sum(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">cart</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="6806000467-1">(</span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="6806000467-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="6806000467-2">(</span><span class="p" data-group-id="6806000467-2">)</span><span class="w">
+</span><span class="mi">10</span></code></pre></section><section class="h3"><h3 id="product-enum" class="section-heading">
+  <a href="#product-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#product/1"><code class="inline">product(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">cart</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="6590139329-1">(</span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="6590139329-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">product</span><span class="p" data-group-id="6590139329-2">(</span><span class="p" data-group-id="6590139329-2">)</span><span class="w">
+</span><span class="mi">18</span></code></pre></section></section><section class="h2 col-2"><h2 id="sorting" class="col-2 section-heading">
+  <a href="#sorting" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Sorting</span>
+</h2>
+<section class="h3"><h3 id="sort-enum-sorter-asc" class="section-heading">
+  <a href="#sort-enum-sorter-asc" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#sort/2"><code class="inline">sort(enum, sorter \\ :asc)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">cart</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="0849699832-1">(</span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="0849699832-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort</span><span class="p" data-group-id="0849699832-2">(</span><span class="p" data-group-id="0849699832-2">)</span><span class="w">
+</span><span class="p" data-group-id="0849699832-3">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="0849699832-3">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">cart</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="0849699832-4">(</span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="0849699832-4">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort</span><span class="p" data-group-id="0849699832-5">(</span><span class="ss">:desc</span><span class="p" data-group-id="0849699832-5">)</span><span class="w">
+</span><span class="p" data-group-id="0849699832-6">[</span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p" data-group-id="0849699832-6">]</span></code></pre><p>When sorting structs, use <a href="Enum.html#sort/2"><code class="inline">Enum.sort/2</code></a> with a module as sorter.</p></section><section class="h3"><h3 id="sort_by-enum-mapper-sorter-asc" class="section-heading">
+  <a href="#sort_by-enum-mapper-sorter-asc" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#sort_by/2"><code class="inline">sort_by(enum, mapper, sorter \\ :asc)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort_by</span><span class="p" data-group-id="3542490017-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="3542490017-1">)</span><span class="w">
+</span><span class="p" data-group-id="3542490017-2">[</span><span class="w">
+  </span><span class="p" data-group-id="3542490017-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3542490017-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3542490017-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3542490017-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3542490017-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3542490017-5">}</span><span class="w">
+</span><span class="p" data-group-id="3542490017-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort_by</span><span class="p" data-group-id="3542490017-6">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="ss">:desc</span><span class="p" data-group-id="3542490017-6">)</span><span class="w">
+</span><span class="p" data-group-id="3542490017-7">[</span><span class="w">
+  </span><span class="p" data-group-id="3542490017-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3542490017-8">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3542490017-9">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3542490017-9">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3542490017-10">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3542490017-10">}</span><span class="w">
+</span><span class="p" data-group-id="3542490017-7">]</span></code></pre><p>When the sorted by value is a struct, use <a href="Enum.html#sort_by/3"><code class="inline">Enum.sort_by/3</code></a> with a module as sorter.</p></section><section class="h3"><h3 id="min-enum" class="section-heading">
+  <a href="#min-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#min/1"><code class="inline">min(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">cart</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="2493380246-1">(</span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="2493380246-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">min</span><span class="p" data-group-id="2493380246-2">(</span><span class="p" data-group-id="2493380246-2">)</span><span class="w">
+</span><span class="mi">1</span></code></pre><p>When comparing structs, use <a href="Enum.html#min/2"><code class="inline">Enum.min/2</code></a> with a module as sorter.</p></section><section class="h3"><h3 id="min_by-enum-mapper" class="section-heading">
+  <a href="#min_by-enum-mapper" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#min_by/2"><code class="inline">min_by(enum, mapper)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">min_by</span><span class="p" data-group-id="5186926971-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="5186926971-1">)</span><span class="w">
+</span><span class="p" data-group-id="5186926971-2">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="5186926971-2">}</span></code></pre><p>When comparing structs, use <a href="Enum.html#min_by/3"><code class="inline">Enum.min_by/3</code></a> with a module as sorter.</p></section><section class="h3"><h3 id="max-enum" class="section-heading">
+  <a href="#max-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#max/1"><code class="inline">max(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">cart</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="0083746031-1">(</span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="0083746031-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">max</span><span class="p" data-group-id="0083746031-2">(</span><span class="p" data-group-id="0083746031-2">)</span><span class="w">
+</span><span class="mi">6</span></code></pre><p>When comparing structs, use <a href="Enum.html#max/2"><code class="inline">Enum.max/2</code></a> with a module as sorter.</p></section><section class="h3"><h3 id="max_by-enum-mapper" class="section-heading">
+  <a href="#max_by-enum-mapper" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#max_by/2"><code class="inline">max_by(enum, mapper)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">max_by</span><span class="p" data-group-id="0970347767-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="0970347767-1">)</span><span class="w">
+</span><span class="p" data-group-id="0970347767-2">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="0970347767-2">}</span></code></pre><p>When comparing structs, use <a href="Enum.html#max_by/3"><code class="inline">Enum.max_by/3</code></a> with a module as sorter.</p></section></section><section class="h2 col-2"><h2 id="concatenating-flattening" class="col-2 section-heading">
+  <a href="#concatenating-flattening" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Concatenating &amp; flattening</span>
+</h2>
+<section class="h3"><h3 id="concat-enums" class="section-heading">
+  <a href="#concat-enums" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#concat/1"><code class="inline">concat(enums)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">concat</span><span class="p" data-group-id="8934784889-1">(</span><span class="p" data-group-id="8934784889-2">[</span><span class="p" data-group-id="8934784889-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8934784889-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8934784889-4">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8934784889-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8934784889-5">[</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p" data-group-id="8934784889-5">]</span><span class="p" data-group-id="8934784889-2">]</span><span class="p" data-group-id="8934784889-1">)</span><span class="w">
+</span><span class="p" data-group-id="8934784889-6">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p" data-group-id="8934784889-6">]</span></code></pre></section><section class="h3"><h3 id="concat-left-right" class="section-heading">
+  <a href="#concat-left-right" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#concat/2"><code class="inline">concat(left, right)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">concat</span><span class="p" data-group-id="9152508790-1">(</span><span class="p" data-group-id="9152508790-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9152508790-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9152508790-3">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9152508790-3">]</span><span class="p" data-group-id="9152508790-1">)</span><span class="w">
+</span><span class="p" data-group-id="9152508790-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9152508790-4">]</span></code></pre></section><section class="h3"><h3 id="flat_map-enum-fun" class="section-heading">
+  <a href="#flat_map-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#flat_map/2"><code class="inline">flat_map(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">flat_map</span><span class="p" data-group-id="8941809914-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8941809914-2">fn</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="nc">List</span><span class="o">.</span><span class="n">duplicate</span><span class="p" data-group-id="8941809914-3">(</span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="8941809914-3">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="8941809914-2">end</span><span class="p" data-group-id="8941809914-1">)</span><span class="w">
+</span><span class="p" data-group-id="8941809914-4">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w">
+ </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="8941809914-4">]</span></code></pre></section><section class="h3"><h3 id="flat_map_reduce-enum-acc-fun" class="section-heading">
+  <a href="#flat_map_reduce-enum-acc-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#flat_map_reduce/3"><code class="inline">flat_map_reduce(enum, acc, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">flat_map_reduce</span><span class="p" data-group-id="3503197285-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3503197285-2">fn</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">List</span><span class="o">.</span><span class="n">duplicate</span><span class="p" data-group-id="3503197285-3">(</span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="3503197285-3">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3503197285-4">{</span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="p" data-group-id="3503197285-4">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="3503197285-2">end</span><span class="p" data-group-id="3503197285-1">)</span><span class="w">
+</span><span class="p" data-group-id="3503197285-5">{</span><span class="p" data-group-id="3503197285-6">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="3503197285-6">]</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="3503197285-5">}</span></code></pre></section><section class="h3"><h3 id="comprehension-3" class="section-heading">
+  <a href="#comprehension-3" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Kernel.SpecialForms.html#for/1"><code class="inline">Comprehension</code></a></span>
+</h3>
+<p>Flattening can also be done with comprehensions:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="n">fruit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nc">List</span><span class="o">.</span><span class="n">duplicate</span><span class="p" data-group-id="2185486633-1">(</span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="2185486633-1">)</span><span class="w"> </span><span class="k" data-group-id="2185486633-2">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">fruit</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="2185486633-2">end</span><span class="w">
+</span><span class="p" data-group-id="2185486633-3">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w">
+ </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="2185486633-3">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="conversion" class="col-2 section-heading">
+  <a href="#conversion" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Conversion</span>
+</h2>
+<section class="h3"><h3 id="into-enum-collectable" class="section-heading">
+  <a href="#into-enum-collectable" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#into/2"><code class="inline">into(enum, collectable)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">pairs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1604850623-1">[</span><span class="p" data-group-id="1604850623-2">{</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="1604850623-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1604850623-3">{</span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1604850623-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1604850623-4">{</span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="1604850623-4">}</span><span class="p" data-group-id="1604850623-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">into</span><span class="p" data-group-id="1604850623-5">(</span><span class="n">pairs</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1604850623-6">%{</span><span class="p" data-group-id="1604850623-6">}</span><span class="p" data-group-id="1604850623-5">)</span><span class="w">
+</span><span class="p" data-group-id="1604850623-7">%{</span><span class="s">&quot;apple&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="1604850623-7">}</span></code></pre></section><section class="h3"><h3 id="into-enum-collectable-transform" class="section-heading">
+  <a href="#into-enum-collectable-transform" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#into/3"><code class="inline">into(enum, collectable, transform)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">into</span><span class="p" data-group-id="5210919318-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5210919318-2">%{</span><span class="p" data-group-id="5210919318-2">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5210919318-3">fn</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="5210919318-4">{</span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="5210919318-4">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="5210919318-3">end</span><span class="p" data-group-id="5210919318-1">)</span><span class="w">
+</span><span class="p" data-group-id="5210919318-5">%{</span><span class="s">&quot;apple&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="5210919318-5">}</span></code></pre></section><section class="h3"><h3 id="to_list-enum" class="section-heading">
+  <a href="#to_list-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#to_list/1"><code class="inline">to_list(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">to_list</span><span class="p" data-group-id="7089988705-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p" data-group-id="7089988705-1">)</span><span class="w">
+</span><span class="p" data-group-id="7089988705-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="7089988705-2">]</span></code></pre></section><section class="h3"><h3 id="comprehension-4" class="section-heading">
+  <a href="#comprehension-4" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Kernel.SpecialForms.html#for/1"><code class="inline">Comprehension</code></a></span>
+</h3>
+<p>Conversion can also be done with comprehensions:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="ss">into</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7240638731-1">%{</span><span class="p" data-group-id="7240638731-1">}</span><span class="w"> </span><span class="k" data-group-id="7240638731-2">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="7240638731-3">{</span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="7240638731-3">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="7240638731-2">end</span><span class="w">
+</span><span class="p" data-group-id="7240638731-4">%{</span><span class="s">&quot;apple&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7240638731-4">}</span></code></pre></section></section><section class="h2 col-2"><h2 id="duplicates-uniques" class="col-2 section-heading">
+  <a href="#duplicates-uniques" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Duplicates &amp; uniques</span>
+</h2>
+<section class="h3"><h3 id="dedup-enum" class="section-heading">
+  <a href="#dedup-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#dedup/1"><code class="inline">dedup(enum)</code></a></span>
+</h3>
+<p><code class="inline">dedup</code> only removes contiguous duplicates:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">dedup</span><span class="p" data-group-id="1238160902-1">(</span><span class="p" data-group-id="1238160902-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="1238160902-2">]</span><span class="p" data-group-id="1238160902-1">)</span><span class="w">
+</span><span class="p" data-group-id="1238160902-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="1238160902-3">]</span></code></pre></section><section class="h3"><h3 id="dedup_by-enum-fun" class="section-heading">
+  <a href="#dedup_by-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#dedup_by/2"><code class="inline">dedup_by(enum, fun)</code></a></span>
+</h3>
+<p>Remove contiguous entries given a property:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">dedup_by</span><span class="p" data-group-id="2158838441-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;a&quot;</span><span class="p" data-group-id="2158838441-1">)</span><span class="w">
+</span><span class="p" data-group-id="2158838441-2">[</span><span class="p" data-group-id="2158838441-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="2158838441-3">}</span><span class="p" data-group-id="2158838441-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">dedup_by</span><span class="p" data-group-id="2158838441-4">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="2158838441-4">)</span><span class="w">
+</span><span class="p" data-group-id="2158838441-5">[</span><span class="w">
+  </span><span class="p" data-group-id="2158838441-6">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="2158838441-6">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2158838441-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="2158838441-7">}</span><span class="w">
+</span><span class="p" data-group-id="2158838441-5">]</span></code></pre></section><section class="h3"><h3 id="uniq-enum" class="section-heading">
+  <a href="#uniq-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#uniq/1"><code class="inline">uniq(enum)</code></a></span>
+</h3>
+<p><code class="inline">uniq</code> applies to the whole collection:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">uniq</span><span class="p" data-group-id="9707270667-1">(</span><span class="p" data-group-id="9707270667-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9707270667-2">]</span><span class="p" data-group-id="9707270667-1">)</span><span class="w">
+</span><span class="p" data-group-id="9707270667-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9707270667-3">]</span></code></pre><p>Comprehensions also support the <code class="inline">uniq: true</code> option.</p></section><section class="h3"><h3 id="uniq_by-enum-fun" class="section-heading">
+  <a href="#uniq_by-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#uniq_by/2"><code class="inline">uniq_by(enum, fun)</code></a></span>
+</h3>
+<p>Get entries which are unique by the last letter of the fruit:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">uniq_by</span><span class="p" data-group-id="7351063970-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">String</span><span class="o">.</span><span class="n">last</span><span class="p" data-group-id="7351063970-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="7351063970-2">)</span><span class="p" data-group-id="7351063970-1">)</span><span class="w">
+</span><span class="p" data-group-id="7351063970-3">[</span><span class="w">
+  </span><span class="p" data-group-id="7351063970-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7351063970-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7351063970-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7351063970-5">}</span><span class="w">
+</span><span class="p" data-group-id="7351063970-3">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="indexing" class="col-2 section-heading">
+  <a href="#indexing" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Indexing</span>
+</h2>
+<section class="h3"><h3 id="at-enum-index-default-nil" class="section-heading">
+  <a href="#at-enum-index-default-nil" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#at/2"><code class="inline">at(enum, index, default \\ nil)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">at</span><span class="p" data-group-id="6314854434-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6314854434-1">)</span><span class="w">
+</span><span class="p" data-group-id="6314854434-2">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6314854434-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">at</span><span class="p" data-group-id="6314854434-3">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="6314854434-3">)</span><span class="w">
+</span><span class="no">nil</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">at</span><span class="p" data-group-id="6314854434-4">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="ss">:none</span><span class="p" data-group-id="6314854434-4">)</span><span class="w">
+</span><span class="ss">:none</span></code></pre><p>Accessing a list by index in a loop is discouraged.</p></section><section class="h3"><h3 id="fetch-enum-index" class="section-heading">
+  <a href="#fetch-enum-index" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#fetch/2"><code class="inline">fetch(enum, index)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">fetch</span><span class="p" data-group-id="8172252910-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8172252910-1">)</span><span class="w">
+</span><span class="p" data-group-id="8172252910-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8172252910-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8172252910-3">}</span><span class="p" data-group-id="8172252910-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">fetch</span><span class="p" data-group-id="8172252910-4">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="8172252910-4">)</span><span class="w">
+</span><span class="ss">:error</span></code></pre></section><section class="h3"><h3 id="fetch-enum-index-1" class="section-heading">
+  <a href="#fetch-enum-index-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#fetch!/2"><code class="inline">fetch!(enum, index)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">fetch!</span><span class="p" data-group-id="1460633407-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1460633407-1">)</span><span class="w">
+</span><span class="p" data-group-id="1460633407-2">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="1460633407-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">fetch!</span><span class="p" data-group-id="1460633407-3">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="1460633407-3">)</span><span class="w">
+</span><span class="gt">** (Enum.OutOfBoundsError) out of bounds error</span></code></pre></section><section class="h3"><h3 id="with_index-enum" class="section-heading">
+  <a href="#with_index-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#with_index/1"><code class="inline">with_index(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">with_index</span><span class="p" data-group-id="1409312475-1">(</span><span class="n">cart</span><span class="p" data-group-id="1409312475-1">)</span><span class="w">
+</span><span class="p" data-group-id="1409312475-2">[</span><span class="w">
+  </span><span class="p" data-group-id="1409312475-3">{</span><span class="p" data-group-id="1409312475-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="1409312475-4">}</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1409312475-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1409312475-5">{</span><span class="p" data-group-id="1409312475-6">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1409312475-6">}</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1409312475-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1409312475-7">{</span><span class="p" data-group-id="1409312475-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="1409312475-8">}</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1409312475-7">}</span><span class="w">
+</span><span class="p" data-group-id="1409312475-2">]</span></code></pre></section><section class="h3"><h3 id="with_index-enum-fun" class="section-heading">
+  <a href="#with_index-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#with_index/2"><code class="inline">with_index(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">with_index</span><span class="p" data-group-id="6100021695-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6100021695-2">fn</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6100021695-3">{</span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p" data-group-id="6100021695-3">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="6100021695-2">end</span><span class="p" data-group-id="6100021695-1">)</span><span class="w">
+</span><span class="p" data-group-id="6100021695-4">[</span><span class="w">
+  </span><span class="p" data-group-id="6100021695-5">{</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6100021695-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="6100021695-6">{</span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6100021695-6">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="6100021695-7">{</span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6100021695-7">}</span><span class="w">
+</span><span class="p" data-group-id="6100021695-4">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="finding" class="col-2 section-heading">
+  <a href="#finding" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Finding</span>
+</h2>
+<section class="h3"><h3 id="find-enum-default-nil-fun" class="section-heading">
+  <a href="#find-enum-default-nil-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#find/2"><code class="inline">find(enum, default \\ nil, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find</span><span class="p" data-group-id="4657941807-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="4657941807-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;o&quot;</span><span class="p" data-group-id="4657941807-2">)</span><span class="p" data-group-id="4657941807-1">)</span><span class="w">
+</span><span class="p" data-group-id="4657941807-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="4657941807-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find</span><span class="p" data-group-id="4657941807-4">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="4657941807-5">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;y&quot;</span><span class="p" data-group-id="4657941807-5">)</span><span class="p" data-group-id="4657941807-4">)</span><span class="w">
+</span><span class="no">nil</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find</span><span class="p" data-group-id="4657941807-6">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="ss">:none</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="4657941807-7">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;y&quot;</span><span class="p" data-group-id="4657941807-7">)</span><span class="p" data-group-id="4657941807-6">)</span><span class="w">
+</span><span class="ss">:none</span></code></pre></section><section class="h3"><h3 id="find_index-enum-fun" class="section-heading">
+  <a href="#find_index-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#find_index/2"><code class="inline">find_index(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find_index</span><span class="p" data-group-id="1050185545-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="1050185545-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;o&quot;</span><span class="p" data-group-id="1050185545-2">)</span><span class="p" data-group-id="1050185545-1">)</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find_index</span><span class="p" data-group-id="1050185545-3">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="1050185545-4">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;y&quot;</span><span class="p" data-group-id="1050185545-4">)</span><span class="p" data-group-id="1050185545-3">)</span><span class="w">
+</span><span class="no">nil</span></code></pre></section><section class="h3"><h3 id="find_value-enum-default-nil-fun" class="section-heading">
+  <a href="#find_value-enum-default-nil-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#find_value/2"><code class="inline">find_value(enum, default \\ nil, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find_value</span><span class="p" data-group-id="1852383062-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1852383062-2">fn</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="1852383062-2">end</span><span class="p" data-group-id="1852383062-1">)</span><span class="w">
+</span><span class="s">&quot;banana&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">find_value</span><span class="p" data-group-id="1852383062-3">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="ss">:none</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1852383062-4">fn</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">item</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="1852383062-4">end</span><span class="p" data-group-id="1852383062-3">)</span><span class="w">
+</span><span class="ss">:none</span></code></pre></section></section><section class="h2 col-2"><h2 id="grouping" class="col-2 section-heading">
+  <a href="#grouping" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Grouping</span>
+</h2>
+<section class="h3"><h3 id="group_by-enum-key_fun" class="section-heading">
+  <a href="#group_by-enum-key_fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#group_by/2"><code class="inline">group_by(enum, key_fun)</code></a></span>
+</h3>
+<p>Group by the last letter of the fruit:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">group_by</span><span class="p" data-group-id="9987396299-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">String</span><span class="o">.</span><span class="n">last</span><span class="p" data-group-id="9987396299-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="9987396299-2">)</span><span class="p" data-group-id="9987396299-1">)</span><span class="w">
+</span><span class="p" data-group-id="9987396299-3">%{</span><span class="w">
+  </span><span class="s">&quot;a&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="9987396299-4">[</span><span class="p" data-group-id="9987396299-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9987396299-5">}</span><span class="p" data-group-id="9987396299-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="s">&quot;e&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="9987396299-6">[</span><span class="w">
+    </span><span class="p" data-group-id="9987396299-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9987396299-7">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9987396299-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9987396299-8">}</span><span class="w">
+  </span><span class="p" data-group-id="9987396299-6">]</span><span class="w">
+</span><span class="p" data-group-id="9987396299-3">}</span></code></pre></section><section class="h3"><h3 id="group_by-enum-key_fun-value_fun" class="section-heading">
+  <a href="#group_by-enum-key_fun-value_fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#group_by/3"><code class="inline">group_by(enum, key_fun, value_fun)</code></a></span>
+</h3>
+<p>Group by the last letter of the fruit with custom value:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">group_by</span><span class="p" data-group-id="8971947478-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">String</span><span class="o">.</span><span class="n">last</span><span class="p" data-group-id="8971947478-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="8971947478-2">)</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="8971947478-1">)</span><span class="w">
+</span><span class="p" data-group-id="8971947478-3">%{</span><span class="w">
+  </span><span class="s">&quot;a&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8971947478-4">[</span><span class="s">&quot;banana&quot;</span><span class="p" data-group-id="8971947478-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="s">&quot;e&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8971947478-5">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="8971947478-5">]</span><span class="w">
+</span><span class="p" data-group-id="8971947478-3">}</span></code></pre></section></section><section class="h2 col-2"><h2 id="joining-interspersing" class="col-2 section-heading">
+  <a href="#joining-interspersing" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Joining &amp; interspersing</span>
+</h2>
+<section class="h3"><h3 id="join-enum-joiner" class="section-heading">
+  <a href="#join-enum-joiner" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#join/2"><code class="inline">join(enum, joiner \\ &quot;&quot;)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="5850978803-1">(</span><span class="p" data-group-id="5850978803-2">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="5850978803-2">]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p" data-group-id="5850978803-1">)</span><span class="w">
+</span><span class="s">&quot;apple, banana, orange&quot;</span></code></pre></section><section class="h3"><h3 id="map_join-enum-joiner-mapper" class="section-heading">
+  <a href="#map_join-enum-joiner-mapper" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#map_join/3"><code class="inline">map_join(enum, joiner \\ &quot;&quot;, mapper)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map_join</span><span class="p" data-group-id="9019569140-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="9019569140-1">)</span><span class="w">
+</span><span class="s">&quot;apple, banana, orange&quot;</span></code></pre></section><section class="h3"><h3 id="intersperse-enum-separator" class="section-heading">
+  <a href="#intersperse-enum-separator" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#intersperse/2"><code class="inline">intersperse(enum, separator \\ &quot;&quot;)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">intersperse</span><span class="p" data-group-id="1515338574-1">(</span><span class="p" data-group-id="1515338574-2">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="1515338574-2">]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p" data-group-id="1515338574-1">)</span><span class="w">
+</span><span class="p" data-group-id="1515338574-3">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="1515338574-3">]</span></code></pre></section><section class="h3"><h3 id="map_intersperse-enum-separator-mapper" class="section-heading">
+  <a href="#map_intersperse-enum-separator-mapper" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#map_intersperse/3"><code class="inline">map_intersperse(enum, separator \\ &quot;&quot;, mapper)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map_intersperse</span><span class="p" data-group-id="5582315284-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="5582315284-1">)</span><span class="w">
+</span><span class="p" data-group-id="5582315284-2">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="5582315284-2">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="slicing" class="col-2 section-heading">
+  <a href="#slicing" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Slicing</span>
+</h2>
+<section class="h3"><h3 id="slice-enum-index_range" class="section-heading">
+  <a href="#slice-enum-index_range" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#slice/2"><code class="inline">slice(enum, index_range)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="0439863158-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">1</span><span class="p" data-group-id="0439863158-1">)</span><span class="w">
+</span><span class="p" data-group-id="0439863158-2">[</span><span class="w">
+  </span><span class="p" data-group-id="0439863158-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0439863158-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="0439863158-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0439863158-4">}</span><span class="w">
+</span><span class="p" data-group-id="0439863158-2">]</span></code></pre><p>Negative ranges count from the back:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="8802971463-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="o">..</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="8802971463-1">)</span><span class="w">
+</span><span class="p" data-group-id="8802971463-2">[</span><span class="w">
+  </span><span class="p" data-group-id="8802971463-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8802971463-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8802971463-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8802971463-4">}</span><span class="w">
+</span><span class="p" data-group-id="8802971463-2">]</span></code></pre></section><section class="h3"><h3 id="slice-enum-start_index-amount" class="section-heading">
+  <a href="#slice-enum-start_index-amount" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#slice/3"><code class="inline">slice(enum, start_index, amount)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slice</span><span class="p" data-group-id="7710231375-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7710231375-1">)</span><span class="w">
+</span><span class="p" data-group-id="7710231375-2">[</span><span class="w">
+  </span><span class="p" data-group-id="7710231375-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7710231375-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7710231375-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7710231375-4">}</span><span class="w">
+</span><span class="p" data-group-id="7710231375-2">]</span></code></pre></section><section class="h3"><h3 id="slide-enum-range_or_single_index-insertion_index" class="section-heading">
+  <a href="#slide-enum-range_or_single_index-insertion_index" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#slide/3"><code class="inline">slide(enum, range_or_single_index, insertion_index)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="n">fruits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0721259082-1">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;grape&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pear&quot;</span><span class="p" data-group-id="0721259082-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slide</span><span class="p" data-group-id="0721259082-2">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0721259082-2">)</span><span class="w">
+</span><span class="p" data-group-id="0721259082-3">[</span><span class="s">&quot;grape&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pear&quot;</span><span class="p" data-group-id="0721259082-3">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slide</span><span class="p" data-group-id="0721259082-4">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="0721259082-4">)</span><span class="w">
+</span><span class="p" data-group-id="0721259082-5">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pear&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;grape&quot;</span><span class="p" data-group-id="0721259082-5">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slide</span><span class="p" data-group-id="0721259082-6">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0721259082-6">)</span><span class="w">
+</span><span class="p" data-group-id="0721259082-7">[</span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;grape&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pear&quot;</span><span class="p" data-group-id="0721259082-7">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">slide</span><span class="p" data-group-id="0721259082-8">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="0721259082-8">)</span><span class="w">
+</span><span class="p" data-group-id="0721259082-9">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pear&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;grape&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="0721259082-9">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="reversing" class="col-2 section-heading">
+  <a href="#reversing" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Reversing</span>
+</h2>
+<section class="h3"><h3 id="reverse-enum" class="section-heading">
+  <a href="#reverse-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#reverse/1"><code class="inline">reverse(enum)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reverse</span><span class="p" data-group-id="7555556174-1">(</span><span class="n">cart</span><span class="p" data-group-id="7555556174-1">)</span><span class="w">
+</span><span class="p" data-group-id="7555556174-2">[</span><span class="w">
+  </span><span class="p" data-group-id="7555556174-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7555556174-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7555556174-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7555556174-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7555556174-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7555556174-5">}</span><span class="w">
+</span><span class="p" data-group-id="7555556174-2">]</span></code></pre></section><section class="h3"><h3 id="reverse-enum-tail" class="section-heading">
+  <a href="#reverse-enum-tail" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#reverse/2"><code class="inline">reverse(enum, tail)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reverse</span><span class="p" data-group-id="0703599156-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0703599156-2">[</span><span class="ss">:this_will_be</span><span class="p">,</span><span class="w"> </span><span class="ss">:the_tail</span><span class="p" data-group-id="0703599156-2">]</span><span class="p" data-group-id="0703599156-1">)</span><span class="w">
+</span><span class="p" data-group-id="0703599156-3">[</span><span class="w">
+  </span><span class="p" data-group-id="0703599156-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="0703599156-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="0703599156-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0703599156-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="0703599156-6">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0703599156-6">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">:this_will_be</span><span class="p">,</span><span class="w">
+  </span><span class="ss">:the_tail</span><span class="w">
+</span><span class="p" data-group-id="0703599156-3">]</span></code></pre></section><section class="h3"><h3 id="reverse_slice-enum-start_index-count" class="section-heading">
+  <a href="#reverse_slice-enum-start_index-count" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#reverse_slice/3"><code class="inline">reverse_slice(enum, start_index, count)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reverse_slice</span><span class="p" data-group-id="1509729594-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1509729594-1">)</span><span class="w">
+</span><span class="p" data-group-id="1509729594-2">[</span><span class="w">
+  </span><span class="p" data-group-id="1509729594-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="1509729594-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1509729594-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="1509729594-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1509729594-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1509729594-5">}</span><span class="w">
+</span><span class="p" data-group-id="1509729594-2">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="splitting" class="col-2 section-heading">
+  <a href="#splitting" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Splitting</span>
+</h2>
+<section class="h3"><h3 id="split-enum-amount" class="section-heading">
+  <a href="#split-enum-amount" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#split/2"><code class="inline">split(enum, amount)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="3986655041-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3986655041-1">)</span><span class="w">
+</span><span class="p" data-group-id="3986655041-2">{</span><span class="p" data-group-id="3986655041-3">[</span><span class="p" data-group-id="3986655041-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3986655041-4">}</span><span class="p" data-group-id="3986655041-3">]</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="3986655041-5">[</span><span class="w">
+   </span><span class="p" data-group-id="3986655041-6">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3986655041-6">}</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="3986655041-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3986655041-7">}</span><span class="w">
+ </span><span class="p" data-group-id="3986655041-5">]</span><span class="p" data-group-id="3986655041-2">}</span></code></pre><p>Negative indexes count from the back:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="4626363793-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="4626363793-1">)</span><span class="w">
+</span><span class="p" data-group-id="4626363793-2">{</span><span class="p" data-group-id="4626363793-3">[</span><span class="w">
+  </span><span class="p" data-group-id="4626363793-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="4626363793-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="4626363793-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4626363793-5">}</span><span class="w">
+ </span><span class="p" data-group-id="4626363793-3">]</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="4626363793-6">[</span><span class="p" data-group-id="4626363793-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="4626363793-7">}</span><span class="p" data-group-id="4626363793-6">]</span><span class="p" data-group-id="4626363793-2">}</span></code></pre></section><section class="h3"><h3 id="split_while-enum-fun" class="section-heading">
+  <a href="#split_while-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#split_while/2"><code class="inline">split_while(enum, fun)</code></a></span>
+</h3>
+<p>Stops splitting as soon as it is false:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">split_while</span><span class="p" data-group-id="4582818044-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="4582818044-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p" data-group-id="4582818044-2">)</span><span class="p" data-group-id="4582818044-1">)</span><span class="w">
+</span><span class="p" data-group-id="4582818044-3">{</span><span class="p" data-group-id="4582818044-4">[</span><span class="p" data-group-id="4582818044-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="4582818044-5">}</span><span class="p" data-group-id="4582818044-4">]</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="4582818044-6">[</span><span class="w">
+   </span><span class="p" data-group-id="4582818044-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4582818044-7">}</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="4582818044-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="4582818044-8">}</span><span class="w">
+ </span><span class="p" data-group-id="4582818044-6">]</span><span class="p" data-group-id="4582818044-3">}</span></code></pre></section><section class="h3"><h3 id="split_with-enum-fun" class="section-heading">
+  <a href="#split_with-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#split_with/2"><code class="inline">split_with(enum, fun)</code></a></span>
+</h3>
+<p>Splits the whole collection:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">split_with</span><span class="p" data-group-id="5837783240-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="5837783240-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p" data-group-id="5837783240-2">)</span><span class="p" data-group-id="5837783240-1">)</span><span class="w">
+</span><span class="p" data-group-id="5837783240-3">{</span><span class="p" data-group-id="5837783240-4">[</span><span class="w">
+  </span><span class="p" data-group-id="5837783240-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="5837783240-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="5837783240-6">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="5837783240-6">}</span><span class="w">
+ </span><span class="p" data-group-id="5837783240-4">]</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="5837783240-7">[</span><span class="p" data-group-id="5837783240-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="5837783240-8">}</span><span class="p" data-group-id="5837783240-7">]</span><span class="p" data-group-id="5837783240-3">}</span></code></pre></section></section><section class="h2 col-2"><h2 id="splitting-drop-and-take" class="col-2 section-heading">
+  <a href="#splitting-drop-and-take" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Splitting (drop and take)</span>
+</h2>
+<section class="h3"><h3 id="drop-enum-amount" class="section-heading">
+  <a href="#drop-enum-amount" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#drop/2"><code class="inline">drop(enum, amount)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">drop</span><span class="p" data-group-id="1413627215-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1413627215-1">)</span><span class="w">
+</span><span class="p" data-group-id="1413627215-2">[</span><span class="w">
+  </span><span class="p" data-group-id="1413627215-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1413627215-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1413627215-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="1413627215-4">}</span><span class="w">
+</span><span class="p" data-group-id="1413627215-2">]</span></code></pre><p>Negative indexes count from the back:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">drop</span><span class="p" data-group-id="5751247464-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="5751247464-1">)</span><span class="w">
+</span><span class="p" data-group-id="5751247464-2">[</span><span class="w">
+  </span><span class="p" data-group-id="5751247464-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="5751247464-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="5751247464-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="5751247464-4">}</span><span class="w">
+</span><span class="p" data-group-id="5751247464-2">]</span></code></pre></section><section class="h3"><h3 id="drop_every-enum-nth" class="section-heading">
+  <a href="#drop_every-enum-nth" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#drop_every/2"><code class="inline">drop_every(enum, nth)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">drop_every</span><span class="p" data-group-id="0457405991-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="0457405991-1">)</span><span class="w">
+</span><span class="p" data-group-id="0457405991-2">[</span><span class="p" data-group-id="0457405991-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0457405991-3">}</span><span class="p" data-group-id="0457405991-2">]</span></code></pre></section><section class="h3"><h3 id="drop_while-enum-fun" class="section-heading">
+  <a href="#drop_while-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#drop_while/2"><code class="inline">drop_while(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">drop_while</span><span class="p" data-group-id="8539994589-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="8539994589-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p" data-group-id="8539994589-2">)</span><span class="p" data-group-id="8539994589-1">)</span><span class="w">
+</span><span class="p" data-group-id="8539994589-3">[</span><span class="w">
+  </span><span class="p" data-group-id="8539994589-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8539994589-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8539994589-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8539994589-5">}</span><span class="w">
+</span><span class="p" data-group-id="8539994589-3">]</span></code></pre></section><section class="h3"><h3 id="take-enum-amount" class="section-heading">
+  <a href="#take-enum-amount" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#take/2"><code class="inline">take(enum, amount)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take</span><span class="p" data-group-id="9482662844-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9482662844-1">)</span><span class="w">
+</span><span class="p" data-group-id="9482662844-2">[</span><span class="p" data-group-id="9482662844-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9482662844-3">}</span><span class="p" data-group-id="9482662844-2">]</span></code></pre><p>Negative indexes count from the back:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take</span><span class="p" data-group-id="0621090712-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="0621090712-1">)</span><span class="w">
+</span><span class="p" data-group-id="0621090712-2">[</span><span class="p" data-group-id="0621090712-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="0621090712-3">}</span><span class="p" data-group-id="0621090712-2">]</span></code></pre></section><section class="h3"><h3 id="take_every-enum-nth" class="section-heading">
+  <a href="#take_every-enum-nth" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#take_every/2"><code class="inline">take_every(enum, nth)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take_every</span><span class="p" data-group-id="3945951829-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="3945951829-1">)</span><span class="w">
+</span><span class="p" data-group-id="3945951829-2">[</span><span class="w">
+  </span><span class="p" data-group-id="3945951829-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3945951829-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3945951829-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3945951829-4">}</span><span class="w">
+</span><span class="p" data-group-id="3945951829-2">]</span></code></pre></section><section class="h3"><h3 id="take_while-enum-fun" class="section-heading">
+  <a href="#take_while-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#take_while/2"><code class="inline">take_while(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take_while</span><span class="p" data-group-id="8648375566-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p" data-group-id="8648375566-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p" data-group-id="8648375566-2">)</span><span class="p" data-group-id="8648375566-1">)</span><span class="w">
+</span><span class="p" data-group-id="8648375566-3">[</span><span class="p" data-group-id="8648375566-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8648375566-4">}</span><span class="p" data-group-id="8648375566-3">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="random" class="col-2 section-heading">
+  <a href="#random" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Random</span>
+</h2>
+<section class="h3"><h3 id="random-enum" class="section-heading">
+  <a href="#random-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#random/1"><code class="inline">random(enum)</code></a></span>
+</h3>
+<p>Results will vary on every call:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">random</span><span class="p" data-group-id="2062588817-1">(</span><span class="n">cart</span><span class="p" data-group-id="2062588817-1">)</span><span class="w">
+</span><span class="p" data-group-id="2062588817-2">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="2062588817-2">}</span></code></pre></section><section class="h3"><h3 id="take_random-enum-count" class="section-heading">
+  <a href="#take_random-enum-count" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#take_random/2"><code class="inline">take_random(enum, count)</code></a></span>
+</h3>
+<p>Results will vary on every call:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take_random</span><span class="p" data-group-id="8078552071-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8078552071-1">)</span><span class="w">
+</span><span class="p" data-group-id="8078552071-2">[</span><span class="w">
+  </span><span class="p" data-group-id="8078552071-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8078552071-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8078552071-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8078552071-4">}</span><span class="w">
+</span><span class="p" data-group-id="8078552071-2">]</span></code></pre></section><section class="h3"><h3 id="shuffle-enum" class="section-heading">
+  <a href="#shuffle-enum" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#shuffle/1"><code class="inline">shuffle(enum)</code></a></span>
+</h3>
+<p>Results will vary on every call:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">shuffle</span><span class="p" data-group-id="3026877762-1">(</span><span class="n">cart</span><span class="p" data-group-id="3026877762-1">)</span><span class="w">
+</span><span class="p" data-group-id="3026877762-2">[</span><span class="w">
+  </span><span class="p" data-group-id="3026877762-3">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3026877762-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3026877762-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3026877762-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3026877762-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3026877762-5">}</span><span class="w">
+</span><span class="p" data-group-id="3026877762-2">]</span></code></pre></section></section><section class="h2 col-2"><h2 id="chunking" class="col-2 section-heading">
+  <a href="#chunking" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Chunking</span>
+</h2>
+<section class="h3"><h3 id="chunk_by-enum-fun" class="section-heading">
+  <a href="#chunk_by-enum-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#chunk_by/2"><code class="inline">chunk_by(enum, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">chunk_by</span><span class="p" data-group-id="0176568859-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">String</span><span class="o">.</span><span class="n">length</span><span class="p" data-group-id="0176568859-2">(</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p" data-group-id="0176568859-2">)</span><span class="p" data-group-id="0176568859-1">)</span><span class="w">
+</span><span class="p" data-group-id="0176568859-3">[</span><span class="w">
+  </span><span class="p" data-group-id="0176568859-4">[</span><span class="p" data-group-id="0176568859-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0176568859-5">}</span><span class="p" data-group-id="0176568859-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="0176568859-6">[</span><span class="w">
+    </span><span class="p" data-group-id="0176568859-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0176568859-7">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="0176568859-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="0176568859-8">}</span><span class="w">
+  </span><span class="p" data-group-id="0176568859-6">]</span><span class="w">
+</span><span class="p" data-group-id="0176568859-3">]</span></code></pre></section><section class="h3"><h3 id="chunk_every-enum-count" class="section-heading">
+  <a href="#chunk_every-enum-count" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#chunk_every/2"><code class="inline">chunk_every(enum, count)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">chunk_every</span><span class="p" data-group-id="6002842869-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6002842869-1">)</span><span class="w">
+</span><span class="p" data-group-id="6002842869-2">[</span><span class="w">
+  </span><span class="p" data-group-id="6002842869-3">[</span><span class="w">
+    </span><span class="p" data-group-id="6002842869-4">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6002842869-4">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="6002842869-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6002842869-5">}</span><span class="w">
+  </span><span class="p" data-group-id="6002842869-3">]</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="6002842869-6">[</span><span class="p" data-group-id="6002842869-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="6002842869-7">}</span><span class="p" data-group-id="6002842869-6">]</span><span class="w">
+</span><span class="p" data-group-id="6002842869-2">]</span></code></pre></section><section class="h3"><h3 id="chunk_every-enum-count-step-leftover" class="section-heading">
+  <a href="#chunk_every-enum-count-step-leftover" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#chunk_every/2"><code class="inline">chunk_every(enum, count, step, leftover \\ [])</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">chunk_every</span><span class="p" data-group-id="8155940698-1">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8155940698-2">[</span><span class="ss">:elements</span><span class="p">,</span><span class="w"> </span><span class="ss">:to_complete</span><span class="p" data-group-id="8155940698-2">]</span><span class="p" data-group-id="8155940698-1">)</span><span class="w">
+</span><span class="p" data-group-id="8155940698-3">[</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-4">[</span><span class="w">
+    </span><span class="p" data-group-id="8155940698-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8155940698-5">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="8155940698-6">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8155940698-6">}</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-7">[</span><span class="w">
+    </span><span class="p" data-group-id="8155940698-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8155940698-8">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">:elements</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-7">]</span><span class="w">
+</span><span class="p" data-group-id="8155940698-3">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">chunk_every</span><span class="p" data-group-id="8155940698-9">(</span><span class="n">cart</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">:discard</span><span class="p" data-group-id="8155940698-9">)</span><span class="w">
+</span><span class="p" data-group-id="8155940698-10">[</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-11">[</span><span class="w">
+    </span><span class="p" data-group-id="8155940698-12">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8155940698-12">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="8155940698-13">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8155940698-13">}</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-11">]</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-14">[</span><span class="w">
+    </span><span class="p" data-group-id="8155940698-15">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8155940698-15">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="8155940698-16">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="8155940698-16">}</span><span class="w">
+  </span><span class="p" data-group-id="8155940698-14">]</span><span class="w">
+</span><span class="p" data-group-id="8155940698-10">]</span></code></pre><p>See <a href="Enum.html#chunk_while/4"><code class="inline">Enum.chunk_while/4</code></a> for custom chunking.</p></section></section><section class="h2 col-2"><h2 id="zipping" class="col-2 section-heading">
+  <a href="#zipping" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Zipping</span>
+</h2>
+<section class="h3"><h3 id="zip-enum1-enum2" class="section-heading">
+  <a href="#zip-enum1-enum2" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#zip/2"><code class="inline">zip(enum1, enum2)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">fruits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7355867795-1">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="7355867795-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7355867795-2">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7355867795-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">zip</span><span class="p" data-group-id="7355867795-3">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="n">counts</span><span class="p" data-group-id="7355867795-3">)</span><span class="w">
+</span><span class="p" data-group-id="7355867795-4">[</span><span class="p" data-group-id="7355867795-5">{</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7355867795-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7355867795-6">{</span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7355867795-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7355867795-7">{</span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7355867795-7">}</span><span class="p" data-group-id="7355867795-4">]</span></code></pre><p>See <a href="Enum.html#zip/1"><code class="inline">Enum.zip/1</code></a> for zipping many collections at once.</p></section><section class="h3"><h3 id="zip_with-enum1-enum2-fun" class="section-heading">
+  <a href="#zip_with-enum1-enum2-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#zip_with/2"><code class="inline">zip_with(enum1, enum2, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">fruits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3111951311-1">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="3111951311-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3111951311-2">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3111951311-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">zip_with</span><span class="p" data-group-id="3111951311-3">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="n">counts</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3111951311-4">fn</span><span class="w"> </span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3111951311-5">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="n">count</span><span class="p" data-group-id="3111951311-5">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="3111951311-4">end</span><span class="p" data-group-id="3111951311-3">)</span><span class="w">
+</span><span class="p" data-group-id="3111951311-6">[</span><span class="w">
+  </span><span class="p" data-group-id="3111951311-7">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3111951311-7">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3111951311-8">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3111951311-8">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="3111951311-9">%{</span><span class="ss">fruit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">count</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="3111951311-9">}</span><span class="w">
+</span><span class="p" data-group-id="3111951311-6">]</span></code></pre><p>See <a href="Enum.html#zip_with/2"><code class="inline">Enum.zip_with/2</code></a> for zipping many collections at once.</p></section><section class="h3"><h3 id="zip_reduce-left-right-acc-fun" class="section-heading">
+  <a href="#zip_reduce-left-right-acc-fun" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#zip_reduce/4"><code class="inline">zip_reduce(left, right, acc, fun)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">fruits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7110482677-1">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="7110482677-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7110482677-2">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7110482677-2">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">zip_reduce</span><span class="p" data-group-id="7110482677-3">(</span><span class="n">fruits</span><span class="p">,</span><span class="w"> </span><span class="n">counts</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7110482677-4">fn</span><span class="w"> </span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">,</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">fruit</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="n">count</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">acc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">price</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="7110482677-4">end</span><span class="p" data-group-id="7110482677-3">)</span><span class="w">
+</span><span class="mi">19</span></code></pre><p>See <a href="Enum.html#zip_reduce/3"><code class="inline">Enum.zip_reduce/3</code></a> for zipping many collections at once.</p></section><section class="h3"><h3 id="unzip-list" class="section-heading">
+  <a href="#unzip-list" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Enum.html#unzip/1"><code class="inline">unzip(list)</code></a></span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">cart</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="2844320001-1">(</span><span class="o">&amp;</span><span class="p" data-group-id="2844320001-2">{</span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">fruit</span><span class="p">,</span><span class="w"> </span><span class="ni">&amp;1</span><span class="o">.</span><span class="n">count</span><span class="p" data-group-id="2844320001-2">}</span><span class="p" data-group-id="2844320001-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">unzip</span><span class="p" data-group-id="2844320001-3">(</span><span class="p" data-group-id="2844320001-3">)</span><span class="w">
+</span><span class="p" data-group-id="2844320001-4">{</span><span class="p" data-group-id="2844320001-5">[</span><span class="s">&quot;apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;banana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orange&quot;</span><span class="p" data-group-id="2844320001-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2844320001-6">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="2844320001-6">]</span><span class="p" data-group-id="2844320001-4">}</span></code></pre></section></section>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="debugging.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Debugging
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="what-anti-patterns.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+What are anti-patterns?
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

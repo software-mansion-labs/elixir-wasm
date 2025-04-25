@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Keyword lists and maps — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/keywords-and-maps.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Keyword lists and maps</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/keywords-and-maps.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Now let's talk about associative data structures. Associative data structures are able to associate a key to a certain value. Different languages call these different names like dictionaries, hashes, associative arrays, etc.</p><p>In Elixir, we have two main associative data structures: keyword lists and maps.</p><h2 id="keyword-lists" class="section-heading">
+  <a href="#keyword-lists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Keyword lists</span>
+</h2>
+<p>Keyword lists are a data-structure used to pass options to functions. Imagine you want to split a string of numbers. We can use <a href="String.html#split/2"><code class="inline">String.split/2</code></a>:</p><pre class="elixir" data-code-id="31393233"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split(&quot;1 2 3&quot;, &quot; &quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]</p></pre><p>However, what happens if there is an additional space between the numbers:</p><pre class="elixir" data-code-id="31393837"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split(&quot;1  2  3&quot;, &quot; &quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;1&quot;, &quot;&quot;, &quot;2&quot;, &quot;&quot;, &quot;3&quot;]</p></pre><p>As you can see, there are now empty strings in our results. Luckily, the <a href="String.html#split/3"><code class="inline">String.split/3</code></a> function allows the <code class="inline">trim</code> option to be set to true:</p><pre class="elixir" data-code-id="32303531"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split(&quot;1  2  3&quot;, &quot; &quot;, [trim: true])</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]</p></pre><p><code class="inline">[trim: true]</code> is a keyword list. Furthermore, when a keyword list is the last argument of a function, we can skip the brackets and write:</p><pre class="elixir" data-code-id="32313135"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.split(&quot;1  2  3&quot;, &quot; &quot;, trim: true)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]</p></pre><p>As shown in the example above, keyword lists are mostly used as optional arguments to functions.</p><p>As the name implies, keyword lists are simply lists. In particular, they are lists consisting of 2-item tuples where the first element (the key) is an atom and the second element can be any value. Both representations are the same:</p><pre class="elixir" data-code-id="32313739"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[{:trim, true}] == [trim: true]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Since keyword lists are lists, we can use all operations available to lists. For example, we can use <code class="inline">++</code> to add new values to a keyword list:</p><pre class="elixir" data-code-id="32323433"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list = [a: 1, b: 2]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [a: 1, b: 2]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list ++ [c: 3]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [a: 1, b: 2, c: 3]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[a: 0] ++ list</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [a: 0, a: 1, b: 2]</p></pre><p>You can read the value of a keyword list using the brackets syntax. This is also known as the access syntax, as it is defined by the <a href="Access.html"><code class="inline">Access</code></a> module:</p><pre class="elixir" data-code-id="32333037"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list[:a]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">list[:b]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p></pre><p>In case of duplicate keys, values added to the front are the ones fetched:</p><pre class="elixir" data-code-id="32333731"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">new_list = [a: 0] ++ list</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [a: 0, a: 1, b: 2]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">new_list[:a]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 0</p></pre><p>Keyword lists are important because they have three special characteristics:</p><ul><li>Keys must be atoms.</li><li>Keys are ordered, as specified by the developer.</li><li>Keys can be given more than once.</li></ul><p>For example, <a href="https://github.com/elixir-lang/ecto">the Ecto library</a> makes use of these features to provide an elegant DSL for writing database queries:</p><pre class="elixir" data-code-id="32343335"><p class="output output-initial" data-code-type="output"># query =</p><p class="output output-initial" data-code-type="output">#   from w in Weather,</p><p class="output output-initial" data-code-type="output">#     where: w.prcp &gt; 0,</p><p class="output output-initial" data-code-type="output">#     where: w.temp &lt; 20,</p><p class="output output-initial" data-code-type="output">#     select: w</p></pre><p>Although we can pattern match on keyword lists, it is not done in practice since pattern matching on lists requires the number of items and their order to match:</p><pre class="elixir" data-code-id="32343939"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[a: a] = [a: 1]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [a: 1]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">a</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[a: a] = [a: 1, b: 2]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: [a: 1, b: 2]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[b: b, a: a] = [a: 1, b: 2]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: [a: 1, b: 2]</p></pre><p>Furthermore, given keyword lists are often used as optional arguments, they are used in situations where not all keys may be present, which would make it impossible to match on them. In a nutshell, do not pattern match on keyword lists.</p><p>In order to manipulate keyword lists, Elixir provides the <a href="Keyword.html"><code class="inline">Keyword</code></a> module. Remember, though, keyword lists are simply lists, and as such they provide the same linear performance characteristics as them: the longer the list, the longer it will take to find a key, to count the number of items, and so on. If you need to store a large amount of keys in a key-value data structure, Elixir offers maps, which we will soon learn.</p><h3 id="do-blocks-and-keywords" class="section-heading">
+  <a href="#do-blocks-and-keywords" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">do</code>-blocks and keywords</span>
+</h3>
+<p>As we have seen, keywords are mostly used in the language to pass optional values. In fact, we have used keywords in earlier chapters. For example, we have seen:</p><pre class="elixir" data-code-id="32353633"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">if true do
+  &quot;This will be seen&quot;
+else
+  &quot;This won't&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;This will be seen&quot;</p></pre><p>It happens that <code class="inline">do</code> blocks are nothing more than a syntax convenience on top of keywords. We can rewrite the above to:</p><pre class="elixir" data-code-id="32363237"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">if true, do: &quot;This will be seen&quot;, else: &quot;This won't&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;This will be seen&quot;</p></pre><p>Pay close attention to both syntaxes. In the keyword list format, we separate each key-value pair with commas, and each key is followed by <code class="inline">:</code>. In the <code class="inline">do</code>-blocks, we get rid of the colons, the commas, and separate each keyword by a newline. They are useful exactly because they remove the verbosity when writing blocks of code. Most of the time, you will use the block syntax, but it is good to know they are equivalent.</p><p>This plays an important role in the language as it allows Elixir syntax to stay small but still expressive. We only need few data structures to represent the language, a topic we will come back to when talking about <a href="optional-syntax.html">optional syntax</a> and go in-depth when discussing <a href="quote-and-unquote.html">meta-programming</a>.</p><p>With this out of the way, let's talk about maps.</p><h2 id="maps-as-key-value-pairs" class="section-heading">
+  <a href="#maps-as-key-value-pairs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Maps as key-value pairs</span>
+</h2>
+<p>Whenever you need to store key-value pairs, maps are the &quot;go to&quot; data structure in Elixir. A map is created using the <code class="inline">%{}</code> syntax:</p><pre class="elixir" data-code-id="32363931"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map = %{:a =&gt; 1, 2 =&gt; :b}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{2 =&gt; :b, :a =&gt; 1}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map[:a]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map[2]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># :b</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map[:c]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># nil</p></pre><p>Compared to keyword lists, we can already see two differences:</p><ul><li>Maps allow any value as a key.</li><li>Maps' keys do not follow any ordering.</li></ul><p>In contrast to keyword lists, maps are very useful with pattern matching. When a map is used in a pattern, it will always match on a subset of the given value:</p><pre class="elixir" data-code-id="32373535"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%{} = %{:a =&gt; 1, 2 =&gt; :b}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{2 =&gt; :b, :a =&gt; 1}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%{:a =&gt; a} = %{:a =&gt; 1, 2 =&gt; :b}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{2 =&gt; :b, :a =&gt; 1}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">a</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%{:c =&gt; c} = %{:a =&gt; 1, 2 =&gt; :b}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: %{2 =&gt; :b, :a =&gt; 1}</p></pre><p>As shown above, a map matches as long as the keys in the pattern exist in the given map. Therefore, an empty map matches all maps.</p><p>The <a href="Map.html"><code class="inline">Map</code></a> module provides a very similar API to the <a href="Keyword.html"><code class="inline">Keyword</code></a> module with convenience functions to add, remove, and update maps keys:</p><pre class="elixir" data-code-id="32383139"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Map.get(%{:a =&gt; 1, 2 =&gt; :b}, :a)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Map.put(%{:a =&gt; 1, 2 =&gt; :b}, :c, 3)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{2 =&gt; :b, :a =&gt; 1, :c =&gt; 3}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">Map.to_list(%{:a =&gt; 1, 2 =&gt; :b})</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [{2, :b}, {:a, 1}]</p></pre><h2 id="maps-of-predefined-keys" class="section-heading">
+  <a href="#maps-of-predefined-keys" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Maps of predefined keys</span>
+</h2>
+<p>In the previous section, we have used maps as a key-value data structure where keys can be added or removed at any time. However, it is also common to create maps with a pre-defined set of keys. Their values may be updated, but new keys are never added nor removed. This is useful when we know the shape of the data we are working with and, if we get a different key, it likely means a mistake was done elsewhere.</p><p>We define such maps using the same syntax as in the previous section, except that all keys must be atoms:</p><pre class="elixir" data-code-id="32383833"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map = %{:name =&gt; &quot;John&quot;, :age =&gt; 23}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{name: &quot;John&quot;, age: 23}</p></pre><p>As you can see from the printed result above, Elixir also allows you to write maps of atom keys using the same <code class="inline">key: value</code> syntax as keyword lists.</p><p>When the keys are atoms, in particular when working with maps of predefined keys, we can also access them using the <code class="inline">map.key</code> syntax:</p><pre class="elixir" data-code-id="32393437"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map = %{name: &quot;John&quot;, age: 23}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{name: &quot;John&quot;, age: 23}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map.name</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;John&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">map.agee</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (KeyError) key :agee not found in: %{name: &quot;John&quot;, age: 23}</p></pre><p>There is also syntax for updating keys, which also raises if the key has not yet been defined:</p><pre class="elixir" data-code-id="33303131"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%{map | name: &quot;Mary&quot;}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># %{name: &quot;Mary&quot;, age: 23}</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">%{map | agee: 27}</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (KeyError) key :agee not found in: %{name: &quot;John&quot;, age: 23}</p></pre><p>These operations have one large benefit in that they raise if the key does not exist in the map and the compiler may even detect and warn when possible. This makes them useful to get quick feedback and spot bugs and typos early on. This is also the syntax used to power another Elixir feature called &quot;Structs&quot;, which we will learn later on.</p><p>Elixir developers typically prefer to use the <code class="inline">map.key</code> syntax and pattern matching instead of the functions in the <a href="Map.html"><code class="inline">Map</code></a> module when working with maps because they lead to an assertive style of programming. <a href="https://dashbit.co/blog/writing-assertive-code-with-elixir">This blog post by José Valim</a> provides insight and examples on how you get more concise and faster software by writing assertive code in Elixir.</p><h2 id="nested-data-structures" class="section-heading">
+  <a href="#nested-data-structures" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Nested data structures</span>
+</h2>
+<p>Often we will have maps inside maps, or even keywords lists inside maps, and so forth. Elixir provides conveniences for manipulating nested data structures via the <a href="Kernel.html#get_in/1"><code class="inline">get_in/1</code></a>, <a href="Kernel.html#put_in/2"><code class="inline">put_in/2</code></a>, <a href="Kernel.html#update_in/2"><code class="inline">update_in/2</code></a>, and other macros giving the same conveniences you would find in imperative languages while keeping the immutable properties of the language.</p><p>Imagine you have the following structure:</p><pre class="elixir" data-code-id="33303735"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">users = [</span><span class="info"></span></div><p class="output output-initial" data-code-type="output">#   john: %{name: &quot;John&quot;, age: 27, languages: [&quot;Erlang&quot;, &quot;Ruby&quot;, &quot;Elixir&quot;]},</p><p class="output output-initial" data-code-type="output">#   mary: %{name: &quot;Mary&quot;, age: 29, languages: [&quot;Elixir&quot;, &quot;F#&quot;, &quot;Clojure&quot;]}</p><p class="output output-initial" data-code-type="output"># ]</p><p class="output output-initial" data-code-type="output"># [</p><p class="output output-initial" data-code-type="output">#   john: %{age: 27, languages: [&quot;Erlang&quot;, &quot;Ruby&quot;, &quot;Elixir&quot;], name: &quot;John&quot;},</p><p class="output output-initial" data-code-type="output">#   mary: %{age: 29, languages: [&quot;Elixir&quot;, &quot;F#&quot;, &quot;Clojure&quot;], name: &quot;Mary&quot;}</p><p class="output output-initial" data-code-type="output"># ]</p></pre><p>We have a keyword list of users where each value is a map containing the name, age and a list of programming languages each user likes. If we wanted to access the age for john, we could write:</p><pre class="elixir" data-code-id="33313339"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">users[:john].age</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 27</p></pre><p>It happens we can also use this same syntax for updating the value:</p><pre class="elixir" data-code-id="33323033"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">users = put_in users[:john].age, 31</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [</p><p class="output output-initial" data-code-type="output">#   john: %{age: 31, languages: [&quot;Erlang&quot;, &quot;Ruby&quot;, &quot;Elixir&quot;], name: &quot;John&quot;},</p><p class="output output-initial" data-code-type="output">#   mary: %{age: 29, languages: [&quot;Elixir&quot;, &quot;F#&quot;, &quot;Clojure&quot;], name: &quot;Mary&quot;}</p><p class="output output-initial" data-code-type="output"># ]</p></pre><p>The <a href="Kernel.html#update_in/2"><code class="inline">update_in/2</code></a> macro is similar but allows us to pass a function that controls how the value changes. For example, let's remove &quot;Clojure&quot; from Mary's list of languages:</p><pre class="elixir" data-code-id="33323637"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">users = update_in users[:mary].languages, fn languages -&gt; List.delete(languages, &quot;Clojure&quot;) end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [</p><p class="output output-initial" data-code-type="output">#   john: %{age: 31, languages: [&quot;Erlang&quot;, &quot;Ruby&quot;, &quot;Elixir&quot;], name: &quot;John&quot;},</p><p class="output output-initial" data-code-type="output">#   mary: %{age: 29, languages: [&quot;Elixir&quot;, &quot;F#&quot;], name: &quot;Mary&quot;}</p><p class="output output-initial" data-code-type="output"># ]</p></pre><p>There is more to learn about <a href="Kernel.html#get_in/1"><code class="inline">get_in/1</code></a>, <a href="Kernel.html#pop_in/1"><code class="inline">pop_in/1</code></a> and others, including the <a href="Kernel.html#get_and_update_in/2"><code class="inline">get_and_update_in/2</code></a> that allows us to extract a value and update the data structure at once. There are also <code class="inline">get_in/3</code>, <a href="Kernel.html#put_in/3"><code class="inline">put_in/3</code></a>, <a href="Kernel.html#update_in/3"><code class="inline">update_in/3</code></a>, <a href="Kernel.html#get_and_update_in/3"><code class="inline">get_and_update_in/3</code></a>, <a href="Kernel.html#pop_in/2"><code class="inline">pop_in/2</code></a> which allow dynamic access into the data structure.</p><h2 id="summary" class="section-heading">
+  <a href="#summary" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Summary</span>
+</h2>
+<p>There are two different data structures for working with key-value stores in Elixir. Alongside the <a href="Access.html"><code class="inline">Access</code></a> module and pattern matching, they provide a rich set of tools for manipulating complex, potentially nested, data structures.</p><p>As we conclude this chapter, remember that you should:</p><ul><li><p>Use keyword lists for passing optional values to functions</p></li><li><p>Use maps for general key-value data structures</p></li><li><p>Use maps when working with data that has a predefined set of keys</p></li></ul><p>Now let's talk about modules and functions.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="binaries-strings-and-charlists.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Binaries, strings, and charlists
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="modules-and-functions.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Modules and functions
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

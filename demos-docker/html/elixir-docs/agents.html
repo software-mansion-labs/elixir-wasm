@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Simple state management with agents — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/agents.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Simple state management with agents</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/agents.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter, we will learn how to keep and share state between multiple entities. If you have previous programming experience, you may think of globally shared variables, but the model we will learn here is quite different. The next chapters will generalize the concepts introduced here.</p><p>If you have skipped the <em>Getting Started</em> guide or read it long ago, be sure to re-read the <a href="processes.html">Processes</a> chapter. We will use it as a starting point.</p><h2 id="the-trouble-with-mutable-state" class="section-heading">
+  <a href="#the-trouble-with-mutable-state" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The trouble with (mutable) state</span>
+</h2>
+<p>Elixir is an immutable language where nothing is shared by default. If we want to share information, which can be read and modified from multiple places, we have two main options in Elixir:</p><ul><li>Using processes and message passing</li><li><a href="http://www.erlang.org/doc/man/ets.html">ETS (Erlang Term Storage)</a></li></ul><p>We covered processes in the <em>Getting Started</em> guide. ETS (Erlang Term Storage) is a new topic that we will explore in later chapters. When it comes to processes though, we rarely hand-roll our own, instead we use the abstractions available in Elixir and OTP:</p><ul><li><a href="Agent.html"><code class="inline">Agent</code></a> — Simple wrappers around state.</li><li><a href="GenServer.html"><code class="inline">GenServer</code></a> — &quot;Generic servers&quot; (processes) that encapsulate state, provide sync and async calls, support code reloading, and more.</li><li><a href="Task.html"><code class="inline">Task</code></a> — Asynchronous units of computation that allow spawning a process and potentially retrieving its result at a later time.</li></ul><p>We will explore these abstractions as we move forward. Keep in mind that they are all implemented on top of processes using the basic features provided by the VM, like <a href="Kernel.html#send/2"><code class="inline">send/2</code></a>, <a href="Kernel.SpecialForms.html#receive/1"><code class="inline">receive/1</code></a>, <a href="Kernel.html#spawn/1"><code class="inline">spawn/1</code></a> and <a href="Process.html#link/1"><code class="inline">Process.link/1</code></a>.</p><p>Here, we will use agents, and create a module named <code class="inline">KV.Bucket</code>, responsible for storing our key-value entries in a way that allows them to be read and modified by other processes.</p><h2 id="agents-101" class="section-heading">
+  <a href="#agents-101" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Agents 101</span>
+</h2>
+<p><a href="Agent.html"><code class="inline">Agent</code></a>s are simple wrappers around state. If all you want from a process is to keep state, agents are a great fit. Let's start a <code class="inline">iex</code> session inside the project with:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex -S mix
+</span></code></pre><p>And play a bit with agents:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="1887682211-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">agent</span><span class="p" data-group-id="1887682211-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Agent</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="1887682211-2">(</span><span class="k" data-group-id="1887682211-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1887682211-4">[</span><span class="p" data-group-id="1887682211-4">]</span><span class="w"> </span><span class="k" data-group-id="1887682211-3">end</span><span class="p" data-group-id="1887682211-2">)</span><span class="w">
+</span><span class="p" data-group-id="1887682211-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1887682211-6">#</span><span class="nc" data-group-id="1887682211-6">PID</span><span class="p" data-group-id="1887682211-6">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">57</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="1887682211-6">&gt;</span><span class="p" data-group-id="1887682211-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="1887682211-7">(</span><span class="n">agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1887682211-8">fn</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1887682211-9">[</span><span class="s">&quot;eggs&quot;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">list</span><span class="p" data-group-id="1887682211-9">]</span><span class="w"> </span><span class="k" data-group-id="1887682211-8">end</span><span class="p" data-group-id="1887682211-7">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="1887682211-10">(</span><span class="n">agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1887682211-11">fn</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="k" data-group-id="1887682211-11">end</span><span class="p" data-group-id="1887682211-10">)</span><span class="w">
+</span><span class="p" data-group-id="1887682211-12">[</span><span class="s">&quot;eggs&quot;</span><span class="p" data-group-id="1887682211-12">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">stop</span><span class="p" data-group-id="1887682211-13">(</span><span class="n">agent</span><span class="p" data-group-id="1887682211-13">)</span><span class="w">
+</span><span class="ss">:ok</span></code></pre><p>We started an agent with an initial state of an empty list. We updated the agent's state, adding our new item to the head of the list. The second argument of <a href="Agent.html#update/3"><code class="inline">Agent.update/3</code></a> is a function that takes the agent's current state as input and returns its desired new state. Finally, we retrieved the whole list. The second argument of <a href="Agent.html#get/3"><code class="inline">Agent.get/3</code></a> is a function that takes the state as input and returns the value that <a href="Agent.html#get/3"><code class="inline">Agent.get/3</code></a> itself will return. Once we are done with the agent, we can call <a href="Agent.html#stop/3"><code class="inline">Agent.stop/3</code></a> to terminate the agent process.</p><p>The <a href="Agent.html#update/3"><code class="inline">Agent.update/3</code></a> function accepts as a second argument any function that receives one argument and returns a value:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="6938786839-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">agent</span><span class="p" data-group-id="6938786839-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Agent</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="6938786839-2">(</span><span class="k" data-group-id="6938786839-3">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6938786839-4">[</span><span class="p" data-group-id="6938786839-4">]</span><span class="w"> </span><span class="k" data-group-id="6938786839-3">end</span><span class="p" data-group-id="6938786839-2">)</span><span class="w">
+</span><span class="p" data-group-id="6938786839-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6938786839-6">#</span><span class="nc" data-group-id="6938786839-6">PID</span><span class="p" data-group-id="6938786839-6">&lt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">338</span><span class="o">.</span><span class="mi">0</span><span class="p" data-group-id="6938786839-6">&gt;</span><span class="p" data-group-id="6938786839-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="6938786839-7">(</span><span class="n">agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6938786839-8">fn</span><span class="w"> </span><span class="c">_list</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="k" data-group-id="6938786839-8">end</span><span class="p" data-group-id="6938786839-7">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="6938786839-9">(</span><span class="n">agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6938786839-10">fn</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6938786839-11">%{</span><span class="ss">a</span><span class="p">:</span><span class="w"> </span><span class="n">content</span><span class="p" data-group-id="6938786839-11">}</span><span class="w"> </span><span class="k" data-group-id="6938786839-10">end</span><span class="p" data-group-id="6938786839-9">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="6938786839-12">(</span><span class="n">agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6938786839-13">fn</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6938786839-14">[</span><span class="mi">12</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="6938786839-15">[</span><span class="n">content</span><span class="p" data-group-id="6938786839-15">]</span><span class="p" data-group-id="6938786839-14">]</span><span class="w"> </span><span class="k" data-group-id="6938786839-13">end</span><span class="p" data-group-id="6938786839-12">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="6938786839-16">(</span><span class="n">agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6938786839-17">fn</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6938786839-18">[</span><span class="ss">:nop</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">list</span><span class="p" data-group-id="6938786839-18">]</span><span class="w"> </span><span class="k" data-group-id="6938786839-17">end</span><span class="p" data-group-id="6938786839-16">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="6938786839-19">(</span><span class="n">agent</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6938786839-20">fn</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="k" data-group-id="6938786839-20">end</span><span class="p" data-group-id="6938786839-19">)</span><span class="w">
+</span><span class="p" data-group-id="6938786839-21">[</span><span class="ss">:nop</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6938786839-22">%{</span><span class="ss">a</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p" data-group-id="6938786839-22">}</span><span class="p" data-group-id="6938786839-21">]</span></code></pre><p>As you can see, we can modify the agent state in any way we want. Therefore, we most likely don't want to access the Agent API throughout many different places in our code. Instead, we want to encapsulate all Agent-related functionality in a single module, which we will call <code class="inline">KV.Bucket</code>. Before we implement it, let's write some tests which will outline the API exposed by our module.</p><p>Create a file at <code class="inline">test/kv/bucket_test.exs</code> (remember the <code class="inline">.exs</code> extension) with the following:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.BucketTest</span><span class="w"> </span><span class="k" data-group-id="6027552946-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;stores values by key&quot;</span><span class="w"> </span><span class="k" data-group-id="6027552946-2">do</span><span class="w">
+    </span><span class="p" data-group-id="6027552946-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="6027552946-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="6027552946-4">(</span><span class="p" data-group-id="6027552946-5">[</span><span class="p" data-group-id="6027552946-5">]</span><span class="p" data-group-id="6027552946-4">)</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="6027552946-6">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p" data-group-id="6027552946-6">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="no">nil</span><span class="w">
+
+    </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="6027552946-7">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6027552946-7">)</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="6027552946-8">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p" data-group-id="6027552946-8">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="w">
+  </span><span class="k" data-group-id="6027552946-2">end</span><span class="w">
+</span><span class="k" data-group-id="6027552946-1">end</span></code></pre><p><code class="inline">use ExUnit.Case</code> is responsible for setting up our module for testing and imports many test-related functionality, such as the <code class="inline">test/2</code> macro.</p><p>Our first test starts a new <code class="inline">KV.Bucket</code> by calling the <code class="inline">start_link/1</code> and passing an empty list of options. Then we perform some <code class="inline">get/2</code> and <code class="inline">put/3</code> operations on it, asserting the result.</p><p>Also note the <code class="inline">async: true</code> option passed to <a href="https://hexdocs.pm/ex_unit/ExUnit.Case.html"><code class="inline">ExUnit.Case</code></a>. This option makes the test case run in parallel with other <code class="inline">:async</code> test cases by using multiple cores in our machine. This is extremely useful to speed up our test suite. However, <code class="inline">:async</code> must <em>only</em> be set if the test case does not rely on or change any global values. For example, if the test requires writing to the file system or access a database, keep it synchronous (omit the <code class="inline">:async</code> option) to avoid race conditions between tests.</p><p>Async or not, our new test should obviously fail, as none of the functionality is implemented in the module being tested:</p><pre><code class="text">** (UndefinedFunctionError) function KV.Bucket.start_link/1 is undefined (module KV.Bucket is not available)</code></pre><p>In order to fix the failing test, let's create a file at <code class="inline">lib/kv/bucket.ex</code> with the contents below. Feel free to give a try at implementing the <code class="inline">KV.Bucket</code> module yourself using agents before peeking at the implementation below.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="w"> </span><span class="k" data-group-id="4891354856-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Agent</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Starts a new bucket.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">start_link</span><span class="p" data-group-id="4891354856-2">(</span><span class="c">_opts</span><span class="p" data-group-id="4891354856-2">)</span><span class="w"> </span><span class="k" data-group-id="4891354856-3">do</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="4891354856-4">(</span><span class="k" data-group-id="4891354856-5">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="4891354856-6">%{</span><span class="p" data-group-id="4891354856-6">}</span><span class="w"> </span><span class="k" data-group-id="4891354856-5">end</span><span class="p" data-group-id="4891354856-4">)</span><span class="w">
+  </span><span class="k" data-group-id="4891354856-3">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Gets a value from the `bucket` by `key`.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">get</span><span class="p" data-group-id="4891354856-7">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="4891354856-7">)</span><span class="w"> </span><span class="k" data-group-id="4891354856-8">do</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="4891354856-9">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="4891354856-10">(</span><span class="ni">&amp;1</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="4891354856-10">)</span><span class="p" data-group-id="4891354856-9">)</span><span class="w">
+  </span><span class="k" data-group-id="4891354856-8">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Puts the `value` for the given `key` in the `bucket`.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">put</span><span class="p" data-group-id="4891354856-11">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4891354856-11">)</span><span class="w"> </span><span class="k" data-group-id="4891354856-12">do</span><span class="w">
+    </span><span class="nc">Agent</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="4891354856-13">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Map</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="4891354856-14">(</span><span class="ni">&amp;1</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="4891354856-14">)</span><span class="p" data-group-id="4891354856-13">)</span><span class="w">
+  </span><span class="k" data-group-id="4891354856-12">end</span><span class="w">
+</span><span class="k" data-group-id="4891354856-1">end</span></code></pre><p>The first step in our implementation is to call <code class="inline">use Agent</code>. Most of the functionality we will learn, such as <a href="GenServer.html"><code class="inline">GenServer</code></a> and <a href="Supervisor.html"><code class="inline">Supervisor</code></a>, follow this pattern. For all of them, calling <code class="inline">use</code> generates a <code class="inline">child_spec/1</code> function with default configuration, which will be handy when we start supervising processes in chapter 4.</p><p>Then we define a <code class="inline">start_link/1</code> function, which will effectively start the agent. It is a convention to define a <code class="inline">start_link/1</code> function that always accepts a list of options. We don't plan on using any options right now, but we might later on. We then proceed to call <a href="Agent.html#start_link/1"><code class="inline">Agent.start_link/1</code></a>, which receives an anonymous function that returns the Agent's initial state.</p><p>We are keeping a map inside the agent to store our keys and values. Getting and putting values on the map is done with the Agent API and the capture operator <code class="inline">&amp;</code>, introduced in <a href="anonymous-functions.html#the-capture-operator">the Getting Started guide</a>. The agent passes its state to the anonymous function via the <code class="inline">&amp;1</code> argument when <a href="Agent.html#get/2"><code class="inline">Agent.get/2</code></a> and <a href="Agent.html#update/2"><code class="inline">Agent.update/2</code></a> are called.</p><p>Now that the <code class="inline">KV.Bucket</code> module has been defined, our test should pass! You can try it yourself by running: <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a>.</p><h2 id="test-setup-with-exunit-callbacks" class="section-heading">
+  <a href="#test-setup-with-exunit-callbacks" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Test setup with ExUnit callbacks</span>
+</h2>
+<p>Before moving on and adding more features to <code class="inline">KV.Bucket</code>, let's talk about ExUnit callbacks. As you may expect, all <code class="inline">KV.Bucket</code> tests will require a bucket agent to be up and running. Luckily, ExUnit supports callbacks that allow us to skip such repetitive tasks.</p><p>Let's rewrite the test case to use callbacks:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.BucketTest</span><span class="w"> </span><span class="k" data-group-id="7484674543-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+
+  </span><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="7484674543-2">do</span><span class="w">
+    </span><span class="p" data-group-id="7484674543-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="7484674543-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">start_link</span><span class="p" data-group-id="7484674543-4">(</span><span class="p" data-group-id="7484674543-5">[</span><span class="p" data-group-id="7484674543-5">]</span><span class="p" data-group-id="7484674543-4">)</span><span class="w">
+    </span><span class="p" data-group-id="7484674543-6">%{</span><span class="ss">bucket</span><span class="p">:</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="7484674543-6">}</span><span class="w">
+  </span><span class="k" data-group-id="7484674543-2">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;stores values by key&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7484674543-7">%{</span><span class="ss">bucket</span><span class="p">:</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="7484674543-7">}</span><span class="w"> </span><span class="k" data-group-id="7484674543-8">do</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7484674543-9">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p" data-group-id="7484674543-9">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="no">nil</span><span class="w">
+
+    </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="7484674543-10">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7484674543-10">)</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7484674543-11">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;milk&quot;</span><span class="p" data-group-id="7484674543-11">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="w">
+  </span><span class="k" data-group-id="7484674543-8">end</span><span class="w">
+</span><span class="k" data-group-id="7484674543-1">end</span></code></pre><p>We have first defined a setup callback with the help of the <code class="inline">setup/1</code> macro. The <code class="inline">setup/1</code> macro defines a callback that is run before every test, in the same process as the test itself.</p><p>Note that we need a mechanism to pass the <code class="inline">bucket</code> PID from the callback to the test. We do so by using the <em>test context</em>. When we return <code class="inline">%{bucket: bucket}</code> from the callback, ExUnit will merge this map into the test context. Since the test context is a map itself, we can pattern match the bucket out of it, providing access to the bucket inside the test:</p><pre><code class="makeup elixir" translate="no"><span class="n">test</span><span class="w"> </span><span class="s">&quot;stores values by key&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5799272702-1">%{</span><span class="ss">bucket</span><span class="p">:</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="5799272702-1">}</span><span class="w"> </span><span class="k" data-group-id="5799272702-2">do</span><span class="w">
+  </span><span class="c1"># `bucket` is now the bucket from the setup block</span><span class="w">
+</span><span class="k" data-group-id="5799272702-2">end</span></code></pre><p>You can read more about ExUnit cases in the <a href="https://hexdocs.pm/ex_unit/ExUnit.Case.html"><code class="inline">ExUnit.Case</code> module documentation</a> and more about callbacks in <a href="https://hexdocs.pm/ex_unit/ExUnit.Callbacks.html"><code class="inline">ExUnit.Callbacks</code></a>.</p><h2 id="other-agent-actions" class="section-heading">
+  <a href="#other-agent-actions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Other agent actions</span>
+</h2>
+<p>Besides getting a value and updating the agent state, agents allow us to get a value and update the agent state in one function call via <a href="Agent.html#get_and_update/2"><code class="inline">Agent.get_and_update/2</code></a>. Let's implement a <code class="inline">KV.Bucket.delete/2</code> function that deletes a key from the bucket, returning its current value:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+Deletes `key` from `bucket`.
+
+Returns the current value of `key`, if `key` exists.
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">delete</span><span class="p" data-group-id="9264185547-1">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="9264185547-1">)</span><span class="w"> </span><span class="k" data-group-id="9264185547-2">do</span><span class="w">
+  </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get_and_update</span><span class="p" data-group-id="9264185547-3">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">Map</span><span class="o">.</span><span class="n">pop</span><span class="p" data-group-id="9264185547-4">(</span><span class="ni">&amp;1</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="9264185547-4">)</span><span class="p" data-group-id="9264185547-3">)</span><span class="w">
+</span><span class="k" data-group-id="9264185547-2">end</span></code></pre><p>Now it is your turn to write a test for the functionality above! Also, be sure to explore <a href="Agent.html">the documentation for the <code class="inline">Agent</code> module</a> to learn more about them.</p><h2 id="client-server-in-agents" class="section-heading">
+  <a href="#client-server-in-agents" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Client/server in agents</span>
+</h2>
+<p>Before we move on to the next chapter, let's discuss the client/server dichotomy in agents. Let's expand the <code class="inline">delete/2</code> function we have just implemented:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">delete</span><span class="p" data-group-id="5226565866-1">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="5226565866-1">)</span><span class="w"> </span><span class="k" data-group-id="5226565866-2">do</span><span class="w">
+  </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get_and_update</span><span class="p" data-group-id="5226565866-3">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5226565866-4">fn</span><span class="w"> </span><span class="n">dict</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">Map</span><span class="o">.</span><span class="n">pop</span><span class="p" data-group-id="5226565866-5">(</span><span class="n">dict</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="5226565866-5">)</span><span class="w">
+  </span><span class="k" data-group-id="5226565866-4">end</span><span class="p" data-group-id="5226565866-3">)</span><span class="w">
+</span><span class="k" data-group-id="5226565866-2">end</span></code></pre><p>Everything that is inside the function we passed to the agent happens in the agent process. In this case, since the agent process is the one receiving and responding to our messages, we say the agent process is the server. Everything outside the function is happening in the client.</p><p>This distinction is important. If there are expensive actions to be done, you must consider if it will be better to perform these actions on the client or on the server. For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">delete</span><span class="p" data-group-id="4781161476-1">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="4781161476-1">)</span><span class="w"> </span><span class="k" data-group-id="4781161476-2">do</span><span class="w">
+  </span><span class="nc">Process</span><span class="o">.</span><span class="n">sleep</span><span class="p" data-group-id="4781161476-3">(</span><span class="mi">1000</span><span class="p" data-group-id="4781161476-3">)</span><span class="w"> </span><span class="c1"># puts client to sleep</span><span class="w">
+  </span><span class="nc">Agent</span><span class="o">.</span><span class="n">get_and_update</span><span class="p" data-group-id="4781161476-4">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4781161476-5">fn</span><span class="w"> </span><span class="n">dict</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">Process</span><span class="o">.</span><span class="n">sleep</span><span class="p" data-group-id="4781161476-6">(</span><span class="mi">1000</span><span class="p" data-group-id="4781161476-6">)</span><span class="w"> </span><span class="c1"># puts server to sleep</span><span class="w">
+    </span><span class="nc">Map</span><span class="o">.</span><span class="n">pop</span><span class="p" data-group-id="4781161476-7">(</span><span class="n">dict</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="4781161476-7">)</span><span class="w">
+  </span><span class="k" data-group-id="4781161476-5">end</span><span class="p" data-group-id="4781161476-4">)</span><span class="w">
+</span><span class="k" data-group-id="4781161476-2">end</span></code></pre><p>When a long action is performed on the server, all other requests to that particular server will wait until the action is done, which may cause some clients to timeout.</p><p>In the next chapter, we will explore GenServers, where the segregation between clients and servers is made more apparent.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="introduction-to-mix.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Introduction to Mix
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="genservers.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Client-server communication with GenServer
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

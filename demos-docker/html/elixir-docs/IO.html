@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>IO — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/IO.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">IO</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Functions handling input/output (IO).</p><p>Many functions in this module expect an IO device as an argument.
+An IO device must be a PID or an atom representing a process.
+For convenience, Elixir provides <code class="inline">:stdio</code> and <code class="inline">:stderr</code> as
+shortcuts to Erlang's <code class="inline">:standard_io</code> and <code class="inline">:standard_error</code>.</p><p>The majority of the functions expect chardata. In case another type is given,
+functions will convert those types to string via the <a href="String.Chars.html"><code class="inline">String.Chars</code></a> protocol
+(as shown in typespecs). For more information on chardata, see the
+&quot;IO data&quot; section below.</p><h2 id="module-io-devices" class="section-heading">
+  <a href="#module-io-devices" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">IO devices</span>
+</h2>
+<p>An IO device may be an atom or a PID. In case it is an atom,
+the atom must be the name of a registered process. In addition,
+Elixir provides two shortcuts:</p><ul><li><p><code class="inline">:stdio</code> - a shortcut for <code class="inline">:standard_io</code>, which maps to
+the current <a href="Process.html#group_leader/0"><code class="inline">Process.group_leader/0</code></a> in Erlang</p></li><li><p><code class="inline">:stderr</code> - a shortcut for the named process <code class="inline">:standard_error</code>
+provided in Erlang</p></li></ul><p>IO devices maintain their position, which means subsequent calls to any
+reading or writing functions will start from the place where the device
+was last accessed. The position of files can be changed using the
+<a href="https://www.erlang.org/doc/apps/kernel/file.html#position/2"><code class="inline">:file.position/2</code></a> function.</p><h2 id="module-io-data" class="section-heading">
+  <a href="#module-io-data" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">IO data</span>
+</h2>
+<p>IO data is a data type that can be used as a more efficient alternative to binaries
+in certain situations.</p><p>A term of type <strong>IO data</strong> is a binary or a list containing bytes (integers within the <code class="inline">0..255</code> range)
+or nested IO data. The type is recursive. Let's see an example of one of
+the possible IO data representing the binary <code class="inline">&quot;hello&quot;</code>:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="0716672243-1">[</span><span class="sc">?h</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;el&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0716672243-2">[</span><span class="s">&quot;l&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0716672243-3">[</span><span class="sc">?o</span><span class="p" data-group-id="0716672243-3">]</span><span class="p" data-group-id="0716672243-2">]</span><span class="p" data-group-id="0716672243-1">]</span></code></pre><p>The built-in <a href="typespecs.html#built-in-types"><code class="inline">iodata/0</code></a> type is defined in terms of <a href="typespecs.html#built-in-types"><code class="inline">iolist/0</code></a>. An IO list is
+the same as IO data but it doesn't allow for a binary at the top level (but binaries
+are still allowed in the list itself).</p><h3 id="module-use-cases-for-io-data" class="section-heading">
+  <a href="#module-use-cases-for-io-data" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Use cases for IO data</span>
+</h3>
+<p>IO data exists because often you need to do many append operations
+on smaller chunks of binaries in order to create a bigger binary. However, in
+Erlang and Elixir concatenating binaries will copy the concatenated binaries
+into a new binary.</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">email</span><span class="p" data-group-id="2046769525-1">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">domain</span><span class="p" data-group-id="2046769525-1">)</span><span class="w"> </span><span class="k" data-group-id="2046769525-2">do</span><span class="w">
+  </span><span class="n">username</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s">&quot;@&quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">domain</span><span class="w">
+</span><span class="k" data-group-id="2046769525-2">end</span></code></pre><p>In this function, creating the email address will copy the <code class="inline">username</code> and <code class="inline">domain</code>
+binaries. Now imagine you want to use the resulting email inside another binary:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">welcome_message</span><span class="p" data-group-id="6095749601-1">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">domain</span><span class="p" data-group-id="6095749601-1">)</span><span class="w"> </span><span class="k" data-group-id="6095749601-2">do</span><span class="w">
+  </span><span class="s">&quot;Welcome </span><span class="si" data-group-id="6095749601-3">#{</span><span class="n">name</span><span class="si" data-group-id="6095749601-3">}</span><span class="s">, your email is: </span><span class="si" data-group-id="6095749601-4">#{</span><span class="n">email</span><span class="p" data-group-id="6095749601-5">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">domain</span><span class="p" data-group-id="6095749601-5">)</span><span class="si" data-group-id="6095749601-4">}</span><span class="s">&quot;</span><span class="w">
+</span><span class="k" data-group-id="6095749601-2">end</span><span class="w">
+
+</span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6095749601-6">(</span><span class="n">welcome_message</span><span class="p" data-group-id="6095749601-7">(</span><span class="s">&quot;Meg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;example.com&quot;</span><span class="p" data-group-id="6095749601-7">)</span><span class="p" data-group-id="6095749601-6">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;Welcome Meg, your email is: meg@example.com&quot;</span></code></pre><p>Every time you concatenate binaries or use interpolation (<code class="inline">#{}</code>) you are making
+copies of those binaries. However, in many cases you don't need the complete
+binary while you create it, but only at the end to print it out or send it
+somewhere. In such cases, you can construct the binary by creating IO data:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">email</span><span class="p" data-group-id="9837134934-1">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">domain</span><span class="p" data-group-id="9837134934-1">)</span><span class="w"> </span><span class="k" data-group-id="9837134934-2">do</span><span class="w">
+  </span><span class="p" data-group-id="9837134934-3">[</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="sc">?@</span><span class="p">,</span><span class="w"> </span><span class="n">domain</span><span class="p" data-group-id="9837134934-3">]</span><span class="w">
+</span><span class="k" data-group-id="9837134934-2">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">welcome_message</span><span class="p" data-group-id="9837134934-4">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">domain</span><span class="p" data-group-id="9837134934-4">)</span><span class="w"> </span><span class="k" data-group-id="9837134934-5">do</span><span class="w">
+  </span><span class="p" data-group-id="9837134934-6">[</span><span class="s">&quot;Welcome &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, your email is: &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p" data-group-id="9837134934-7">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">domain</span><span class="p" data-group-id="9837134934-7">)</span><span class="p" data-group-id="9837134934-6">]</span><span class="w">
+</span><span class="k" data-group-id="9837134934-5">end</span><span class="w">
+
+</span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="9837134934-8">(</span><span class="n">welcome_message</span><span class="p" data-group-id="9837134934-9">(</span><span class="s">&quot;Meg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;meg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;example.com&quot;</span><span class="p" data-group-id="9837134934-9">)</span><span class="p" data-group-id="9837134934-8">)</span><span class="w">
+</span><span class="c1">#=&gt; &quot;Welcome Meg, your email is: meg@example.com&quot;</span></code></pre><p>Building IO data is cheaper than concatenating binaries. Concatenating multiple
+pieces of IO data just means putting them together inside a list since IO data
+can be arbitrarily nested, and that's a cheap and efficient operation. Most of
+the IO-based APIs, such as <code class="inline">:gen_tcp</code> and <a href="IO.html"><code class="inline">IO</code></a>, receive IO data and write it
+to the socket directly without converting it to binary.</p><p>One drawback of IO data is that you can't do things like pattern match on the
+first part of a piece of IO data like you can with a binary, because you usually
+don't know the shape of the IO data. In those cases, you may need to convert it
+to a binary by calling <a href="#iodata_to_binary/1"><code class="inline">iodata_to_binary/1</code></a>, which is reasonably efficient
+since it's implemented natively in C. Other functionality, like computing the
+length of IO data, can be computed directly on the iodata by calling <a href="#iodata_length/1"><code class="inline">iodata_length/1</code></a>.</p><h3 id="module-chardata" class="section-heading">
+  <a href="#module-chardata" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Chardata</span>
+</h3>
+<p>Erlang and Elixir also have the idea of <a href="#t:chardata/0"><code class="inline">chardata/0</code></a>. Chardata is very
+similar to IO data: the only difference is that integers in IO data represent
+bytes while integers in chardata represent Unicode code points. Bytes
+(<a href="typespecs.html#built-in-types"><code class="inline">byte/0</code></a>) are integers within the <code class="inline">0..255</code> range, while Unicode code points
+(<a href="typespecs.html#built-in-types"><code class="inline">char/0</code></a>) are integers within the <code class="inline">0..0x10FFFF</code> range. The <a href="IO.html"><code class="inline">IO</code></a> module provides
+the <a href="#chardata_to_string/1"><code class="inline">chardata_to_string/1</code></a> function for chardata as the &quot;counter-part&quot; of the
+<a href="#iodata_to_binary/1"><code class="inline">iodata_to_binary/1</code></a> function for IO data.</p><p>If you try to use <a href="#iodata_to_binary/1"><code class="inline">iodata_to_binary/1</code></a> on chardata, it will result in an
+argument error. For example, let's try to put a code point that is not
+representable with one byte, like <code class="inline">?π</code>, inside IO data:</p><pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">iodata_to_binary</span><span class="p" data-group-id="3164626615-1">(</span><span class="p" data-group-id="3164626615-2">[</span><span class="s">&quot;The symbol for pi is: &quot;</span><span class="p">,</span><span class="w"> </span><span class="sc">?π</span><span class="p" data-group-id="3164626615-2">]</span><span class="p" data-group-id="3164626615-1">)</span><span class="w">
+</span><span class="c1">#=&gt; ** (ArgumentError) argument error</span></code></pre><p>If we use chardata instead, it will work as expected:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">chardata_to_string</span><span class="p" data-group-id="4151503721-1">(</span><span class="p" data-group-id="4151503721-2">[</span><span class="s">&quot;The symbol for pi is: &quot;</span><span class="p">,</span><span class="w"> </span><span class="sc">?π</span><span class="p" data-group-id="4151503721-2">]</span><span class="p" data-group-id="4151503721-1">)</span><span class="w">
+</span><span class="s">&quot;The symbol for pi is: π&quot;</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:chardata/0" data-no-tooltip="" translate="no">chardata()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:device/0" data-no-tooltip="" translate="no">device()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:nodata/0" data-no-tooltip="" translate="no">nodata()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#binread/2" data-no-tooltip="" translate="no">binread(device \\ :stdio, line_or_chars)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads from the IO <code class="inline">device</code>. The operation is Unicode unsafe.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#binstream/0" data-no-tooltip="" translate="no">binstream()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a raw, line-based <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a> on <code class="inline">:stdio</code>. The operation is Unicode unsafe.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#binstream/2" data-no-tooltip="" translate="no">binstream(device \\ :stdio, line_or_bytes)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the IO <code class="inline">device</code> into an <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a>. The operation is Unicode unsafe.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#binwrite/2" data-no-tooltip="" translate="no">binwrite(device \\ :stdio, iodata)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes <code class="inline">iodata</code> to the given <code class="inline">device</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#chardata_to_string/1" data-no-tooltip="" translate="no">chardata_to_string(chardata)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts chardata into a string.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#getn/2" data-no-tooltip="" translate="no">getn(prompt, count \\ 1)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a number of bytes from IO device <code class="inline">:stdio</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#getn/3" data-no-tooltip="" translate="no">getn(device, prompt, count)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a number of bytes from the IO <code class="inline">device</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#gets/2" data-no-tooltip="" translate="no">gets(device \\ :stdio, prompt)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads a line from the IO <code class="inline">device</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#inspect/2" data-no-tooltip="" translate="no">inspect(item, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Inspects and writes the given <code class="inline">item</code> to the standard output.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#inspect/3" data-no-tooltip="" translate="no">inspect(device, item, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Inspects <code class="inline">item</code> according to the given options using the IO <code class="inline">device</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#iodata_length/1" data-no-tooltip="" translate="no">iodata_length(iodata)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the size of an IO data.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#iodata_to_binary/1" data-no-tooltip="" translate="no">iodata_to_binary(iodata)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts IO data into a binary</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#puts/2" data-no-tooltip="" translate="no">puts(device \\ :stdio, item)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes <code class="inline">item</code> to the given <code class="inline">device</code>, similar to <a href="#write/2"><code class="inline">write/2</code></a>,
+but adds a newline at the end.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read/2" data-no-tooltip="" translate="no">read(device \\ :stdio, line_or_chars)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads from the IO <code class="inline">device</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stream/0" data-no-tooltip="" translate="no">stream()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a line-based <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a> on <code class="inline">:stdio</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stream/2" data-no-tooltip="" translate="no">stream(device \\ :stdio, line_or_codepoints)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the IO <code class="inline">device</code> into an <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#warn/1" data-no-tooltip="" translate="no">warn(message)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes a <code class="inline">message</code> to stderr, along with the current stacktrace.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#warn/2" data-no-tooltip="" translate="no">warn(message, stacktrace_info)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes a <code class="inline">message</code> to stderr, along with the given <code class="inline">stacktrace_info</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write/2" data-no-tooltip="" translate="no">write(device \\ :stdio, chardata)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes <code class="inline">chardata</code> to the given <code class="inline">device</code>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:chardata/0">
+
+  <div class="detail-header">
+    <a href="#t:chardata/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chardata()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L123" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> chardata() ::
+  <a href="String.html#t:t/0">String.t</a>() | <a href="typespecs.html#basic-types">maybe_improper_list</a>(<a href="typespecs.html#built-in-types">char</a>() | <a href="#t:chardata/0">chardata</a>(), <a href="String.html#t:t/0">String.t</a>() | [])</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:device/0">
+
+  <div class="detail-header">
+    <a href="#t:device/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">device()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L121" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> device() :: <a href="typespecs.html#basic-types">atom</a>() | <a href="typespecs.html#basic-types">pid</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:nodata/0">
+
+  <div class="detail-header">
+    <a href="#t:nodata/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">nodata()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L122" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> nodata() :: {:error, <a href="typespecs.html#built-in-types">term</a>()} | :eof</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="binread/2">
+
+    <span id="binread/1"></span>
+
+  <div class="detail-header">
+    <a href="#binread/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">binread(device \\ :stdio, line_or_chars)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L208" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> binread(<a href="#t:device/0">device</a>(), :eof | :line | <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="typespecs.html#built-in-types">iodata</a>() | <a href="#t:nodata/0">nodata</a>()</pre>
+
+      </div>
+
+<p>Reads from the IO <code class="inline">device</code>. The operation is Unicode unsafe.</p><p>The <code class="inline">device</code> is iterated as specified by the <code class="inline">line_or_chars</code> argument:</p><ul><li><p>if <code class="inline">line_or_chars</code> is an integer, it represents a number of bytes. The device is
+iterated by that number of bytes.</p></li><li><p>if <code class="inline">line_or_chars</code> is <code class="inline">:line</code>, the device is iterated line by line.</p></li><li><p>if <code class="inline">line_or_chars</code> is <code class="inline">:eof</code> (since v1.13), the device is iterated until <code class="inline">:eof</code>.
+If the device is already at the end, it returns <code class="inline">:eof</code> itself.</p></li></ul><p>It returns:</p><ul><li><p><code class="inline">data</code> - the output bytes</p></li><li><p><code class="inline">:eof</code> - end of file was encountered</p></li><li><p><code class="inline">{:error, reason}</code> - other (rare) error condition;
+for instance, <code class="inline">{:error, :estale}</code> if reading from an
+NFS volume</p></li></ul><p>Note: do not use this function on IO devices in Unicode mode
+as it will return the wrong result.</p>
+  </section>
+</section>
+<section class="detail" id="binstream/0">
+
+  <div class="detail-header">
+    <a href="#binstream/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">binstream()</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L644" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> binstream() :: <a href="Enumerable.html#t:t/1">Enumerable.t</a>(<a href="typespecs.html#built-in-types">binary</a>())</pre>
+
+      </div>
+
+<p>Returns a raw, line-based <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a> on <code class="inline">:stdio</code>. The operation is Unicode unsafe.</p><p>This is equivalent to:</p><pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">binstream</span><span class="p" data-group-id="0328158682-1">(</span><span class="ss">:stdio</span><span class="p">,</span><span class="w"> </span><span class="ss">:line</span><span class="p" data-group-id="0328158682-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="binstream/2">
+
+    <span id="binstream/1"></span>
+
+  <div class="detail-header">
+    <a href="#binstream/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">binstream(device \\ :stdio, line_or_bytes)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L666" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> binstream(<a href="#t:device/0">device</a>(), :line | <a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="Enumerable.html#t:t/0">Enumerable.t</a>()</pre>
+
+      </div>
+
+<p>Converts the IO <code class="inline">device</code> into an <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a>. The operation is Unicode unsafe.</p><p>An <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a> implements both <a href="Enumerable.html"><code class="inline">Enumerable</code></a> and
+<a href="Collectable.html"><code class="inline">Collectable</code></a>, allowing it to be used for both read
+and write.</p><p>The <code class="inline">device</code> is iterated by the given number of bytes or line by line if
+<code class="inline">:line</code> is given. This reads from the IO device as a raw binary.</p><p>Note that an IO stream has side effects and every time
+you go over the stream you may get different results.</p><p>Finally, do not use this function on IO devices in Unicode
+mode as it will return the wrong result.</p><p><a href="#binstream/0"><code class="inline">binstream/0</code></a> has been introduced in Elixir v1.12.0,
+while <a href="#binstream/2"><code class="inline">binstream/2</code></a> has been available since v1.0.0.</p>
+  </section>
+</section>
+<section class="detail" id="binwrite/2">
+
+    <span id="binwrite/1"></span>
+
+  <div class="detail-header">
+    <a href="#binwrite/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">binwrite(device \\ :stdio, iodata)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L280" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> binwrite(<a href="#t:device/0">device</a>(), <a href="typespecs.html#built-in-types">iodata</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Writes <code class="inline">iodata</code> to the given <code class="inline">device</code>.</p><p>This operation is meant to be used with &quot;raw&quot; devices
+that are started without an encoding. The given <code class="inline">iodata</code>
+is written as is to the device, without conversion. For
+more information on IO data, see the &quot;IO data&quot; section in
+the module documentation.</p><p>Use <a href="#write/2"><code class="inline">write/2</code></a> for devices with encoding.</p><p>Important: do <strong>not</strong> use this function on IO devices in
+Unicode mode as it will write the wrong data. In particular,
+the standard IO device is set to Unicode by default, so writing
+to stdio with this function will likely result in the wrong data
+being sent down the wire.</p>
+  </section>
+</section>
+<section class="detail" id="chardata_to_string/1">
+
+  <div class="detail-header">
+    <a href="#chardata_to_string/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">chardata_to_string(chardata)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L694" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> chardata_to_string(<a href="#t:chardata/0">chardata</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts chardata into a string.</p><p>For more information about chardata, see the <a href="#module-chardata">&quot;Chardata&quot;</a>
+section in the module documentation.</p><p>In case the conversion fails, it raises an <a href="UnicodeConversionError.html"><code class="inline">UnicodeConversionError</code></a>.
+If a string is given, it returns the string itself.</p><h2 id="chardata_to_string/1-examples" class="section-heading">
+  <a href="#chardata_to_string/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">chardata_to_string</span><span class="p" data-group-id="9203882290-1">(</span><span class="p" data-group-id="9203882290-2">[</span><span class="mh">0x00E6</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00DF</span><span class="p" data-group-id="9203882290-2">]</span><span class="p" data-group-id="9203882290-1">)</span><span class="w">
+</span><span class="s">&quot;æß&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">chardata_to_string</span><span class="p" data-group-id="9203882290-3">(</span><span class="p" data-group-id="9203882290-4">[</span><span class="mh">0x0061</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bc&quot;</span><span class="p" data-group-id="9203882290-4">]</span><span class="p" data-group-id="9203882290-3">)</span><span class="w">
+</span><span class="s">&quot;abc&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">chardata_to_string</span><span class="p" data-group-id="9203882290-5">(</span><span class="s">&quot;string&quot;</span><span class="p" data-group-id="9203882290-5">)</span><span class="w">
+</span><span class="s">&quot;string&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="getn/2">
+
+    <span id="getn/1"></span>
+
+  <div class="detail-header">
+    <a href="#getn/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">getn(prompt, count \\ 1)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L501" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> getn(
+  <a href="#t:device/0">device</a>() | <a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>(),
+  <a href="typespecs.html#basic-types">pos_integer</a>() | :eof | <a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>()
+) :: <a href="#t:chardata/0">chardata</a>() | <a href="#t:nodata/0">nodata</a>()</pre>
+
+      </div>
+
+<p>Gets a number of bytes from IO device <code class="inline">:stdio</code>.</p><p>If <code class="inline">:stdio</code> is a Unicode device, <code class="inline">count</code> implies
+the number of Unicode code points to be retrieved.
+Otherwise, <code class="inline">count</code> is the number of raw bytes to be retrieved.</p><p>See <a href="#getn/3"><code class="inline">IO.getn/3</code></a> for a description of return values.</p>
+  </section>
+</section>
+<section class="detail" id="getn/3">
+
+  <div class="detail-header">
+    <a href="#getn/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">getn(device, prompt, count)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L534" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> getn(<a href="#t:device/0">device</a>(), <a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>(), <a href="typespecs.html#basic-types">pos_integer</a>() | :eof) ::
+  <a href="#t:chardata/0">chardata</a>() | <a href="#t:nodata/0">nodata</a>()</pre>
+
+      </div>
+
+<p>Gets a number of bytes from the IO <code class="inline">device</code>.</p><p>If the IO <code class="inline">device</code> is a Unicode device, <code class="inline">count</code> implies
+the number of Unicode code points to be retrieved.
+Otherwise, <code class="inline">count</code> is the number of raw bytes to be retrieved.</p><p>It returns:</p><ul><li><p><code class="inline">data</code> - the input characters</p></li><li><p><code class="inline">:eof</code> - end of file was encountered</p></li><li><p><code class="inline">{:error, reason}</code> - other (rare) error condition;
+for instance, <code class="inline">{:error, :estale}</code> if reading from an
+NFS volume</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="gets/2">
+
+    <span id="gets/1"></span>
+
+  <div class="detail-header">
+    <a href="#gets/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">gets(device \\ :stdio, prompt)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L576" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> gets(<a href="#t:device/0">device</a>(), <a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>()) :: <a href="#t:chardata/0">chardata</a>() | <a href="#t:nodata/0">nodata</a>()</pre>
+
+      </div>
+
+<p>Reads a line from the IO <code class="inline">device</code>.</p><p>It returns:</p><ul><li><p><code class="inline">data</code> - the characters in the line terminated
+by a line-feed (LF) or end of file (EOF)</p></li><li><p><code class="inline">:eof</code> - end of file was encountered</p></li><li><p><code class="inline">{:error, reason}</code> - other (rare) error condition;
+for instance, <code class="inline">{:error, :estale}</code> if reading from an
+NFS volume</p></li></ul><h2 id="gets/2-examples" class="section-heading">
+  <a href="#gets/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>To display &quot;What is your name?&quot; as a prompt and await user input:</p><pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">gets</span><span class="p" data-group-id="4728046680-1">(</span><span class="s">&quot;What is your name?</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="4728046680-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="inspect/2">
+
+    <span id="inspect/1"></span>
+
+  <div class="detail-header">
+    <a href="#inspect/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">inspect(item, opts \\ [])</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L468" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> inspect(
+  item,
+  <a href="typespecs.html#built-in-types">keyword</a>()
+) :: item
+when item: var</pre>
+
+      </div>
+
+<p>Inspects and writes the given <code class="inline">item</code> to the standard output.</p><p>It's important to note that it returns the given <code class="inline">item</code> unchanged.
+This makes it possible to &quot;spy&quot; on values by inserting an
+<a href="#inspect/2"><code class="inline">IO.inspect/2</code></a> call almost anywhere in your code, for example,
+in the middle of a pipeline.</p><p>It enables pretty printing by default with width of
+80 characters. The width can be changed by explicitly
+passing the <code class="inline">:width</code> option.</p><p>The output can be decorated with a label, by providing the <code class="inline">:label</code>
+option to easily distinguish it from other <a href="#inspect/2"><code class="inline">IO.inspect/2</code></a> calls.
+The label will be printed before the inspected <code class="inline">item</code>.</p><p>See <a href="Inspect.Opts.html"><code class="inline">Inspect.Opts</code></a> for a full list of remaining formatting options.
+To print to other IO devices, see <a href="#inspect/3"><code class="inline">IO.inspect/3</code></a></p><h2 id="inspect/2-examples" class="section-heading">
+  <a href="#inspect/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="4804716548-1">(</span><span class="p" data-group-id="4804716548-2">&lt;&lt;</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="4804716548-2">&gt;&gt;</span><span class="p">,</span><span class="w"> </span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p" data-group-id="4804716548-1">)</span></code></pre><p>Prints:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6217823945-1">&lt;&lt;</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="6217823945-1">&gt;&gt;</span></code></pre><p>We can use the <code class="inline">:label</code> option to decorate the output:</p><pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="5280388590-1">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a wonderful range&quot;</span><span class="p" data-group-id="5280388590-1">)</span></code></pre><p>Prints:</p><pre><code class="makeup elixir" translate="no"><span class="n">a</span><span class="w"> </span><span class="n">wonderful</span><span class="w"> </span><span class="ss">range</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span></code></pre><p>The <code class="inline">:label</code> option is especially useful with pipelines:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3827620626-1">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3827620626-1">]</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="3827620626-2">(</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;before&quot;</span><span class="p" data-group-id="3827620626-2">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="3827620626-3">(</span><span class="o">&amp;</span><span class="p" data-group-id="3827620626-4">(</span><span class="ni">&amp;1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="3827620626-4">)</span><span class="p" data-group-id="3827620626-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">inspect</span><span class="p" data-group-id="3827620626-5">(</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;after&quot;</span><span class="p" data-group-id="3827620626-5">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sum</span><span class="p" data-group-id="3827620626-6">(</span><span class="p" data-group-id="3827620626-6">)</span></code></pre><p>Prints:</p><pre><code class="makeup elixir" translate="no"><span class="ss">before</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5245483643-1">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="5245483643-1">]</span><span class="w">
+</span><span class="ss">after</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5245483643-2">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="5245483643-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="inspect/3">
+
+  <div class="detail-header">
+    <a href="#inspect/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">inspect(device, item, opts)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L478" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> inspect(<a href="#t:device/0">device</a>(), item, <a href="typespecs.html#built-in-types">keyword</a>()) :: item when item: var</pre>
+
+      </div>
+
+<p>Inspects <code class="inline">item</code> according to the given options using the IO <code class="inline">device</code>.</p><p>See <a href="#inspect/2"><code class="inline">inspect/2</code></a> for a full list of options.</p>
+  </section>
+</section>
+<section class="detail" id="iodata_length/1">
+
+  <div class="detail-header">
+    <a href="#iodata_length/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">iodata_length(iodata)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L753" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> iodata_length(<a href="typespecs.html#built-in-types">iodata</a>()) :: <a href="typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Returns the size of an IO data.</p><p>For more information about IO data, see the <a href="#module-io-data">&quot;IO data&quot;</a>
+section in the module documentation.</p><p>Inlined by the compiler.</p><h2 id="iodata_length/1-examples" class="section-heading">
+  <a href="#iodata_length/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">iodata_length</span><span class="p" data-group-id="2940667670-1">(</span><span class="p" data-group-id="2940667670-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="2940667670-3">&lt;&lt;</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="2940667670-3">&gt;&gt;</span><span class="p" data-group-id="2940667670-2">]</span><span class="p" data-group-id="2940667670-1">)</span><span class="w">
+</span><span class="mi">4</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="iodata_to_binary/1">
+
+  <div class="detail-header">
+    <a href="#iodata_to_binary/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">iodata_to_binary(iodata)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L734" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> iodata_to_binary(<a href="typespecs.html#built-in-types">iodata</a>()) :: <a href="typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Converts IO data into a binary</p><p>The operation is Unicode unsafe.</p><p>Note that this function treats integers in the given IO data as
+raw bytes and does not perform any kind of encoding conversion.
+If you want to convert from a charlist to a UTF-8-encoded string,
+use <a href="#chardata_to_string/1"><code class="inline">chardata_to_string/1</code></a> instead. For more information about
+IO data and chardata, see the <a href="#module-io-data">&quot;IO data&quot;</a> section in the
+module documentation.</p><p>If this function receives a binary, the same binary is returned.</p><p>Inlined by the compiler.</p><h2 id="iodata_to_binary/1-examples" class="section-heading">
+  <a href="#iodata_to_binary/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">bin1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9589670179-1">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9589670179-1">&gt;&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">bin2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9589670179-2">&lt;&lt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="9589670179-2">&gt;&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">bin3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9589670179-3">&lt;&lt;</span><span class="mi">6</span><span class="p" data-group-id="9589670179-3">&gt;&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">iodata_to_binary</span><span class="p" data-group-id="9589670179-4">(</span><span class="p" data-group-id="9589670179-5">[</span><span class="n">bin1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9589670179-6">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">bin2</span><span class="p" data-group-id="9589670179-6">]</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">bin3</span><span class="p" data-group-id="9589670179-5">]</span><span class="p" data-group-id="9589670179-4">)</span><span class="w">
+</span><span class="p" data-group-id="9589670179-7">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="9589670179-7">&gt;&gt;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">bin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9589670179-8">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9589670179-8">&gt;&gt;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">IO</span><span class="o">.</span><span class="n">iodata_to_binary</span><span class="p" data-group-id="9589670179-9">(</span><span class="n">bin</span><span class="p" data-group-id="9589670179-9">)</span><span class="w">
+</span><span class="p" data-group-id="9589670179-10">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="9589670179-10">&gt;&gt;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="puts/2">
+
+    <span id="puts/1"></span>
+
+  <div class="detail-header">
+    <a href="#puts/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">puts(device \\ :stdio, item)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L303" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> puts(<a href="#t:device/0">device</a>(), <a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Writes <code class="inline">item</code> to the given <code class="inline">device</code>, similar to <a href="#write/2"><code class="inline">write/2</code></a>,
+but adds a newline at the end.</p><p>By default, the <code class="inline">device</code> is the standard output. It returns <code class="inline">:ok</code>
+if it succeeds.</p><h2 id="puts/2-examples" class="section-heading">
+  <a href="#puts/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="1294466983-1">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p" data-group-id="1294466983-1">)</span><span class="w">
+</span><span class="c1">#=&gt; Hello World!</span><span class="w">
+
+</span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="1294466983-2">(</span><span class="ss">:stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="p" data-group-id="1294466983-2">)</span><span class="w">
+</span><span class="c1">#=&gt; error</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="read/2">
+
+    <span id="read/1"></span>
+
+  <div class="detail-header">
+    <a href="#read/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read(device \\ :stdio, line_or_chars)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read(<a href="#t:device/0">device</a>(), :eof | :line | <a href="typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="#t:chardata/0">chardata</a>() | <a href="#t:nodata/0">nodata</a>()</pre>
+
+      </div>
+
+<p>Reads from the IO <code class="inline">device</code>.</p><p>The <code class="inline">device</code> is iterated as specified by the <code class="inline">line_or_chars</code> argument:</p><ul><li><p>if <code class="inline">line_or_chars</code> is an integer, it represents a number of bytes. The device is
+iterated by that number of bytes.</p></li><li><p>if <code class="inline">line_or_chars</code> is <code class="inline">:line</code>, the device is iterated line by line.</p></li><li><p>if <code class="inline">line_or_chars</code> is <code class="inline">:eof</code> (since v1.13), the device is iterated until <code class="inline">:eof</code>.
+If the device is already at the end, it returns <code class="inline">:eof</code> itself.</p></li></ul><p>It returns:</p><ul><li><p><code class="inline">data</code> - the output characters</p></li><li><p><code class="inline">:eof</code> - end of file was encountered</p></li><li><p><code class="inline">{:error, reason}</code> - other (rare) error condition;
+for instance, <code class="inline">{:error, :estale}</code> if reading from an
+NFS volume</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="stream/0">
+
+  <div class="detail-header">
+    <a href="#stream/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stream()</h1>
+
+        <span class="note">(since 1.12.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L590" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stream() :: <a href="Enumerable.html#t:t/1">Enumerable.t</a>(<a href="String.html#t:t/0">String.t</a>())</pre>
+
+      </div>
+
+<p>Returns a line-based <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a> on <code class="inline">:stdio</code>.</p><p>This is equivalent to:</p><pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">stream</span><span class="p" data-group-id="0046078472-1">(</span><span class="ss">:stdio</span><span class="p">,</span><span class="w"> </span><span class="ss">:line</span><span class="p" data-group-id="0046078472-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="stream/2">
+
+    <span id="stream/1"></span>
+
+  <div class="detail-header">
+    <a href="#stream/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stream(device \\ :stdio, line_or_codepoints)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L628" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stream(<a href="#t:device/0">device</a>(), :line | <a href="typespecs.html#basic-types">pos_integer</a>()) :: <a href="Enumerable.html#t:t/0">Enumerable.t</a>()</pre>
+
+      </div>
+
+<p>Converts the IO <code class="inline">device</code> into an <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a>.</p><p>An <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a> implements both <a href="Enumerable.html"><code class="inline">Enumerable</code></a> and
+<a href="Collectable.html"><code class="inline">Collectable</code></a>, allowing it to be used for both read
+and write.</p><p>The <code class="inline">device</code> is iterated by the given number of characters or line by line if
+<code class="inline">:line</code> is given.</p><p>This reads from the IO as UTF-8. Check out
+<a href="#binstream/2"><code class="inline">IO.binstream/2</code></a> to handle the IO as a raw binary.</p><p>Note that an IO stream has side effects and every time
+you go over the stream you may get different results.</p><p><a href="#stream/0"><code class="inline">stream/0</code></a> has been introduced in Elixir v1.12.0,
+while <a href="#stream/2"><code class="inline">stream/2</code></a> has been available since v1.0.0.</p><h2 id="stream/2-examples" class="section-heading">
+  <a href="#stream/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Here is an example on how we mimic an echo server
+from the command line:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Enum</span><span class="o">.</span><span class="n">each</span><span class="p" data-group-id="9473275107-1">(</span><span class="nc">IO</span><span class="o">.</span><span class="n">stream</span><span class="p" data-group-id="9473275107-2">(</span><span class="ss">:stdio</span><span class="p">,</span><span class="w"> </span><span class="ss">:line</span><span class="p" data-group-id="9473275107-2">)</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nc">IO</span><span class="o">.</span><span class="n">write</span><span class="p" data-group-id="9473275107-3">(</span><span class="ni">&amp;1</span><span class="p" data-group-id="9473275107-3">)</span><span class="p" data-group-id="9473275107-1">)</span></code></pre><p>Another example where you might want to collect a user input
+every new line and break on an empty line, followed by removing
+redundant new line characters (<code class="inline">&quot;\n&quot;</code>):</p><pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">stream</span><span class="p" data-group-id="7672457746-1">(</span><span class="ss">:stdio</span><span class="p">,</span><span class="w"> </span><span class="ss">:line</span><span class="p" data-group-id="7672457746-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take_while</span><span class="p" data-group-id="7672457746-2">(</span><span class="o">&amp;</span><span class="p" data-group-id="7672457746-3">(</span><span class="ni">&amp;1</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7672457746-3">)</span><span class="p" data-group-id="7672457746-2">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="7672457746-4">(</span><span class="o">&amp;</span><span class="nc">String</span><span class="o">.</span><span class="n">replace</span><span class="p" data-group-id="7672457746-5">(</span><span class="ni">&amp;1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="7672457746-5">)</span><span class="p" data-group-id="7672457746-4">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="warn/1">
+
+  <div class="detail-header">
+    <a href="#warn/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">warn(message)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L413" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> warn(<a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Writes a <code class="inline">message</code> to stderr, along with the current stacktrace.</p><p>It returns <code class="inline">:ok</code> if it succeeds.</p><p>Do not call this function at the tail of another function. Due to tail
+call optimization, a stacktrace entry would not be added and the
+stacktrace would be incorrectly trimmed. Therefore make sure at least
+one expression (or an atom such as <code class="inline">:ok</code>) follows the <a href="#warn/1"><code class="inline">IO.warn/1</code></a> call.</p><h2 id="warn/1-examples" class="section-heading">
+  <a href="#warn/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">warn</span><span class="p" data-group-id="9364979562-1">(</span><span class="s">&quot;variable bar is unused&quot;</span><span class="p" data-group-id="9364979562-1">)</span><span class="w">
+</span><span class="c1">#=&gt; warning: variable bar is unused</span><span class="w">
+</span><span class="c1">#=&gt;   (iex) evaluator.ex:108: IEx.Evaluator.eval/4</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="warn/2">
+
+  <div class="detail-header">
+    <a href="#warn/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">warn(message, stacktrace_info)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L339" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> warn(
+  <a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>(),
+  <a href="Exception.html#t:stacktrace/0">Exception.stacktrace</a>() | <a href="typespecs.html#built-in-types">keyword</a>() | <a href="Macro.Env.html#t:t/0">Macro.Env.t</a>()
+) :: :ok</pre>
+
+      </div>
+
+<p>Writes a <code class="inline">message</code> to stderr, along with the given <code class="inline">stacktrace_info</code>.</p><p>The <code class="inline">stacktrace_info</code> must be one of:</p><ul><li><p>a <code class="inline">__STACKTRACE__</code>, where all entries in the stacktrace will be
+included in the error message</p></li><li><p>a <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> structure (since v1.14.0), where a single stacktrace
+entry from the compilation environment will be used</p></li><li><p>a keyword list with at least the <code class="inline">:file</code> option representing
+a single stacktrace entry (since v1.14.0). The <code class="inline">:line</code>, <code class="inline">:column</code>,
+<code class="inline">:module</code>, and <code class="inline">:function</code> options are also supported</p></li></ul><p>This function notifies the compiler a warning was printed
+and emits a compiler diagnostic (<a href="Code.html#t:diagnostic/1"><code class="inline">Code.diagnostic/1</code></a>).
+The diagnostic will include precise file and location information
+if a <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a> is given or those values have been passed as
+keyword list, but not for stacktraces, as they are often imprecise.</p><p>It returns <code class="inline">:ok</code> if it succeeds.</p><h2 id="warn/2-examples" class="section-heading">
+  <a href="#warn/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">warn</span><span class="p" data-group-id="8827111104-1">(</span><span class="s">&quot;variable bar is unused&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">module</span><span class="p">:</span><span class="w"> </span><span class="nc">MyApp</span><span class="p">,</span><span class="w"> </span><span class="ss">function</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8827111104-2">{</span><span class="ss">:main</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="8827111104-2">}</span><span class="p">,</span><span class="w"> </span><span class="ss">line</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_app.ex&quot;</span><span class="p" data-group-id="8827111104-1">)</span><span class="w">
+</span><span class="c1">#=&gt; warning: variable bar is unused</span><span class="w">
+</span><span class="c1">#=&gt;   my_app.ex:4: MyApp.main/1</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="write/2">
+
+    <span id="write/1"></span>
+
+  <div class="detail-header">
+    <a href="#write/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">write(device \\ :stdio, chardata)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/io.ex#L258" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> write(<a href="#t:device/0">device</a>(), <a href="#t:chardata/0">chardata</a>() | <a href="String.Chars.html#t:t/0">String.Chars.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>Writes <code class="inline">chardata</code> to the given <code class="inline">device</code>.</p><p>By default, the <code class="inline">device</code> is the standard output.</p><h2 id="write/2-examples" class="section-heading">
+  <a href="#write/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="nc">IO</span><span class="o">.</span><span class="n">write</span><span class="p" data-group-id="4271519255-1">(</span><span class="s">&quot;sample&quot;</span><span class="p" data-group-id="4271519255-1">)</span><span class="w">
+</span><span class="c1">#=&gt; sample</span><span class="w">
+
+</span><span class="nc">IO</span><span class="o">.</span><span class="n">write</span><span class="p" data-group-id="4271519255-2">(</span><span class="ss">:stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="p" data-group-id="4271519255-2">)</span><span class="w">
+</span><span class="c1">#=&gt; error</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

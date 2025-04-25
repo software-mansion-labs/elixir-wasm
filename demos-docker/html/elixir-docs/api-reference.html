@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>API Reference — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/api-reference.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>API Reference <small class="app-vsn">Elixir v1.17.3</small></h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+  <section class="details-list">
+    <h2 id="modules" class="section-heading">
+  <a href="#modules" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Modules</span>
+</h2>
+
+    <div class="summary">
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Access.html" translate="no">Access</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Key-based access to data structures.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Agent.html" translate="no">Agent</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Agents are a simple abstraction around state.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Application.html" translate="no">Application</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A module for working with applications and defining application callbacks.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ArgumentError.html" translate="no">ArgumentError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when an argument to a function is invalid.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ArithmeticError.html" translate="no">ArithmeticError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised on invalid arithmetic operations.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Atom.html" translate="no">Atom</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Atoms are constants whose values are their own name.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BadArityError.html" translate="no">BadArityError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a function is called with the wrong number of arguments.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BadBooleanError.html" translate="no">BadBooleanError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when an operator expected a boolean, but received something else.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BadFunctionError.html" translate="no">BadFunctionError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BadMapError.html" translate="no">BadMapError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when something expected a map, but received something else.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="BadStructError.html" translate="no">BadStructError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Base.html" translate="no">Base</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module provides data encoding and decoding functions
+according to <a href="https://tools.ietf.org/html/rfc4648">RFC 4648</a>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Behaviour.html" translate="no">Behaviour</a>
+
+      <span class="deprecated" title="Use @callback and @macrocallback attributes instead">deprecated</span>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Mechanism for handling behaviours.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Bitwise.html" translate="no">Bitwise</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A set of functions that perform calculations on bits.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Calendar.html" translate="no">Calendar</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module defines the responsibilities for working with
+calendars, dates, times and datetimes in Elixir.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Calendar.ISO.html" translate="no">Calendar.ISO</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The default calendar implementation, a Gregorian calendar following ISO 8601.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Calendar.TimeZoneDatabase.html" translate="no">Calendar.TimeZoneDatabase</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module defines a behaviour for providing time zone data.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Calendar.UTCOnlyTimeZoneDatabase.html" translate="no">Calendar.UTCOnlyTimeZoneDatabase</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Built-in time zone database that works only in the <code class="inline">Etc/UTC</code> timezone.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CaseClauseError.html" translate="no">CaseClauseError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a term in a <a href="Kernel.SpecialForms.html#case/2"><code class="inline">case/2</code></a> expression
+does not match any of the defined <code class="inline">-&gt;</code> clauses.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Code.html" translate="no">Code</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Utilities for managing code compilation, code evaluation, and code loading.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Code.Fragment.html" translate="no">Code.Fragment</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module provides conveniences for analyzing fragments of
+textual code and extract available information whenever possible.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Code.LoadError.html" translate="no">Code.LoadError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a file cannot be loaded.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Collectable.html" translate="no">Collectable</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A protocol to traverse data structures.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CompileError.html" translate="no">CompileError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when there's an error when compiling code.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="CondClauseError.html" translate="no">CondClauseError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when no clauses in a <a href="Kernel.SpecialForms.html#cond/1"><code class="inline">cond/1</code></a> expression evaluate to a truthy value.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Config.html" translate="no">Config</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A simple keyword-based configuration API.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Config.Provider.html" translate="no">Config.Provider</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Specifies a provider API that loads configuration during boot.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Config.Reader.html" translate="no">Config.Reader</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>API for reading config files defined with <a href="Config.html"><code class="inline">Config</code></a>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Date.html" translate="no">Date</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A Date struct and functions.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Date.Range.html" translate="no">Date.Range</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Returns an inclusive range between dates.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="DateTime.html" translate="no">DateTime</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A datetime implementation with a time zone.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Dict.html" translate="no">Dict</a>
+
+      <span class="deprecated" title="Use Map or Keyword modules instead">deprecated</span>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Generic API for dictionaries.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Duration.html" translate="no">Duration</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Struct and functions for handling durations.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="DynamicSupervisor.html" translate="no">DynamicSupervisor</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A supervisor optimized to only start children dynamically.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Enum.html" translate="no">Enum</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for working with collections (known as enumerables).</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Enum.EmptyError.html" translate="no">Enum.EmptyError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception that is raised when something expects a non-empty enumerable
+but finds an empty one.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Enum.OutOfBoundsError.html" translate="no">Enum.OutOfBoundsError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception that is raised when a function expects an enumerable to have
+a certain size but finds that it is too small.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Enumerable.html" translate="no">Enumerable</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Enumerable protocol used by <a href="Enum.html"><code class="inline">Enum</code></a> and <a href="Stream.html"><code class="inline">Stream</code></a> modules.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="ErlangError.html" translate="no">ErlangError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Exception.html" translate="no">Exception</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for dealing with throw/catch/exit and exceptions.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="File.html" translate="no">File</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module contains functions to manipulate files.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="File.CopyError.html" translate="no">File.CopyError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception that is raised when copying a file fails.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="File.Error.html" translate="no">File.Error</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception that is raised when a file operation fails.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="File.LinkError.html" translate="no">File.LinkError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception that is raised when linking a file fails.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="File.RenameError.html" translate="no">File.RenameError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception that is raised when renaming a file fails.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="File.Stat.html" translate="no">File.Stat</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A struct that holds file information.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="File.Stream.html" translate="no">File.Stream</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines a <a href="File.Stream.html"><code class="inline">File.Stream</code></a> struct returned by <a href="File.html#stream!/3"><code class="inline">File.stream!/3</code></a>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Float.html" translate="no">Float</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for working with floating-point numbers.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Function.html" translate="no">Function</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A set of functions for working with functions.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="FunctionClauseError.html" translate="no">FunctionClauseError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a function call doesn't match any defined clause.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="GenEvent.html" translate="no">GenEvent</a>
+
+      <span class="deprecated" title="Use Erlang/OTP's :gen_event module instead">deprecated</span>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An event manager with event handlers behaviour.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="GenServer.html" translate="no">GenServer</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A behaviour module for implementing the server of a client-server relation.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="HashDict.html" translate="no">HashDict</a>
+
+      <span class="deprecated" title="Use Map instead">deprecated</span>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Tuple-based HashDict implementation.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="HashSet.html" translate="no">HashSet</a>
+
+      <span class="deprecated" title="Use MapSet instead">deprecated</span>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Tuple-based HashSet implementation.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="IO.html" translate="no">IO</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions handling input/output (IO).</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="IO.ANSI.html" translate="no">IO.ANSI</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functionality to render ANSI escape sequences.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="IO.Stream.html" translate="no">IO.Stream</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines an <a href="IO.Stream.html"><code class="inline">IO.Stream</code></a> struct returned by <a href="IO.html#stream/2"><code class="inline">IO.stream/2</code></a> and <a href="IO.html#binstream/2"><code class="inline">IO.binstream/2</code></a>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="IO.StreamError.html" translate="no">IO.StreamError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Inspect.html" translate="no">Inspect</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The <a href="Inspect.html"><code class="inline">Inspect</code></a> protocol converts an Elixir data structure into an
+algebra document.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Inspect.Algebra.html" translate="no">Inspect.Algebra</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A set of functions for creating and manipulating algebra
+documents.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Inspect.Error.html" translate="no">Inspect.Error</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Raised when a struct cannot be inspected.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Inspect.Opts.html" translate="no">Inspect.Opts</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Defines the options used by the <a href="Inspect.html"><code class="inline">Inspect</code></a> protocol.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Integer.html" translate="no">Integer</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for working with integers.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Kernel.html" translate="no">Kernel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p><a href="Kernel.html"><code class="inline">Kernel</code></a> is Elixir's default environment.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Kernel.ParallelCompiler.html" translate="no">Kernel.ParallelCompiler</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A module responsible for compiling and requiring files in parallel.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Kernel.SpecialForms.html" translate="no">Kernel.SpecialForms</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Special forms are the basic building blocks of Elixir, and therefore
+cannot be overridden by the developer.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Kernel.TypespecError.html" translate="no">Kernel.TypespecError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when there's an error in a typespec.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="KeyError.html" translate="no">KeyError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a key is not found in a data structure.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Keyword.html" translate="no">Keyword</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A keyword list is a list that consists exclusively of two-element tuples.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="List.html" translate="no">List</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Linked lists hold zero, one, or more elements in the chosen order.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="List.Chars.html" translate="no">List.Chars</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The <a href="List.Chars.html"><code class="inline">List.Chars</code></a> protocol is responsible for
+converting a structure to a charlist (only if applicable).</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Macro.html" translate="no">Macro</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for manipulating AST and implementing macros.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Macro.Env.html" translate="no">Macro.Env</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A struct that holds compile time environment information.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Map.html" translate="no">Map</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Maps are the &quot;go to&quot; key-value data structure in Elixir.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MapSet.html" translate="no">MapSet</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions that work on sets.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MatchError.html" translate="no">MatchError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a pattern match (<a href="Kernel.SpecialForms.html#=/2"><code class="inline">=/2</code></a>) fails.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MismatchedDelimiterError.html" translate="no">MismatchedDelimiterError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a mismatched delimiter is found when parsing code.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Module.html" translate="no">Module</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Provides functions to deal with modules during compilation time.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="NaiveDateTime.html" translate="no">NaiveDateTime</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A NaiveDateTime struct (without a time zone) and functions.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Node.html" translate="no">Node</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions related to VM nodes.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="OptionParser.html" translate="no">OptionParser</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for parsing command line arguments.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="OptionParser.ParseError.html" translate="no">OptionParser.ParseError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when parsing option fails.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="PartitionSupervisor.html" translate="no">PartitionSupervisor</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A supervisor that starts multiple partitions of the same child.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Path.html" translate="no">Path</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>This module provides conveniences for manipulating or
+retrieving file system paths.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Port.html" translate="no">Port</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for interacting with the external world through ports.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Process.html" translate="no">Process</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Conveniences for working with processes and the process dictionary.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Protocol.html" translate="no">Protocol</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Reference and functions for working with protocols.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Protocol.UndefinedError.html" translate="no">Protocol.UndefinedError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a protocol is not implemented for a given value.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Range.html" translate="no">Range</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Ranges represent a sequence of zero, one or many, ascending
+or descending integers with a common difference called step.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Record.html" translate="no">Record</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Module to work with, define, and import records.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Regex.html" translate="no">Regex</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Provides regular expressions for Elixir.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Regex.CompileError.html" translate="no">Regex.CompileError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a regular expression could not be compiled.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Registry.html" translate="no">Registry</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A local, decentralized and scalable key-value process storage.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="RuntimeError.html" translate="no">RuntimeError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception for a generic runtime error.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Set.html" translate="no">Set</a>
+
+      <span class="deprecated" title="Use MapSet instead">deprecated</span>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Generic API for sets.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Stream.html" translate="no">Stream</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for creating and composing streams.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="String.html" translate="no">String</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Strings in Elixir are UTF-8 encoded binaries.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="String.Chars.html" translate="no">String.Chars</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The <a href="String.Chars.html"><code class="inline">String.Chars</code></a> protocol is responsible for
+converting a structure to a binary (only if applicable).</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="StringIO.html" translate="no">StringIO</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Controls an IO device process that wraps a string.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Supervisor.html" translate="no">Supervisor</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A behaviour module for implementing supervisors.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Supervisor.Spec.html" translate="no">Supervisor.Spec</a>
+
+      <span class="deprecated" title="Use the new child specifications outlined in the Supervisor module instead">deprecated</span>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Outdated functions for building child specifications.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SyntaxError.html" translate="no">SyntaxError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when there's a syntax error when parsing code.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="System.html" translate="no">System</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The <a href="System.html"><code class="inline">System</code></a> module provides functions that interact directly
+with the VM or the host system.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="System.EnvError.html" translate="no">System.EnvError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a system environment variable is not set.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SystemLimitError.html" translate="no">SystemLimitError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a system limit has been reached.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Task.html" translate="no">Task</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Conveniences for spawning and awaiting tasks.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Task.Supervisor.html" translate="no">Task.Supervisor</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A task supervisor.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Time.html" translate="no">Time</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A Time struct and functions.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="TokenMissingError.html" translate="no">TokenMissingError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a token is missing when parsing code.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="TryClauseError.html" translate="no">TryClauseError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a term in a <a href="Kernel.SpecialForms.html#try/1"><code class="inline">try/1</code></a> expression
+does not match any of the defined <code class="inline">-&gt;</code> clauses in its <code class="inline">else</code>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Tuple.html" translate="no">Tuple</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for working with tuples.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="URI.html" translate="no">URI</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Utilities for working with URIs.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="URI.Error.html" translate="no">URI.Error</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when an error occurs when a <a href="URI.html"><code class="inline">URI</code></a> is invalid.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="UndefinedFunctionError.html" translate="no">UndefinedFunctionError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a function is invoked that is not defined.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="UnicodeConversionError.html" translate="no">UnicodeConversionError</a>
+
+  </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Version.html" translate="no">Version</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Functions for parsing and matching versions against requirements.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Version.InvalidRequirementError.html" translate="no">Version.InvalidRequirementError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a version requirement is invalid.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Version.InvalidVersionError.html" translate="no">Version.InvalidVersionError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a version is invalid.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Version.Requirement.html" translate="no">Version.Requirement</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A struct that holds version requirement information.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="WithClauseError.html" translate="no">WithClauseError</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>An exception raised when a term in a <a href="Kernel.SpecialForms.html#with/1"><code class="inline">with/1</code></a> expression
+does not match any of the defined <code class="inline">-&gt;</code> clauses in its <code class="inline">else</code>.</p></div>
+
+</div>
+
+    </div>
+  </section>
+
+
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="changelog.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Changelog for Elixir v1.17
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>case, cond, and if — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/case-cond-and-if.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>case, cond, and if</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/case-cond-and-if.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter, we will learn about the <code class="inline">case</code>, <code class="inline">cond</code>, and <code class="inline">if</code> control flow structures.</p><h2 id="case" class="section-heading">
+  <a href="#case" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">case</span>
+</h2>
+<p><code class="inline">case</code> allows us to compare a value against many patterns until we find a matching one:</p><pre class="elixir" data-code-id="393639"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">case {1, 2, 3} do
+  {4, 5, 6} -&gt;
+    &quot;This clause won't match&quot;
+  {1, x, 3} -&gt;
+    &quot;This clause will match and bind x to 2 in this clause&quot;
+  _ -&gt;
+    &quot;This clause would match any value&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;This clause will match and bind x to 2 in this clause&quot;</p></pre><p>If you want to pattern match against an existing variable, you need to use the <code class="inline">^</code> operator:</p><pre class="elixir" data-code-id="31303333"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">case 10 do
+  ^x -&gt; &quot;Won't match&quot;
+  _ -&gt; &quot;Will match&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;Will match&quot;</p></pre><p>Clauses also allow extra conditions to be specified via guards:</p><pre class="elixir" data-code-id="31303937"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">case {1, 2, 3} do
+  {1, x, 3} when x &gt; 0 -&gt;
+    &quot;Will match&quot;
+  _ -&gt;
+    &quot;Would match, if guard condition were not satisfied&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;Will match&quot;</p></pre><p>The first clause above will only match when <code class="inline">x</code> is positive.</p><p>Keep in mind errors in guards do not leak but simply make the guard fail:</p><pre class="elixir" data-code-id="31313631"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">hd(1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (ArgumentError) argument error</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">case 1 do
+  x when hd(x) -&gt; &quot;Won't match&quot;
+  x -&gt; &quot;Got #{x}&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;Got 1&quot;</p></pre><p>If none of the clauses match, an error is raised:</p><pre class="elixir" data-code-id="31323235"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">case :ok do
+  :error -&gt; &quot;Won't match&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (CaseClauseError) no case clause matching: :ok</p></pre><p>The documentation for the <a href="Kernel.html"><code class="inline">Kernel</code></a> module lists all available guards in its sidebar. You can also consult the complete <a href="patterns-and-guards.html#guards">Patterns and Guards</a> reference for in-depth documentation.</p><h2 id="if-unless" class="section-heading">
+  <a href="#if-unless" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">if/unless</span>
+</h2>
+<p><code class="inline">case</code> builds on pattern matching and guards to destructure and match on certain conditions. However, patterns and guards are limited only to certain expressions which are optimized by the compiler. In many situations, you need to write conditions that go beyond what can be expressed with <code class="inline">case</code>. For those, <a href="Kernel.html#if/2"><code class="inline">if/2</code></a> (and <a href="Kernel.html#unless/2"><code class="inline">unless/2</code></a>) are useful alternatives:</p><pre class="elixir" data-code-id="31323839"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">if true do
+  &quot;This works!&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;This works!&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">unless true do
+  &quot;This will never be seen&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># nil</p></pre><p>If the condition given to <a href="Kernel.html#if/2"><code class="inline">if/2</code></a> returns <code class="inline">false</code> or <code class="inline">nil</code>, the body given between <code class="inline">do</code>-<code class="inline">end</code> is not executed and instead it returns <code class="inline">nil</code>. The opposite happens with <a href="Kernel.html#unless/2"><code class="inline">unless/2</code></a>.</p><p>They also support <code class="inline">else</code> blocks (although using <code class="inline">else</code> with <code class="inline">unless</code> is generally discouraged):</p><pre class="elixir" data-code-id="31333533"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">if nil do
+  &quot;This won't be seen&quot;
+else
+  &quot;This will&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;This will&quot;</p></pre><p>This is also a good opportunity to talk about variable scoping in Elixir. If any variable is declared or changed inside <code class="inline">if</code>, <code class="inline">case</code>, and similar constructs, the declaration and change will only be visible inside the construct. For example:</p><pre class="elixir" data-code-id="31343137"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">if true do
+  x = x + 1
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p></pre><p>In said cases, if you want to change a value, you must return the value from the <code class="inline">if</code>:</p><pre class="elixir" data-code-id="31343831"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = 1</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x = if true do
+  x + 1
+else
+  x
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p></pre><section role="note" class="admonition info"><h4 class="admonition-title info"><code class="inline">if</code> and <code class="inline">unless</code> are macros</h4><p>An interesting note regarding <a href="Kernel.html#if/2"><code class="inline">if/2</code></a> and <a href="Kernel.html#unless/2"><code class="inline">unless/2</code></a> is that they are implemented as macros in the language: they aren't special language constructs as they would be in many languages. You can check the documentation and their source for more information.</p></section><p>If you find yourself nesting several <a href="Kernel.html#if/2"><code class="inline">if/2</code></a> blocks, you may want to consider using <a href="Kernel.SpecialForms.html#cond/1"><code class="inline">cond/1</code></a> instead. Let's check it out.</p><h2 id="cond" class="section-heading">
+  <a href="#cond" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">cond</span>
+</h2>
+<p>If you need to check across several conditions and find the first one that does not evaluate to <code class="inline">nil</code> or <code class="inline">false</code>, <a href="Kernel.SpecialForms.html#cond/1"><code class="inline">cond/1</code></a> is a useful construct:</p><pre class="elixir" data-code-id="31353435"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">cond do
+  2 + 2 == 5 -&gt;
+    &quot;This will not be true&quot;
+  2 * 2 == 3 -&gt;
+    &quot;Nor this&quot;
+  1 + 1 == 2 -&gt;
+    &quot;But this will&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;But this will&quot;</p></pre><p>This is equivalent to <code class="inline">else if</code> clauses in many imperative languages - although used less frequently in Elixir.</p><p>If all of the conditions return <code class="inline">nil</code> or <code class="inline">false</code>, an error (<a href="CondClauseError.html"><code class="inline">CondClauseError</code></a>) is raised. For this reason, it may be necessary to add a final condition, equal to <code class="inline">true</code>, which will always match:</p><pre class="elixir" data-code-id="31363039"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">cond do
+  2 + 2 == 5 -&gt;
+    &quot;This is never true&quot;
+  2 * 2 == 3 -&gt;
+    &quot;Nor this&quot;
+  true -&gt;
+    &quot;This is always true (equivalent to else)&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;This is always true (equivalent to else)&quot;</p></pre><p>Similar to <a href="Kernel.html#if/2"><code class="inline">if/2</code></a> and <a href="Kernel.html#unless/2"><code class="inline">unless/2</code></a>, <code class="inline">cond</code> considers any value besides <code class="inline">nil</code> and <code class="inline">false</code> to be true:</p><pre class="elixir" data-code-id="31363733"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">cond do
+  hd([1, 2, 3]) -&gt;
+    &quot;1 is considered as true&quot;
+end</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;1 is considered as true&quot;</p></pre><h2 id="summing-up" class="section-heading">
+  <a href="#summing-up" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Summing up</span>
+</h2>
+<p>We have concluded the introduction to the most fundamental control-flow constructs in Elixir. Generally speaking, Elixir developers prefer pattern matching and guards, using <code class="inline">case</code> and function definitions (which we will explore in future chapters), as they are succinct and precise. When your logic cannot be outlined within patterns and guards, you may consider <a href="Kernel.html#if/2"><code class="inline">if/2</code></a>, falling back to <a href="Kernel.SpecialForms.html#cond/1"><code class="inline">cond/1</code></a> when there are several conditions to check.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="pattern-matching.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Pattern matching
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="anonymous-functions.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Anonymous functions
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

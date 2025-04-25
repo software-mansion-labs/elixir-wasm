@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Introduction to Mix — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/introduction-to-mix.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Introduction to Mix</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/introduction-to-mix.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this guide, we will build a complete Elixir application, with its own supervision tree, configuration, tests, and more.</p><p>The requirements for this guide are (see <code class="inline">elixir -v</code>):</p><ul><li>Elixir 1.15.0 onwards</li><li>Erlang/OTP 24 onwards</li></ul><p>The application works as a distributed key-value store. We are going to organize key-value pairs into buckets and distribute those buckets across multiple nodes. We will also build a simple client that allows us to connect to any of those nodes and send requests such as:</p><pre><code class="text">CREATE shopping
+OK
+
+PUT shopping milk 1
+OK
+
+PUT shopping eggs 3
+OK
+
+GET shopping milk
+1
+OK
+
+DELETE shopping eggs
+OK</code></pre><p>In order to build our key-value application, we are going to use three main tools:</p><ul><li><p><strong><em>OTP</em></strong> <em>(Open Telecom Platform)</em> is a set of libraries that ships with Erlang. Erlang developers use OTP to build robust, fault-tolerant applications. In this chapter we will explore how many aspects from OTP integrate with Elixir, including supervision trees, event managers and more;</p></li><li><p><strong><em><a href="https://hexdocs.pm/mix/Mix.html">Mix</a></em></strong> is a build tool that ships with Elixir that provides tasks for creating, compiling, testing your application, managing its dependencies and much more;</p></li><li><p><strong><em><a href="https://hexdocs.pm/ex_unit/ExUnit.html">ExUnit</a></em></strong> is a test-unit based framework that ships with Elixir.</p></li></ul><p>In this chapter, we will create our first project using Mix and explore different features in OTP, Mix, and ExUnit as we go.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Source code</h4><p>The final code for the application built in this guide is in <a href="https://github.com/josevalim/kv_umbrella">this repository</a> and can be used as a reference.</p></section><section role="note" class="admonition info"><h4 class="admonition-title info">Is this guide required reading?</h4><p>This guide is not required reading in your Elixir journey. We'll explain.</p><p>As an Elixir developer, you will most likely use one of the many existing frameworks when writing your Elixir code. <a href="https://phoenixframework.org">Phoenix</a> covers web applications, <a href="https://github.com/elixir-ecto/ecto">Ecto</a> communicates with databases, you can craft embedded software with <a href="https://nerves-project.org/">Nerves</a>, <a href="https://github.com/elixir-nx">Nx</a> powers machine learning and AI projects, <a href="https://membrane.stream/">Membrane</a> assembles audio/video processing pipelines, <a href="https://elixir-broadway.org/">Broadway</a> handles data ingestion and processing, and many more. These frameworks handle the lower level details of concurrency, distribution, and fault-tolerance, so you, as a user, can focus on your own needs and demands.</p><p>On the other hand, if you want to learn the foundations these frameworks are built upon, and the abstractions that power the Elixir ecosystem, this guide will give you a tour through several important concepts.</p></section><h2 id="our-first-project" class="section-heading">
+  <a href="#our-first-project" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Our first project</span>
+</h2>
+<p>When you install Elixir, besides getting the <code class="inline">elixir</code>, <code class="inline">elixirc</code>, and <code class="inline">iex</code> executables, you also get an executable Elixir script named <code class="inline">mix</code>.</p><p>Let's create our first project by invoking <a href="https://hexdocs.pm/mix/Mix.Tasks.New.html"><code class="inline">mix new</code></a> from the command line. We'll pass the project path as the argument (<code class="inline">kv</code>, in this case). By default, the application name and module name will be retrieved from the path. So we tell Mix that our main module should be the all-uppercase <code class="inline">KV</code>, instead of the default, which would have been <code class="inline">Kv</code>:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">mix new kv --module KV
+</span></code></pre><p>Mix will create a directory named <code class="inline">kv</code> with a few files in it:</p><pre><code class="text">* creating README.md
+* creating .formatter.exs
+* creating .gitignore
+* creating mix.exs
+* creating lib
+* creating lib/kv.ex
+* creating test
+* creating test/test_helper.exs
+* creating test/kv_test.exs</code></pre><p>Let's take a brief look at those generated files.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Executables in the <code class="inline">PATH</code></h4><p>Mix is an Elixir executable. This means that in order to run <code class="inline">mix</code>, you need to have both <code class="inline">mix</code> and <code class="inline">elixir</code> executables in your PATH. That's what happens when you install Elixir.</p></section><h2 id="project-compilation" class="section-heading">
+  <a href="#project-compilation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Project compilation</span>
+</h2>
+<p>A file named <code class="inline">mix.exs</code> was generated inside our new project folder (<code class="inline">kv</code>) and its main responsibility is to configure our project. Let's take a look at it:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV.MixProject</span><span class="w"> </span><span class="k" data-group-id="3523793340-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Mix.Project</span><span class="w">
+
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="3523793340-2">do</span><span class="w">
+    </span><span class="p" data-group-id="3523793340-3">[</span><span class="w">
+      </span><span class="ss">app</span><span class="p">:</span><span class="w"> </span><span class="ss">:kv</span><span class="p">,</span><span class="w">
+      </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.1.0&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">elixir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~&gt; 1.11&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">start_permanent</span><span class="p">:</span><span class="w"> </span><span class="nc">Mix</span><span class="o">.</span><span class="n">env</span><span class="p" data-group-id="3523793340-4">(</span><span class="p" data-group-id="3523793340-4">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:prod</span><span class="p">,</span><span class="w">
+      </span><span class="ss">deps</span><span class="p">:</span><span class="w"> </span><span class="n">deps</span><span class="p" data-group-id="3523793340-5">(</span><span class="p" data-group-id="3523793340-5">)</span><span class="w">
+    </span><span class="p" data-group-id="3523793340-3">]</span><span class="w">
+  </span><span class="k" data-group-id="3523793340-2">end</span><span class="w">
+
+  </span><span class="c1"># Run &quot;mix help compile.app&quot; to learn about applications</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">application</span><span class="w"> </span><span class="k" data-group-id="3523793340-6">do</span><span class="w">
+    </span><span class="p" data-group-id="3523793340-7">[</span><span class="w">
+      </span><span class="ss">extra_applications</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3523793340-8">[</span><span class="ss">:logger</span><span class="p" data-group-id="3523793340-8">]</span><span class="w">
+    </span><span class="p" data-group-id="3523793340-7">]</span><span class="w">
+  </span><span class="k" data-group-id="3523793340-6">end</span><span class="w">
+
+  </span><span class="c1"># Run &quot;mix help deps&quot; to learn about dependencies</span><span class="w">
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="3523793340-9">do</span><span class="w">
+    </span><span class="p" data-group-id="3523793340-10">[</span><span class="w">
+      </span><span class="c1"># {:dep_from_hexpm, &quot;~&gt; 0.3.0&quot;},</span><span class="w">
+      </span><span class="c1"># {:dep_from_git, git: &quot;https://github.com/elixir-lang/my_dep.git&quot;, tag: &quot;0.1.0&quot;},</span><span class="w">
+    </span><span class="p" data-group-id="3523793340-10">]</span><span class="w">
+  </span><span class="k" data-group-id="3523793340-9">end</span><span class="w">
+</span><span class="k" data-group-id="3523793340-1">end</span></code></pre><p>Our <code class="inline">mix.exs</code> defines two public functions: <code class="inline">project</code>, which returns project configuration like the project name and version, and <code class="inline">application</code>, which is used to generate an application file.</p><p>There is also a private function named <code class="inline">deps</code>, which is invoked from the <code class="inline">project</code> function, that defines our project dependencies. Defining <code class="inline">deps</code> as a separate function is not required, but it helps keep the project configuration tidy.</p><p>Mix also generates a file at <code class="inline">lib/kv.ex</code> with a module containing exactly one function, called <code class="inline">hello</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KV</span><span class="w"> </span><span class="k" data-group-id="5683400524-1">do</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Documentation for KV.
+  &quot;&quot;&quot;</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Hello world.
+
+  ## Examples
+
+      iex&gt; KV.hello()
+      :world
+
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">hello</span><span class="w"> </span><span class="k" data-group-id="5683400524-2">do</span><span class="w">
+    </span><span class="ss">:world</span><span class="w">
+  </span><span class="k" data-group-id="5683400524-2">end</span><span class="w">
+</span><span class="k" data-group-id="5683400524-1">end</span><span class="w">
+</span></code></pre><p>This structure is enough to compile our project:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">cd kv
+</span><span class="gp unselectable">$ </span><span class="">mix compile
+</span></code></pre><p>Will output:</p><pre><code class="text">Compiling 1 file (.ex)
+Generated kv app</code></pre><p>The <code class="inline">lib/kv.ex</code> file was compiled and an application manifest named <code class="inline">kv.app</code> was generated. All compilation artifacts are placed inside the <code class="inline">_build</code> directory using the options defined in the <code class="inline">mix.exs</code> file.</p><p>Once the project is compiled, you can start a <code class="inline">iex</code> session inside the project by running the command below. The <code class="inline">-S mix</code> is necessary to load the project in the interactive shell:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">iex -S mix
+</span></code></pre><p>We are going to work on this <code class="inline">kv</code> project, making modifications and trying out the latest changes from a <code class="inline">iex</code> session. While you may start a new session whenever there are changes to the project source code, you can also recompile the project from within <code class="inline">iex</code> with the <code class="inline">recompile</code> helper, like this:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">recompile</span><span class="p" data-group-id="4138493944-1">(</span><span class="p" data-group-id="4138493944-1">)</span><span class="w">
+</span><span class="nc">Compiling</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="p" data-group-id="4138493944-2">(</span><span class="o">.</span><span class="n">ex</span><span class="p" data-group-id="4138493944-2">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">recompile</span><span class="p" data-group-id="4138493944-3">(</span><span class="p" data-group-id="4138493944-3">)</span><span class="w">
+</span><span class="ss">:noop</span></code></pre><p>If anything had to be compiled, you see some informative text, and get the <code class="inline">:ok</code> atom back, otherwise the function is silent, and returns <code class="inline">:noop</code>.</p><h2 id="running-tests" class="section-heading">
+  <a href="#running-tests" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Running tests</span>
+</h2>
+<p>Mix also generated the appropriate structure for running our project tests. Mix projects usually follow the convention of having a <code class="inline">&lt;filename&gt;_test.exs</code> file in the <code class="inline">test</code> directory for each file in the <code class="inline">lib</code> directory. For this reason, we can already find a <code class="inline">test/kv_test.exs</code> corresponding to our <code class="inline">lib/kv.ex</code> file. It doesn't do much at this point:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KVTest</span><span class="w"> </span><span class="k" data-group-id="7694642377-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="w">
+  </span><span class="n">doctest</span><span class="w"> </span><span class="nc">KV</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;greets the world&quot;</span><span class="w"> </span><span class="k" data-group-id="7694642377-2">do</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="nc">KV</span><span class="o">.</span><span class="n">hello</span><span class="p" data-group-id="7694642377-3">(</span><span class="p" data-group-id="7694642377-3">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:world</span><span class="w">
+  </span><span class="k" data-group-id="7694642377-2">end</span><span class="w">
+</span><span class="k" data-group-id="7694642377-1">end</span></code></pre><p>It is important to note a couple of things:</p><ol><li><p>the test file is an Elixir script file (<code class="inline">.exs</code>). This is convenient because we don't need to compile test files before running them;</p></li><li><p>we define a test module named <code class="inline">KVTest</code>, in which we <a href="https://hexdocs.pm/ex_unit/ExUnit.Case.html"><code class="inline">use ExUnit.Case</code></a> to inject the testing API;</p></li><li><p>we use one of the imported macros, <a href="https://hexdocs.pm/ex_unit/ExUnit.DocTest.html#doctest/1"><code class="inline">ExUnit.DocTest.doctest/1</code></a>, to indicate that the <code class="inline">KV</code> module contains doctests (we will discuss those in a later chapter);</p></li><li><p>we use the <a href="https://hexdocs.pm/ex_unit/ExUnit.Case.html#test/2"><code class="inline">ExUnit.Case.test/2</code></a> macro to define a simple test;</p></li></ol><p>Mix also generated a file named <code class="inline">test/test_helper.exs</code> which is responsible for setting up the test framework:</p><pre><code class="makeup elixir" translate="no"><span class="nc">ExUnit</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="0608054205-1">(</span><span class="p" data-group-id="0608054205-1">)</span></code></pre><p>This file will be required by Mix every time before we run our tests. We can run tests with:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">mix test
+</span><span class="">Compiled lib/kv.ex
+</span><span class="">Generated kv app
+</span><span class="">Running ExUnit with seed: 540224, max_cases: 16
+</span><span class="">..
+</span><span class="">
+</span><span class="">Finished in 0.04 seconds
+</span><span class="">1 doctest, 1 test, 0 failures
+</span></code></pre><p>Notice that by running <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a>, Mix has compiled the source files and generated the application manifest once again. This happens because Mix supports multiple environments, which we will discuss later in this chapter.</p><p>Furthermore, you can see that ExUnit prints a dot for each successful test and automatically randomizes tests too. Let's make the test fail on purpose and see what happens.</p><p>Change the assertion in <code class="inline">test/kv_test.exs</code> to the following:</p><pre><code class="makeup elixir" translate="no"><span class="n">assert</span><span class="w"> </span><span class="nc">KV</span><span class="o">.</span><span class="n">hello</span><span class="p" data-group-id="3528314338-1">(</span><span class="p" data-group-id="3528314338-1">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:oops</span></code></pre><p>Now run <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> again (notice this time there will be no compilation):</p><pre><code class="text">  1) test greets the world (KVTest)
+     test/kv_test.exs:5
+     Assertion with == failed
+     code:  assert KV.hello() == :oops
+     left:  :world
+     right: :oops
+     stacktrace:
+       test/kv_test.exs:6: (test)
+
+.
+
+Finished in 0.05 seconds
+1 doctest, 1 test, 1 failure</code></pre><p>For each failure, ExUnit prints a detailed report, containing the test name with the test case, the code that failed and the values for the left side and right side (RHS) of the <code class="inline">==</code> operator.</p><p>In the second line of the failure, right below the test name, there is the location where the test was defined. If you copy the test location in full, including the file and line number, and append it to <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a>, Mix will load and run just that particular test:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">mix test test/kv_test.exs:5
+</span></code></pre><p>This shortcut will be extremely useful as we build our project, allowing us to quickly iterate by running a single test.</p><p>Finally, the stacktrace relates to the failure itself, giving information about the test and often the place the failure was generated from within the source files.</p><h2 id="automatic-code-formatting" class="section-heading">
+  <a href="#automatic-code-formatting" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Automatic code formatting</span>
+</h2>
+<p>One of the files generated by <a href="https://hexdocs.pm/mix/Mix.Tasks.New.html"><code class="inline">mix new</code></a> is the <code class="inline">.formatter.exs</code>. Elixir ships with a code formatter that is capable of automatically formatting our codebase according to a consistent style. The formatter is triggered with the <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html"><code class="inline">mix format</code></a> task. The generated <code class="inline">.formatter.exs</code> file configures which files should be formatted when <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html"><code class="inline">mix format</code></a> runs.</p><p>To give the formatter a try, change a file in the <code class="inline">lib</code> or <code class="inline">test</code> directories to include extra spaces or extra newlines, such as <code class="inline">def hello do</code>, and then run <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html"><code class="inline">mix format</code></a>.</p><p>Most editors provide built-in integration with the formatter, allowing a file to be formatted on save or via a chosen keybinding. If you are learning Elixir, editor integration gives you useful and quick feedback when learning the Elixir syntax.</p><p>For companies and teams, we recommend developers to run <code class="inline">mix format --check-formatted</code> on their continuous integration servers, ensuring all current and future code follows the standard.</p><p>You can learn more about the code formatter by checking <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html">the format task documentation</a> or by reading <a href="https://elixir-lang.org/blog/2018/01/17/elixir-v1-6-0-released/">the release announcement for Elixir v1.6</a>, the first version to include the formatter.</p><h2 id="environments" class="section-heading">
+  <a href="#environments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Environments</span>
+</h2>
+<p>Mix provides the concept of &quot;environments&quot;. They allow a developer to customize compilation and other options for specific scenarios. By default, Mix understands three environments:</p><ul><li><code class="inline">:dev</code> — the one in which Mix tasks (like <code class="inline">compile</code>) run by default</li><li><code class="inline">:test</code> — used by <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a></li><li><code class="inline">:prod</code> — the one you will use to run your project in production</li></ul><p>The environment applies only to the current project. As we will see in future chapters, any dependency you add to your project will by default run in the <code class="inline">:prod</code> environment.</p><p>Customization per environment can be done by accessing the <a href="https://hexdocs.pm/mix/Mix.html#env/0"><code class="inline">Mix.env/0</code></a> in your <code class="inline">mix.exs</code> file, which returns the current environment as an atom. That's what we have used in the <code class="inline">:start_permanent</code> options:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="8085938623-1">do</span><span class="w">
+  </span><span class="p" data-group-id="8085938623-2">[</span><span class="w">
+    </span><span class="n">...</span><span class="p">,</span><span class="w">
+    </span><span class="ss">start_permanent</span><span class="p">:</span><span class="w"> </span><span class="nc">Mix</span><span class="o">.</span><span class="n">env</span><span class="p" data-group-id="8085938623-3">(</span><span class="p" data-group-id="8085938623-3">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:prod</span><span class="p">,</span><span class="w">
+    </span><span class="n">...</span><span class="w">
+  </span><span class="p" data-group-id="8085938623-2">]</span><span class="w">
+</span><span class="k" data-group-id="8085938623-1">end</span></code></pre><p>When true, the <code class="inline">:start_permanent</code> option starts your application in permanent mode, which means the Erlang VM will crash if your application's supervision tree shuts down. Notice we don't want this behavior in dev and test because it is useful to keep the VM instance running in those environments for troubleshooting purposes.</p><p>Mix will default to the <code class="inline">:dev</code> environment, except for the <code class="inline">test</code> task that will default to the <code class="inline">:test</code> environment. The environment can be changed via the <code class="inline">MIX_ENV</code> environment variable:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">MIX_ENV=prod mix compile
+</span></code></pre><p>Or on Windows:</p><pre><code class="batch">&gt; set &quot;MIX_ENV=prod&quot; &amp;&amp; mix compile</code></pre><section role="note" class="admonition warning"><h4 class="admonition-title warning">Mix in production</h4><p>Mix is a <strong>build tool</strong> and, as such, it is not expected to be available in production. Therefore, it is recommended to access <a href="https://hexdocs.pm/mix/Mix.html#env/0"><code class="inline">Mix.env/0</code></a> only in configuration files and inside <code class="inline">mix.exs</code>, never in your application code (<code class="inline">lib</code>).</p></section><h2 id="exploring" class="section-heading">
+  <a href="#exploring" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Exploring</span>
+</h2>
+<p>There is much more to Mix, and we will continue to explore it as we build our project. A general overview is available on the <a href="https://hexdocs.pm/mix/Mix.html">Mix documentation</a> and you can always invoke the help task to list all available tasks:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">mix help
+</span><span class="gp unselectable">$ </span><span class="">mix help compile
+</span></code></pre><p>Now let's move forward and add the first modules and functions to our application.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="domain-specific-languages.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Domain-Specific Languages (DSLs)
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="agents.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Simple state management with agents
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

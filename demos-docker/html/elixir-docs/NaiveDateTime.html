@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>NaiveDateTime — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/NaiveDateTime.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">NaiveDateTime</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A NaiveDateTime struct (without a time zone) and functions.</p><p>The NaiveDateTime struct contains the fields year, month, day, hour,
+minute, second, microsecond and calendar. New naive datetimes can be
+built with the <a href="#new/2"><code class="inline">new/2</code></a> and <a href="#new/8"><code class="inline">new/8</code></a> functions or using the
+<code class="inline">~N</code> (see <a href="Kernel.html#sigil_N/2"><code class="inline">sigil_N/2</code></a>) sigil:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="ld">~N[2000-01-01 23:00:07]</span><span class="w">
+</span><span class="ld">~N[2000-01-01 23:00:07]</span></code></pre><p>The date and time fields in the struct can be accessed directly:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">naive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ld">~N[2000-01-01 23:00:07]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive</span><span class="o">.</span><span class="n">year</span><span class="w">
+</span><span class="mi">2000</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive</span><span class="o">.</span><span class="n">second</span><span class="w">
+</span><span class="mi">7</span></code></pre><p>We call them &quot;naive&quot; because this datetime representation does not
+have a time zone. This means the datetime may not actually exist in
+certain areas in the world even though it is valid.</p><p>For example, when daylight saving changes are applied by a region,
+the clock typically moves forward or backward by one hour. This means
+certain datetimes never occur or may occur more than once. Since
+<a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> is not validated against a time zone, such errors
+would go unnoticed.</p><p>Developers should avoid creating the NaiveDateTime structs directly
+and instead, rely on the functions provided by this module as well
+as the ones in third-party calendar libraries.</p><h2 id="module-comparing-naive-date-times" class="section-heading">
+  <a href="#module-comparing-naive-date-times" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Comparing naive date times</span>
+</h2>
+<p>Comparisons in Elixir using <a href="Kernel.html#==/2"><code class="inline">==/2</code></a>, <a href="Kernel.html#%3E/2"><code class="inline">&gt;/2</code></a>, <a href="Kernel.html#%3C/2"><code class="inline">&lt;/2</code></a> and similar are structural
+and based on the <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct fields. For proper comparison
+between naive datetimes, use the <a href="#compare/2"><code class="inline">compare/2</code></a> function. The existence of the
+<a href="#compare/2"><code class="inline">compare/2</code></a> function in this module also allows using <a href="Enum.html#min/2"><code class="inline">Enum.min/2</code></a> and
+<a href="Enum.html#max/2"><code class="inline">Enum.max/2</code></a> functions to get the minimum and maximum naive datetime of an
+<a href="Enum.html"><code class="inline">Enum</code></a>. For example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Enum</span><span class="o">.</span><span class="n">min</span><span class="p" data-group-id="0899700714-1">(</span><span class="p" data-group-id="0899700714-2">[</span><span class="ld">~N[2020-01-01 23:00:07]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-01 23:00:07]</span><span class="p" data-group-id="0899700714-2">]</span><span class="p">,</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="p" data-group-id="0899700714-1">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 23:00:07]</span></code></pre><h2 id="module-using-epochs" class="section-heading">
+  <a href="#module-using-epochs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Using epochs</span>
+</h2>
+<p>The <a href="#add/3"><code class="inline">add/3</code></a> and <a href="#diff/3"><code class="inline">diff/3</code></a> functions can be used for computing date
+times or retrieving the number of seconds between instants.
+For example, if there is an interest in computing the number of
+seconds from the Unix epoch (1970-01-01 00:00:00):</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="6684083772-1">(</span><span class="ld">~N[2010-04-17 14:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[1970-01-01 00:00:00]</span><span class="p" data-group-id="6684083772-1">)</span><span class="w">
+</span><span class="mi">1271512800</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="6684083772-2">(</span><span class="ld">~N[1970-01-01 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="mi">1_271_512_800</span><span class="p" data-group-id="6684083772-2">)</span><span class="w">
+</span><span class="ld">~N[2010-04-17 14:00:00]</span></code></pre><p>Those functions are optimized to deal with common epochs, such
+as the Unix Epoch above or the Gregorian Epoch (0000-01-01 00:00:00).</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add/3" data-no-tooltip="" translate="no">add(naive_datetime, amount_to_add, unit \\ :second)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a specified amount of time to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#after?/2" data-no-tooltip="" translate="no">after?(naive_datetime1, naive_datetime2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the first <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> is strictly later than the second.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#before?/2" data-no-tooltip="" translate="no">before?(naive_datetime1, naive_datetime2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if the first <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> is strictly earlier than the second.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#beginning_of_day/1" data-no-tooltip="" translate="no">beginning_of_day(naive_datetime)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calculates a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> that is the first moment for the given <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compare/2" data-no-tooltip="" translate="no">compare(naive_datetime1, naive_datetime2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Compares two <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> structs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#convert/2" data-no-tooltip="" translate="no">convert(naive_datetime, calendar)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given <code class="inline">naive_datetime</code> from one calendar to another.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#convert!/2" data-no-tooltip="" translate="no">convert!(naive_datetime, calendar)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given <code class="inline">naive_datetime</code> from one calendar to another.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#diff/3" data-no-tooltip="" translate="no">diff(naive_datetime1, naive_datetime2, unit \\ :second)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Subtracts <code class="inline">naive_datetime2</code> from <code class="inline">naive_datetime1</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#end_of_day/1" data-no-tooltip="" translate="no">end_of_day(naive_datetime)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Calculates a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> that is the last moment for the given <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_erl/3" data-no-tooltip="" translate="no">from_erl(tuple, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts an Erlang datetime tuple to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_erl!/3" data-no-tooltip="" translate="no">from_erl!(tuple, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts an Erlang datetime tuple to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_gregorian_seconds/3" data-no-tooltip="" translate="no">from_gregorian_seconds(seconds, microsecond_precision \\ {0, 0}, calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a number of gregorian seconds to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_iso8601/2" data-no-tooltip="" translate="no">from_iso8601(string, calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses the extended &quot;Date and time of day&quot; format described by
+<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601:2019</a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#from_iso8601!/2" data-no-tooltip="" translate="no">from_iso8601!(string, calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Parses the extended &quot;Date and time of day&quot; format described by
+<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601:2019</a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#local_now/1" data-no-tooltip="" translate="no">local_now(calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the &quot;local time&quot; for the machine the Elixir program is running on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/2" data-no-tooltip="" translate="no">new(date, time)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds a naive datetime from date and time structs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/8" data-no-tooltip="" translate="no">new(year, month, day, hour, minute, second, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds a new ISO naive datetime.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new!/2" data-no-tooltip="" translate="no">new!(date, time)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds a naive datetime from date and time structs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new!/8" data-no-tooltip="" translate="no">new!(year, month, day, hour, minute, second, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds a new ISO naive datetime.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#shift/2" data-no-tooltip="" translate="no">shift(naive_datetime, duration)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Shifts given <code class="inline">naive_datetime</code> by <code class="inline">duration</code> according to its calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_date/1" data-no-tooltip="" translate="no">to_date(map)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> into a <a href="Date.html"><code class="inline">Date</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_erl/1" data-no-tooltip="" translate="no">to_erl(naive_datetime)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct to an Erlang datetime tuple.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_gregorian_seconds/1" data-no-tooltip="" translate="no">to_gregorian_seconds(map)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct to a number of gregorian seconds and microseconds.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_iso8601/2" data-no-tooltip="" translate="no">to_iso8601(naive_datetime, format \\ :extended)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given naive datetime to
+<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601:2019</a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_string/1" data-no-tooltip="" translate="no">to_string(naive_datetime)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the given naive datetime to a string according to its calendar.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_time/1" data-no-tooltip="" translate="no">to_time(map)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> into <a href="Time.html"><code class="inline">Time</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#truncate/2" data-no-tooltip="" translate="no">truncate(naive_datetime, precision)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the given naive datetime with the microsecond field truncated to the
+given precision (<code class="inline">:microsecond</code>, <code class="inline">:millisecond</code> or <code class="inline">:second</code>).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#utc_now/1" data-no-tooltip="" translate="no">utc_now(calendar_or_time_unit \\ Calendar.ISO)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the current naive datetime in UTC.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#utc_now/2" data-no-tooltip="" translate="no">utc_now(time_unit, calendar)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the current naive datetime in UTC, supporting a specific
+calendar and precision.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L76" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %NaiveDateTime{
+  calendar: <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>(),
+  day: <a href="Calendar.html#t:day/0">Calendar.day</a>(),
+  hour: <a href="Calendar.html#t:hour/0">Calendar.hour</a>(),
+  microsecond: <a href="Calendar.html#t:microsecond/0">Calendar.microsecond</a>(),
+  minute: <a href="Calendar.html#t:minute/0">Calendar.minute</a>(),
+  month: <a href="Calendar.html#t:month/0">Calendar.month</a>(),
+  second: <a href="Calendar.html#t:second/0">Calendar.second</a>(),
+  year: <a href="Calendar.html#t:year/0">Calendar.year</a>()
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="add/3">
+
+    <span id="add/2"></span>
+
+  <div class="detail-header">
+    <a href="#add/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add(naive_datetime, amount_to_add, unit \\ :second)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L456" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> add(
+  <a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(),
+  <a href="typespecs.html#basic-types">integer</a>(),
+  :day | :hour | :minute | <a href="System.html#t:time_unit/0">System.time_unit</a>()
+) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a specified amount of time to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>.</p><p>Accepts an <code class="inline">amount_to_add</code> in any <code class="inline">unit</code>. <code class="inline">unit</code> can be <code class="inline">:day</code>,
+<code class="inline">:hour</code>, <code class="inline">:minute</code>, <code class="inline">:second</code> or any subsecond precision from
+<a href="System.html#t:time_unit/0"><code class="inline">System.time_unit/0</code></a>. It defaults to <code class="inline">:second</code>. Negative values
+will move backwards in time.</p><p>This function always consider the unit to be computed according
+to the <a href="Calendar.ISO.html"><code class="inline">Calendar.ISO</code></a>.</p><h2 id="add/3-examples" class="section-heading">
+  <a href="#add/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>It uses seconds by default:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># adds seconds by default</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="5340120145-1">(</span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5340120145-1">)</span><span class="w">
+</span><span class="ld">~N[2014-10-02 00:29:12]</span><span class="w">
+
+</span><span class="c1"># accepts negative offsets</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="5340120145-2">(</span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p" data-group-id="5340120145-2">)</span><span class="w">
+</span><span class="ld">~N[2014-10-02 00:29:08]</span></code></pre><p>It can also work with subsecond precisions:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="9759455671-1">(</span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="mi">2_000</span><span class="p">,</span><span class="w"> </span><span class="ss">:millisecond</span><span class="p" data-group-id="9759455671-1">)</span><span class="w">
+</span><span class="ld">~N[2014-10-02 00:29:12.000]</span></code></pre><p>As well as days/hours/minutes:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="6110710531-1">(</span><span class="ld">~N[2015-02-28 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">:day</span><span class="p" data-group-id="6110710531-1">)</span><span class="w">
+</span><span class="ld">~N[2015-03-02 00:29:10]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="6110710531-2">(</span><span class="ld">~N[2015-02-28 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="mi">36</span><span class="p">,</span><span class="w"> </span><span class="ss">:hour</span><span class="p" data-group-id="6110710531-2">)</span><span class="w">
+</span><span class="ld">~N[2015-03-01 12:29:10]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="6110710531-3">(</span><span class="ld">~N[2015-02-28 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="ss">:minute</span><span class="p" data-group-id="6110710531-3">)</span><span class="w">
+</span><span class="ld">~N[2015-02-28 01:29:10]</span></code></pre><p>This operation merges the precision of the naive date time with the given unit:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="8878103255-1">(</span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="ss">:millisecond</span><span class="p" data-group-id="8878103255-1">)</span><span class="w">
+</span><span class="ld">~N[2014-10-02 00:29:10.021]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">microsecond</span><span class="w">
+</span><span class="p" data-group-id="8878103255-2">{</span><span class="mi">21000</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8878103255-2">}</span></code></pre><p>Operations on top of gregorian seconds or the Unix epoch are optimized:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># from Gregorian seconds</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="7050049759-1">(</span><span class="ld">~N[0000-01-01 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="mi">63_579_428_950</span><span class="p" data-group-id="7050049759-1">)</span><span class="w">
+</span><span class="ld">~N[2014-10-02 00:29:10]</span></code></pre><p>Passing a <a href="DateTime.html"><code class="inline">DateTime</code></a> automatically converts it to <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>,
+discarding the time zone information:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3723930544-1">%</span><span class="nc" data-group-id="3723930544-1">DateTime</span><span class="p" data-group-id="3723930544-1">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="ss">zone_abbr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CET&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3723930544-2">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3723930544-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">utc_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="ss">std_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">time_zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Warsaw&quot;</span><span class="p" data-group-id="3723930544-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">add</span><span class="p" data-group-id="3723930544-3">(</span><span class="n">dt</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="ss">:second</span><span class="p" data-group-id="3723930544-3">)</span><span class="w">
+</span><span class="ld">~N[2000-02-29 23:00:28]</span></code></pre><p>To shift a naive datetime by a <a href="Duration.html"><code class="inline">Duration</code></a> and according to its underlying calendar, use <a href="#shift/2"><code class="inline">NaiveDateTime.shift/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="after?/2">
+
+  <div class="detail-header">
+    <a href="#after?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">after?(naive_datetime1, naive_datetime2)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1226" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> after?(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(), <a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if the first <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> is strictly later than the second.</p><h2 id="after?/2-examples" class="section-heading">
+  <a href="#after?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">after?</span><span class="p" data-group-id="4194832094-1">(</span><span class="ld">~N[2022-02-02 11:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p" data-group-id="4194832094-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">after?</span><span class="p" data-group-id="4194832094-2">(</span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p" data-group-id="4194832094-2">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">after?</span><span class="p" data-group-id="4194832094-3">(</span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2022-02-02 11:00:00]</span><span class="p" data-group-id="4194832094-3">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="before?/2">
+
+  <div class="detail-header">
+    <a href="#before?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">before?(naive_datetime1, naive_datetime2)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1207" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> before?(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(), <a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if the first <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> is strictly earlier than the second.</p><h2 id="before?/2-examples" class="section-heading">
+  <a href="#before?/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">before?</span><span class="p" data-group-id="0584770469-1">(</span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2022-02-02 11:00:00]</span><span class="p" data-group-id="0584770469-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">before?</span><span class="p" data-group-id="0584770469-2">(</span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p" data-group-id="0584770469-2">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">before?</span><span class="p" data-group-id="0584770469-3">(</span><span class="ld">~N[2022-02-02 11:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2021-01-01 11:00:00]</span><span class="p" data-group-id="0584770469-3">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="beginning_of_day/1">
+
+  <div class="detail-header">
+    <a href="#beginning_of_day/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">beginning_of_day(naive_datetime)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1345" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> beginning_of_day(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Calculates a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> that is the first moment for the given <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>.</p><p>To calculate the beginning of day of a <a href="DateTime.html"><code class="inline">DateTime</code></a>, call this function, then convert back to a <a href="DateTime.html"><code class="inline">DateTime</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="n">datetime</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">beginning_of_day</span><span class="p" data-group-id="2577819931-1">(</span><span class="p" data-group-id="2577819931-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">DateTime</span><span class="o">.</span><span class="n">from_naive</span><span class="p" data-group-id="2577819931-2">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">time_zone</span><span class="p" data-group-id="2577819931-2">)</span></code></pre><p>Note that the beginning of the day may not exist or be ambiguous
+in a given timezone, so you must handle those cases accordingly.</p><h2 id="beginning_of_day/1-examples" class="section-heading">
+  <a href="#beginning_of_day/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">beginning_of_day</span><span class="p" data-group-id="7983504310-1">(</span><span class="ld">~N[2000-01-01 23:00:07.123456]</span><span class="p" data-group-id="7983504310-1">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 00:00:00.000000]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="compare/2">
+
+  <div class="detail-header">
+    <a href="#compare/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compare(naive_datetime1, naive_datetime2)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1175" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> compare(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(), <a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: :lt | :eq | :gt</pre>
+
+      </div>
+
+<p>Compares two <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> structs.</p><p>Returns <code class="inline">:gt</code> if first is later than the second
+and <code class="inline">:lt</code> for vice versa. If the two NaiveDateTime
+are equal <code class="inline">:eq</code> is returned.</p><h2 id="compare/2-examples" class="section-heading">
+  <a href="#compare/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">compare</span><span class="p" data-group-id="5323863233-1">(</span><span class="ld">~N[2016-04-16 13:30:15]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2016-04-28 16:19:25]</span><span class="p" data-group-id="5323863233-1">)</span><span class="w">
+</span><span class="ss">:lt</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">compare</span><span class="p" data-group-id="5323863233-2">(</span><span class="ld">~N[2016-04-16 13:30:15.1]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2016-04-16 13:30:15.01]</span><span class="p" data-group-id="5323863233-2">)</span><span class="w">
+</span><span class="ss">:gt</span></code></pre><p>This function can also be used to compare a DateTime without
+the time zone information:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5032955657-1">%</span><span class="nc" data-group-id="5032955657-1">DateTime</span><span class="p" data-group-id="5032955657-1">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="ss">zone_abbr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CET&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5032955657-2">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="5032955657-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">utc_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="ss">std_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">time_zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Warsaw&quot;</span><span class="p" data-group-id="5032955657-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">compare</span><span class="p" data-group-id="5032955657-3">(</span><span class="n">dt</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-02-29 23:00:07]</span><span class="p" data-group-id="5032955657-3">)</span><span class="w">
+</span><span class="ss">:eq</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">compare</span><span class="p" data-group-id="5032955657-4">(</span><span class="n">dt</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-29 23:00:07]</span><span class="p" data-group-id="5032955657-4">)</span><span class="w">
+</span><span class="ss">:gt</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">compare</span><span class="p" data-group-id="5032955657-5">(</span><span class="n">dt</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-03-29 23:00:07]</span><span class="p" data-group-id="5032955657-5">)</span><span class="w">
+</span><span class="ss">:lt</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="convert/2">
+
+  <div class="detail-header">
+    <a href="#convert/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">convert(naive_datetime, calendar)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1253" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> convert(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(), <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) ::
+  {:ok, <a href="#t:t/0">t</a>()} | {:error, :incompatible_calendars}</pre>
+
+      </div>
+
+<p>Converts the given <code class="inline">naive_datetime</code> from one calendar to another.</p><p>If it is not possible to convert unambiguously between the calendars
+(see <a href="Calendar.html#compatible_calendars?/2"><code class="inline">Calendar.compatible_calendars?/2</code></a>), an <code class="inline">{:error, :incompatible_calendars}</code> tuple
+is returned.</p><h2 id="convert/2-examples" class="section-heading">
+  <a href="#convert/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Imagine someone implements <code class="inline">Calendar.Holocene</code>, a calendar based on the
+Gregorian calendar that adds exactly 10,000 years to the current Gregorian
+year:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">convert</span><span class="p" data-group-id="9943659290-1">(</span><span class="ld">~N[2000-01-01 13:30:15]</span><span class="p">,</span><span class="w"> </span><span class="nc">Calendar.Holocene</span><span class="p" data-group-id="9943659290-1">)</span><span class="w">
+</span><span class="p" data-group-id="9943659290-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9943659290-3">%</span><span class="nc" data-group-id="9943659290-3">NaiveDateTime</span><span class="p" data-group-id="9943659290-3">{</span><span class="ss">calendar</span><span class="p">:</span><span class="w"> </span><span class="nc">Calendar.Holocene</span><span class="p">,</span><span class="w"> </span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">12000</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                     </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9943659290-4">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="9943659290-4">}</span><span class="p" data-group-id="9943659290-3">}</span><span class="p" data-group-id="9943659290-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="convert!/2">
+
+  <div class="detail-header">
+    <a href="#convert!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">convert!(naive_datetime, calendar)</h1>
+
+        <span class="note">(since 1.5.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1312" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> convert!(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(), <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Converts the given <code class="inline">naive_datetime</code> from one calendar to another.</p><p>If it is not possible to convert unambiguously between the calendars
+(see <a href="Calendar.html#compatible_calendars?/2"><code class="inline">Calendar.compatible_calendars?/2</code></a>), an ArgumentError is raised.</p><h2 id="convert!/2-examples" class="section-heading">
+  <a href="#convert!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>Imagine someone implements <code class="inline">Calendar.Holocene</code>, a calendar based on the
+Gregorian calendar that adds exactly 10,000 years to the current Gregorian
+year:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">convert!</span><span class="p" data-group-id="2352840726-1">(</span><span class="ld">~N[2000-01-01 13:30:15]</span><span class="p">,</span><span class="w"> </span><span class="nc">Calendar.Holocene</span><span class="p" data-group-id="2352840726-1">)</span><span class="w">
+</span><span class="p" data-group-id="2352840726-2">%</span><span class="nc" data-group-id="2352840726-2">NaiveDateTime</span><span class="p" data-group-id="2352840726-2">{</span><span class="ss">calendar</span><span class="p">:</span><span class="w"> </span><span class="nc">Calendar.Holocene</span><span class="p">,</span><span class="w"> </span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">12000</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+               </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2352840726-3">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2352840726-3">}</span><span class="p" data-group-id="2352840726-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="diff/3">
+
+    <span id="diff/2"></span>
+
+  <div class="detail-header">
+    <a href="#diff/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">diff(naive_datetime1, naive_datetime2, unit \\ :second)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L537" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> diff(
+  <a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(),
+  <a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(),
+  :day | :hour | :minute | <a href="System.html#t:time_unit/0">System.time_unit</a>()
+) :: <a href="typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Subtracts <code class="inline">naive_datetime2</code> from <code class="inline">naive_datetime1</code>.</p><p>The answer can be returned in any <code class="inline">:day</code>, <code class="inline">:hour</code>, <code class="inline">:minute</code>, or any <code class="inline">unit</code>
+available from <a href="System.html#t:time_unit/0"><code class="inline">System.time_unit/0</code></a>. The unit is measured according to
+<a href="Calendar.ISO.html"><code class="inline">Calendar.ISO</code></a> and defaults to <code class="inline">:second</code>.</p><p>Fractional results are not supported and are truncated.</p><h2 id="diff/3-examples" class="section-heading">
+  <a href="#diff/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="9266653615-1">(</span><span class="ld">~N[2014-10-02 00:29:12]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p" data-group-id="9266653615-1">)</span><span class="w">
+</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="9266653615-2">(</span><span class="ld">~N[2014-10-02 00:29:12]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ss">:microsecond</span><span class="p" data-group-id="9266653615-2">)</span><span class="w">
+</span><span class="mi">2_000_000</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="9266653615-3">(</span><span class="ld">~N[2014-10-02 00:29:10.042]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10.021]</span><span class="p" data-group-id="9266653615-3">)</span><span class="w">
+</span><span class="mi">0</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="9266653615-4">(</span><span class="ld">~N[2014-10-02 00:29:10.042]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10.021]</span><span class="p">,</span><span class="w"> </span><span class="ss">:millisecond</span><span class="p" data-group-id="9266653615-4">)</span><span class="w">
+</span><span class="mi">21</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="9266653615-5">(</span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:12]</span><span class="p" data-group-id="9266653615-5">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">2</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="9266653615-6">(</span><span class="ld">~N[-0001-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[-0001-10-02 00:29:12]</span><span class="p" data-group-id="9266653615-6">)</span><span class="w">
+</span><span class="o">-</span><span class="mi">2</span></code></pre><p>It can also compute the difference in days, hours, or minutes:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="3910993346-1">(</span><span class="ld">~N[2014-10-10 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ss">:day</span><span class="p" data-group-id="3910993346-1">)</span><span class="w">
+</span><span class="mi">8</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="3910993346-2">(</span><span class="ld">~N[2014-10-02 12:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ss">:hour</span><span class="p" data-group-id="3910993346-2">)</span><span class="w">
+</span><span class="mi">12</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="3910993346-3">(</span><span class="ld">~N[2014-10-02 00:39:10]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ss">:minute</span><span class="p" data-group-id="3910993346-3">)</span><span class="w">
+</span><span class="mi">10</span></code></pre><p>But it also rounds incomplete days to zero:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">diff</span><span class="p" data-group-id="0334283647-1">(</span><span class="ld">~N[2014-10-10 00:29:09]</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2014-10-02 00:29:10]</span><span class="p">,</span><span class="w"> </span><span class="ss">:day</span><span class="p" data-group-id="0334283647-1">)</span><span class="w">
+</span><span class="mi">7</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="end_of_day/1">
+
+  <div class="detail-header">
+    <a href="#end_of_day/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">end_of_day(naive_datetime)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1372" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> end_of_day(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Calculates a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> that is the last moment for the given <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>.</p><p>To calculate the end of day of a <a href="DateTime.html"><code class="inline">DateTime</code></a>, call this function, then convert back to a <a href="DateTime.html"><code class="inline">DateTime</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="n">datetime</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">end_of_day</span><span class="p" data-group-id="3823883027-1">(</span><span class="p" data-group-id="3823883027-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">DateTime</span><span class="o">.</span><span class="n">from_naive</span><span class="p" data-group-id="3823883027-2">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">time_zone</span><span class="p" data-group-id="3823883027-2">)</span></code></pre><p>Note that the end of the day may not exist or be ambiguous
+in a given timezone, so you must handle those cases accordingly.</p><h2 id="end_of_day/1-examples" class="section-heading">
+  <a href="#end_of_day/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">end_of_day</span><span class="p" data-group-id="1188191381-1">(</span><span class="ld">~N[2000-01-01 23:00:07.123456]</span><span class="p" data-group-id="1188191381-1">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 23:59:59.999999]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_erl/3">
+
+    <span id="from_erl/1"></span>
+
+    <span id="from_erl/2"></span>
+
+  <div class="detail-header">
+    <a href="#from_erl/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_erl(tuple, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1006" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_erl(<a href="https://www.erlang.org/doc/apps/stdlib/calendar.html#t:datetime/0">:calendar.datetime</a>(), <a href="Calendar.html#t:microsecond/0">Calendar.microsecond</a>(), <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) ::
+  {:ok, <a href="#t:t/0">t</a>()} | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Converts an Erlang datetime tuple to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct.</p><p>Attempting to convert an invalid ISO calendar date will produce an error tuple.</p><h2 id="from_erl/3-examples" class="section-heading">
+  <a href="#from_erl/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_erl</span><span class="p" data-group-id="6235859989-1">(</span><span class="p" data-group-id="6235859989-2">{</span><span class="p" data-group-id="6235859989-3">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6235859989-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6235859989-4">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="6235859989-4">}</span><span class="p" data-group-id="6235859989-2">}</span><span class="p" data-group-id="6235859989-1">)</span><span class="w">
+</span><span class="p" data-group-id="6235859989-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-01 13:30:15]</span><span class="p" data-group-id="6235859989-5">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_erl</span><span class="p" data-group-id="6235859989-6">(</span><span class="p" data-group-id="6235859989-7">{</span><span class="p" data-group-id="6235859989-8">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6235859989-8">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6235859989-9">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="6235859989-9">}</span><span class="p" data-group-id="6235859989-7">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6235859989-10">{</span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6235859989-10">}</span><span class="p" data-group-id="6235859989-6">)</span><span class="w">
+</span><span class="p" data-group-id="6235859989-11">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-01 13:30:15.005]</span><span class="p" data-group-id="6235859989-11">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_erl</span><span class="p" data-group-id="6235859989-12">(</span><span class="p" data-group-id="6235859989-13">{</span><span class="p" data-group-id="6235859989-14">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6235859989-14">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6235859989-15">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="6235859989-15">}</span><span class="p" data-group-id="6235859989-13">}</span><span class="p" data-group-id="6235859989-12">)</span><span class="w">
+</span><span class="p" data-group-id="6235859989-16">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_date</span><span class="p" data-group-id="6235859989-16">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_erl</span><span class="p" data-group-id="6235859989-17">(</span><span class="p" data-group-id="6235859989-18">{</span><span class="p" data-group-id="6235859989-19">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6235859989-19">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6235859989-20">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="6235859989-20">}</span><span class="p" data-group-id="6235859989-18">}</span><span class="p" data-group-id="6235859989-17">)</span><span class="w">
+</span><span class="p" data-group-id="6235859989-21">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_date</span><span class="p" data-group-id="6235859989-21">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_erl!/3">
+
+    <span id="from_erl!/1"></span>
+
+    <span id="from_erl!/2"></span>
+
+  <div class="detail-header">
+    <a href="#from_erl!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_erl!(tuple, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1030" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_erl!(<a href="https://www.erlang.org/doc/apps/stdlib/calendar.html#t:datetime/0">:calendar.datetime</a>(), <a href="Calendar.html#t:microsecond/0">Calendar.microsecond</a>(), <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) ::
+  <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Converts an Erlang datetime tuple to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct.</p><p>Raises if the datetime is invalid.
+Attempting to convert an invalid ISO calendar date will produce an error tuple.</p><h2 id="from_erl!/3-examples" class="section-heading">
+  <a href="#from_erl!/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_erl!</span><span class="p" data-group-id="2042941283-1">(</span><span class="p" data-group-id="2042941283-2">{</span><span class="p" data-group-id="2042941283-3">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="2042941283-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2042941283-4">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="2042941283-4">}</span><span class="p" data-group-id="2042941283-2">}</span><span class="p" data-group-id="2042941283-1">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 13:30:15]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_erl!</span><span class="p" data-group-id="2042941283-5">(</span><span class="p" data-group-id="2042941283-6">{</span><span class="p" data-group-id="2042941283-7">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="2042941283-7">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2042941283-8">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="2042941283-8">}</span><span class="p" data-group-id="2042941283-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2042941283-9">{</span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="2042941283-9">}</span><span class="p" data-group-id="2042941283-5">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 13:30:15.005]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_erl!</span><span class="p" data-group-id="2042941283-10">(</span><span class="p" data-group-id="2042941283-11">{</span><span class="p" data-group-id="2042941283-12">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="2042941283-12">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2042941283-13">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="2042941283-13">}</span><span class="p" data-group-id="2042941283-11">}</span><span class="p" data-group-id="2042941283-10">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) cannot convert {{2000, 13, 1}, {13, 30, 15}} to naive datetime, reason: :invalid_date</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_gregorian_seconds/3">
+
+    <span id="from_gregorian_seconds/1"></span>
+
+    <span id="from_gregorian_seconds/2"></span>
+
+  <div class="detail-header">
+    <a href="#from_gregorian_seconds/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_gregorian_seconds(seconds, microsecond_precision \\ {0, 0}, calendar \\ Calendar.ISO)</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1056" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_gregorian_seconds(<a href="typespecs.html#basic-types">integer</a>(), <a href="Calendar.html#t:microsecond/0">Calendar.microsecond</a>(), <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) ::
+  <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Converts a number of gregorian seconds to a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct.</p><h2 id="from_gregorian_seconds/3-examples" class="section-heading">
+  <a href="#from_gregorian_seconds/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_gregorian_seconds</span><span class="p" data-group-id="3016433098-1">(</span><span class="mi">1</span><span class="p" data-group-id="3016433098-1">)</span><span class="w">
+</span><span class="ld">~N[0000-01-01 00:00:01]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_gregorian_seconds</span><span class="p" data-group-id="3016433098-2">(</span><span class="mi">63_755_511_991</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3016433098-3">{</span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3016433098-3">}</span><span class="p" data-group-id="3016433098-2">)</span><span class="w">
+</span><span class="ld">~N[2020-05-01 00:26:31.005]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_gregorian_seconds</span><span class="p" data-group-id="3016433098-4">(</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="3016433098-4">)</span><span class="w">
+</span><span class="ld">~N[-0001-12-31 23:59:59]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_iso8601/2">
+
+    <span id="from_iso8601/1"></span>
+
+  <div class="detail-header">
+    <a href="#from_iso8601/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_iso8601(string, calendar \\ Calendar.ISO)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L853" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_iso8601(<a href="String.html#t:t/0">String.t</a>(), <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) :: {:ok, <a href="#t:t/0">t</a>()} | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Parses the extended &quot;Date and time of day&quot; format described by
+<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601:2019</a>.</p><p>Time zone offset may be included in the string but they will be
+simply discarded as such information is not included in naive date
+times.</p><p>As specified in the standard, the separator &quot;T&quot; may be omitted if
+desired as there is no ambiguity within this function.</p><p>Note leap seconds are not supported by the built-in Calendar.ISO.</p><h2 id="from_iso8601/2-examples" class="section-heading">
+  <a href="#from_iso8601/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-1">(</span><span class="s">&quot;2015-01-23 23:50:07&quot;</span><span class="p" data-group-id="0890206212-1">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07]</span><span class="p" data-group-id="0890206212-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-3">(</span><span class="s">&quot;2015-01-23T23:50:07&quot;</span><span class="p" data-group-id="0890206212-3">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07]</span><span class="p" data-group-id="0890206212-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-5">(</span><span class="s">&quot;2015-01-23T23:50:07Z&quot;</span><span class="p" data-group-id="0890206212-5">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07]</span><span class="p" data-group-id="0890206212-6">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-7">(</span><span class="s">&quot;2015-01-23 23:50:07.0&quot;</span><span class="p" data-group-id="0890206212-7">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07.0]</span><span class="p" data-group-id="0890206212-8">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-9">(</span><span class="s">&quot;2015-01-23 23:50:07,0123456&quot;</span><span class="p" data-group-id="0890206212-9">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07.012345]</span><span class="p" data-group-id="0890206212-10">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-11">(</span><span class="s">&quot;2015-01-23 23:50:07.0123456&quot;</span><span class="p" data-group-id="0890206212-11">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07.012345]</span><span class="p" data-group-id="0890206212-12">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-13">(</span><span class="s">&quot;2015-01-23T23:50:07.123Z&quot;</span><span class="p" data-group-id="0890206212-13">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-14">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07.123]</span><span class="p" data-group-id="0890206212-14">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-15">(</span><span class="s">&quot;2015-01-23P23:50:07&quot;</span><span class="p" data-group-id="0890206212-15">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-16">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_format</span><span class="p" data-group-id="0890206212-16">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-17">(</span><span class="s">&quot;2015:01:23 23-50-07&quot;</span><span class="p" data-group-id="0890206212-17">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-18">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_format</span><span class="p" data-group-id="0890206212-18">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-19">(</span><span class="s">&quot;2015-01-23 23:50:07A&quot;</span><span class="p" data-group-id="0890206212-19">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-20">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_format</span><span class="p" data-group-id="0890206212-20">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-21">(</span><span class="s">&quot;2015-01-23 23:50:61&quot;</span><span class="p" data-group-id="0890206212-21">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-22">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_time</span><span class="p" data-group-id="0890206212-22">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-23">(</span><span class="s">&quot;2015-01-32 23:50:07&quot;</span><span class="p" data-group-id="0890206212-23">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-24">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_date</span><span class="p" data-group-id="0890206212-24">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-25">(</span><span class="s">&quot;2015-01-23T23:50:07.123+02:30&quot;</span><span class="p" data-group-id="0890206212-25">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-26">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07.123]</span><span class="p" data-group-id="0890206212-26">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-27">(</span><span class="s">&quot;2015-01-23T23:50:07.123+00:00&quot;</span><span class="p" data-group-id="0890206212-27">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-28">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07.123]</span><span class="p" data-group-id="0890206212-28">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-29">(</span><span class="s">&quot;2015-01-23T23:50:07.123-02:30&quot;</span><span class="p" data-group-id="0890206212-29">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-30">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2015-01-23 23:50:07.123]</span><span class="p" data-group-id="0890206212-30">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-31">(</span><span class="s">&quot;2015-01-23T23:50:07.123-00:00&quot;</span><span class="p" data-group-id="0890206212-31">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-32">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_format</span><span class="p" data-group-id="0890206212-32">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-33">(</span><span class="s">&quot;2015-01-23T23:50:07.123-00:60&quot;</span><span class="p" data-group-id="0890206212-33">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-34">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_format</span><span class="p" data-group-id="0890206212-34">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601</span><span class="p" data-group-id="0890206212-35">(</span><span class="s">&quot;2015-01-23T23:50:07.123-24:00&quot;</span><span class="p" data-group-id="0890206212-35">)</span><span class="w">
+</span><span class="p" data-group-id="0890206212-36">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_format</span><span class="p" data-group-id="0890206212-36">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="from_iso8601!/2">
+
+    <span id="from_iso8601!/1"></span>
+
+  <div class="detail-header">
+    <a href="#from_iso8601!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">from_iso8601!(string, calendar \\ Calendar.ISO)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L888" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> from_iso8601!(<a href="String.html#t:t/0">String.t</a>(), <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Parses the extended &quot;Date and time of day&quot; format described by
+<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601:2019</a>.</p><p>Raises if the format is invalid.</p><h2 id="from_iso8601!/2-examples" class="section-heading">
+  <a href="#from_iso8601!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601!</span><span class="p" data-group-id="3226648142-1">(</span><span class="s">&quot;2015-01-23T23:50:07.123Z&quot;</span><span class="p" data-group-id="3226648142-1">)</span><span class="w">
+</span><span class="ld">~N[2015-01-23 23:50:07.123]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601!</span><span class="p" data-group-id="3226648142-2">(</span><span class="s">&quot;2015-01-23T23:50:07,123Z&quot;</span><span class="p" data-group-id="3226648142-2">)</span><span class="w">
+</span><span class="ld">~N[2015-01-23 23:50:07.123]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">from_iso8601!</span><span class="p" data-group-id="3226648142-3">(</span><span class="s">&quot;2015-01-23P23:50:07&quot;</span><span class="p" data-group-id="3226648142-3">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) cannot parse &quot;2015-01-23P23:50:07&quot; as naive datetime, reason: :invalid_format</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="local_now/1">
+
+    <span id="local_now/0"></span>
+
+  <div class="detail-header">
+    <a href="#local_now/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">local_now(calendar \\ Calendar.ISO)</h1>
+
+        <span class="note">(since 1.10.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L189" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> local_now(<a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Returns the &quot;local time&quot; for the machine the Elixir program is running on.</p><p>WARNING: This function can cause insidious bugs. It depends on the time zone
+configuration at run time. This can changed and be set to a time zone that has
+daylight saving jumps (spring forward or fall back).</p><p>This function can be used to display what the time is right now for the time
+zone configuration that the machine happens to have. An example would be a
+desktop program displaying a clock to the user. For any other uses it is
+probably a bad idea to use this function.</p><p>For most cases, use <a href="DateTime.html#now/2"><code class="inline">DateTime.now/2</code></a> or <a href="DateTime.html#utc_now/1"><code class="inline">DateTime.utc_now/1</code></a> instead.</p><p>Does not include fractional seconds.</p><h2 id="local_now/1-examples" class="section-heading">
+  <a href="#local_now/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">local_now</span><span class="p" data-group-id="7512456286-1">(</span><span class="p" data-group-id="7512456286-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="o">.</span><span class="n">year</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2019</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/2">
+
+  <div class="detail-header">
+    <a href="#new/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(date, time)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L354" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="Date.html#t:t/0">Date.t</a>(), <a href="Time.html#t:t/0">Time.t</a>()) :: {:ok, <a href="#t:t/0">t</a>()}</pre>
+
+      </div>
+
+<p>Builds a naive datetime from date and time structs.</p><h2 id="new/2-examples" class="section-heading">
+  <a href="#new/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="5452679947-1">(</span><span class="ld">~D[2010-01-13]</span><span class="p">,</span><span class="w"> </span><span class="ld">~T[23:00:07.005]</span><span class="p" data-group-id="5452679947-1">)</span><span class="w">
+</span><span class="p" data-group-id="5452679947-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2010-01-13 23:00:07.005]</span><span class="p" data-group-id="5452679947-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new/8">
+
+    <span id="new/6"></span>
+
+    <span id="new/7"></span>
+
+  <div class="detail-header">
+    <a href="#new/8" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(year, month, day, hour, minute, second, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L258" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(
+  <a href="Calendar.html#t:year/0">Calendar.year</a>(),
+  <a href="Calendar.html#t:month/0">Calendar.month</a>(),
+  <a href="Calendar.html#t:day/0">Calendar.day</a>(),
+  <a href="Calendar.html#t:hour/0">Calendar.hour</a>(),
+  <a href="Calendar.html#t:minute/0">Calendar.minute</a>(),
+  <a href="Calendar.html#t:second/0">Calendar.second</a>(),
+  <a href="Calendar.html#t:microsecond/0">Calendar.microsecond</a>() | <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()
+) :: {:ok, <a href="#t:t/0">t</a>()} | {:error, <a href="typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+<p>Builds a new ISO naive datetime.</p><p>Expects all values to be integers. Returns <code class="inline">{:ok, naive_datetime}</code>
+if each entry fits its appropriate range, returns <code class="inline">{:error, reason}</code>
+otherwise.</p><h2 id="new/8-examples" class="section-heading">
+  <a href="#new/8-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-1">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4035860116-1">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-01 00:00:00]</span><span class="p" data-group-id="4035860116-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-3">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4035860116-3">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_date</span><span class="p" data-group-id="4035860116-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-5">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4035860116-5">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-02-29 00:00:00]</span><span class="p" data-group-id="4035860116-6">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-7">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4035860116-7">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_date</span><span class="p" data-group-id="4035860116-8">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-9">(</span><span class="mi">2001</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4035860116-9">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-10">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_date</span><span class="p" data-group-id="4035860116-10">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-11">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4035860116-12">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4035860116-12">}</span><span class="p" data-group-id="4035860116-11">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-13">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-01 23:59:59.0]</span><span class="p" data-group-id="4035860116-13">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-14">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">999_999</span><span class="p" data-group-id="4035860116-14">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-15">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-01 23:59:59.999999]</span><span class="p" data-group-id="4035860116-15">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-16">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">999_999</span><span class="p" data-group-id="4035860116-16">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-17">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_time</span><span class="p" data-group-id="4035860116-17">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-18">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">999_999</span><span class="p" data-group-id="4035860116-18">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-19">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_time</span><span class="p" data-group-id="4035860116-19">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-20">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">999_999</span><span class="p" data-group-id="4035860116-20">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-21">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_time</span><span class="p" data-group-id="4035860116-21">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-22">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">1_000_000</span><span class="p" data-group-id="4035860116-22">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-23">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_time</span><span class="p" data-group-id="4035860116-23">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4035860116-24">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4035860116-25">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4035860116-25">}</span><span class="p">,</span><span class="w"> </span><span class="nc">Calendar.ISO</span><span class="p" data-group-id="4035860116-24">)</span><span class="w">
+</span><span class="p" data-group-id="4035860116-26">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ld">~N[2000-01-01 23:59:59.0]</span><span class="p" data-group-id="4035860116-26">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new!/2">
+
+  <div class="detail-header">
+    <a href="#new!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new!(date, time)</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L385" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new!(<a href="Date.html#t:t/0">Date.t</a>(), <a href="Time.html#t:t/0">Time.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Builds a naive datetime from date and time structs.</p><h2 id="new!/2-examples" class="section-heading">
+  <a href="#new!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="8205041238-1">(</span><span class="ld">~D[2010-01-13]</span><span class="p">,</span><span class="w"> </span><span class="ld">~T[23:00:07.005]</span><span class="p" data-group-id="8205041238-1">)</span><span class="w">
+</span><span class="ld">~N[2010-01-13 23:00:07.005]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="new!/8">
+
+    <span id="new!/6"></span>
+
+    <span id="new!/7"></span>
+
+  <div class="detail-header">
+    <a href="#new!/8" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new!(year, month, day, hour, minute, second, microsecond \\ {0, 0}, calendar \\ Calendar.ISO)</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L323" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new!(
+  <a href="Calendar.html#t:year/0">Calendar.year</a>(),
+  <a href="Calendar.html#t:month/0">Calendar.month</a>(),
+  <a href="Calendar.html#t:day/0">Calendar.day</a>(),
+  <a href="Calendar.html#t:hour/0">Calendar.hour</a>(),
+  <a href="Calendar.html#t:minute/0">Calendar.minute</a>(),
+  <a href="Calendar.html#t:second/0">Calendar.second</a>(),
+  <a href="Calendar.html#t:microsecond/0">Calendar.microsecond</a>() | <a href="typespecs.html#basic-types">non_neg_integer</a>(),
+  <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()
+) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Builds a new ISO naive datetime.</p><p>Expects all values to be integers. Returns <code class="inline">naive_datetime</code>
+if each entry fits its appropriate range, raises if
+time or date is invalid.</p><h2 id="new!/8-examples" class="section-heading">
+  <a href="#new!/8-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="0728396231-1">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0728396231-1">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 00:00:00]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="0728396231-2">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0728396231-2">)</span><span class="w">
+</span><span class="ld">~N[2000-02-29 00:00:00]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="0728396231-3">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0728396231-4">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0728396231-4">}</span><span class="p" data-group-id="0728396231-3">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 23:59:59.0]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="0728396231-5">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">999_999</span><span class="p" data-group-id="0728396231-5">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 23:59:59.999999]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="0728396231-6">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0728396231-7">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0728396231-7">}</span><span class="p">,</span><span class="w"> </span><span class="nc">Calendar.ISO</span><span class="p" data-group-id="0728396231-6">)</span><span class="w">
+</span><span class="ld">~N[2000-01-01 23:59:59.0]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">new!</span><span class="p" data-group-id="0728396231-8">(</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="mi">999_999</span><span class="p" data-group-id="0728396231-8">)</span><span class="w">
+</span><span class="gt">** (ArgumentError) cannot build naive datetime, reason: :invalid_time</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="shift/2">
+
+  <div class="detail-header">
+    <a href="#shift/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shift(naive_datetime, duration)</h1>
+
+        <span class="note">(since 1.17.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L613" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> shift(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(), <a href="Duration.html#t:duration/0">Duration.duration</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Shifts given <code class="inline">naive_datetime</code> by <code class="inline">duration</code> according to its calendar.</p><p>Allowed units are: <code class="inline">:year</code>, <code class="inline">:month</code>, <code class="inline">:week</code>, <code class="inline">:day</code>, <code class="inline">:hour</code>, <code class="inline">:minute</code>, <code class="inline">:second</code>, <code class="inline">:microsecond</code>.</p><p>When using the default ISO calendar, durations are collapsed and
+applied in the order of months, then seconds and microseconds:</p><ul><li>when shifting by 1 year and 2 months the date is actually shifted by 14 months</li><li>weeks, days and smaller units are collapsed into seconds and microseconds</li></ul><p>When shifting by month, days are rounded down to the nearest valid date.</p><h2 id="shift/2-examples" class="section-heading">
+  <a href="#shift/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-1">(</span><span class="ld">~N[2016-01-31 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1169203781-1">)</span><span class="w">
+</span><span class="ld">~N[2016-02-29 00:00:00]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-2">(</span><span class="ld">~N[2016-01-31 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1169203781-2">)</span><span class="w">
+</span><span class="ld">~N[2020-02-01 00:00:00]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-3">(</span><span class="ld">~N[2016-01-31 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1169203781-3">)</span><span class="w">
+</span><span class="ld">~N[2014-02-01 00:00:00]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-4">(</span><span class="ld">~N[2016-01-31 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p" data-group-id="1169203781-4">)</span><span class="w">
+</span><span class="ld">~N[2016-01-31 00:00:45]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-5">(</span><span class="ld">~N[2016-01-31 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1169203781-6">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="1169203781-6">}</span><span class="p" data-group-id="1169203781-5">)</span><span class="w">
+</span><span class="ld">~N[2016-01-31 00:00:00.000100]</span><span class="w">
+
+</span><span class="c1"># leap years</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-7">(</span><span class="ld">~N[2024-02-29 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1169203781-7">)</span><span class="w">
+</span><span class="ld">~N[2025-02-28 00:00:00]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-8">(</span><span class="ld">~N[2024-02-29 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="1169203781-8">)</span><span class="w">
+</span><span class="ld">~N[2028-02-29 00:00:00]</span><span class="w">
+
+</span><span class="c1"># rounding down</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">shift</span><span class="p" data-group-id="1169203781-9">(</span><span class="ld">~N[2015-01-31 00:00:00]</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1169203781-9">)</span><span class="w">
+</span><span class="ld">~N[2015-02-28 00:00:00]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_date/1">
+
+  <div class="detail-header">
+    <a href="#to_date/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_date(map)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L714" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_date(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="Date.html#t:t/0">Date.t</a>()</pre>
+
+      </div>
+
+<p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> into a <a href="Date.html"><code class="inline">Date</code></a>.</p><p>Because <a href="Date.html"><code class="inline">Date</code></a> does not hold time information,
+data will be lost during the conversion.</p><h2 id="to_date/1-examples" class="section-heading">
+  <a href="#to_date/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_date</span><span class="p" data-group-id="7634414104-1">(</span><span class="ld">~N[2002-01-13 23:00:07]</span><span class="p" data-group-id="7634414104-1">)</span><span class="w">
+</span><span class="ld">~D[2002-01-13]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_erl/1">
+
+  <div class="detail-header">
+    <a href="#to_erl/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_erl(naive_datetime)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L980" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_erl(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="https://www.erlang.org/doc/apps/stdlib/calendar.html#t:datetime/0">:calendar.datetime</a>()</pre>
+
+      </div>
+
+<p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct to an Erlang datetime tuple.</p><p>Only supports converting naive datetimes which are in the ISO calendar,
+attempting to convert naive datetimes from other calendars will raise.</p><p>WARNING: Loss of precision may occur, as Erlang time tuples only store
+hour/minute/second.</p><h2 id="to_erl/1-examples" class="section-heading">
+  <a href="#to_erl/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_erl</span><span class="p" data-group-id="7295342680-1">(</span><span class="ld">~N[2000-01-01 13:30:15]</span><span class="p" data-group-id="7295342680-1">)</span><span class="w">
+</span><span class="p" data-group-id="7295342680-2">{</span><span class="p" data-group-id="7295342680-3">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7295342680-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7295342680-4">{</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="7295342680-4">}</span><span class="p" data-group-id="7295342680-2">}</span></code></pre><p>This function can also be used to convert a DateTime to an Erlang
+datetime tuple without the time zone information:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2325606506-1">%</span><span class="nc" data-group-id="2325606506-1">DateTime</span><span class="p" data-group-id="2325606506-1">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="ss">zone_abbr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CET&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2325606506-2">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2325606506-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">utc_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="ss">std_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">time_zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Warsaw&quot;</span><span class="p" data-group-id="2325606506-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_erl</span><span class="p" data-group-id="2325606506-3">(</span><span class="n">dt</span><span class="p" data-group-id="2325606506-3">)</span><span class="w">
+</span><span class="p" data-group-id="2325606506-4">{</span><span class="p" data-group-id="2325606506-5">{</span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p" data-group-id="2325606506-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2325606506-6">{</span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="mi">07</span><span class="p" data-group-id="2325606506-6">}</span><span class="p" data-group-id="2325606506-4">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_gregorian_seconds/1">
+
+  <div class="detail-header">
+    <a href="#to_gregorian_seconds/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_gregorian_seconds(map)</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L1120" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_gregorian_seconds(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) ::
+  {<a href="typespecs.html#basic-types">integer</a>(), <a href="typespecs.html#basic-types">non_neg_integer</a>()}</pre>
+
+      </div>
+
+<p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> struct to a number of gregorian seconds and microseconds.</p><h2 id="to_gregorian_seconds/1-examples" class="section-heading">
+  <a href="#to_gregorian_seconds/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_gregorian_seconds</span><span class="p" data-group-id="8516417832-1">(</span><span class="ld">~N[0000-01-01 00:00:01]</span><span class="p" data-group-id="8516417832-1">)</span><span class="w">
+</span><span class="p" data-group-id="8516417832-2">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8516417832-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_gregorian_seconds</span><span class="p" data-group-id="8516417832-3">(</span><span class="ld">~N[2020-05-01 00:26:31.005]</span><span class="p" data-group-id="8516417832-3">)</span><span class="w">
+</span><span class="p" data-group-id="8516417832-4">{</span><span class="mi">63_755_511_991</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p" data-group-id="8516417832-4">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_iso8601/2">
+
+    <span id="to_iso8601/1"></span>
+
+  <div class="detail-header">
+    <a href="#to_iso8601/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_iso8601(naive_datetime, format \\ :extended)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L931" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_iso8601(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>(), :basic | :extended) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the given naive datetime to
+<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601:2019</a>.</p><p>By default, <a href="#to_iso8601/2"><code class="inline">NaiveDateTime.to_iso8601/2</code></a> returns naive datetimes formatted in the &quot;extended&quot;
+format, for human readability. It also supports the &quot;basic&quot; format through passing the <code class="inline">:basic</code> option.</p><p>Only supports converting naive datetimes which are in the ISO calendar,
+attempting to convert naive datetimes from other calendars will raise.</p><h3 id="to_iso8601/2-examples" class="section-heading">
+  <a href="#to_iso8601/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="8157068707-1">(</span><span class="ld">~N[2000-02-28 23:00:13]</span><span class="p" data-group-id="8157068707-1">)</span><span class="w">
+</span><span class="s">&quot;2000-02-28T23:00:13&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="8157068707-2">(</span><span class="ld">~N[2000-02-28 23:00:13.001]</span><span class="p" data-group-id="8157068707-2">)</span><span class="w">
+</span><span class="s">&quot;2000-02-28T23:00:13.001&quot;</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="8157068707-3">(</span><span class="ld">~N[2000-02-28 23:00:13.001]</span><span class="p">,</span><span class="w"> </span><span class="ss">:basic</span><span class="p" data-group-id="8157068707-3">)</span><span class="w">
+</span><span class="s">&quot;20000228T230013.001&quot;</span></code></pre><p>This function can also be used to convert a DateTime to ISO 8601 without
+the time zone information:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8250987146-1">%</span><span class="nc" data-group-id="8250987146-1">DateTime</span><span class="p" data-group-id="8250987146-1">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="ss">zone_abbr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CET&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8250987146-2">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8250987146-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">utc_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="ss">std_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">time_zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Warsaw&quot;</span><span class="p" data-group-id="8250987146-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_iso8601</span><span class="p" data-group-id="8250987146-3">(</span><span class="n">dt</span><span class="p" data-group-id="8250987146-3">)</span><span class="w">
+</span><span class="s">&quot;2000-02-29T23:00:07&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_string/1">
+
+  <div class="detail-header">
+    <a href="#to_string/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_string(naive_datetime)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L782" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the given naive datetime to a string according to its calendar.</p><h3 id="to_string/1-examples" class="section-heading">
+  <a href="#to_string/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h3>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="3282004665-1">(</span><span class="ld">~N[2000-02-28 23:00:13]</span><span class="p" data-group-id="3282004665-1">)</span><span class="w">
+</span><span class="s">&quot;2000-02-28 23:00:13&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="3282004665-2">(</span><span class="ld">~N[2000-02-28 23:00:13.001]</span><span class="p" data-group-id="3282004665-2">)</span><span class="w">
+</span><span class="s">&quot;2000-02-28 23:00:13.001&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="3282004665-3">(</span><span class="ld">~N[-0100-12-15 03:20:31]</span><span class="p" data-group-id="3282004665-3">)</span><span class="w">
+</span><span class="s">&quot;-0100-12-15 03:20:31&quot;</span></code></pre><p>This function can also be used to convert a DateTime to a string without
+the time zone information:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8095052144-1">%</span><span class="nc" data-group-id="8095052144-1">DateTime</span><span class="p" data-group-id="8095052144-1">{</span><span class="ss">year</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="ss">month</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">day</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="ss">zone_abbr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CET&quot;</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">hour</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="ss">minute</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">second</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="ss">microsecond</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8095052144-2">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8095052144-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">               </span><span class="ss">utc_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="ss">std_offset</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">time_zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Europe/Warsaw&quot;</span><span class="p" data-group-id="8095052144-1">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="8095052144-3">(</span><span class="n">dt</span><span class="p" data-group-id="8095052144-3">)</span><span class="w">
+</span><span class="s">&quot;2000-02-29 23:00:07&quot;</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="to_time/1">
+
+  <div class="detail-header">
+    <a href="#to_time/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">to_time(map)</h1>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L740" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> to_time(<a href="Calendar.html#t:naive_datetime/0">Calendar.naive_datetime</a>()) :: <a href="Time.html#t:t/0">Time.t</a>()</pre>
+
+      </div>
+
+<p>Converts a <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a> into <a href="Time.html"><code class="inline">Time</code></a>.</p><p>Because <a href="Time.html"><code class="inline">Time</code></a> does not hold date information,
+data will be lost during the conversion.</p><h2 id="to_time/1-examples" class="section-heading">
+  <a href="#to_time/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">to_time</span><span class="p" data-group-id="0691008829-1">(</span><span class="ld">~N[2002-01-13 23:00:07]</span><span class="p" data-group-id="0691008829-1">)</span><span class="w">
+</span><span class="ld">~T[23:00:07]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="truncate/2">
+
+  <div class="detail-header">
+    <a href="#truncate/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">truncate(naive_datetime, precision)</h1>
+
+        <span class="note">(since 1.6.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L672" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> truncate(<a href="#t:t/0">t</a>(), :microsecond | :millisecond | :second) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Returns the given naive datetime with the microsecond field truncated to the
+given precision (<code class="inline">:microsecond</code>, <code class="inline">:millisecond</code> or <code class="inline">:second</code>).</p><p>The given naive datetime is returned unchanged if it already has lower precision
+than the given precision.</p><h2 id="truncate/2-examples" class="section-heading">
+  <a href="#truncate/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">truncate</span><span class="p" data-group-id="2423553699-1">(</span><span class="ld">~N[2017-11-06 00:23:51.123456]</span><span class="p">,</span><span class="w"> </span><span class="ss">:microsecond</span><span class="p" data-group-id="2423553699-1">)</span><span class="w">
+</span><span class="ld">~N[2017-11-06 00:23:51.123456]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">truncate</span><span class="p" data-group-id="2423553699-2">(</span><span class="ld">~N[2017-11-06 00:23:51.123456]</span><span class="p">,</span><span class="w"> </span><span class="ss">:millisecond</span><span class="p" data-group-id="2423553699-2">)</span><span class="w">
+</span><span class="ld">~N[2017-11-06 00:23:51.123]</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">truncate</span><span class="p" data-group-id="2423553699-3">(</span><span class="ld">~N[2017-11-06 00:23:51.123456]</span><span class="p">,</span><span class="w"> </span><span class="ss">:second</span><span class="p" data-group-id="2423553699-3">)</span><span class="w">
+</span><span class="ld">~N[2017-11-06 00:23:51]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="utc_now/1">
+
+    <span id="utc_now/0"></span>
+
+  <div class="detail-header">
+    <a href="#utc_now/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">utc_now(calendar_or_time_unit \\ Calendar.ISO)</h1>
+
+        <span class="note">(since 1.4.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L111" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> utc_now(<a href="Calendar.html#t:calendar/0">Calendar.calendar</a>() | :native | :microsecond | :millisecond | :second) ::
+  <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Returns the current naive datetime in UTC.</p><p>Prefer using <a href="DateTime.html#utc_now/0"><code class="inline">DateTime.utc_now/0</code></a> when possible as, opposite
+to <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>, it will keep the time zone information.</p><p>You can also provide a time unit to automatically truncate
+the naive datetime. This is available since v1.15.0.</p><h2 id="utc_now/1-examples" class="section-heading">
+  <a href="#utc_now/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">utc_now</span><span class="p" data-group-id="3594855513-1">(</span><span class="p" data-group-id="3594855513-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="o">.</span><span class="n">year</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2016</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">utc_now</span><span class="p" data-group-id="3594855513-2">(</span><span class="ss">:second</span><span class="p" data-group-id="3594855513-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="o">.</span><span class="n">microsecond</span><span class="w">
+</span><span class="p" data-group-id="3594855513-3">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3594855513-3">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="utc_now/2">
+
+  <div class="detail-header">
+    <a href="#utc_now/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">utc_now(time_unit, calendar)</h1>
+
+        <span class="note">(since 1.15.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/calendar/naive_datetime.ex#L159" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> utc_now(:native | :microsecond | :millisecond | :second, <a href="Calendar.html#t:calendar/0">Calendar.calendar</a>()) ::
+  <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Returns the current naive datetime in UTC, supporting a specific
+calendar and precision.</p><p>Prefer using <a href="DateTime.html#utc_now/2"><code class="inline">DateTime.utc_now/2</code></a> when possible as, opposite
+to <a href="NaiveDateTime.html"><code class="inline">NaiveDateTime</code></a>, it will keep the time zone information.</p><h2 id="utc_now/2-examples" class="section-heading">
+  <a href="#utc_now/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">utc_now</span><span class="p" data-group-id="6615270977-1">(</span><span class="ss">:second</span><span class="p">,</span><span class="w"> </span><span class="nc">Calendar.ISO</span><span class="p" data-group-id="6615270977-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="o">.</span><span class="n">year</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2016</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">NaiveDateTime</span><span class="o">.</span><span class="n">utc_now</span><span class="p" data-group-id="6615270977-2">(</span><span class="ss">:second</span><span class="p">,</span><span class="w"> </span><span class="nc">Calendar.ISO</span><span class="p" data-group-id="6615270977-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">naive_datetime</span><span class="o">.</span><span class="n">microsecond</span><span class="w">
+</span><span class="p" data-group-id="6615270977-3">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6615270977-3">}</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

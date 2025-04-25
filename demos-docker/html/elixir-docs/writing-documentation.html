@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Writing documentation — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/writing-documentation.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Writing documentation</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/writing-documentation.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir treats documentation as a first-class citizen. Documentation must be easy to write and easy to read. In this guide you will learn how to write documentation in Elixir, covering constructs like module attributes, style practices, and doctests.</p><h2 id="markdown" class="section-heading">
+  <a href="#markdown" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Markdown</span>
+</h2>
+<p>Elixir documentation is written using Markdown. There are plenty of guides on Markdown online, we recommend the one from GitHub as a getting started point:</p><ul><li><a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">Basic writing and formatting syntax</a></li></ul><h2 id="module-attributes" class="section-heading">
+  <a href="#module-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Module Attributes</span>
+</h2>
+<p>Documentation in Elixir is usually attached to module attributes. Let's see an example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Hello</span><span class="w"> </span><span class="k" data-group-id="8021686905-1">do</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  This is the Hello module.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="ss">since</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Says hello to the given `name`.
+
+  Returns `:ok`.
+
+  ## Examples
+
+      iex&gt; MyApp.Hello.world(:john)
+      :ok
+
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="ss">since</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.3.0&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">world</span><span class="p" data-group-id="8021686905-2">(</span><span class="n">name</span><span class="p" data-group-id="8021686905-2">)</span><span class="w"> </span><span class="k" data-group-id="8021686905-3">do</span><span class="w">
+    </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="8021686905-4">(</span><span class="s">&quot;hello </span><span class="si" data-group-id="8021686905-5">#{</span><span class="n">name</span><span class="si" data-group-id="8021686905-5">}</span><span class="s">&quot;</span><span class="p" data-group-id="8021686905-4">)</span><span class="w">
+  </span><span class="k" data-group-id="8021686905-3">end</span><span class="w">
+</span><span class="k" data-group-id="8021686905-1">end</span></code></pre><p>The <code class="inline">@moduledoc</code> attribute is used to add documentation to the module. <code class="inline">@doc</code> is used before a function to provide documentation for it. Besides the attributes above, <code class="inline">@typedoc</code> can also be used to attach documentation to types defined as part of typespecs, which we will explore later on. Elixir also allows metadata to be attached to documentation, by passing a keyword list to <code class="inline">@doc</code> and friends.</p><h2 id="function-arguments" class="section-heading">
+  <a href="#function-arguments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Function Arguments</span>
+</h2>
+<p>When documenting a function, argument names are inferred by the compiler. For example:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">size</span><span class="p" data-group-id="3946471877-1">(</span><span class="p" data-group-id="3946471877-2">%{</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="3946471877-2">}</span><span class="p" data-group-id="3946471877-1">)</span><span class="w"> </span><span class="k" data-group-id="3946471877-3">do</span><span class="w">
+  </span><span class="n">size</span><span class="w">
+</span><span class="k" data-group-id="3946471877-3">end</span></code></pre><p>The compiler will infer this argument as <code class="inline">map</code>. Sometimes the inference will be suboptimal, especially if the function contains multiple clauses with the argument matching on different values each time. You can specify the proper names for documentation by declaring only the function head at any moment before the implementation:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">size</span><span class="p" data-group-id="0458556013-1">(</span><span class="n">map_with_size</span><span class="p" data-group-id="0458556013-1">)</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">size</span><span class="p" data-group-id="0458556013-2">(</span><span class="p" data-group-id="0458556013-3">%{</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="0458556013-3">}</span><span class="p" data-group-id="0458556013-2">)</span><span class="w"> </span><span class="k" data-group-id="0458556013-4">do</span><span class="w">
+  </span><span class="n">size</span><span class="w">
+</span><span class="k" data-group-id="0458556013-4">end</span></code></pre><h2 id="documentation-metadata" class="section-heading">
+  <a href="#documentation-metadata" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Documentation metadata</span>
+</h2>
+<p>Elixir allows developers to attach arbitrary metadata to the documentation. This is done by passing a keyword list to the relevant attribute (such as <code class="inline">@moduledoc</code>, <code class="inline">@typedoc</code>, and <code class="inline">@doc</code>). A commonly used metadata is <code class="inline">:since</code>, which annotates in which version that particular module, function, type, or callback was added, as shown in the example above.</p><p>Another common metadata is <code class="inline">:deprecated</code>, which emits a warning in the documentation, explaining that its usage is discouraged:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="ss">deprecated</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Use Foo.bar/2 instead&quot;</span></code></pre><p>Note that the <code class="inline">:deprecated</code> key does not warn when a developer invokes the functions. If you want the code to also emit a warning, you can use the <code class="inline">@deprecated</code> attribute:</p><pre><code class="makeup elixir" translate="no"><span class="na">@deprecated</span><span class="w"> </span><span class="s">&quot;Use Foo.bar/2 instead&quot;</span></code></pre><p>Metadata can have any key. Documentation tools often use metadata to provide more data to readers and to enrich the user experience.</p><h2 id="recommendations" class="section-heading">
+  <a href="#recommendations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Recommendations</span>
+</h2>
+<p>When writing documentation:</p><ul><li><p>Keep the first paragraph of the documentation concise and simple, typically one-line. Tools like <a href="https://github.com/elixir-lang/ex_doc/">ExDoc</a> use the first line to generate a summary.</p></li><li><p>Reference modules by their full name.</p><p>Markdown uses backticks (<code class="inline">`</code>) to quote code. Elixir builds on top of that to automatically generate links when module or function names are referenced. For this reason, always use full module names. If you have a module called <code class="inline">MyApp.Hello</code>, always reference it as <code class="inline">`MyApp.Hello`</code> and never as <code class="inline">`Hello`</code>.</p></li><li><p>Reference functions by name and arity if they are local, as in <code class="inline">`world/1`</code>, or by module, name and arity if pointing to an external module: <code class="inline">`MyApp.Hello.world/1`</code>.</p></li><li><p>Reference a <code class="inline">@callback</code> by prepending <code class="inline">c:</code>, as in <code class="inline">`c:world/1`</code>.</p></li><li><p>Reference a <code class="inline">@type</code> by prepending <code class="inline">t:</code>, as in <code class="inline">`t:values/0`</code>.</p></li><li><p>Start new sections with second level Markdown headers <code class="inline">##</code>. First level headers are reserved for module and function names.</p></li><li><p>Place documentation before the first clause of multi-clause functions. Documentation is always per function and arity and not per clause.</p></li><li><p>Use the <code class="inline">:since</code> key in the documentation metadata to annotate whenever new functions or modules are added to your API.</p></li></ul><h2 id="doctests" class="section-heading">
+  <a href="#doctests" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Doctests</span>
+</h2>
+<p>We recommend that developers include examples in their documentation, often under their own <code class="inline">## Examples</code> heading. To ensure examples do not get out of date, Elixir's test framework (ExUnit) provides a feature called doctests that allows developers to test the examples in their documentation. Doctests work by parsing out code samples starting with <code class="inline">iex&gt;</code> from the documentation. You can read more about them at <a href="https://hexdocs.pm/ex_unit/ExUnit.DocTest.html"><code class="inline">ExUnit.DocTest</code></a>.</p><h2 id="documentation-code-comments" class="section-heading">
+  <a href="#documentation-code-comments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Documentation != Code comments</span>
+</h2>
+<p>Elixir treats documentation and code comments as different concepts. Documentation is an explicit contract between you and users of your Application Programming Interface (API), be them third-party developers, co-workers, or your future self. Modules and functions must always be documented if they are part of your API.</p><p>Code comments are aimed at developers reading the code. They are useful for marking improvements, leaving notes (for example, why you had to resort to a workaround due to a bug in a library), and so forth. They are tied to the source code: you can completely rewrite a function and remove all existing code comments, and it will continue to behave the same, with no change to either its behavior or its documentation.</p><p>Because private functions cannot be accessed externally, Elixir will warn if a private function has a <code class="inline">@doc</code> attribute and will discard its content. However, you can add code comments to private functions, as with any other piece of code, and we recommend developers to do so whenever they believe it will add relevant information to the readers and maintainers of such code.</p><p>In summary, documentation is a contract with users of your API, who may not necessarily have access to the source code, whereas code comments are for those who interact directly with the source. You can learn and express different guarantees about your software by separating those two concepts.</p><h2 id="hiding-internal-modules-and-functions" class="section-heading">
+  <a href="#hiding-internal-modules-and-functions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Hiding internal Modules and Functions</span>
+</h2>
+<p>Besides the modules and functions libraries provide as part of their public interface, libraries may also implement important functionality that is not part of their API. While these modules and functions can be accessed, they are meant to be internal to the library and thus should not have documentation for end users.</p><p>Conveniently, Elixir allows developers to hide modules and functions from the documentation, by setting <code class="inline">@doc false</code> to hide a particular function, or <code class="inline">@moduledoc false</code> to hide the whole module. If a module is hidden, you may even document the functions in the module, but the module itself won't be listed in the documentation:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Hidden</span><span class="w"> </span><span class="k" data-group-id="3810387717-1">do</span><span class="w">
+  </span><span class="na">@moduledoc</span><span class="w"> </span><span class="no">false</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  This function won&#39;t be listed in docs.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">function_that_wont_be_listed_in_docs</span><span class="w"> </span><span class="k" data-group-id="3810387717-2">do</span><span class="w">
+    </span><span class="c1"># ...</span><span class="w">
+  </span><span class="k" data-group-id="3810387717-2">end</span><span class="w">
+</span><span class="k" data-group-id="3810387717-1">end</span></code></pre><p>In case you don't want to hide a whole module, you can hide functions individually:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Sample</span><span class="w"> </span><span class="k" data-group-id="9501227618-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="no">false</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">add</span><span class="p" data-group-id="9501227618-2">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p" data-group-id="9501227618-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w">
+</span><span class="k" data-group-id="9501227618-1">end</span></code></pre><p>However, keep in mind <code class="inline">@moduledoc false</code> or <code class="inline">@doc false</code> do not make a function private. The function above can still be invoked as <code class="inline">MyApp.Sample.add(1, 2)</code>. Not only that, if <code class="inline">MyApp.Sample</code> is imported, the <code class="inline">add/2</code> function will also be imported into the caller. For those reasons, be cautious when adding <code class="inline">@doc false</code> to functions, instead use one of these two options:</p><ul><li><p>Move the undocumented function to a module with <code class="inline">@moduledoc false</code>, like <code class="inline">MyApp.Hidden</code>, ensuring the function won't be accidentally exposed or imported. Remember that you can use <code class="inline">@moduledoc false</code> to hide a whole module and still document each function with <code class="inline">@doc</code>. Tools will still ignore the module.</p></li><li><p>Start the function name with one or two underscores, for example, <code class="inline">__add__/2</code>. Functions starting with underscore are automatically treated as hidden, although you can also be explicit and add <code class="inline">@doc false</code>. The compiler does not import functions with leading underscores and they hint to anyone reading the code of their intended private usage.</p></li></ul><h2 id="code-fetch_docs-1" class="section-heading">
+  <a href="#code-fetch_docs-1" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><a href="Code.html#fetch_docs/1"><code class="inline">Code.fetch_docs/1</code></a></span>
+</h2>
+<p>Elixir stores documentation inside pre-defined chunks in the bytecode. Documentation is not loaded into memory when modules are loaded, instead, it can be read from the bytecode in disk using the <a href="Code.html#fetch_docs/1"><code class="inline">Code.fetch_docs/1</code></a> function. The downside is that modules defined in-memory, like the ones defined in IEx, cannot have their documentation accessed as they do not write their bytecode to disk.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="try-catch-and-rescue.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+try, catch, and rescue
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="optional-syntax.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Optional syntax sheet
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

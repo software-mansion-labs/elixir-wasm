@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Doctests, patterns, and with — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/docs-tests-and-with.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Doctests, patterns, and with</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/mix-and-otp/docs-tests-and-with.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In this chapter, we will implement the code that parses the commands we described in the first chapter:</p><pre><code class="text">CREATE shopping
+OK
+
+PUT shopping milk 1
+OK
+
+PUT shopping eggs 3
+OK
+
+GET shopping milk
+1
+OK
+
+DELETE shopping eggs
+OK</code></pre><p>After the parsing is done, we will update our server to dispatch the parsed commands to the <code class="inline">:kv</code> application we built previously.</p><h2 id="doctests" class="section-heading">
+  <a href="#doctests" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Doctests</span>
+</h2>
+<p>On the language homepage, we mention that Elixir makes documentation a first-class citizen in the language. We have explored this concept many times throughout this guide, be it via <a href="https://hexdocs.pm/mix/Mix.Tasks.Help.html"><code class="inline">mix help</code></a> or by typing <code class="inline">h Enum</code> or another module in an IEx console.</p><p>In this section, we will implement the parsing functionality, document it and make sure our documentation is up to date with doctests. This helps us provide documentation with accurate code samples.</p><p>Let's create our command parser at <code class="inline">lib/kv_server/command.ex</code> and start with the doctest:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KVServer.Command</span><span class="w"> </span><span class="k" data-group-id="4734497555-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">~S&quot;&quot;&quot;
+  Parses the given `line` into a command.
+
+  ## Examples
+
+      iex&gt; KVServer.Command.parse(&quot;CREATE shopping\r\n&quot;)
+      {:ok, {:create, &quot;shopping&quot;}}
+
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="4734497555-2">(</span><span class="c">_line</span><span class="p" data-group-id="4734497555-2">)</span><span class="w"> </span><span class="k" data-group-id="4734497555-3">do</span><span class="w">
+    </span><span class="ss">:not_implemented</span><span class="w">
+  </span><span class="k" data-group-id="4734497555-3">end</span><span class="w">
+</span><span class="k" data-group-id="4734497555-1">end</span></code></pre><p>Doctests are specified by an indentation of four spaces followed by the <code class="inline">iex&gt;</code> prompt in a documentation string. If a command spans multiple lines, you can use <code class="inline">...&gt;</code>, as in IEx. The expected result should start at the next line after <code class="inline">iex&gt;</code> or <code class="inline">...&gt;</code> line(s) and is terminated either by a newline or a new <code class="inline">iex&gt;</code> prefix.</p><p>Also, note that we started the documentation string using <code class="inline">@doc ~S&quot;&quot;&quot;</code>. The <code class="inline">~S</code> prevents the <code class="inline">\r\n</code> characters from being converted to a carriage return and line feed until they are evaluated in the test.</p><p>To run our doctests, we'll create a file at <code class="inline">test/kv_server/command_test.exs</code> and call <code class="inline">doctest KVServer.Command</code> in the test case:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KVServer.CommandTest</span><span class="w"> </span><span class="k" data-group-id="8633810988-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="n">doctest</span><span class="w"> </span><span class="nc">KVServer.Command</span><span class="w">
+</span><span class="k" data-group-id="8633810988-1">end</span></code></pre><p>Run the test suite and the doctest should fail:</p><pre><code class="text">  1) doctest KVServer.Command.parse/1 (1) (KVServer.CommandTest)
+     test/kv_server/command_test.exs:3
+     Doctest failed
+     doctest:
+       iex&gt; KVServer.Command.parse(&quot;CREATE shopping\r\n&quot;)
+       {:ok, {:create, &quot;shopping&quot;}}
+     code: KVServer.Command.parse &quot;CREATE shopping\r\n&quot; === {:ok, {:create, &quot;shopping&quot;}}
+     left:  :not_implemented
+     right: {:ok, {:create, &quot;shopping&quot;}}
+     stacktrace:
+       lib/kv_server/command.ex:7: KVServer.Command (module)</code></pre><p>Excellent!</p><p>Now let's make the doctest pass. Let's implement the <code class="inline">parse/1</code> function:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="8003697092-1">(</span><span class="n">line</span><span class="p" data-group-id="8003697092-1">)</span><span class="w"> </span><span class="k" data-group-id="8003697092-2">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="8003697092-3">(</span><span class="n">line</span><span class="p" data-group-id="8003697092-3">)</span><span class="w"> </span><span class="k" data-group-id="8003697092-4">do</span><span class="w">
+    </span><span class="p" data-group-id="8003697092-5">[</span><span class="s">&quot;CREATE&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="8003697092-5">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="8003697092-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8003697092-7">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="8003697092-7">}</span><span class="p" data-group-id="8003697092-6">}</span><span class="w">
+  </span><span class="k" data-group-id="8003697092-4">end</span><span class="w">
+</span><span class="k" data-group-id="8003697092-2">end</span></code></pre><p>Our implementation splits the line on whitespace and then matches the command against a list. Using <a href="String.html#split/1"><code class="inline">String.split/1</code></a> means our commands will be whitespace-insensitive. Leading and trailing whitespace won't matter, nor will consecutive spaces between words. Let's add some new doctests to test this behavior along with the other commands:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">~S&quot;&quot;&quot;
+Parses the given `line` into a command.
+
+## Examples
+
+    iex&gt; KVServer.Command.parse &quot;CREATE shopping\r\n&quot;
+    {:ok, {:create, &quot;shopping&quot;}}
+
+    iex&gt; KVServer.Command.parse &quot;CREATE  shopping  \r\n&quot;
+    {:ok, {:create, &quot;shopping&quot;}}
+
+    iex&gt; KVServer.Command.parse &quot;PUT shopping milk 1\r\n&quot;
+    {:ok, {:put, &quot;shopping&quot;, &quot;milk&quot;, &quot;1&quot;}}
+
+    iex&gt; KVServer.Command.parse &quot;GET shopping milk\r\n&quot;
+    {:ok, {:get, &quot;shopping&quot;, &quot;milk&quot;}}
+
+    iex&gt; KVServer.Command.parse &quot;DELETE shopping eggs\r\n&quot;
+    {:ok, {:delete, &quot;shopping&quot;, &quot;eggs&quot;}}
+
+Unknown commands or commands with the wrong number of
+arguments return an error:
+
+    iex&gt; KVServer.Command.parse &quot;UNKNOWN shopping eggs\r\n&quot;
+    {:error, :unknown_command}
+
+    iex&gt; KVServer.Command.parse &quot;GET shopping\r\n&quot;
+    {:error, :unknown_command}
+
+&quot;&quot;&quot;</span></code></pre><p>With doctests at hand, it is your turn to make tests pass! Once you're ready, you can compare your work with our solution below:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">parse</span><span class="p" data-group-id="1228900404-1">(</span><span class="n">line</span><span class="p" data-group-id="1228900404-1">)</span><span class="w"> </span><span class="k" data-group-id="1228900404-2">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">split</span><span class="p" data-group-id="1228900404-3">(</span><span class="n">line</span><span class="p" data-group-id="1228900404-3">)</span><span class="w"> </span><span class="k" data-group-id="1228900404-4">do</span><span class="w">
+    </span><span class="p" data-group-id="1228900404-5">[</span><span class="s">&quot;CREATE&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="1228900404-5">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1228900404-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1228900404-7">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="1228900404-7">}</span><span class="p" data-group-id="1228900404-6">}</span><span class="w">
+    </span><span class="p" data-group-id="1228900404-8">[</span><span class="s">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="1228900404-8">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1228900404-9">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1228900404-10">{</span><span class="ss">:get</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="1228900404-10">}</span><span class="p" data-group-id="1228900404-9">}</span><span class="w">
+    </span><span class="p" data-group-id="1228900404-11">[</span><span class="s">&quot;PUT&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="1228900404-11">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1228900404-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1228900404-13">{</span><span class="ss">:put</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="1228900404-13">}</span><span class="p" data-group-id="1228900404-12">}</span><span class="w">
+    </span><span class="p" data-group-id="1228900404-14">[</span><span class="s">&quot;DELETE&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="1228900404-14">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1228900404-15">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1228900404-16">{</span><span class="ss">:delete</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="1228900404-16">}</span><span class="p" data-group-id="1228900404-15">}</span><span class="w">
+    </span><span class="bp">_</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1228900404-17">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown_command</span><span class="p" data-group-id="1228900404-17">}</span><span class="w">
+  </span><span class="k" data-group-id="1228900404-4">end</span><span class="w">
+</span><span class="k" data-group-id="1228900404-2">end</span></code></pre><p>Notice how we were able to elegantly parse the commands without adding a bunch of <code class="inline">if/else</code> clauses that check the command name and number of arguments!</p><p>Finally, you may have observed that each doctest corresponds to a different test in our suite, which now reports a total of 7 doctests. That is because ExUnit considers the following to define two different doctests:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="2797295807-1">(</span><span class="s">&quot;UNKNOWN shopping eggs</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="2797295807-1">)</span><span class="w">
+</span><span class="p" data-group-id="2797295807-2">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown_command</span><span class="p" data-group-id="2797295807-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="2797295807-3">(</span><span class="s">&quot;GET shopping</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="2797295807-3">)</span><span class="w">
+</span><span class="p" data-group-id="2797295807-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown_command</span><span class="p" data-group-id="2797295807-4">}</span></code></pre><p>Without new lines, as seen below, ExUnit compiles it into a single doctest:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1788176152-1">(</span><span class="s">&quot;UNKNOWN shopping eggs</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="1788176152-1">)</span><span class="w">
+</span><span class="p" data-group-id="1788176152-2">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown_command</span><span class="p" data-group-id="1788176152-2">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="1788176152-3">(</span><span class="s">&quot;GET shopping</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="1788176152-3">)</span><span class="w">
+</span><span class="p" data-group-id="1788176152-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown_command</span><span class="p" data-group-id="1788176152-4">}</span></code></pre><p>As the name says, doctest is documentation first and a test later. Their goal is not to replace tests but to provide up-to-date documentation. You can read more about doctests in the <a href="https://hexdocs.pm/ex_unit/ExUnit.DocTest.html"><code class="inline">ExUnit.DocTest</code></a> documentation.</p><h2 id="with" class="section-heading">
+  <a href="#with" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">with</code></span>
+</h2>
+<p>As we are now able to parse commands, we can finally start implementing the logic that runs the commands. Let's add a stub definition for this function for now:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KVServer.Command</span><span class="w"> </span><span class="k" data-group-id="5218804434-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Runs the given command.
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="5218804434-2">(</span><span class="n">command</span><span class="p" data-group-id="5218804434-2">)</span><span class="w"> </span><span class="k" data-group-id="5218804434-3">do</span><span class="w">
+    </span><span class="p" data-group-id="5218804434-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="5218804434-4">}</span><span class="w">
+  </span><span class="k" data-group-id="5218804434-3">end</span><span class="w">
+</span><span class="k" data-group-id="5218804434-1">end</span></code></pre><p>Before we implement this function, let's change our server to start using our new <code class="inline">parse/1</code> and <code class="inline">run/1</code> functions. Remember, our <code class="inline">read_line/1</code> function was also crashing when the client closed the socket, so let's take the opportunity to fix it, too. Open up <code class="inline">lib/kv_server.ex</code> and replace the existing server definition:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">serve</span><span class="p" data-group-id="6893264368-1">(</span><span class="n">socket</span><span class="p" data-group-id="6893264368-1">)</span><span class="w"> </span><span class="k" data-group-id="6893264368-2">do</span><span class="w">
+  </span><span class="n">socket</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">read_line</span><span class="p" data-group-id="6893264368-3">(</span><span class="p" data-group-id="6893264368-3">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">write_line</span><span class="p" data-group-id="6893264368-4">(</span><span class="n">socket</span><span class="p" data-group-id="6893264368-4">)</span><span class="w">
+
+  </span><span class="n">serve</span><span class="p" data-group-id="6893264368-5">(</span><span class="n">socket</span><span class="p" data-group-id="6893264368-5">)</span><span class="w">
+</span><span class="k" data-group-id="6893264368-2">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">read_line</span><span class="p" data-group-id="6893264368-6">(</span><span class="n">socket</span><span class="p" data-group-id="6893264368-6">)</span><span class="w"> </span><span class="k" data-group-id="6893264368-7">do</span><span class="w">
+  </span><span class="p" data-group-id="6893264368-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p" data-group-id="6893264368-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">recv</span><span class="p" data-group-id="6893264368-9">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="6893264368-9">)</span><span class="w">
+  </span><span class="n">data</span><span class="w">
+</span><span class="k" data-group-id="6893264368-7">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="6893264368-10">(</span><span class="n">line</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="6893264368-10">)</span><span class="w"> </span><span class="k" data-group-id="6893264368-11">do</span><span class="w">
+  </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="6893264368-12">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="p" data-group-id="6893264368-12">)</span><span class="w">
+</span><span class="k" data-group-id="6893264368-11">end</span></code></pre><p>by the following:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">serve</span><span class="p" data-group-id="8840420687-1">(</span><span class="n">socket</span><span class="p" data-group-id="8840420687-1">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-2">do</span><span class="w">
+  </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="n">read_line</span><span class="p" data-group-id="8840420687-3">(</span><span class="n">socket</span><span class="p" data-group-id="8840420687-3">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-4">do</span><span class="w">
+      </span><span class="p" data-group-id="8840420687-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p" data-group-id="8840420687-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="k">case</span><span class="w"> </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="8840420687-6">(</span><span class="n">data</span><span class="p" data-group-id="8840420687-6">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-7">do</span><span class="w">
+          </span><span class="p" data-group-id="8840420687-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p" data-group-id="8840420687-8">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="8840420687-9">(</span><span class="n">command</span><span class="p" data-group-id="8840420687-9">)</span><span class="w">
+          </span><span class="p" data-group-id="8840420687-10">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="8840420687-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+            </span><span class="n">err</span><span class="w">
+        </span><span class="k" data-group-id="8840420687-7">end</span><span class="w">
+      </span><span class="p" data-group-id="8840420687-11">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="8840420687-11">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+        </span><span class="n">err</span><span class="w">
+    </span><span class="k" data-group-id="8840420687-4">end</span><span class="w">
+
+  </span><span class="n">write_line</span><span class="p" data-group-id="8840420687-12">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p" data-group-id="8840420687-12">)</span><span class="w">
+  </span><span class="n">serve</span><span class="p" data-group-id="8840420687-13">(</span><span class="n">socket</span><span class="p" data-group-id="8840420687-13">)</span><span class="w">
+</span><span class="k" data-group-id="8840420687-2">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">read_line</span><span class="p" data-group-id="8840420687-14">(</span><span class="n">socket</span><span class="p" data-group-id="8840420687-14">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-15">do</span><span class="w">
+  </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">recv</span><span class="p" data-group-id="8840420687-16">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8840420687-16">)</span><span class="w">
+</span><span class="k" data-group-id="8840420687-15">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="8840420687-17">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8840420687-18">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p" data-group-id="8840420687-18">}</span><span class="p" data-group-id="8840420687-17">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-19">do</span><span class="w">
+  </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="8840420687-20">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p" data-group-id="8840420687-20">)</span><span class="w">
+</span><span class="k" data-group-id="8840420687-19">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="8840420687-21">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8840420687-22">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:unknown_command</span><span class="p" data-group-id="8840420687-22">}</span><span class="p" data-group-id="8840420687-21">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-23">do</span><span class="w">
+  </span><span class="c1"># Known error; write to the client</span><span class="w">
+  </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="8840420687-24">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UNKNOWN COMMAND</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="8840420687-24">)</span><span class="w">
+</span><span class="k" data-group-id="8840420687-23">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="8840420687-25">(</span><span class="c">_socket</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8840420687-26">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:closed</span><span class="p" data-group-id="8840420687-26">}</span><span class="p" data-group-id="8840420687-25">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-27">do</span><span class="w">
+  </span><span class="c1"># The connection was closed, exit politely</span><span class="w">
+  </span><span class="n">exit</span><span class="p" data-group-id="8840420687-28">(</span><span class="ss">:shutdown</span><span class="p" data-group-id="8840420687-28">)</span><span class="w">
+</span><span class="k" data-group-id="8840420687-27">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="8840420687-29">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8840420687-30">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p" data-group-id="8840420687-30">}</span><span class="p" data-group-id="8840420687-29">)</span><span class="w"> </span><span class="k" data-group-id="8840420687-31">do</span><span class="w">
+  </span><span class="c1"># Unknown error; write to the client and exit</span><span class="w">
+  </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="8840420687-32">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ERROR</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="8840420687-32">)</span><span class="w">
+  </span><span class="n">exit</span><span class="p" data-group-id="8840420687-33">(</span><span class="n">error</span><span class="p" data-group-id="8840420687-33">)</span><span class="w">
+</span><span class="k" data-group-id="8840420687-31">end</span></code></pre><p>If we start our server, we can now send commands to it. For now, we will get two different responses: &quot;OK&quot; when the command is known and &quot;UNKNOWN COMMAND&quot; otherwise:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">telnet 127.0.0.1 4040
+</span><span class="">Trying 127.0.0.1...
+</span><span class="">Connected to localhost.
+</span><span class="">Escape character is &#39;^]&#39;.
+</span><span class="">CREATE shopping
+</span><span class="">OK
+</span><span class="">HELLO
+</span><span class="">UNKNOWN COMMAND
+</span></code></pre><p>This means our implementation is going in the correct direction, but it doesn't look very elegant, does it?</p><p>The previous implementation used pipelines which made the logic straightforward to follow. However, now that we need to handle different error codes along the way, our server logic is nested inside many <code class="inline">case</code> calls.</p><p>Thankfully, Elixir v1.2 introduced the <code class="inline">with</code> construct, which allows you to simplify code like the above, replacing nested <code class="inline">case</code> calls with a chain of matching clauses. Let's rewrite the <code class="inline">serve/1</code> function to use <code class="inline">with</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">serve</span><span class="p" data-group-id="9182036224-1">(</span><span class="n">socket</span><span class="p" data-group-id="9182036224-1">)</span><span class="w"> </span><span class="k" data-group-id="9182036224-2">do</span><span class="w">
+  </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="k">with</span><span class="w"> </span><span class="p" data-group-id="9182036224-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p" data-group-id="9182036224-3">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_line</span><span class="p" data-group-id="9182036224-4">(</span><span class="n">socket</span><span class="p" data-group-id="9182036224-4">)</span><span class="p">,</span><span class="w">
+         </span><span class="p" data-group-id="9182036224-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p" data-group-id="9182036224-5">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">parse</span><span class="p" data-group-id="9182036224-6">(</span><span class="n">data</span><span class="p" data-group-id="9182036224-6">)</span><span class="p">,</span><span class="w">
+         </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">KVServer.Command</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="9182036224-7">(</span><span class="n">command</span><span class="p" data-group-id="9182036224-7">)</span><span class="w">
+
+  </span><span class="n">write_line</span><span class="p" data-group-id="9182036224-8">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p" data-group-id="9182036224-8">)</span><span class="w">
+  </span><span class="n">serve</span><span class="p" data-group-id="9182036224-9">(</span><span class="n">socket</span><span class="p" data-group-id="9182036224-9">)</span><span class="w">
+</span><span class="k" data-group-id="9182036224-2">end</span></code></pre><p>Much better! <code class="inline">with</code> will retrieve the value returned by the right-side of <code class="inline">&lt;-</code> and match it against the pattern on the left side. If the value matches the pattern, <code class="inline">with</code> moves on to the next expression. In case there is no match, the non-matching value is returned.</p><p>In other words, we converted each expression given to <a href="Kernel.SpecialForms.html#case/2"><code class="inline">case/2</code></a> as a step in <code class="inline">with</code>. As soon as any of the steps return something that does not match <code class="inline">{:ok, x}</code>, <code class="inline">with</code> aborts, and returns the non-matching value.</p><p>You can read more about <a href="Kernel.SpecialForms.html#with/1"><code class="inline">with/1</code></a> in our documentation.</p><h2 id="running-commands" class="section-heading">
+  <a href="#running-commands" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Running commands</span>
+</h2>
+<p>The last step is to implement <code class="inline">KVServer.Command.run/1</code>, to run the parsed commands against the <code class="inline">:kv</code> application. Its implementation is shown below:</p><pre><code class="makeup elixir" translate="no"><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+Runs the given command.
+&quot;&quot;&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="7438029085-1">(</span><span class="n">command</span><span class="p" data-group-id="7438029085-1">)</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="7438029085-2">(</span><span class="p" data-group-id="7438029085-3">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="7438029085-3">}</span><span class="p" data-group-id="7438029085-2">)</span><span class="w"> </span><span class="k" data-group-id="7438029085-4">do</span><span class="w">
+  </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="7438029085-5">(</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="7438029085-5">)</span><span class="w">
+  </span><span class="p" data-group-id="7438029085-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7438029085-6">}</span><span class="w">
+</span><span class="k" data-group-id="7438029085-4">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="7438029085-7">(</span><span class="p" data-group-id="7438029085-8">{</span><span class="ss">:get</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="7438029085-8">}</span><span class="p" data-group-id="7438029085-7">)</span><span class="w"> </span><span class="k" data-group-id="7438029085-9">do</span><span class="w">
+  </span><span class="n">lookup</span><span class="p" data-group-id="7438029085-10">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7438029085-11">fn</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7438029085-12">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="7438029085-12">)</span><span class="w">
+    </span><span class="p" data-group-id="7438029085-13">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="si" data-group-id="7438029085-14">#{</span><span class="n">value</span><span class="si" data-group-id="7438029085-14">}</span><span class="se">\r</span><span class="se">\n</span><span class="s">OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7438029085-13">}</span><span class="w">
+  </span><span class="k" data-group-id="7438029085-11">end</span><span class="p" data-group-id="7438029085-10">)</span><span class="w">
+</span><span class="k" data-group-id="7438029085-9">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="7438029085-15">(</span><span class="p" data-group-id="7438029085-16">{</span><span class="ss">:put</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="7438029085-16">}</span><span class="p" data-group-id="7438029085-15">)</span><span class="w"> </span><span class="k" data-group-id="7438029085-17">do</span><span class="w">
+  </span><span class="n">lookup</span><span class="p" data-group-id="7438029085-18">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7438029085-19">fn</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">put</span><span class="p" data-group-id="7438029085-20">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="7438029085-20">)</span><span class="w">
+    </span><span class="p" data-group-id="7438029085-21">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7438029085-21">}</span><span class="w">
+  </span><span class="k" data-group-id="7438029085-19">end</span><span class="p" data-group-id="7438029085-18">)</span><span class="w">
+</span><span class="k" data-group-id="7438029085-17">end</span><span class="w">
+
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="7438029085-22">(</span><span class="p" data-group-id="7438029085-23">{</span><span class="ss">:delete</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="7438029085-23">}</span><span class="p" data-group-id="7438029085-22">)</span><span class="w"> </span><span class="k" data-group-id="7438029085-24">do</span><span class="w">
+  </span><span class="n">lookup</span><span class="p" data-group-id="7438029085-25">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7438029085-26">fn</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+    </span><span class="nc">KV.Bucket</span><span class="o">.</span><span class="n">delete</span><span class="p" data-group-id="7438029085-27">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p" data-group-id="7438029085-27">)</span><span class="w">
+    </span><span class="p" data-group-id="7438029085-28">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7438029085-28">}</span><span class="w">
+  </span><span class="k" data-group-id="7438029085-26">end</span><span class="p" data-group-id="7438029085-25">)</span><span class="w">
+</span><span class="k" data-group-id="7438029085-24">end</span><span class="w">
+
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">lookup</span><span class="p" data-group-id="7438029085-29">(</span><span class="n">bucket</span><span class="p">,</span><span class="w"> </span><span class="n">callback</span><span class="p" data-group-id="7438029085-29">)</span><span class="w"> </span><span class="k" data-group-id="7438029085-30">do</span><span class="w">
+  </span><span class="k">case</span><span class="w"> </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">lookup</span><span class="p" data-group-id="7438029085-31">(</span><span class="nc">KV.Registry</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="7438029085-31">)</span><span class="w"> </span><span class="k" data-group-id="7438029085-32">do</span><span class="w">
+    </span><span class="p" data-group-id="7438029085-33">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="7438029085-33">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">callback</span><span class="o">.</span><span class="p" data-group-id="7438029085-34">(</span><span class="n">pid</span><span class="p" data-group-id="7438029085-34">)</span><span class="w">
+    </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="7438029085-35">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_found</span><span class="p" data-group-id="7438029085-35">}</span><span class="w">
+  </span><span class="k" data-group-id="7438029085-32">end</span><span class="w">
+</span><span class="k" data-group-id="7438029085-30">end</span></code></pre><p>Every function clause dispatches the appropriate command to the <code class="inline">KV.Registry</code> server that we registered during the <code class="inline">:kv</code> application startup. Since our <code class="inline">:kv_server</code> depends on the <code class="inline">:kv</code> application, it is completely fine to depend on the services it provides.</p><p>You might have noticed we have a function head, <code class="inline">def run(command)</code>, without a body. In the <a href="modules-and-functions.html#default-arguments">Modules and Functions</a> chapter, we learned that a bodiless function can be used to declare default arguments for a multi-clause function. Here is another use case where we use a function without a body to document what the arguments are.</p><p>Note that we have also defined a private function named <code class="inline">lookup/2</code> to help with the common functionality of looking up a bucket and returning its <code class="inline">pid</code> if it exists, <code class="inline">{:error, :not_found}</code> otherwise.</p><p>By the way, since we are now returning <code class="inline">{:error, :not_found}</code>, we should amend the <code class="inline">write_line/2</code> function in <code class="inline">KVServer</code> to print such error as well:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">write_line</span><span class="p" data-group-id="4756789638-1">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4756789638-2">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_found</span><span class="p" data-group-id="4756789638-2">}</span><span class="p" data-group-id="4756789638-1">)</span><span class="w"> </span><span class="k" data-group-id="4756789638-3">do</span><span class="w">
+  </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="4756789638-4">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;NOT FOUND</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="4756789638-4">)</span><span class="w">
+</span><span class="k" data-group-id="4756789638-3">end</span></code></pre><p>Our server functionality is almost complete. Only tests are missing. This time, we have left tests for last because there are some important considerations to be made.</p><p><code class="inline">KVServer.Command.run/1</code>'s implementation is sending commands directly to the server named <code class="inline">KV.Registry</code>, which is registered by the <code class="inline">:kv</code> application. This means this server is global and if we have two tests sending messages to it at the same time, our tests will conflict with each other (and likely fail). We need to decide between having unit tests that are isolated and can run asynchronously, or writing integration tests that work on top of the global state, but exercise our application's full stack as it is meant to be exercised in production.</p><p>So far we have only written unit tests, typically testing a single module directly. However, in order to make <code class="inline">KVServer.Command.run/1</code> testable as a unit we would need to change its implementation to not send commands directly to the <code class="inline">KV.Registry</code> process but instead pass a server as an argument. For example, we would need to change <code class="inline">run</code>'s signature to <code class="inline">def run(command, pid)</code> and then change all clauses accordingly:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="p" data-group-id="9624756555-1">(</span><span class="p" data-group-id="9624756555-2">{</span><span class="ss">:create</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="9624756555-2">}</span><span class="p">,</span><span class="w"> </span><span class="n">pid</span><span class="p" data-group-id="9624756555-1">)</span><span class="w"> </span><span class="k" data-group-id="9624756555-3">do</span><span class="w">
+  </span><span class="nc">KV.Registry</span><span class="o">.</span><span class="n">create</span><span class="p" data-group-id="9624756555-4">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">bucket</span><span class="p" data-group-id="9624756555-4">)</span><span class="w">
+  </span><span class="p" data-group-id="9624756555-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="9624756555-5">}</span><span class="w">
+</span><span class="k" data-group-id="9624756555-3">end</span><span class="w">
+
+</span><span class="c1"># ... other run clauses ...</span></code></pre><p>Feel free to go ahead and do the changes above and write some unit tests. The idea is that your tests will start an instance of the <code class="inline">KV.Registry</code> and pass it as an argument to <code class="inline">run/2</code> instead of relying on the global <code class="inline">KV.Registry</code>. This has the advantage of keeping our tests asynchronous as there is no shared state.</p><p>But let's also try something different. Let's write integration tests that rely on the global server names to exercise the whole stack from the TCP server to the bucket. Our integration tests will rely on global state and must be synchronous. With integration tests, we get coverage on how the components in our application work together at the cost of test performance. They are typically used to test the main flows in your application. For example, we should avoid using integration tests to test an edge case in our command parsing implementation.</p><p>Our integration test will use a TCP client that sends commands to our server and assert we are getting the desired responses.</p><p>Let's implement the integration test in <code class="inline">test/kv_server_test.exs</code> as shown below:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">KVServerTest</span><span class="w"> </span><span class="k" data-group-id="7405297034-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="w">
+
+  </span><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="7405297034-2">do</span><span class="w">
+    </span><span class="nc">Application</span><span class="o">.</span><span class="n">stop</span><span class="p" data-group-id="7405297034-3">(</span><span class="ss">:kv</span><span class="p" data-group-id="7405297034-3">)</span><span class="w">
+    </span><span class="ss">:ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">start</span><span class="p" data-group-id="7405297034-4">(</span><span class="ss">:kv</span><span class="p" data-group-id="7405297034-4">)</span><span class="w">
+  </span><span class="k" data-group-id="7405297034-2">end</span><span class="w">
+
+  </span><span class="n">setup</span><span class="w"> </span><span class="k" data-group-id="7405297034-5">do</span><span class="w">
+    </span><span class="n">opts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7405297034-6">[</span><span class="ss">:binary</span><span class="p">,</span><span class="w"> </span><span class="ss">packet</span><span class="p">:</span><span class="w"> </span><span class="ss">:line</span><span class="p">,</span><span class="w"> </span><span class="ss">active</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p" data-group-id="7405297034-6">]</span><span class="w">
+    </span><span class="p" data-group-id="7405297034-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="7405297034-7">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">connect</span><span class="p" data-group-id="7405297034-8">(</span><span class="sc">&#39;localhost&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">4040</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="7405297034-8">)</span><span class="w">
+    </span><span class="p" data-group-id="7405297034-9">%{</span><span class="ss">socket</span><span class="p">:</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="7405297034-9">}</span><span class="w">
+  </span><span class="k" data-group-id="7405297034-5">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;server interaction&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7405297034-10">%{</span><span class="ss">socket</span><span class="p">:</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="7405297034-10">}</span><span class="w"> </span><span class="k" data-group-id="7405297034-11">do</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-12">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UNKNOWN shopping</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7405297034-12">)</span><span class="w"> </span><span class="o">==</span><span class="w">
+           </span><span class="s">&quot;UNKNOWN COMMAND</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-13">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET shopping eggs</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7405297034-13">)</span><span class="w"> </span><span class="o">==</span><span class="w">
+           </span><span class="s">&quot;NOT FOUND</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-14">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CREATE shopping</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7405297034-14">)</span><span class="w"> </span><span class="o">==</span><span class="w">
+           </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-15">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PUT shopping eggs 3</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7405297034-15">)</span><span class="w"> </span><span class="o">==</span><span class="w">
+           </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+
+    </span><span class="c1"># GET returns two lines</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-16">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET shopping eggs</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7405297034-16">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;3</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-17">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="7405297034-17">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-18">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DELETE shopping eggs</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7405297034-18">)</span><span class="w"> </span><span class="o">==</span><span class="w">
+           </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+
+    </span><span class="c1"># GET returns two lines</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-19">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GET shopping eggs</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="p" data-group-id="7405297034-19">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+    </span><span class="n">assert</span><span class="w"> </span><span class="n">send_and_recv</span><span class="p" data-group-id="7405297034-20">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="7405297034-20">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;OK</span><span class="se">\r</span><span class="se">\n</span><span class="s">&quot;</span><span class="w">
+  </span><span class="k" data-group-id="7405297034-11">end</span><span class="w">
+
+  </span><span class="kd">defp</span><span class="w"> </span><span class="nf">send_and_recv</span><span class="p" data-group-id="7405297034-21">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p" data-group-id="7405297034-21">)</span><span class="w"> </span><span class="k" data-group-id="7405297034-22">do</span><span class="w">
+    </span><span class="ss">:ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">send</span><span class="p" data-group-id="7405297034-23">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p" data-group-id="7405297034-23">)</span><span class="w">
+    </span><span class="p" data-group-id="7405297034-24">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p" data-group-id="7405297034-24">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:gen_tcp</span><span class="o">.</span><span class="n">recv</span><span class="p" data-group-id="7405297034-25">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p" data-group-id="7405297034-25">)</span><span class="w">
+    </span><span class="n">data</span><span class="w">
+  </span><span class="k" data-group-id="7405297034-22">end</span><span class="w">
+</span><span class="k" data-group-id="7405297034-1">end</span></code></pre><p>Our integration test checks all server interaction, including unknown commands and not found errors. It is worth noting that, as with ETS tables and linked processes, there is no need to close the socket. Once the test process exits, the socket is automatically closed.</p><p>This time, since our test relies on global data, we have not given <code class="inline">async: true</code> to <code class="inline">use ExUnit.Case</code>. Furthermore, in order to guarantee our test is always in a clean state, we stop and start the <code class="inline">:kv</code> application before each test. In fact, stopping the <code class="inline">:kv</code> application even prints a warning on the terminal:</p><pre><code class="text">18:12:10.698 [info] Application kv exited: :stopped</code></pre><p>To avoid printing log messages during tests, ExUnit provides a neat feature called <code class="inline">:capture_log</code>. By setting <code class="inline">@tag :capture_log</code> before each test or <code class="inline">@moduletag :capture_log</code> for the whole test module, ExUnit will automatically capture anything that is logged while the test runs. In case our test fails, the captured logs will be printed alongside the ExUnit report.</p><p>Between <code class="inline">use ExUnit.Case</code> and <code class="inline">setup</code>, add the following call:</p><pre><code class="makeup elixir" translate="no"><span class="na">@moduletag</span><span class="w"> </span><span class="ss">:capture_log</span></code></pre><p>In case the test crashes, you will see a report as follows:</p><pre><code class="text">  1) test server interaction (KVServerTest)
+     test/kv_server_test.exs:17
+     ** (RuntimeError) oops
+     stacktrace:
+       test/kv_server_test.exs:29
+
+     The following output was logged:
+
+     13:44:10.035 [notice] Application kv exited: :stopped</code></pre><p>With this simple integration test, we start to see why integration tests may be slow. Not only can this test not run asynchronously, but it also requires the expensive setup of stopping and starting the <code class="inline">:kv</code> application.</p><p>At the end of the day, it is up to you and your team to figure out the best testing strategy for your applications. You need to balance code quality, confidence, and test suite runtime. For example, we may start with testing the server only with integration tests, but if the server continues to grow in future releases, or it becomes a part of the application with frequent bugs, it is important to consider breaking it apart and writing more intensive unit tests that don't have the weight of an integration test.</p><p>Let's move to the next chapter. We will finally make our system distributed by adding a bucket routing mechanism. We will use this opportunity to also improve our testing chops.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="task-and-gen-tcp.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Task and gen_tcp
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="distributed-tasks.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Distributed tasks and tags
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

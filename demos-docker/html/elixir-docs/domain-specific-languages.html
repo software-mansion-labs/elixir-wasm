@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Domain-Specific Languages (DSLs) — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/domain-specific-languages.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Domain-Specific Languages (DSLs)</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/meta-programming/domain-specific-languages.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p><a href="https://en.wikipedia.org/wiki/Domain-specific_language">Domain-specific Languages (DSLs)</a> are languages tailored to a specific application domain. You don't need macros in order to have a DSL: every data structure and every function you define in your module is part of your domain-specific language.</p><p>For example, imagine we want to implement a <code class="inline">Validator</code> module which provides a data validation domain-specific language. We could implement it using data structures, functions, or macros. Let's see what those different DSLs would look like:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># 1. Data structures</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nc">Validator</span><span class="w">
+</span><span class="n">validate</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8120168290-1">[</span><span class="ss">length</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span><span class="p" data-group-id="8120168290-1">]</span><span class="p">,</span><span class="w"> </span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8120168290-2">[</span><span class="ss">matches</span><span class="p">:</span><span class="w"> </span><span class="sr">~r/@/</span><span class="p" data-group-id="8120168290-2">]</span><span class="w">
+
+</span><span class="c1"># 2. Functions</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nc">Validator</span><span class="w">
+</span><span class="n">user</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">validate_length</span><span class="p" data-group-id="8120168290-3">(</span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span><span class="p" data-group-id="8120168290-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">validate_matches</span><span class="p" data-group-id="8120168290-4">(</span><span class="ss">:email</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/@/</span><span class="p" data-group-id="8120168290-4">)</span><span class="w">
+
+</span><span class="c1"># 3. Macros + modules</span><span class="w">
+</span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyValidator</span><span class="w"> </span><span class="k" data-group-id="8120168290-5">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Validator</span><span class="w">
+  </span><span class="n">validate_length</span><span class="w"> </span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span><span class="w">
+  </span><span class="n">validate_matches</span><span class="w"> </span><span class="ss">:email</span><span class="p">,</span><span class="w"> </span><span class="sr">~r/@/</span><span class="w">
+</span><span class="k" data-group-id="8120168290-5">end</span><span class="w">
+
+</span><span class="nc">MyValidator</span><span class="o">.</span><span class="n">validate</span><span class="p" data-group-id="8120168290-6">(</span><span class="n">user</span><span class="p" data-group-id="8120168290-6">)</span></code></pre><p>Of all the approaches above, the first is definitely the most flexible. If our domain rules can be encoded with data structures, they are by far the easiest to compose and implement, as Elixir's standard library is filled with functions for manipulating different data types.</p><p>The second approach uses function calls which better suits more complex APIs (for example, if you need to pass many options) and reads nicely in Elixir thanks to the pipe operator.</p><p>The third approach uses macros, and is by far the most complex. It will take more lines of code to implement, it is hard and expensive to test (compared to testing simple functions), and it limits how the user may use the library since all validations need to be defined inside a module.</p><p>To drive the point home, imagine you want to validate a certain attribute only if a given condition is met. We could easily achieve it with the first solution, by manipulating the data structure accordingly, or with the second solution by using conditionals (if/else) before invoking the function. However, it is impossible to do so with the macros approach unless its DSL is augmented.</p><p>In other words:</p><pre><code class="text">data &gt; functions &gt; macros</code></pre><p>That said, there are still cases where using macros and modules to build domain-specific languages is useful. Since we have explored data structures and function definitions in the Getting Started guide, this chapter will explore how to use macros and module attributes to tackle more complex DSLs.</p><h2 id="building-our-own-test-case" class="section-heading">
+  <a href="#building-our-own-test-case" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Building our own test case</span>
+</h2>
+<p>The goal in this chapter is to build a module named <code class="inline">TestCase</code> that allows us to write the following:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyTest</span><span class="w"> </span><span class="k" data-group-id="2998989992-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">TestCase</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;arithmetic operations&quot;</span><span class="w"> </span><span class="k" data-group-id="2998989992-2">do</span><span class="w">
+    </span><span class="mi">4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w">
+  </span><span class="k" data-group-id="2998989992-2">end</span><span class="w">
+
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;list operations&quot;</span><span class="w"> </span><span class="k" data-group-id="2998989992-3">do</span><span class="w">
+    </span><span class="p" data-group-id="2998989992-4">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="2998989992-4">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2998989992-5">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="2998989992-5">]</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="p" data-group-id="2998989992-6">[</span><span class="mi">3</span><span class="p" data-group-id="2998989992-6">]</span><span class="w">
+  </span><span class="k" data-group-id="2998989992-3">end</span><span class="w">
+</span><span class="k" data-group-id="2998989992-1">end</span><span class="w">
+
+</span><span class="nc">MyTest</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="2998989992-7">(</span><span class="p" data-group-id="2998989992-7">)</span></code></pre><p>In the example above, by using <code class="inline">TestCase</code>, we can write tests using the <code class="inline">test</code> macro, which defines a function named <code class="inline">run</code> to automatically run all tests for us. Our prototype will rely on the match operator (<code class="inline">=</code>) as a mechanism to do assertions.</p><h2 id="the-test-macro" class="section-heading">
+  <a href="#the-test-macro" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The <code class="inline">test</code> macro</span>
+</h2>
+<p>Let's start by creating a module that defines and imports the <code class="inline">test</code> macro when used:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">TestCase</span><span class="w"> </span><span class="k" data-group-id="8049955612-1">do</span><span class="w">
+  </span><span class="c1"># Callback invoked by `use`.</span><span class="w">
+  </span><span class="c1">#</span><span class="w">
+  </span><span class="c1"># For now it returns a quoted expression that</span><span class="w">
+  </span><span class="c1"># imports the module itself into the user code.</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="no">false</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">__using__</span><span class="p" data-group-id="8049955612-2">(</span><span class="c">_opts</span><span class="p" data-group-id="8049955612-2">)</span><span class="w"> </span><span class="k" data-group-id="8049955612-3">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="8049955612-4">do</span><span class="w">
+      </span><span class="kn">import</span><span class="w"> </span><span class="nc">TestCase</span><span class="w">
+    </span><span class="k" data-group-id="8049955612-4">end</span><span class="w">
+  </span><span class="k" data-group-id="8049955612-3">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Defines a test case with the given description.
+
+  ## Examples
+
+      test &quot;arithmetic operations&quot; do
+        4 = 2 + 2
+      end
+
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">test</span><span class="p" data-group-id="8049955612-5">(</span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">block</span><span class="p" data-group-id="8049955612-5">)</span><span class="w"> </span><span class="k" data-group-id="8049955612-6">do</span><span class="w">
+    </span><span class="n">function_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">to_atom</span><span class="p" data-group-id="8049955612-7">(</span><span class="s">&quot;test &quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">description</span><span class="p" data-group-id="8049955612-7">)</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="8049955612-8">do</span><span class="w">
+      </span><span class="kd">def</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="8049955612-9">(</span><span class="n">function_name</span><span class="p" data-group-id="8049955612-9">)</span><span class="p" data-group-id="8049955612-10">(</span><span class="p" data-group-id="8049955612-10">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="8049955612-11">(</span><span class="n">block</span><span class="p" data-group-id="8049955612-11">)</span><span class="w">
+    </span><span class="k" data-group-id="8049955612-8">end</span><span class="w">
+  </span><span class="k" data-group-id="8049955612-6">end</span><span class="w">
+</span><span class="k" data-group-id="8049955612-1">end</span></code></pre><p>Assuming we defined <code class="inline">TestCase</code> in a file named <code class="inline">tests.exs</code>, we can open it up by running <code class="inline">iex tests.exs</code> and define our first tests:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyTest</span><span class="w"> </span><span class="k" data-group-id="7009305058-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">TestCase</span><span class="w">
+</span><span class="gp unselectable">...&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="w"> </span><span class="k" data-group-id="7009305058-2">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="s">&quot;hello&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="7009305058-2">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="7009305058-1">end</span></code></pre><p>For now, we don't have a mechanism to run tests, but we know that a function named <code class="inline">test hello</code> was defined behind the scenes. When we invoke it, it should fail:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">MyTest</span><span class="o">.</span><span class="s">&quot;test hello&quot;</span><span class="p" data-group-id="6473062064-1">(</span><span class="p" data-group-id="6473062064-1">)</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: &quot;world&quot;</span></code></pre><h2 id="storing-information-with-attributes" class="section-heading">
+  <a href="#storing-information-with-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Storing information with attributes</span>
+</h2>
+<p>In order to finish our <code class="inline">TestCase</code> implementation, we need to be able to access all defined test cases. One way of doing this is by retrieving the tests at runtime via <code class="inline">__MODULE__.__info__(:functions)</code>, which returns a list of all functions in a given module. However, considering that we may want to store more information about each test besides the test name, a more flexible approach is required.</p><p>When discussing module attributes in earlier chapters, we mentioned how they can be used as temporary storage. That's exactly the property we will apply in this section.</p><p>In the <code class="inline">__using__/1</code> implementation, we will initialize a module attribute named <code class="inline">@tests</code> to an empty list, then store the name of each defined test in this attribute so the tests can be invoked from the <code class="inline">run</code> function.</p><p>Here is the updated code for the <code class="inline">TestCase</code> module:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">TestCase</span><span class="w"> </span><span class="k" data-group-id="4155486348-1">do</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="no">false</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">__using__</span><span class="p" data-group-id="4155486348-2">(</span><span class="c">_opts</span><span class="p" data-group-id="4155486348-2">)</span><span class="w"> </span><span class="k" data-group-id="4155486348-3">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="4155486348-4">do</span><span class="w">
+      </span><span class="kn">import</span><span class="w"> </span><span class="nc">TestCase</span><span class="w">
+
+      </span><span class="c1"># Initialize @tests to an empty list</span><span class="w">
+      </span><span class="na">@tests</span><span class="w"> </span><span class="p" data-group-id="4155486348-5">[</span><span class="p" data-group-id="4155486348-5">]</span><span class="w">
+
+      </span><span class="c1"># Invoke TestCase.__before_compile__/1 before the module is compiled</span><span class="w">
+      </span><span class="na">@before_compile</span><span class="w"> </span><span class="nc">TestCase</span><span class="w">
+    </span><span class="k" data-group-id="4155486348-4">end</span><span class="w">
+  </span><span class="k" data-group-id="4155486348-3">end</span><span class="w">
+
+  </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
+  Defines a test case with the given description.
+
+  ## Examples
+
+      test &quot;arithmetic operations&quot; do
+        4 = 2 + 2
+      end
+
+  &quot;&quot;&quot;</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">test</span><span class="p" data-group-id="4155486348-6">(</span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">block</span><span class="p" data-group-id="4155486348-6">)</span><span class="w"> </span><span class="k" data-group-id="4155486348-7">do</span><span class="w">
+    </span><span class="n">function_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">to_atom</span><span class="p" data-group-id="4155486348-8">(</span><span class="s">&quot;test &quot;</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">description</span><span class="p" data-group-id="4155486348-8">)</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="4155486348-9">do</span><span class="w">
+      </span><span class="c1"># Prepend the newly defined test to the list of tests</span><span class="w">
+      </span><span class="na">@tests</span><span class="w"> </span><span class="p" data-group-id="4155486348-10">[</span><span class="k">unquote</span><span class="p" data-group-id="4155486348-11">(</span><span class="n">function_name</span><span class="p" data-group-id="4155486348-11">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="na">@tests</span><span class="p" data-group-id="4155486348-10">]</span><span class="w">
+      </span><span class="kd">def</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="4155486348-12">(</span><span class="n">function_name</span><span class="p" data-group-id="4155486348-12">)</span><span class="p" data-group-id="4155486348-13">(</span><span class="p" data-group-id="4155486348-13">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="k">unquote</span><span class="p" data-group-id="4155486348-14">(</span><span class="n">block</span><span class="p" data-group-id="4155486348-14">)</span><span class="w">
+    </span><span class="k" data-group-id="4155486348-9">end</span><span class="w">
+  </span><span class="k" data-group-id="4155486348-7">end</span><span class="w">
+
+  </span><span class="c1"># This will be invoked right before the target module is compiled</span><span class="w">
+  </span><span class="c1"># giving us the perfect opportunity to inject the `run/0` function</span><span class="w">
+  </span><span class="na">@doc</span><span class="w"> </span><span class="no">false</span><span class="w">
+  </span><span class="kd">defmacro</span><span class="w"> </span><span class="nf">__before_compile__</span><span class="p" data-group-id="4155486348-15">(</span><span class="c">_env</span><span class="p" data-group-id="4155486348-15">)</span><span class="w"> </span><span class="k" data-group-id="4155486348-16">do</span><span class="w">
+    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="4155486348-17">do</span><span class="w">
+      </span><span class="kd">def</span><span class="w"> </span><span class="nf">run</span><span class="w"> </span><span class="k" data-group-id="4155486348-18">do</span><span class="w">
+        </span><span class="nc">Enum</span><span class="o">.</span><span class="n">each</span><span class="p" data-group-id="4155486348-19">(</span><span class="na">@tests</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4155486348-20">fn</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+          </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="4155486348-21">(</span><span class="s">&quot;Running </span><span class="si" data-group-id="4155486348-22">#{</span><span class="n">name</span><span class="si" data-group-id="4155486348-22">}</span><span class="s">&quot;</span><span class="p" data-group-id="4155486348-21">)</span><span class="w">
+          </span><span class="n">apply</span><span class="p" data-group-id="4155486348-23">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4155486348-24">[</span><span class="p" data-group-id="4155486348-24">]</span><span class="p" data-group-id="4155486348-23">)</span><span class="w">
+        </span><span class="k" data-group-id="4155486348-20">end</span><span class="p" data-group-id="4155486348-19">)</span><span class="w">
+      </span><span class="k" data-group-id="4155486348-18">end</span><span class="w">
+    </span><span class="k" data-group-id="4155486348-17">end</span><span class="w">
+  </span><span class="k" data-group-id="4155486348-16">end</span><span class="w">
+</span><span class="k" data-group-id="4155486348-1">end</span></code></pre><p>By starting a new IEx session, we can now define our tests and run them:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyTest</span><span class="w"> </span><span class="k" data-group-id="3432155491-1">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">TestCase</span><span class="w">
+</span><span class="gp unselectable">...&gt;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="w"> </span><span class="k" data-group-id="3432155491-2">do</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="s">&quot;hello&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="k" data-group-id="3432155491-2">end</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="k" data-group-id="3432155491-1">end</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">MyTest</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="3432155491-3">(</span><span class="p" data-group-id="3432155491-3">)</span><span class="w">
+</span><span class="nc">Running</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="n">hello</span><span class="w">
+</span><span class="gt">** (MatchError) no match of right hand side value: &quot;world&quot;</span></code></pre><p>Although we have overlooked some details, this is the main idea behind creating domain-specific languages in Elixir via modules and macros. Macros enable us to return quoted expressions that are executed in the caller, which we can then use to transform code and store relevant information in the target module via module attributes. Finally, callbacks such as <code class="inline">@before_compile</code> allow us to inject code into the module when its definition is complete.</p><p>Besides <code class="inline">@before_compile</code>, there are other useful module attributes like <code class="inline">@on_definition</code> and <code class="inline">@after_compile</code>, which you can read more about in the docs for <a href="Module.html"><code class="inline">Module</code></a>. You can also find useful information about macros and the compilation environment in the documentation for the <a href="Macro.html"><code class="inline">Macro</code></a> and <a href="Macro.Env.html"><code class="inline">Macro.Env</code></a>.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="macros.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Macros
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="introduction-to-mix.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Introduction to Mix
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

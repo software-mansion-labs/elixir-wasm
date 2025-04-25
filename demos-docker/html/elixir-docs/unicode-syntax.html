@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Unicode syntax — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/unicode-syntax.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Unicode syntax</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/references/unicode-syntax.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Elixir supports Unicode throughout the language. This document is a complete reference of how
+Elixir supports Unicode in its syntax.</p><p>Strings (<code class="inline">&quot;olá&quot;</code>) and charlists (<code class="inline">'olá'</code>) support Unicode since Elixir v1.0. Strings are UTF-8 encoded. Charlists are lists of Unicode code points. In such cases, the contents are kept as written by developers, without any transformation.</p><p>Elixir also supports Unicode in variables, atoms, and calls since Elixir v1.5. The focus of this document is to provide a high-level introduction to how Elixir allows Unicode in its syntax. We also provide technical documentation describing how Elixir complies with the Unicode specification.</p><p>To check the Unicode version of your current Elixir installation, run <code class="inline">String.Unicode.version()</code>.</p><h2 id="introduction" class="section-heading">
+  <a href="#introduction" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Introduction</span>
+</h2>
+<p>Elixir allows Unicode characters in its variables, atoms, and calls. However, the Unicode characters must still obey the rules of the language syntax. In particular, variables and calls cannot start with an uppercase letter. From now on, we will refer to those terms as identifiers.</p><p>The characters allowed in identifiers are the ones specified by Unicode. Generally speaking, it is restricted to characters typically used by the writing system of human languages still in activity. In particular, it excludes symbols such as emojis, alternate numeric representations, musical notes, and the like.</p><p>Elixir imposes many restrictions on identifiers for security purposes. For example, the word &quot;josé&quot; can be written in two ways in Unicode: as the combination of the characters <code class="inline">j o s é</code> and as a combination of the characters <code class="inline">j o s e ́</code>, where the accent is its own character. The former is called NFC form and the latter is the NFD form. Elixir normalizes all characters to be the in the NFC form.</p><p>Elixir also disallows mixed-scripts in most scenarios. For example, it is not possible to name a variable <code class="inline">аdmin</code>, where <code class="inline">а</code> is in Cyrillic and the remaining characters are in Latin. Doing so will raise the following error:</p><pre><code class="text">** (SyntaxError) invalid mixed-script identifier found: аdmin
+
+Mixed-script identifiers are not supported for security reasons. 'аdmin' is made of the following scripts:
+
+  \u0430 а {Cyrillic}
+  \u0064 d {Latin}
+  \u006D m {Latin}
+  \u0069 i {Latin}
+  \u006E n {Latin}
+
+Make sure all characters in the identifier resolve to a single script or a highly
+restrictive script. See https://hexdocs.pm/elixir/unicode-syntax.html for more information.</code></pre><p>The character must either be all in Cyrillic or all in Latin. The only mixed-scripts that Elixir allows, according to the Highly Restrictive Unicode recommendations, are:</p><ul><li>Latin and Han with Bopomofo</li><li>Latin and Japanese</li><li>Latin and Korean</li></ul><p>Finally, Elixir will also warn on confusable identifiers in the same file. For example, Elixir will emit a warning if you use both variables <code class="inline">а</code> (Cyrillic) and <code class="inline">а</code> (Latin) in your code.</p><p>That's the overall introduction of how Unicode is used in Elixir identifiers. In a nutshell, its goal is to support different writing systems in use today while keeping the Elixir language itself clear and secure.</p><p>For the technical details, see the next sections that cover the technical Unicode requirements.</p><h2 id="unicode-annex-31" class="section-heading">
+  <a href="#unicode-annex-31" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unicode Annex #31</span>
+</h2>
+<p>Elixir implements the requirements outlined in the <a href="https://unicode.org/reports/tr31/">Unicode Annex #31</a>, version 15.0.</p><h3 id="r1-default-identifiers" class="section-heading">
+  <a href="#r1-default-identifiers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">R1. Default Identifiers</span>
+</h3>
+<p>The general Elixir identifier rule is specified as:</p><pre><code class="makeup elixir" translate="no"><span class="o">&lt;</span><span class="nc">Identifier</span><span class="o">&gt;</span><span class="w"> </span><span class="ss">:=</span><span class="w"> </span><span class="o">&lt;</span><span class="nc">Start</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="nc">Continue</span><span class="o">&gt;</span><span class="o">*</span><span class="w"> </span><span class="o">&lt;</span><span class="nc">Ending</span><span class="o">&gt;</span><span class="err">?</span></code></pre><p>where <code class="inline">&lt;Start&gt;</code> uses the same categories as the spec but normalizes them to the NFC form (see R4):</p><blockquote><p>characters derived from the Unicode General Category of uppercase letters, lowercase letters, titlecase letters, modifier letters, other letters, letter numbers, plus <code class="inline">Other_ID_Start</code>, minus <code class="inline">Pattern_Syntax</code> and <code class="inline">Pattern_White_Space</code> code points</p><p>In set notation: <code class="inline">[\p{L}\p{Nl}\p{Other_ID_Start}-\p{Pattern_Syntax}-\p{Pattern_White_Space}]</code>.</p></blockquote><p>and <code class="inline">&lt;Continue&gt;</code> uses the same categories as the spec but normalizes them to the NFC form (see R4):</p><blockquote><p>ID_Start characters, plus characters having the Unicode General Category of nonspacing marks, spacing combining marks, decimal number, connector punctuation, plus <code class="inline">Other_ID_Continue</code>, minus <code class="inline">Pattern_Syntax</code> and <code class="inline">Pattern_White_Space</code> code points.</p><p>In set notation: <code class="inline">[\p{ID_Start}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\p{Other_ID_Continue}-\p{Pattern_Syntax}-\p{Pattern_White_Space}]</code>.</p></blockquote><p><code class="inline">&lt;Ending&gt;</code> is an addition specific to Elixir that includes only the code points <code class="inline">?</code> (003F) and <code class="inline">!</code> (0021).</p><p>The spec also provides a <code class="inline">&lt;Medial&gt;</code> set, but Elixir does not include any character on this set. Therefore, the identifier rule has been simplified to consider this.</p><p>Elixir does not allow the use of ZWJ or ZWNJ in identifiers and therefore does not implement R1a. Bidirectional control characters are also not supported. R1b is guaranteed for backwards compatibility purposes.</p><h4>Atoms</h4><p>Unicode atoms in Elixir follow the identifier rule above with the following modifications:</p><ul><li><code class="inline">&lt;Start&gt;</code> additionally includes the code point <code class="inline">_</code> (005F)</li><li><code class="inline">&lt;Continue&gt;</code> additionally includes the code point <code class="inline">@</code> (0040)</li></ul><p>Note atoms can also be quoted, which allows any characters, such as <code class="inline">:&quot;hello elixir&quot;</code>. All Elixir operators are also valid atoms, such as <code class="inline">:+</code>, <code class="inline">:@</code>, <code class="inline">:|&gt;</code>, and others. The full description of valid atoms is available in the <a href="syntax-reference.html#atoms">&quot;Atoms&quot; section in the syntax reference</a>.</p><h4>Variables, local calls, and remote calls</h4><p>Variables in Elixir follow the identifier rule above with the following modifications:</p><ul><li><code class="inline">&lt;Start&gt;</code> additionally includes the code point <code class="inline">_</code> (005F)</li><li><code class="inline">&lt;Start&gt;</code> additionally excludes Lu (letter uppercase) and Lt (letter titlecase) characters</li></ul><p>In set notation: <code class="inline">[\u{005F}\p{Ll}\p{Lm}\p{Lo}\p{Nl}\p{Other_ID_Start}-\p{Pattern_Syntax}-\p{Pattern_White_Space}]</code>.</p><h4>Aliases</h4><p>Aliases in Elixir only allow ASCII characters, starting in uppercase, and no punctuation characters.</p><h3 id="r3-pattern_white_space-and-pattern_syntax-characters" class="section-heading">
+  <a href="#r3-pattern_white_space-and-pattern_syntax-characters" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">R3. Pattern_White_Space and Pattern_Syntax Characters</span>
+</h3>
+<p>Elixir supports only code points <code class="inline">\t</code> (0009), <code class="inline">\n</code> (000A), <code class="inline">\r</code> (000D) and <code class="inline">\s</code> (0020) as whitespace and therefore does not follow requirement R3. R3 requires a wider variety of whitespace and syntax characters to be supported.</p><h3 id="r4-equivalent-normalized-identifiers" class="section-heading">
+  <a href="#r4-equivalent-normalized-identifiers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">R4. Equivalent Normalized Identifiers</span>
+</h3>
+<p>Identifiers in Elixir are case sensitive.</p><p>Elixir normalizes all atoms and variables to NFC form. Quoted-atoms and strings can, however, be in any form and are not verified by the parser.</p><p>In other words, the atom <code class="inline">:josé</code> can only be written with the code points <code class="inline">006A 006F 0073 00E9</code> or <code class="inline">006A 006F 0073 0065 0301</code>, but Elixir will rewrite it to the former (from Elixir 1.14). On the other hand, <code class="inline">:&quot;josé&quot;</code> may be written as <code class="inline">006A 006F 0073 00E9</code> or <code class="inline">006A 006F 0073 0065 0301</code> and its form will be retained, since it is written between quotes.</p><p>Choosing requirement R4 automatically excludes requirements R5, R6, and R7.</p><h2 id="unicode-technical-standard-39" class="section-heading">
+  <a href="#unicode-technical-standard-39" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unicode Technical Standard #39</span>
+</h2>
+<p>Elixir conforms to the clauses outlined in the <a href="https://unicode.org/reports/tr39/">Unicode Technical Standard #39</a> on Security, version 15.0.</p><h3 id="c1-general-security-profile-for-identifiers" class="section-heading">
+  <a href="#c1-general-security-profile-for-identifiers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">C1. General Security Profile for Identifiers</span>
+</h3>
+<p>Elixir will not allow tokenization of identifiers with codepoints in <code class="inline">\p{Identifier_Status=Restricted}</code>.</p><blockquote><p>An implementation following the General Security Profile does not permit any characters in \p{Identifier_Status=Restricted}, ...</p></blockquote><p>For instance, the 'HANGUL FILLER' (<code class="inline">ㅤ</code>) character, which is often invisible, is an uncommon codepoint and will trigger this warning.</p><p>See the note below about additional normalizations, which can perform automatic replacement of some Restricted identifiers.</p><h3 id="c2-confusable-detection" class="section-heading">
+  <a href="#c2-confusable-detection" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">C2. Confusable detection</span>
+</h3>
+<p>Elixir will warn on identifiers that look the same, but aren't. Examples: in <code class="inline">а = a = 1</code>, the two 'a' characters are Cyrillic and Latin, and could be confused for each other; in <code class="inline">力 = カ = 1</code>, both are Japanese, but different codepoints, in different scripts of that writing system. Confusable identifiers can lead to hard-to-catch bugs (say, due to copy-pasted code) and can be unsafe, so we will warn about identifiers within a single file that could be confused with each other.</p><p>We use the means described in Section 4, 'Confusable Detection', with one noted modification</p><blockquote><p>Alternatively, it shall declare that it uses a modification, and provide a precise list of character mappings that are added to or removed from the provided ones.</p></blockquote><p>Elixir will not warn on confusability for identifiers made up exclusively of characters in a-z, A-Z, 0-9, and _. This is because ASCII identifiers have existed for so long that the programming community has had their own means of dealing with confusability between identifiers like <code class="inline">l,1</code> or <code class="inline">O,0</code> (for instance, fonts designed for programming usually make it easy to differentiate between those characters).</p><h3 id="c3-mixed-script-detection" class="section-heading">
+  <a href="#c3-mixed-script-detection" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">C3. Mixed Script Detection</span>
+</h3>
+<p>Elixir will not allow tokenization of mixed-script identifiers unless the mixing is one of the exceptions defined in UTS 39 5.2, 'Highly Restrictive'. We use the means described in Section 5.1, Mixed-Script Detection, to determine if script mixing is occurring, with the modification documented in the section 'Additional Normalizations', below.</p><p>Examples: Elixir allows an identifiers like <code class="inline">幻ㄒㄧㄤ</code>, even though it includes characters from multiple 'scripts', because those scripts all 'resolve' to Japanese when applying the resolution rules from UTS 39 5.1. It also allows an atom like <code class="inline">:Tシャツ</code>, the Japanese word for 't-shirt', which incorporates a Latin capital T, because {Latn, Jpan} is one of the allowed script mixing in the definition of 'Highly Restrictive' in UTS 39 5.2, and it 'covers' the string.</p><p>However, Elixir would prevent tokenization in code like <code class="inline">if аdmin, do: :ok, else: :err</code>, where the scriptset for the 'a' character is {Cyrillic} but all other characters have scriptsets of {Latin}. The scriptsets fail to resolve, and the scriptsets from the definition of 'Highly Restrictive' in UTS 39 5.2 do not cover the string either, so a descriptive error is shown.</p><h3 id="c4-c5-inapplicable" class="section-heading">
+  <a href="#c4-c5-inapplicable" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">C4, C5 (inapplicable)</span>
+</h3>
+<p>'C4 - Restriction Level detection' conformance is not claimed and does not apply to identifiers in code; rather, it applies to classifying the level of safety of a given arbitrary string into one of 5 restriction levels.</p><p>'C5 - Mixed number detection' conformance is inapplicable as Elixir does not support Unicode numbers.</p><h3 id="addition-normalizations-and-documented-uts-39-modifications" class="section-heading">
+  <a href="#addition-normalizations-and-documented-uts-39-modifications" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Addition normalizations and documented UTS 39 modifications</span>
+</h3>
+<p>As of Elixir 1.14, some codepoints in <code class="inline">\p{Identifier_Status=Restricted}</code> are <em>normalized</em> to other, unrestricted codepoints.</p><p>Initially this is only done to translate MICRO SIGN <code class="inline">µ</code> to Greek lowercase mu, <code class="inline">μ</code>.</p><p>This is not a modification of UTS39 clauses C1 (General Security Profile) or C2 (Confusability Detection); however, it is a documented modification of C3, 'Mixed-Script detection'.</p><p>Mixed-script detection is modified by these normalizations to the extent that the normalized codepoint is given the union of scriptsets from both characters.</p><ul><li><p>For instance, in the example of MICRO =&gt; MU, Micro was a 'Common'-script character -- the same script given to the '_' underscore codepoint -- and thus the normalized character's scriptset will be {Greek, Common}. 'Common' intersects with all non-empty scriptsets, and thus the normalized character can be used in tokens written in any script without causing script mixing.</p></li><li><p>The code points normalized in this fashion are those that are in use in the community, and judged not likely to cause issues with unsafe script mixing. For instance, the MICRO or MU codepoint may be used in an atom or variable dealing with microseconds.</p></li></ul>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="typespecs.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Typespecs reference
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

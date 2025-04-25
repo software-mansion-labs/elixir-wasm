@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Module attributes — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/module-attributes.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Module attributes</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/module-attributes.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>Module attributes in Elixir serve three purposes:</p><ol><li>as module and function annotations</li><li>as temporary module storage to be used during compilation</li><li>as compile-time constants</li></ol><p>Let's check these examples.</p><h2 id="as-annotations" class="section-heading">
+  <a href="#as-annotations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">As annotations</span>
+</h2>
+<p>Elixir brings the concept of module attributes from Erlang. For example:</p><pre class="elixir" data-code-id="34313732"><p class="output output-initial" data-code-type="output"># defmodule MyServer do</p><p class="output output-initial" data-code-type="output">#   @moduledoc &quot;My server code.&quot;</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>In the example above, we are defining the module documentation by using the module attribute syntax. Elixir has a handful of reserved attributes. Here are a few of them, the most commonly used ones:</p><ul><li><code class="inline">@moduledoc</code> — provides documentation for the current module.</li><li><code class="inline">@doc</code> — provides documentation for the function or macro that follows the attribute.</li><li><code class="inline">@spec</code> — provides a typespec for the function that follows the attribute.</li><li><code class="inline">@behaviour</code> — (notice the British spelling) used for specifying an OTP or user-defined behaviour.</li></ul><p><code class="inline">@moduledoc</code> and <code class="inline">@doc</code> are by far the most used attributes, and we expect you to use them a lot. Elixir treats documentation as first-class and provides many functions to access documentation. We will cover them <a href="writing-documentation.html">in their own chapter</a>.</p><p>Let's go back to the <code class="inline">Math</code> module defined in the previous chapters, add some documentation and save it to the <code class="inline">math.ex</code> file:</p><pre class="elixir" data-code-id="34323336"><p class="output output-initial" data-code-type="output"># defmodule Math do</p><p class="output output-initial" data-code-type="output">#   @moduledoc &quot;&quot;&quot;</p><p class="output output-initial" data-code-type="output">#   Provides math-related functions.</p><p class="output output-initial" data-code-type="output">#   ## Examples</p><p class="output output-initial" data-code-type="output">#       iex&gt; Math.sum(1, 2)</p><p class="output output-initial" data-code-type="output">#       3</p><p class="output output-initial" data-code-type="output">#   &quot;&quot;&quot;</p><p class="output output-initial" data-code-type="output">#   @doc &quot;&quot;&quot;</p><p class="output output-initial" data-code-type="output">#   Calculates the sum of two numbers.</p><p class="output output-initial" data-code-type="output">#   &quot;&quot;&quot;</p><p class="output output-initial" data-code-type="output">#   def sum(a, b), do: a + b</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>Elixir promotes the use of Markdown with heredocs to write readable documentation. Heredocs are multi-line strings, they start and end with triple double-quotes, keeping the formatting of the inner text. We can access the documentation of any compiled module directly from IEx:</p><pre><code class="makeup console" translate="no"><span class="gp unselectable">$ </span><span class="">elixirc math.ex
+</span><span class="gp unselectable">$ </span><span class="">iex
+</span></code></pre><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">h</span><span class="w"> </span><span class="nc">Math</span><span class="w"> </span><span class="c1"># Access the docs for the module Math</span><span class="w">
+</span><span class="n">...</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">h</span><span class="w"> </span><span class="nc">Math</span><span class="o">.</span><span class="n">sum</span><span class="w"> </span><span class="c1"># Access the docs for the sum function</span><span class="w">
+</span><span class="n">...</span></code></pre><p>We also provide a tool called <a href="https://github.com/elixir-lang/ex_doc">ExDoc</a> which is used to generate HTML pages from the documentation.</p><p>You can take a look at the docs for <a href="Module.html"><code class="inline">Module</code></a> for a complete list of supported attributes. Elixir also uses attributes to annotate our code with <a href="typespecs.html">typespecs</a>.</p><h2 id="as-temporary-storage" class="section-heading">
+  <a href="#as-temporary-storage" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">As temporary storage</span>
+</h2>
+<p>So far, we have seen how to define attributes, but how can read them? Let's see an example:</p><pre class="elixir" data-code-id="34333030"><p class="output output-initial" data-code-type="output"># defmodule MyServer do</p><p class="output output-initial" data-code-type="output">#   @service URI.parse(&quot;https://example.com&quot;)</p><p class="output output-initial" data-code-type="output">#   IO.inspect @service</p><p class="output output-initial" data-code-type="output"># end</p></pre><section role="note" class="admonition warning"><h4 class="admonition-title warning">Newlines</h4><p>Do not add a newline between the attribute and its value, otherwise Elixir will assume you are reading the value, rather than setting it.</p></section><p>Trying to access an attribute that was not defined will print a warning:</p><pre class="elixir" data-code-id="34333634"><p class="output output-initial" data-code-type="output"># defmodule MyServer do</p><p class="output output-initial" data-code-type="output">#   @unknown</p><p class="output output-initial" data-code-type="output"># end</p><p class="output output-initial" data-code-type="output"># warning: undefined module attribute @unknown, please remove access to @unknown or explicitly set it before access</p></pre><p>Attributes can also be read inside functions:</p><pre class="elixir" data-code-id="34343238"><p class="output output-initial" data-code-type="output"># defmodule MyApp.Status do</p><p class="output output-initial" data-code-type="output">#   @service URI.parse(&quot;https://example.com&quot;)</p><p class="output output-initial" data-code-type="output">#   def status(email) do</p><p class="output output-initial" data-code-type="output">#     SomeHttpClient.get(@service)</p><p class="output output-initial" data-code-type="output">#   end</p><p class="output output-initial" data-code-type="output"># end</p></pre><p>The module attribute is defined at compilation time and its <em>return value</em>, not the function call itself, is what will be substituted in for the attribute. So the above will effectively compile to this:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Status</span><span class="w"> </span><span class="k" data-group-id="7708921553-1">do</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">status</span><span class="p" data-group-id="7708921553-2">(</span><span class="n">email</span><span class="p" data-group-id="7708921553-2">)</span><span class="w"> </span><span class="k" data-group-id="7708921553-3">do</span><span class="w">
+    </span><span class="nc">SomeHttpClient</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="7708921553-4">(</span><span class="p" data-group-id="7708921553-5">%</span><span class="nc" data-group-id="7708921553-5">URI</span><span class="p" data-group-id="7708921553-5">{</span><span class="w">
+      </span><span class="ss">authority</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example.com&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example.com&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w">
+      </span><span class="ss">scheme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span><span class="w">
+    </span><span class="p" data-group-id="7708921553-5">}</span><span class="p" data-group-id="7708921553-4">)</span><span class="w">
+  </span><span class="k" data-group-id="7708921553-3">end</span><span class="w">
+</span><span class="k" data-group-id="7708921553-1">end</span></code></pre><p>This can be useful for pre-computing values and then injecting its results into the module. This is what we mean by temporary storage: after the module is compiled, the module attribute is discarded, except for the functions that have read the attribute. Note you cannot invoke functions defined in the same module as part of the attribute itself, as those functions have not yet been defined.</p><p>Every time we read an attribute inside a function, Elixir takes a snapshot of its current value. Therefore if you read the same attribute multiple times inside multiple functions, you end-up increasing compilation times as Elixir now has to compile every snapshot. Generally speaking, you want to avoid reading the same attribute multiple times and instead move it to function. For example, instead of this:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">some_function</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">do_something_with</span><span class="p" data-group-id="1974543380-1">(</span><span class="na">@example</span><span class="p" data-group-id="1974543380-1">)</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">another_function</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">do_something_else_with</span><span class="p" data-group-id="1974543380-2">(</span><span class="na">@example</span><span class="p" data-group-id="1974543380-2">)</span></code></pre><p>Prefer this:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">some_function</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">do_something_with</span><span class="p" data-group-id="6231685383-1">(</span><span class="n">example</span><span class="p" data-group-id="6231685383-2">(</span><span class="p" data-group-id="6231685383-2">)</span><span class="p" data-group-id="6231685383-1">)</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">another_function</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">do_something_else_with</span><span class="p" data-group-id="6231685383-3">(</span><span class="n">example</span><span class="p" data-group-id="6231685383-4">(</span><span class="p" data-group-id="6231685383-4">)</span><span class="p" data-group-id="6231685383-3">)</span><span class="w">
+</span><span class="kd">defp</span><span class="w"> </span><span class="nf">example</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="na">@example</span></code></pre><h2 id="as-compile-time-constants" class="section-heading">
+  <a href="#as-compile-time-constants" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">As compile-time constants</span>
+</h2>
+<p>Module attributes may also be useful as compile-time constants. Generally speaking, functions themselves are sufficient for the role of constants in a codebase. For example, instead of defining:</p><pre><code class="makeup elixir" translate="no"><span class="na">@hours_in_a_day</span><span class="w"> </span><span class="mi">24</span></code></pre><p>You should prefer:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">hours_in_a_day</span><span class="p" data-group-id="0976103435-1">(</span><span class="p" data-group-id="0976103435-1">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span></code></pre><p>You may even define a public function if it needs to be shared across modules. It is common in many projects to have a module called <code class="inline">MyApp.Constants</code> that defines all constants used throughout the codebase.</p><p>You can even have composite data structures as constants, as long as they are made exclusively of other data types (no function calls, no operators, and no other expressions). For example, you may specify a system configuration constant as follows:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defp</span><span class="w"> </span><span class="nf">system_config</span><span class="p" data-group-id="1136342920-1">(</span><span class="p" data-group-id="1136342920-1">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1136342920-2">%{</span><span class="ss">timezone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pt-BR&quot;</span><span class="p" data-group-id="1136342920-2">}</span></code></pre><p>Given data structures in Elixir are immutable, only a single instance of the data structure above is allocated and shared across all functions calls, as long as it doesn't have any executable expression.</p><p>The use case for module attributes arise when you need to do some work at compile-time and then inject its results inside a function. A common scenario is module attributes inside patterns and guards (as an alternative to <a href="Kernel.html#defguard/1"><code class="inline">defguard/1</code></a>), since they only support a limited set of expressions:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Inside pattern</span><span class="w">
+</span><span class="na">@default_timezone</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">shift</span><span class="p" data-group-id="5014566575-1">(</span><span class="na">@default_timezone</span><span class="p" data-group-id="5014566575-1">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="w">
+
+</span><span class="c1"># Inside guards</span><span class="w">
+</span><span class="na">@time_periods</span><span class="w"> </span><span class="p" data-group-id="5014566575-2">[</span><span class="ss">:am</span><span class="p">,</span><span class="w"> </span><span class="ss">:pm</span><span class="p" data-group-id="5014566575-2">]</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">shift</span><span class="p" data-group-id="5014566575-3">(</span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">period</span><span class="p" data-group-id="5014566575-3">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">period</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="na">@time_periods</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">...</span></code></pre><p>Module attributes as constants and as temporary storage are most often used together: the module attribute is used to compute and store an expensive value, and then exposed as constant from that module.</p><h2 id="going-further" class="section-heading">
+  <a href="#going-further" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Going further</span>
+</h2>
+<p>Libraries and frameworks can leverage module attributes to provide custom annotations. To see an example, look no further than Elixir's unit test framework called <a href="https://hexdocs.pm/ex_unit/ExUnit.html"><code class="inline">ExUnit</code></a>. ExUnit uses module attributes for multiple different purposes:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyTest</span><span class="w"> </span><span class="k" data-group-id="6169082075-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+
+  </span><span class="na">@tag</span><span class="w"> </span><span class="ss">:external</span><span class="w">
+  </span><span class="na">@tag</span><span class="w"> </span><span class="ss">os</span><span class="p">:</span><span class="w"> </span><span class="ss">:unix</span><span class="w">
+  </span><span class="n">test</span><span class="w"> </span><span class="s">&quot;contacts external service&quot;</span><span class="w"> </span><span class="k" data-group-id="6169082075-2">do</span><span class="w">
+    </span><span class="c1"># ...</span><span class="w">
+  </span><span class="k" data-group-id="6169082075-2">end</span><span class="w">
+</span><span class="k" data-group-id="6169082075-1">end</span></code></pre><p>In the example above, <a href="https://hexdocs.pm/ex_unit/ExUnit.html"><code class="inline">ExUnit</code></a> stores the value of <code class="inline">async: true</code> in a module attribute to change how the module is compiled. Tags also work as annotations and they can be supplied multiple times, thanks to Elixir's ability to <a href="Module.html#register_attribute/3">accumulate attribute</a>. Then you can use tags to setup and filter tests, such as avoiding executing Unix specific tests while running your test suite on Windows.</p><p>To fully understand how ExUnit works, we'd need macros, so we will revisit this pattern in the Meta-programming guide and learn how to use module attributes as storage for custom annotations.</p><p>In the next chapters, we'll explore structs and protocols before moving to exception handling and other constructs like sigils and comprehensions.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="alias-require-and-import.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+alias, require, import, and use
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="structs.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Structs
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

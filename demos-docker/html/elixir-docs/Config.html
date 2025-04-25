@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Config — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/Config.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Config</span> 
+      <small class="app-vsn" translate="no">(Elixir v1.17.3)</small>
+
+    </h1>
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A simple keyword-based configuration API.</p><h2 id="module-example" class="section-heading">
+  <a href="#module-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<p>This module is most commonly used to define application configuration,
+typically in <code class="inline">config/config.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Config</span><span class="w">
+
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:some_app</span><span class="p">,</span><span class="w">
+  </span><span class="ss">key1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;value1&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="ss">key2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;value2&quot;</span><span class="w">
+
+</span><span class="n">import_config</span><span class="w"> </span><span class="s">&quot;</span><span class="si" data-group-id="9392123631-1">#{</span><span class="n">config_env</span><span class="p" data-group-id="9392123631-2">(</span><span class="p" data-group-id="9392123631-2">)</span><span class="si" data-group-id="9392123631-1">}</span><span class="s">.exs&quot;</span></code></pre><p><code class="inline">import Config</code> will import the functions <a href="#config/2"><code class="inline">config/2</code></a>, <a href="#config/3"><code class="inline">config/3</code></a>
+<a href="#config_env/0"><code class="inline">config_env/0</code></a>, <a href="#config_target/0"><code class="inline">config_target/0</code></a>, and <a href="#import_config/1"><code class="inline">import_config/1</code></a>
+to help you manage your configuration.</p><p><a href="#config/2"><code class="inline">config/2</code></a> and <a href="#config/3"><code class="inline">config/3</code></a> are used to define key-value configuration
+for a given application. Once Mix starts, it will automatically
+evaluate the configuration file and persist the configuration above
+into <code class="inline">:some_app</code>'s application environment, which can be accessed in
+as follows:</p><pre><code class="makeup elixir" translate="no"><span class="s">&quot;value1&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="9603750567-1">(</span><span class="ss">:some_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:key1</span><span class="p" data-group-id="9603750567-1">)</span></code></pre><p>Finally, the line <code class="inline">import_config &quot;#{config_env()}.exs&quot;</code> will import
+other config files based on the current configuration environment,
+such as <code class="inline">config/dev.exs</code> and <code class="inline">config/test.exs</code>.</p><p><a href="Config.html"><code class="inline">Config</code></a> also provides a low-level API for evaluating and reading
+configuration, under the <a href="Config.Reader.html"><code class="inline">Config.Reader</code></a> module.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Avoid application environment in libraries</h4><p>If you are writing a library to be used by other developers,
+it is generally recommended to avoid the application environment, as the
+application environment is effectively a global storage. Also note that
+the <code class="inline">config/config.exs</code> of a library is not evaluated when the library is
+used as a dependency, as configuration is always meant to configure the
+current project. For more information, read our <a href="library-guidelines.html">library guidelines</a>.</p></section><h2 id="module-migrating-from-use-mix-config" class="section-heading">
+  <a href="#module-migrating-from-use-mix-config" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Migrating from <code class="inline">use Mix.Config</code></span>
+</h2>
+<p>The <a href="Config.html"><code class="inline">Config</code></a> module in Elixir was introduced in v1.9 as a replacement to
+<code class="inline">use Mix.Config</code>, which was specific to Mix and has been deprecated.</p><p>You can leverage <a href="Config.html"><code class="inline">Config</code></a> instead of <code class="inline">use Mix.Config</code> in three steps. The first
+step is to replace <code class="inline">use Mix.Config</code> at the top of your config files by
+<code class="inline">import Config</code>.</p><p>The second is to make sure your <a href="#import_config/1"><code class="inline">import_config/1</code></a> calls do not have a
+wildcard character. If so, you need to perform the wildcard lookup
+manually. For example, if you did:</p><pre><code class="makeup elixir" translate="no"><span class="n">import_config</span><span class="w"> </span><span class="s">&quot;../apps/*/config/config.exs&quot;</span></code></pre><p>It has to be replaced by:</p><pre><code class="makeup elixir" translate="no"><span class="k">for</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&quot;../apps/*/config/config.exs&quot;</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">expand</span><span class="p" data-group-id="4294668985-1">(</span><span class="bp">__DIR__</span><span class="p" data-group-id="4294668985-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">wildcard</span><span class="p" data-group-id="4294668985-2">(</span><span class="p" data-group-id="4294668985-2">)</span><span class="w"> </span><span class="k" data-group-id="4294668985-3">do</span><span class="w">
+  </span><span class="n">import_config</span><span class="w"> </span><span class="n">config</span><span class="w">
+</span><span class="k" data-group-id="4294668985-3">end</span></code></pre><p>The last step is to replace all <code class="inline">Mix.env()</code> calls in the config files with <code class="inline">config_env()</code>.</p><p>Keep in mind you must also avoid using <code class="inline">Mix.env()</code> inside your project files.
+To check the environment at <em>runtime</em>, you may add a configuration key:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># config.exs</span><span class="w">
+</span><span class="n">...</span><span class="w">
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">env</span><span class="p">:</span><span class="w"> </span><span class="n">config_env</span><span class="p" data-group-id="6342026749-1">(</span><span class="p" data-group-id="6342026749-1">)</span></code></pre><p>Then, in other scripts and modules, you may get the environment with
+<a href="Application.html#fetch_env!/2"><code class="inline">Application.fetch_env!/2</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># router.exs</span><span class="w">
+</span><span class="n">...</span><span class="w">
+</span><span class="k">if</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">fetch_env!</span><span class="p" data-group-id="8129375759-1">(</span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:env</span><span class="p" data-group-id="8129375759-1">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:prod</span><span class="w"> </span><span class="k" data-group-id="8129375759-2">do</span><span class="w">
+  </span><span class="n">...</span><span class="w">
+</span><span class="k" data-group-id="8129375759-2">end</span></code></pre><p>The only places where you may access functions from the <a href="https://hexdocs.pm/mix/Mix.html"><code class="inline">Mix</code></a> module are
+the <code class="inline">mix.exs</code> file and inside custom Mix tasks, which are always within
+the <code class="inline">Mix.Tasks</code> namespace.</p><h2 id="module-config-runtime-exs" class="section-heading">
+  <a href="#module-config-runtime-exs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text"><code class="inline">config/runtime.exs</code></span>
+</h2>
+<p>For runtime configuration, you can use the <code class="inline">config/runtime.exs</code> file.
+It is executed right before applications start in both Mix and releases
+(assembled with <a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html"><code class="inline">mix release</code></a>).</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#config/2" data-no-tooltip="" translate="no">config(root_key, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Configures the given <code class="inline">root_key</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#config/3" data-no-tooltip="" translate="no">config(root_key, key, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Configures the given <code class="inline">key</code> for the given <code class="inline">root_key</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#config_env/0" data-no-tooltip="" translate="no">config_env()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the environment this configuration file is executed on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#config_target/0" data-no-tooltip="" translate="no">config_target()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the target this configuration file is executed on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#import_config/1" data-no-tooltip="" translate="no">import_config(file)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Imports configuration from the given file.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="config/2">
+
+  <div class="detail-header">
+    <a href="#config/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">config(root_key, opts)</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config.ex#L145" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Configures the given <code class="inline">root_key</code>.</p><p>Keyword lists are always deep-merged.</p><h2 id="config/2-examples" class="section-heading">
+  <a href="#config/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>The given <code class="inline">opts</code> are merged into the existing configuration
+for the given <code class="inline">root_key</code>. Conflicting keys are overridden by the
+ones specified in <code class="inline">opts</code>, unless they are keywords, which are
+deep merged recursively. For example, the application configuration
+below</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:logger</span><span class="p">,</span><span class="w">
+  </span><span class="ss">level</span><span class="p">:</span><span class="w"> </span><span class="ss">:warn</span><span class="p">,</span><span class="w">
+  </span><span class="ss">backends</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7585806953-1">[</span><span class="ss">:console</span><span class="p" data-group-id="7585806953-1">]</span><span class="w">
+
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:logger</span><span class="p">,</span><span class="w">
+  </span><span class="ss">level</span><span class="p">:</span><span class="w"> </span><span class="ss">:info</span><span class="p">,</span><span class="w">
+  </span><span class="ss">truncate</span><span class="p">:</span><span class="w"> </span><span class="mi">1024</span></code></pre><p>will have a final configuration for <code class="inline">:logger</code> of:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7663801562-1">[</span><span class="ss">level</span><span class="p">:</span><span class="w"> </span><span class="ss">:info</span><span class="p">,</span><span class="w"> </span><span class="ss">backends</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7663801562-2">[</span><span class="ss">:console</span><span class="p" data-group-id="7663801562-2">]</span><span class="p">,</span><span class="w"> </span><span class="ss">truncate</span><span class="p">:</span><span class="w"> </span><span class="mi">1024</span><span class="p" data-group-id="7663801562-1">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="config/3">
+
+  <div class="detail-header">
+    <a href="#config/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">config(root_key, key, opts)</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Configures the given <code class="inline">key</code> for the given <code class="inline">root_key</code>.</p><p>Keyword lists are always deep merged.</p><h2 id="config/3-examples" class="section-heading">
+  <a href="#config/3-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>The given <code class="inline">opts</code> are merged into the existing values for <code class="inline">key</code>
+in the given <code class="inline">root_key</code>. Conflicting keys are overridden by the
+ones specified in <code class="inline">opts</code>, unless they are keywords, which are
+deep merged recursively. For example, the application configuration
+below</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:ecto</span><span class="p">,</span><span class="w"> </span><span class="nc">Repo</span><span class="p">,</span><span class="w">
+  </span><span class="ss">log_level</span><span class="p">:</span><span class="w"> </span><span class="ss">:warn</span><span class="p">,</span><span class="w">
+  </span><span class="ss">adapter</span><span class="p">:</span><span class="w"> </span><span class="nc">Ecto.Adapters.Postgres</span><span class="p">,</span><span class="w">
+  </span><span class="ss">metadata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6671453652-1">[</span><span class="ss">read_only</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6671453652-1">]</span><span class="w">
+
+</span><span class="n">config</span><span class="w"> </span><span class="ss">:ecto</span><span class="p">,</span><span class="w"> </span><span class="nc">Repo</span><span class="p">,</span><span class="w">
+  </span><span class="ss">log_level</span><span class="p">:</span><span class="w"> </span><span class="ss">:info</span><span class="p">,</span><span class="w">
+  </span><span class="ss">pool_size</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="ss">metadata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6671453652-2">[</span><span class="ss">replica</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6671453652-2">]</span></code></pre><p>will have a final value of the configuration for the <code class="inline">Repo</code>
+key in the <code class="inline">:ecto</code> application of:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Application</span><span class="o">.</span><span class="n">get_env</span><span class="p" data-group-id="5437448144-1">(</span><span class="ss">:ecto</span><span class="p">,</span><span class="w"> </span><span class="nc">Repo</span><span class="p" data-group-id="5437448144-1">)</span><span class="w">
+</span><span class="c1">#=&gt; [</span><span class="w">
+</span><span class="c1">#=&gt;   log_level: :info,</span><span class="w">
+</span><span class="c1">#=&gt;   pool_size: 10,</span><span class="w">
+</span><span class="c1">#=&gt;   adapter: Ecto.Adapters.Postgres,</span><span class="w">
+</span><span class="c1">#=&gt;   metadata: [read_only: true, replica: true]</span><span class="w">
+</span><span class="c1">#=&gt; ]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="config_env/0">
+
+  <div class="detail-header">
+    <a href="#config_env/0" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">config_env()</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config.ex#L211" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the environment this configuration file is executed on.</p><p>In Mix projects this function returns the environment this configuration
+file is executed on. In releases, the environment when <a href="https://hexdocs.pm/mix/Mix.Tasks.Release.html"><code class="inline">mix release</code></a> ran.</p><p>This is most often used to execute conditional code:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="w"> </span><span class="n">config_env</span><span class="p" data-group-id="4052180791-1">(</span><span class="p" data-group-id="4052180791-1">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:prod</span><span class="w"> </span><span class="k" data-group-id="4052180791-2">do</span><span class="w">
+  </span><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:debug</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="w">
+</span><span class="k" data-group-id="4052180791-2">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="config_target/0">
+
+  <div class="detail-header">
+    <a href="#config_target/0" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">config_target()</h1>
+
+        <span class="note">(since 1.11.0)</span>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config.ex#L234" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the target this configuration file is executed on.</p><p>This is most often used to execute conditional code:</p><pre><code class="makeup elixir" translate="no"><span class="k">if</span><span class="w"> </span><span class="n">config_target</span><span class="p" data-group-id="4542533027-1">(</span><span class="p" data-group-id="4542533027-1">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">:host</span><span class="w"> </span><span class="k" data-group-id="4542533027-2">do</span><span class="w">
+  </span><span class="n">config</span><span class="w"> </span><span class="ss">:my_app</span><span class="p">,</span><span class="w"> </span><span class="ss">:debug</span><span class="p">,</span><span class="w"> </span><span class="no">false</span><span class="w">
+</span><span class="k" data-group-id="4542533027-2">end</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="import_config/1">
+
+  <div class="detail-header">
+    <a href="#import_config/1" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">import_config(file)</h1>
+
+        <span class="note">(since 1.9.0)</span>
+
+        <span class="note">(macro)</span>
+
+
+        <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/lib/config.ex#L265" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Imports configuration from the given file.</p><p>In case the file doesn't exist, an error is raised.</p><p>If file is a relative, it will be expanded relatively to the
+directory the current configuration file is in.</p><h2 id="import_config/1-examples" class="section-heading">
+  <a href="#import_config/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Examples</span>
+</h2>
+<p>This is often used to emulate configuration across environments:</p><pre><code class="makeup elixir" translate="no"><span class="n">import_config</span><span class="w"> </span><span class="s">&quot;</span><span class="si" data-group-id="6268791016-1">#{</span><span class="n">config_env</span><span class="p" data-group-id="6268791016-2">(</span><span class="p" data-group-id="6268791016-2">)</span><span class="si" data-group-id="6268791016-1">}</span><span class="s">.exs&quot;</span></code></pre><p>Note, however, some configuration files, such as <code class="inline">config/runtime.exs</code>
+does not support imports, as they are meant to be copied across
+systems.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>

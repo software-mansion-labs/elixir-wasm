@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.37.1">
+    <meta name="project" content="Elixir v1.17.3">
+
+
+    <title>Binaries, strings, and charlists — Elixir v1.17.3</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-PD7PAHEK.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/elixir/binaries-strings-and-charlists.html" />
+
+    <script defer src="dist/sidebar_items-3D721A5F.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script>var Module={arguments: ["eval.avm"] }</script>
+    <script defer src="dist/AtomVM.js"></script>
+    <script defer src="dist/html-KNMUZUZQ.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Elixir" />
+        </a>
+
+      <div>
+        <a href="https://elixir-lang.org/docs.html" class="sidebar-projectName" translate="no">
+Elixir
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.17.3
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Elixir</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Binaries, strings, and charlists</h1>
+
+
+      <a href="https://github.com/elixir-lang/elixir/blob/cee31ab46f2cd47a942d236470216376b53fb41a/lib/elixir/pages/getting-started/binaries-strings-and-charlists.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+<p>In <a href="basic-types.html">&quot;Basic types&quot;</a>, we learned a bit about strings and we used the <a href="Kernel.html#is_binary/1"><code class="inline">is_binary/1</code></a> function for checks:</p><pre class="elixir" data-code-id="353832"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">string = &quot;hello&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_binary(string)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>In this chapter, we will gain clarity on what exactly binaries are and how they relate to strings. We will also learn about charlists, <code class="inline">~c&quot;like this&quot;</code>, which are often used for interoperability with Erlang.</p><p>Although strings are one of the most common data types in computer languages, they are subtly complex and are often misunderstood. To understand strings in Elixir, let's first discuss <a href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> and character encodings, specifically the <a href="https://en.wikipedia.org/wiki/UTF-8">UTF-8</a> encoding.</p><h2 id="unicode-and-code-points" class="section-heading">
+  <a href="#unicode-and-code-points" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Unicode and Code Points</span>
+</h2>
+<p>In order to facilitate meaningful communication between computers across multiple languages, a standard is required so that the ones and zeros on one machine mean the same thing when they are transmitted to another. The <a href="https://unicode.org/standard/standard.html">Unicode Standard</a> acts as an official registry of virtually all the characters we know: this includes characters from classical and historical texts, emoji, and formatting and control characters as well.</p><p>Unicode organizes all of the characters in its repertoire into code charts, and each character is given a unique numerical index. This numerical index is known as a <a href="https://en.wikipedia.org/wiki/Code_point">Code Point</a>.</p><p>In Elixir you can use a <code class="inline">?</code> in front of a character literal to reveal its code point:</p><pre class="elixir" data-code-id="363436"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">?a</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 97</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">?ł</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 322</p></pre><p>Note that most Unicode code charts will refer to a code point by its hexadecimal (hex) representation, e.g. <code class="inline">97</code> translates to <code class="inline">0061</code> in hex, and we can represent any Unicode character in an Elixir string by using the <code class="inline">\uXXXX</code> notation and the hex representation of its code point number:</p><pre class="elixir" data-code-id="373130"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;\u0061&quot; == &quot;a&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">0x0061 = 97 = ?a</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 97</p></pre><p>The hex representation will also help you look up information about a code point, e.g. <a href="https://codepoints.net/U+0061">https://codepoints.net/U+0061</a> has a data sheet all about the lower case <code class="inline">a</code>, a.k.a. code point 97.</p><h2 id="utf-8-and-encodings" class="section-heading">
+  <a href="#utf-8-and-encodings" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">UTF-8 and Encodings</span>
+</h2>
+<p>Now that we understand what the Unicode standard is and what code points are, we can finally talk about encodings. Whereas the code point is <strong>what</strong> we store, an encoding deals with <strong>how</strong> we store it: encoding is an implementation. In other words, we need a mechanism to convert the code point numbers into bytes so they can be stored in memory, written to disk, etc.</p><p>Elixir uses UTF-8 to encode its strings, which means that code points are encoded as a series of 8-bit bytes. UTF-8 is a <strong>variable width</strong> character encoding that uses one to four bytes to store each code point. It is capable of encoding all valid Unicode code points. Let's see an example:</p><pre class="elixir" data-code-id="373734"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">string = &quot;héllo&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;héllo&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.length(string)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 5</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">byte_size(string)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 6</p></pre><p>Although the string above has 5 characters, it uses 6 bytes, as two bytes are used to represent the character <code class="inline">é</code>.</p><blockquote><p>Note: if you are running on Windows, there is a chance your terminal does not use UTF-8 by default. You can change the encoding of your current session by running <code class="inline">chcp 65001</code> before entering <code class="inline">iex</code> (<code class="inline">iex.bat</code>).</p></blockquote><p>Besides defining characters, UTF-8 also provides a notion of graphemes. Graphemes may consist of multiple characters that are often perceived as one. For example, the <a href="https://emojipedia.org/woman-firefighter/">woman firefighter emoji</a> is represented as the combination of three characters: the woman emoji (👩), a hidden zero-width joiner, and the fire engine emoji (🚒):</p><pre class="elixir" data-code-id="383338"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.codepoints(&quot;👩‍🚒&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;👩&quot;, &quot;‍&quot;, &quot;🚒&quot;]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.graphemes(&quot;👩‍🚒&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [&quot;👩‍🚒&quot;]</p></pre><p>However, Elixir is smart enough to know they are seen as a single character, and therefore the length is still one:</p><pre class="elixir" data-code-id="393032"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.length(&quot;👩‍🚒&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 1</p></pre><blockquote><p>Note: if you can't see the emoji above in your terminal, you need to make sure your terminal supports emoji and that you are using a font that can render them.</p></blockquote><p>Although these rules may sound complicated, UTF-8 encoded documents are everywhere. This page itself is encoded in UTF-8. The encoding information is given to your browser which then knows how to render all of the bytes, characters, and graphemes accordingly.</p><p>If you want to see the exact bytes that a string would be stored in a file, a common trick is to concatenate the null byte <code class="inline">&lt;&lt;0&gt;&gt;</code> to it:</p><pre class="elixir" data-code-id="393636"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;hełło&quot; &lt;&gt; &lt;&lt;0&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;104, 101, 197, 130, 197, 130, 111, 0&gt;&gt;</p></pre><p>Alternatively, you can view a string's binary representation by using <a href="IO.html#inspect/2"><code class="inline">IO.inspect/2</code></a>:</p><pre class="elixir" data-code-id="31303330"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">IO.inspect(&quot;hełło&quot;, binaries: :as_binaries)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;104, 101, 197, 130, 197, 130, 111&gt;&gt;</p></pre><p>We are getting a little bit ahead of ourselves. Let's talk about bitstrings to learn about what exactly the <code class="inline">&lt;&lt;&gt;&gt;</code> constructor means.</p><h2 id="bitstrings" class="section-heading">
+  <a href="#bitstrings" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Bitstrings</span>
+</h2>
+<p>Although we have covered code points and UTF-8 encoding, we still need to go a bit deeper into how exactly we store the encoded bytes, and this is where we introduce the <strong>bitstring</strong>. A bitstring is a fundamental data type in Elixir, denoted with the <a href="Kernel.SpecialForms.html#%3C%3C%3E%3E/1"><code class="inline">&lt;&lt;&gt;&gt;</code></a> syntax. <strong>A bitstring is a contiguous sequence of bits in memory.</strong></p><p>By default, 8 bits (i.e. 1 byte) is used to store each number in a bitstring, but you can manually specify the number of bits via a <code class="inline">::n</code> modifier to denote the size in <code class="inline">n</code> bits, or you can use the more verbose declaration <code class="inline">::size(n)</code>:</p><pre class="elixir" data-code-id="31303934"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;42&gt;&gt; == &lt;&lt;42::8&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;3::4&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;3::size(4)&gt;&gt;</p></pre><p>For example, the decimal number <code class="inline">3</code> when represented with 4 bits in base 2 would be <code class="inline">0011</code>, which is equivalent to the values <code class="inline">0</code>, <code class="inline">0</code>, <code class="inline">1</code>, <code class="inline">1</code>, each stored using 1 bit:</p><pre class="elixir" data-code-id="31313538"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;0::1, 0::1, 1::1, 1::1&gt;&gt; == &lt;&lt;3::4&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Any value that exceeds what can be stored by the number of bits provisioned is truncated:</p><pre class="elixir" data-code-id="31323232"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;1&gt;&gt; == &lt;&lt;257&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>Here, 257 in base 2 would be represented as <code class="inline">100000001</code>, but since we have reserved only 8 bits for its representation (by default), the left-most bit is ignored and the value becomes truncated to <code class="inline">00000001</code>, or simply <code class="inline">1</code> in decimal.</p><p>A complete reference for the bitstring constructor can be found in <a href="Kernel.SpecialForms.html#%3C%3C%3E%3E/1"><code class="inline">&lt;&lt;&gt;&gt;</code></a>'s documentation.</p><h2 id="binaries" class="section-heading">
+  <a href="#binaries" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Binaries</span>
+</h2>
+<p><strong>A binary is a bitstring where the number of bits is divisible by 8.</strong> That means that every binary is a bitstring, but not every bitstring is a binary. We can use the <a href="Kernel.html#is_bitstring/1"><code class="inline">is_bitstring/1</code></a> and <a href="Kernel.html#is_binary/1"><code class="inline">is_binary/1</code></a> functions to demonstrate this.</p><pre class="elixir" data-code-id="31323836"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_bitstring(&lt;&lt;3::4&gt;&gt;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_binary(&lt;&lt;3::4&gt;&gt;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_bitstring(&lt;&lt;0, 255, 42&gt;&gt;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_binary(&lt;&lt;0, 255, 42&gt;&gt;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_binary(&lt;&lt;42::16&gt;&gt;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>We can pattern match on binaries / bitstrings:</p><pre class="elixir" data-code-id="31333530"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;0, 1, x&gt;&gt; = &lt;&lt;0, 1, 2&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;0, 1, 2&gt;&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># 2</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;0, 1, x&gt;&gt; = &lt;&lt;0, 1, 2, 3&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (MatchError) no match of right hand side value: &lt;&lt;0, 1, 2, 3&gt;&gt;</p></pre><p>Note that unless you explicitly use <code class="inline">::</code> modifiers, each entry in the binary pattern is expected to match a single byte (exactly 8 bits). If we want to match on a binary of unknown size, we can use the <code class="inline">binary</code> modifier at the end of the pattern:</p><pre class="elixir" data-code-id="31343134"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;0, 1, x::binary&gt;&gt; = &lt;&lt;0, 1, 2, 3&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;0, 1, 2, 3&gt;&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;2, 3&gt;&gt;</p></pre><p>There are a couple other modifiers that can be useful when doing pattern matches on binaries. The <code class="inline">binary-size(n)</code> modifier will match <code class="inline">n</code> bytes in a binary:</p><pre class="elixir" data-code-id="31343738"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;head::binary-size(2), rest::binary&gt;&gt; = &lt;&lt;0, 1, 2, 3&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;0, 1, 2, 3&gt;&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">head</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;0, 1&gt;&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">rest</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;2, 3&gt;&gt;</p></pre><p><strong>A string is a UTF-8 encoded binary</strong>, where the code point for each character is encoded using 1 to 4 bytes. Thus every string is a binary, but due to the UTF-8 standard encoding rules, not every binary is a valid string.</p><pre class="elixir" data-code-id="31353432"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_binary(&quot;hello&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_binary(&lt;&lt;239, 191, 19&gt;&gt;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">String.valid?(&lt;&lt;239, 191, 19&gt;&gt;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p></pre><p>The string concatenation operator <code class="inline">&lt;&gt;</code> is actually a binary concatenation operator:</p><pre class="elixir" data-code-id="31363036"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;a&quot; &lt;&gt; &quot;ha&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;aha&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;0, 1&gt;&gt; &lt;&gt; &lt;&lt;2, 3&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;0, 1, 2, 3&gt;&gt;</p></pre><p>Given that strings are binaries, we can also pattern match on strings:</p><pre class="elixir" data-code-id="31363730"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;head, rest::binary&gt;&gt; = &quot;banana&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;banana&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">head == ?b</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">rest</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;anana&quot;</p></pre><p>However, remember that binary pattern matching works on <em>bytes</em>, so matching on the string like &quot;über&quot; with multibyte characters won't match on the <em>character</em>, it will match on the <em>first byte of that character</em>:</p><pre class="elixir" data-code-id="31373334"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;ü&quot; &lt;&gt; &lt;&lt;0&gt;&gt;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;195, 188, 0&gt;&gt;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;x, rest::binary&gt;&gt; = &quot;über&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;über&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x == ?ü</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># false</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">rest</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &lt;&lt;188, 98, 101, 114&gt;&gt;</p></pre><p>Above, <code class="inline">x</code> matched on only the first byte of the multibyte <code class="inline">ü</code> character.</p><p>Therefore, when pattern matching on strings, it is important to use the <code class="inline">utf8</code> modifier:</p><pre class="elixir" data-code-id="31373938"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&lt;&lt;x::utf8, rest::binary&gt;&gt; = &quot;über&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;über&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">x == ?ü</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">rest</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;ber&quot;</p></pre><h2 id="charlists" class="section-heading">
+  <a href="#charlists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Charlists</span>
+</h2>
+<p>Our tour of our bitstrings, binaries, and strings is nearly complete, but we have one more data type to explain: the charlist.</p><p><strong>A charlist is a list of integers where all the integers are valid code points.</strong> In practice, you will not come across them often, only in specific scenarios such as interfacing with older Erlang libraries that do not accept binaries as arguments.</p><pre class="elixir" data-code-id="31383632"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~c&quot;hello&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;hello&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">[?h, ?e, ?l, ?l, ?o]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;hello&quot;</p></pre><p>The <code class="inline">~c</code> sigil (we'll cover sigils later in the <a href="sigils.html">&quot;Sigils&quot;</a> chapter) indicates the fact that we are dealing with a charlist and not a regular string.</p><p>Instead of containing bytes, a charlist contains integer code points. However, the list is only printed as a sigil if all code points are within the ASCII range:</p><pre class="elixir" data-code-id="31393236"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~c&quot;hełło&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [104, 101, 322, 322, 111]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">is_list(~c&quot;hełło&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># true</p></pre><p>This is done to ease interoperability with Erlang, even though it may lead to some surprising behavior. For example, if you are storing a list of integers that happen to range between 0 and 127, by default IEx will interpret this as a charlist and it will display the corresponding ASCII characters.</p><pre class="elixir" data-code-id="31393930"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">heartbeats_per_minute = [99, 97, 116]</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;cat&quot;</p></pre><p>You can always force charlists to be printed in their list representation by calling the <a href="Kernel.html#inspect/2"><code class="inline">inspect/2</code></a> function:</p><pre class="elixir" data-code-id="32303534"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">inspect(heartbeats_per_minute, charlists: :as_list)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;[99, 97, 116]&quot;</p></pre><p>Furthermore, you can convert a charlist to a string and back by using the <a href="Kernel.html#to_string/1"><code class="inline">to_string/1</code></a> and <a href="Kernel.html#to_charlist/1"><code class="inline">to_charlist/1</code></a>:</p><pre class="elixir" data-code-id="32313138"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">to_charlist(&quot;hełło&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># [104, 101, 322, 322, 111]</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">to_string(~c&quot;hełło&quot;)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hełło&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">to_string(:hello)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">to_string(1)</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;1&quot;</p></pre><p>The functions above are polymorphic, in other words, they accept many shapes: not only do they convert charlists to strings (and vice-versa), they can also convert integers, atoms, and so on.</p><p>String (binary) concatenation uses the <code class="inline">&lt;&gt;</code> operator but charlists, being lists, use the list concatenation operator <code class="inline">++</code>:</p><pre class="elixir" data-code-id="32313832"><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~c&quot;this &quot; &lt;&gt; ~c&quot;fails&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (ArgumentError) expected binary argument in &lt;&gt; operator but got: ~c&quot;this &quot;</p><p class="output output-initial" data-code-type="output">#     (elixir) lib/kernel.ex:1821: Kernel.wrap_concatenation/3</p><p class="output output-initial" data-code-type="output">#     (elixir) lib/kernel.ex:1808: Kernel.extract_concatenations/2</p><p class="output output-initial" data-code-type="output">#     (elixir) expanding macro: Kernel.&lt;&gt;/2</p><p class="output output-initial" data-code-type="output">#     iex:1: (file)</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">~c&quot;this &quot; ++ ~c&quot;works&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ~c&quot;this works&quot;</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;he&quot; ++ &quot;llo&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># ** (ArgumentError) argument error</p><p class="output output-initial" data-code-type="output">#     :erlang.++(&quot;he&quot;, &quot;llo&quot;)</p><div class="line" data-code-state="NOT_EVALUATED"><span class="prompt">iex&gt;</span><span class="input" data-code-type="input">&quot;he&quot; &lt;&gt; &quot;llo&quot;</span><span class="info"></span></div><p class="output output-initial" data-code-type="output"># &quot;hello&quot;</p></pre><p>With binaries, strings, and charlists out of the way, it is time to talk about key-value data structures.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="anonymous-functions.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Anonymous functions
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="keywords-and-maps.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Keyword lists and maps
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="Elixir.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>
