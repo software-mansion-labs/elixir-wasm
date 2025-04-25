@@ -25,23 +25,20 @@ jobs:
     permissions:
       contents: read
       packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-    #   id-token: write
+
+
+    defaults:
+      run:
+        working-directory: demos-docker
 
     steps:
-      - name: Checkout repository
+      - name: checkout
         uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.6.0
         with:
-          submodules: false
+          ssh-private-key: |
+            ${{ secrets.ACCESS_TO_FISSIONVM }}
 
-    #   # Install the cosign tool except on PR
-    #   # https://github.com/sigstore/cosign-installer
-    #   - name: Install cosign
-    #     if: github.event_name != 'pull_request'
-    #     uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
-    #     with:
-    #       cosign-release: 'v2.2.4'
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
