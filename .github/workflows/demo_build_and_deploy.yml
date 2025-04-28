@@ -71,13 +71,12 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Deploy to Staging
-        uses: wshihadeh/docker-deployment-action@v1
+        uses: TapTap21/docker-remote-deployment-action@v1.0
         with:
+          args: up -d
           remote_docker_host: ${{ secrets.STAG_POPCORN_HOST }}
-          remote_docker_port: ${{ secrets.STAG_POPCORN_PORT }}
+          ssh_port: ${{ secrets.STAG_POPCORN_PORT }}
           ssh_private_key: ${{ secrets.POPCORN_SSH_PRIV }}
           ssh_public_key: ${{ secrets.STAG_HOST_PUBLIC_KEYS }}
-          deployment_mode: docker-compose
-          copy_stack_file: false
-          deploy_path: /home/popcorn
+
 
