@@ -6,10 +6,9 @@ on:
   push:
     branches: [ deploy ]
 jobs:
-  build:
+  deploy_staging:
 
     runs-on: ubuntu-latest
-
 
     steps:
       - name: test ssh connection
