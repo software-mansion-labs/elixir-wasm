@@ -59,20 +59,14 @@ materialize it into `deps/`, so the installer instead adds an
 `--alias:local_live_view=...` flag pointing at the bundle. See
 [Installation](installation.md) for the full list of what gets configured.
 
-## `LLVEngine.create(liveSocket, config)`
+## Setting up the engine
 
+```javascript
+LLVEngine.create(liveSocket, config);
+```
 Boots the engine. Returns a `Promise` that resolves to the `LLVEngine`
 instance once the WASM runtime is up and every LLV view already in the DOM has
 been mounted.
-
-```javascript
-import { LLVEngine } from "local_live_view";
-
-const engine = await LLVEngine.create(liveSocket, {
-  bundlePaths: ["/assets/js/wasm/bundle.avm"],
-});
-```
-
 * `liveSocket` - the `LiveSocket` instance your `app.js` already created. The
   engine reads the application's Phoenix `Socket` class off it, so there is
   nothing to import or pass in.
@@ -81,8 +75,17 @@ const engine = await LLVEngine.create(liveSocket, {
 `create()` does not call `liveSocket.connect()`; you keep owning that. It works
 called either before or after `connect()` - the installer places it after.
 
+Example:
+```javascript
+import { LLVEngine } from "local_live_view";
+
+const engine = await LLVEngine.create(liveSocket, {
+  bundlePaths: ["/assets/js/wasm/bundle.avm"],
+});
+```
+
 Keep the resolved instance around if you plan to use
-[`pushEvent`](#engine-pushevent-viewid-event-payload). The examples in this
+[`pushEvent`](#pushing-events). The examples in this
 repository store it on `window`:
 
 ```javascript
@@ -91,24 +94,38 @@ window.llvEngine = await LLVEngine.create(liveSocket, {
 });
 ```
 
-### `LLVConfig`
+### LLVConfig
 
 All fields are optional.
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `bundlePaths` | `string[]` | `["wasm/bundle.avm"]` | Paths to the compiled WASM bundles to load. `mix llv.build` writes the bundle to `priv/static/assets/js/wasm/bundle.avm`, which is why the installer passes `["/assets/js/wasm/bundle.avm"]`. |
-| `debug` | `boolean` | `false` | Enables Popcorn debug logging. |
-| `eventHandler` | `(eventName, payload) => void` | - | Called for every raw message the Popcorn runtime emits, including messages that are not part of the LLV protocol. Useful for diagnostics. |
-| `onNavigate` | `(href, replace) => void` | - | Replaces LLV's default handling of an Elixir-initiated `push_patch/2`. See [Navigation](navigation.md#customizing-navigation). |
+```typescript
+interface LLVConfig {
+  bundlePaths?: string[];   // default: ["wasm/bundle.avm"]
+  debug?: boolean;          // default: false
+  eventHandler?: (eventName: string, payload: unknown) => void;
+  onNavigate?: (href: string, replace: boolean) => void;
+}
+```
 
-## `engine.pushEvent(viewId, event, payload)`
+* `bundlePaths` - paths to the compiled WASM bundles to load. `mix llv.build`
+  writes the bundle to `priv/static/assets/js/wasm/bundle.avm`, which is why the
+  installer passes `["/assets/js/wasm/bundle.avm"]`.
 
-Sends an event from your own JavaScript into a running LLV view.
+* `debug` - enables Popcorn debug logging.
+
+* `eventHandler` - called for every raw message the Popcorn runtime emits,
+  including messages that are not part of the LLV protocol. Useful for
+  diagnostics.
+
+* `onNavigate` - replaces LLV's default handling of an Elixir-initiated
+  `push_patch/2`. See [Navigation](navigation.md#customizing-navigation).
+
+## Pushing events
 
 ```javascript
-await engine.pushEvent("ThermostatLive", "refresh", { source: "toolbar" });
+engine.pushEvent(viewId, event, payload);
 ```
+Sends an event from your own JavaScript into a running LLV view.
 
 * `viewId` - either the view name as written in `<.local_live_view view="...">`
   or the mount element's `id`. A view name is resolved against the first
@@ -116,6 +133,11 @@ await engine.pushEvent("ThermostatLive", "refresh", { source: "toolbar" });
   view is rendered more than once on a page.
 * `event` - the event name.
 * `payload` - optional map, defaults to `{}`.
+
+Example:
+```javascript
+await engine.pushEvent("ThermostatLocal", "refresh", { source: "toolbar" });
+```
 
 On the Elixir side the event arrives at the view's `c:LocalLiveView.handle_info/2`
 as a three-element tuple, not at `handle_event/3`:
@@ -133,16 +155,11 @@ detect delivery failures.
 
 ## What `create()` changes in your page
 
-`create()` is not inert. Knowing what it touches makes surprising behaviour
-much easier to place.
-
 * **Registers two LiveView hooks** on `liveSocket.hooks`: `LocalLiveView`,
   which mounts, updates and unmounts a view as its element enters and leaves
   the DOM, and `LocalLiveViewEventBus`, a hidden sibling element used to send
   events from a local view to the host LiveView. Both are rendered by
-  `<.local_live_view>`; you do not add them yourself. Because they are
-  registered on the instance, they do not need to appear in the `hooks` option
-  you pass to `new LiveSocket(...)`.
+  `<.local_live_view>`; you do not add them yourself.
 * **Patches `liveSocket.owner`** so that DOM events originating inside a
   `[data-pop-view]` subtree are dispatched to the local view rather than to the
   surrounding server LiveView. LLV mount points deliberately carry no
@@ -165,63 +182,6 @@ much easier to place.
 * **Opens a mirror socket at `/llv_socket`**, but only if at least one mounted
   view carries a `data-pop-mirror-id` - that is, only if it has a server-side
   `Mirror` module. Pages without mirrors open no extra socket.
-
-## Communicating with the host LiveView
-
-Once the engine is running, four channels of communication exist between the
-page, the host LiveView and the Elixir code in WASM. Only the first requires
-JavaScript from you.
-
-**Host LiveView to local view.** Your host LiveView pushes a `llv_server_message`
-event; the engine routes it to the addressed view, which handles it in
-`handle_server_event/3`. The library has no server-side helper, so the push is
-written by hand:
-
-```elixir
-push_event(socket, "llv_server_message", %{
-  "view" => "CartLive",
-  "payload" => %{"type" => "items_updated", "items" => items}
-})
-```
-
-* `"view"` addresses the target: a view name or a mount element `id`, resolved
-  the same way as in [`pushEvent`](#engine-pushevent-viewid-event-payload).
-* `"payload"` **must contain a `"type"` key**. `use LocalLiveView` generates a
-  `handle_event("llv_server_message", ...)` clause that matches on it and calls
-  `handle_server_event(type, payload, socket)`; a payload without `"type"` never
-  reaches `handle_server_event/3`.
-
-The local view receives the type as the first argument and the full payload as
-the second:
-
-```elixir
-def handle_server_event("items_updated", %{"items" => items}, socket) do
-  {:noreply, assign(socket, :items, items)}
-end
-```
-
-`handle_server_event/3` is an overridable function generated by
-`use LocalLiveView`, not a declared callback, so it takes no `@impl true`. The
-default implementation ignores the event.
-
-Messages that arrive while the runtime is still booting are buffered and
-flushed after it comes up, so a push during the initial LiveView join is not
-lost.
-
-**Local view to host LiveView.** `LocalLiveView.push_server_event/3` sends an
-event through the hidden event bus element to the host LiveView's
-`handle_event/3`. If the push fails - no host LiveView on the page, socket
-disconnected, error reply, timeout - the view's
-`c:LocalLiveView.handle_push_error/4` runs so it can roll optimistic edits
-back.
-
-**Assigns from the host.** `<.local_live_view view="Cart" items={@items} />`
-re-renders on the host as usual; the `LocalLiveView` hook notices the changed
-assigns and forwards them, which runs the local view's `c:LocalLiveView.update/2`.
-
-**Mirror sync.** `LocalLiveView.mirror_sync/2` pushes the declared assigns over
-the `/llv_socket` channel to the view's `Mirror` module. See
-[Mirror Sync](mirror-sync.md).
 
 ## Reconnects
 

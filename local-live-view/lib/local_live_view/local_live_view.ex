@@ -100,10 +100,9 @@ defmodule LocalLiveView do
 
   Another way of communicating the server is by using `mirror_sync/2`.
 
-  The browser-side half of both mechanisms lives in the `LLVEngine` JavaScript
-  bridge. See the [JavaScript API](js-api.md) page for what it sets up, how the
-  host LiveView pushes events back into a local view, and how to handle
-  reconnects.
+  The browser-side half of these mechanisms lives in the `LLVEngine` JavaScript
+  bridge. See the [JavaScript API](js-api.md) page for what it sets up and how
+  to handle reconnects.
   '''
 
   alias Phoenix.LiveView.Socket
@@ -156,8 +155,8 @@ defmodule LocalLiveView do
   timeout), the view's `c:handle_push_error/4` callback is invoked.
 
   The event is delivered through the hidden event bus element rendered by
-  `<.local_live_view>`; see the
-  [JavaScript API](js-api.md#communicating-with-the-host-liveview) for details.
+  `<.local_live_view>`; see
+  [what the engine sets up](js-api.md#what-create-changes-in-your-page).
   """
   def push_server_event(%Socket{} = socket, event, payload \\ %{}) do
     Popcorn.Wasm.run_js(
