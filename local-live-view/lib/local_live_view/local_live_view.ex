@@ -99,6 +99,10 @@ defmodule LocalLiveView do
   rolling optimistic local edits back to the latest authoritative state.
 
   Another way of communicating the server is by using `mirror_sync/2`.
+
+  The browser-side half of these mechanisms lives in the `LLVEngine` JavaScript
+  bridge. See the [JavaScript API](js-api.md) page for what it sets up and how
+  to handle reconnects.
   '''
 
   alias Phoenix.LiveView.Socket
@@ -107,6 +111,9 @@ defmodule LocalLiveView do
   Syncs the declared mirror assigns to the server-side mirror channel.
   Must be called from within a LocalLiveView callback (handle_event, handle_info)
   after assigns have been updated.
+
+  The sync travels over the `/llv_socket` channel opened by the
+  [JavaScript bridge](js-api.md#what-create-changes-in-your-page).
   """
   def mirror_sync(%Phoenix.LiveView.Socket{} = socket, mirror_keys) do
     payload =
@@ -146,6 +153,10 @@ defmodule LocalLiveView do
 
   If the push fails (no host LiveView, disconnected socket, error reply or
   timeout), the view's `c:handle_push_error/4` callback is invoked.
+
+  The event is delivered through the hidden event bus element rendered by
+  `<.local_live_view>`; see
+  [what the engine sets up](js-api.md#what-create-changes-in-your-page).
   """
   def push_server_event(%Socket{} = socket, event, payload \\ %{}) do
     Popcorn.Wasm.run_js(

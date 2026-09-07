@@ -8,8 +8,12 @@ export interface LLVConfig {
   bundlePaths?: string[];
   /** Enable Popcorn debug logging */
   debug?: boolean;
-  /** Callback for raw Popcorn messages */
-  eventHandler?: (msg: unknown) => void;
+  /**
+   * Callback for raw Popcorn messages, invoked with the event name and its
+   * payload. Receives every message the runtime emits, including ones that
+   * are not part of the LLV protocol.
+   */
+  eventHandler?: (eventName: string, payload: unknown) => void;
   /**
    * Override LLV's default navigation handler.
    * Called instead of `liveSocket.historyPatch` when an LLV view calls `push_patch`.
