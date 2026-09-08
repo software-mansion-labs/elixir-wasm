@@ -1,5 +1,4 @@
-import type { Channel } from "phoenix";
-import type { LiveSocketInstanceInterface } from "phoenix_live_view";
+import type { Hook, LiveSocketInstanceInterface } from "phoenix_live_view";
 
 // --- Public API ---
 
@@ -16,6 +15,12 @@ export interface LLVConfig {
    * Pass a custom function to take full control of navigation.
    */
   onNavigate?: (href: string, replace: boolean) => void;
+  /**
+   * Hooks available to local views (`phx-hook` in their templates).
+   * Independent of the host LiveSocket's hooks — pass the same object to
+   * both if hooks are shared.
+   */
+  hooks?: Record<string, Hook>;
 }
 
 // --- Internal Phoenix types ---
@@ -52,14 +57,6 @@ export interface LLVServerEventDetail {
   payload: unknown;
 }
 
-export interface LLVView {
-  el: HTMLElement;
-  channel: Channel;
-  join(): void;
-  addHook: (el: Element) => unknown;
-  destroy?: (callback?: () => void) => void;
-}
-
 /**
  * A mounted LocalLiveViewEventBus hook instance: the host-side channel used
  * by __llvPushServer.
@@ -75,18 +72,17 @@ export interface EventBusHook {
  * a public runtime method their TS types simply don't declare.
  */
 interface PhxLiveSocketInternals {
-  newRootView(el: HTMLElement, ...rest: unknown[]): LLVView;
   isConnected(): boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hooks: Record<string, any>;
   debounce(el: Element, event: Event, eventType: string, callback: () => void): unknown;
+  roots: Record<string, { channel: { leave(): unknown } }>;
   pushHistoryPatch(
     event: Event | { isTrusted: boolean; type: string },
     href: string,
     linkState: string,
     targetEl: Element | null,
   ): void;
-  bindForms(): void;
 }
 
 /** Public LiveSocket interface extended with Phoenix internals accessed by LLV. */

@@ -48,7 +48,10 @@ defmodule LocalLvKanban.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.1.0"},
+      # Temporary local override: the multi-socket branch of LV (viewSelector
+      # + foreign-root opacity) that LLV's socket-per-view design needs.
+      {:phoenix_live_view,
+       path: "#{System.user_home!()}/dev/phoenix/phoenix_live_view", override: true},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},

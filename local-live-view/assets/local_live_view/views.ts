@@ -1,20 +1,40 @@
-import type { Socket as PhoenixSocket } from "phoenix";
 import type { LLVSocket } from "./types";
 import type { PopcornClient } from "./index";
 import { llvIdOf } from "./helpers";
+import type { PopcornTransports } from "./transport";
 
 interface ViewData {
   lastAssigns?: string | null;
+  // The view's own LiveSocket, created once its container is installed.
+  socket?: LLVSocket;
 }
 
 export class Views {
-  private socket: LLVSocket;
+  private hostSocket: LLVSocket;
   private pop: PopcornClient;
+  private transports: PopcornTransports;
   private data = new Map<string, ViewData>();
 
-  constructor(socket: LLVSocket, pop: PopcornClient) {
-    this.socket = socket;
+  constructor(hostSocket: LLVSocket, pop: PopcornClient, transports: PopcornTransports) {
+    this.hostSocket = hostSocket;
     this.pop = pop;
+    this.transports = transports;
+  }
+
+  // The LiveSocket owning the element: the view's own socket for elements
+  // inside a mounted container, the host's otherwise.
+  socketFor(el: Element): LLVSocket {
+    const rootEl = el.closest("[data-pop-root]");
+    const socket = rootEl && this.data.get(rootEl.id)?.socket;
+    return socket || this.hostSocket;
+  }
+
+  socketById(llvId: string): LLVSocket | undefined {
+    return this.data.get(llvId)?.socket;
+  }
+
+  mountedIds(): string[] {
+    return Array.from(this.data.keys());
   }
 
   async mount(pop_view_el: HTMLElement): Promise<void> {
@@ -55,32 +75,33 @@ export class Views {
       console.error("LLV: mount point has no [data-pop-root] element", llvId);
       return;
     }
-    this.socket.newRootView(this.installContainer(root, html)).join();
+    this.installContainer(root, html);
+    // The container is in the DOM: the view's own LiveSocket scoped to it
+    // discovers and joins it through the fully stock path.
+    data.socket = this.transports.newSocket(llvId);
+    data.socket.connect();
   }
 
   unmount(pop_view_el: HTMLElement): void {
     const llvId = llvIdOf(pop_view_el);
-    if (this.data.delete(llvId)) this.pop.call({ action: "destroy", id: llvId });
-  }
-
-  // Replace the view's channel with the PopcornSocket channel
-  // for the local views.
-  // This relies on LV's private API and the fact that LV
-  // opens the channel before it calls newRootView and joins it
-  // afterwards.
-  patchAdoption(popcornSocket: PhoenixSocket): void {
-    const origNewRootView = this.socket.newRootView.bind(this.socket);
-
-    this.socket.newRootView = (...args) => {
-      const [el] = args;
-      const view = origNewRootView(...args);
-      if (el.matches?.("[data-pop-root]")) {
-        const params = (view.channel as unknown as { params: () => Record<string, unknown> })
-          .params;
-        view.channel = popcornSocket.channel(`lv:${el.id}`, params);
-      }
-      return view;
-    };
+    const data = this.data.get(llvId);
+    if (!data) return;
+    this.data.delete(llvId);
+    // Stock goodbye: phx_leave makes the channel process exit itself with
+    // {:shutdown, :left} — no server-side kill needed. Deliberately
+    // channel.leave, NOT View.destroy/destroyAllViews: those mark the
+    // element "destroyed" in element-private state, which the HOST's
+    // morphdom getNodeKey reads (it is per-element, not per-socket) — a
+    // null key gets the leftover sticky husk positionally paired with the
+    // next page's content and swallows it on live navigation. The destroy
+    // action then only cleans the dispatcher's registry/ETS (and its epoch
+    // guard reaps a join still in flight — the one case where no client
+    // exists to leave).
+    if (data.socket) {
+      for (const view of Object.values(data.socket.roots ?? {})) view.channel.leave();
+      data.socket.disconnect();
+    }
+    this.pop.call({ action: "destroy", id: llvId });
   }
 
   syncAssigns(pop_view_el: HTMLElement): void {
