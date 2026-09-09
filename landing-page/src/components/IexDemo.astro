@@ -604,9 +604,6 @@ const figures = [
   }
 
   function runExample(popcorn: Popcorn, commands: string[]) {
-    const clear = popcorn.writeStdin("\f");
-    console.assert(clear.ok);
-
     for (const command of commands) {
       const input = popcorn.writeStdin(`${command}\r`);
       console.assert(input.ok);
