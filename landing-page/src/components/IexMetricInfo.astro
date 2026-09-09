@@ -1,0 +1,30 @@
+---
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<abbr
+  class="text-brown-60 flex-none cursor-help no-underline"
+  title={label}
+  aria-label={label}
+  tabindex="0"
+>
+  <svg class="size-3.5" viewBox="0 0 14 14" aria-hidden="true">
+    <circle
+      cx="7"
+      cy="7"
+      r="5.25"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.25"></circle>
+    <path
+      d="M7 6.25v3.25M7 4.25h.01"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.25"
+      stroke-linecap="round"></path>
+  </svg>
+</abbr>

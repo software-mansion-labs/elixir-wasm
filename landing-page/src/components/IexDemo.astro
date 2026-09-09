@@ -1,4 +1,6 @@
 ---
+import IexMetricInfo from "./IexMetricInfo.astro";
+
 const memory = [
   { color: "bg-ink", key: "processes", name: "processes" },
   { color: "bg-brown-70", key: "binary", name: "binary" },
@@ -8,14 +10,22 @@ const memory = [
 ];
 
 const metrics = [
-  { key: "runQueue", name: "run queue" },
-  { key: "reductionsFull", name: "reductions / s" },
+  { info: null, key: "runQueue", name: "run queue" },
+  {
+    info: "Reductions count the work performed by the BEAM VM each second.",
+    key: "reductionsFull",
+    name: "reductions / s",
+  },
 ];
 
 const processMetrics = [
-  { key: "processCountLimit", name: "count / limit" },
-  { key: "gcRuns", name: "gc runs" },
-  { key: "uptime", name: "uptime" },
+  { info: null, key: "processCountLimit", name: "count / limit" },
+  {
+    info: "Garbage collection runs reclaim memory from BEAM processes.",
+    key: "gcRuns",
+    name: "gc runs",
+  },
+  { info: null, key: "uptime", name: "uptime" },
 ];
 
 const figures = [
@@ -40,16 +50,19 @@ const figures = [
       <button
         class="border-demo font-copy text-ink md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
         type="button"
+        disabled
         data-iex-example="greet">Greet a process</button
       >
       <button
         class="border-demo font-copy text-ink md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
         type="button"
+        disabled
         data-iex-example="sort">Enum.sort/1</button
       >
       <button
         class="border-demo font-copy text-ink md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
         type="button"
+        disabled
         data-iex-example="supervise">Supervise a crash</button
       >
     </div>
@@ -58,6 +71,7 @@ const figures = [
       class="border-demo-soft text-ink font-copy flex w-11.5 flex-none cursor-pointer items-center justify-center gap-2 border-l text-sm disabled:cursor-default disabled:opacity-35 md:w-auto md:border-0 md:px-5.5"
       type="button"
       aria-label="Restart IEx"
+      disabled
       data-iex-restart
     >
       <svg class="size-3.5 flex-none" viewBox="0 0 14 14" aria-hidden="true">
@@ -156,11 +170,14 @@ const figures = [
           >Load</span
         >
         {
-          metrics.map(({ key, name }) => (
+          metrics.map(({ info, key, name }) => (
             <dl class="font-label flex min-w-0 items-center gap-3 text-sm leading-5.5">
-              <dt class="text-brown-70 min-w-0 flex-1">{name}</dt>
+              <dt class="text-brown-70 flex min-w-0 flex-1 items-center gap-1.5">
+                {name}
+                {info !== null && <IexMetricInfo label={info} />}
+              </dt>
               <dd
-                class="text-ink w-27.5 flex-none whitespace-nowrap text-right"
+                class="text-ink w-27.5 flex-none text-right whitespace-nowrap"
                 data-iex-stat={key}
               >
                 —
@@ -168,10 +185,6 @@ const figures = [
             </dl>
           ))
         }
-        <p class="font-copy text-brown-60 text-sm leading-5.5">
-          Popcorn runs one scheduler thread. Load is reported as run queue
-          length and reductions per second.
-        </p>
       </div>
 
       <div class="border-demo-soft flex min-h-0 flex-col gap-2 border-t pt-5">
@@ -180,11 +193,14 @@ const figures = [
           >Processes</span
         >
         {
-          processMetrics.map(({ key, name }) => (
+          processMetrics.map(({ info, key, name }) => (
             <dl class="font-label flex min-w-0 items-center gap-3 text-sm leading-5.5">
-              <dt class="text-brown-70 min-w-0 flex-1">{name}</dt>
+              <dt class="text-brown-70 flex min-w-0 flex-1 items-center gap-1.5">
+                {name}
+                {info !== null && <IexMetricInfo label={info} />}
+              </dt>
               <dd
-                class="text-ink w-27.5 flex-none whitespace-nowrap text-right"
+                class="text-ink w-27.5 flex-none text-right whitespace-nowrap"
                 data-iex-stat={key}
               >
                 —
@@ -282,8 +298,14 @@ const figures = [
 </section>
 
 <script>
-  import { Popcorn } from "@swmansion/popcorn";
-  import { FitAddon, init, Terminal } from "ghostty-web";
+  import type { Popcorn as PopcornInstance } from "@swmansion/popcorn";
+  import type {
+    FitAddon as FitAddonInstance,
+    Terminal as TerminalInstance,
+  } from "ghostty-web";
+
+  const TERMINAL_FONT =
+    'ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace';
 
   const STATS_EVAL = `
     {InitialReductions, _} = erlang:statistics(reductions),
@@ -385,10 +407,18 @@ const figures = [
     processes: Array<{ pid: string; name: string }>;
   };
 
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting !== true) continue;
+      observer.unobserve(entry.target);
+      setupDemo(entry.target as HTMLElement);
+    }
+  });
+
   for (const demo of document.querySelectorAll<HTMLElement>(
     "[data-iex-demo]",
   )) {
-    setupDemo(demo);
+    observer.observe(demo);
   }
 
   async function setupDemo(demo: HTMLElement) {
@@ -427,8 +457,8 @@ const figures = [
       return;
     }
 
-    let popcorn: Popcorn | null = null;
-    let terminal: Terminal | null = null;
+    let popcorn: PopcornInstance | null = null;
+    let terminal: TerminalInstance | null = null;
     let stopStatistics: (() => void) | null = null;
 
     if (
@@ -500,6 +530,7 @@ const figures = [
     loadingMessage.textContent = "Loading runtime…";
     status.textContent = "Starting the Elixir runtime";
     terminalElement.dataset.ready = "false";
+    await nextFrame();
 
     if (self.crossOriginIsolated !== true) {
       const message = "Cross-origin isolation is required to start IEx";
@@ -509,13 +540,17 @@ const figures = [
       return { popcorn: null, terminal: null, stopStatistics: null };
     }
 
+    const [{ Popcorn }, { FitAddon, init, Terminal }] = await Promise.all([
+      import("@swmansion/popcorn"),
+      import("ghostty-web"),
+    ]);
     await init();
 
     const styles = getComputedStyle(document.documentElement);
     const terminal = new Terminal({
       cursorBlink: true,
       cursorStyle: "bar",
-      fontFamily: "IBM Plex Mono",
+      fontFamily: TERMINAL_FONT,
       fontSize: window.matchMedia("(max-width: 47.999rem)").matches ? 12 : 14,
       scrollback: 1_000,
       theme: {
@@ -550,9 +585,7 @@ const figures = [
     const nativeFocus = terminalElement.focus.bind(terminalElement);
     terminalElement.focus = () => nativeFocus({ preventScroll: true });
     terminal.open(terminalElement);
-    fitAddon.fit();
-    fitAddon.observeResize();
-    terminal.writeln("\x1b[90mBooting BEAM and starting IEx…\x1b[0m");
+    const dimensions = fitTerminal(terminal, fitAddon);
 
     const result = await Popcorn.init({
       beam: {
@@ -560,7 +593,7 @@ const figures = [
         env: { TERM: "xterm-256color" },
         extraArgs: SHELL_ARGS,
       },
-      tty: { size: ttySize(terminal) },
+      tty: { size: dimensions },
       timeoutsMs: { boot: 30_000 },
       onStdout: (chunk) => terminal.write(chunk),
       onStderr: (chunk) => terminal.write(chunk),
@@ -589,12 +622,18 @@ const figures = [
       if (resize.ok === false) status.textContent = resize.error.message;
     });
 
-    fitAddon.fit();
-    const resize = popcorn.resizeTty(terminal.cols, terminal.rows);
+    fitAddon.observeResize();
+    const fitted = fitTerminal(terminal, fitAddon);
+    const resize = popcorn.resizeTty(fitted.columns, fitted.rows);
     console.assert(resize.ok);
     terminalElement.dataset.ready = "true";
     status.textContent = "IEx is ready";
     setLoading(exampleButtons, restart, loadingElement, progress, false);
+    await nextFrame();
+    terminal.options.fontFamily = TERMINAL_FONT;
+    const redrawn = fitTerminal(terminal, fitAddon);
+    const redrawResize = popcorn.resizeTty(redrawn.columns, redrawn.rows);
+    console.assert(redrawResize.ok);
     const stopStatistics = popcorn.onEvent((event) => {
       const statistics = getRuntimeStatistics(event);
       if (statistics !== null) updateStatistics(demo, statistics);
@@ -603,7 +642,7 @@ const figures = [
     return { popcorn, terminal, stopStatistics };
   }
 
-  function runExample(popcorn: Popcorn, commands: string[]) {
+  function runExample(popcorn: PopcornInstance, commands: string[]) {
     for (const command of commands) {
       const input = popcorn.writeStdin(`${command}\r`);
       console.assert(input.ok);
@@ -759,10 +798,21 @@ const figures = [
       .join(":");
   }
 
-  function ttySize(terminal: Terminal) {
-    console.assert(terminal.cols > 0);
-    console.assert(terminal.rows > 0);
-    return { columns: terminal.cols, rows: terminal.rows };
+  function fitTerminal(terminal: TerminalInstance, fitAddon: FitAddonInstance) {
+    terminal.renderer?.remeasureFont();
+    const dimensions = fitAddon.proposeDimensions();
+    if (dimensions === undefined) {
+      throw new Error("Terminal dimensions are unavailable");
+    }
+
+    terminal.resize(dimensions.cols, dimensions.rows);
+    return { columns: dimensions.cols, rows: dimensions.rows };
+  }
+
+  function nextFrame() {
+    return new Promise<void>((resolve) => {
+      requestAnimationFrame(() => resolve());
+    });
   }
 </script>
 

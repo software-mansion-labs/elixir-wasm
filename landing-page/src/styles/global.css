@@ -1,7 +1,8 @@
 @import "@fontsource-variable/dm-sans";
 @import "@fontsource-variable/fraunces";
 @import "@fontsource-variable/inter";
-@import "@fontsource/ibm-plex-mono/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
 @import "tailwindcss";
 
 @theme {
