@@ -127,17 +127,13 @@ defmodule LocalLiveView.Dispatcher do
   end
 
   defp handle_wasm_call(
-         %{
-           "action" => "create",
-           "id" => id,
-           "view" => view,
-           "mirror_id" => mirror_id,
-           "assigns" => assigns
-         },
+         %{"action" => "create", "id" => id} = msg,
          _promise,
          state
        )
        when not is_map_key(state.views, id) do
+    %{"view" => view, "mirror_id" => mirror_id, "assigns" => assigns} = msg
+
     # When an LLV is created, destroyed/crashes and created again
     # in a short period, there can be multiple LLV processes for
     # a single LLV at the same time. Thus, we add a reference
@@ -280,28 +276,20 @@ defmodule LocalLiveView.Dispatcher do
   end
 
   defp push_to_browser(%{topic: topic} = message, state) do
-    if validate_push(message) and Map.has_key?(state.views, topic_to_id(topic)) do
-      Popcorn.Wasm.run_js(
-        """
-        ({ args }) => {
-          window.__llvPopcornTransportPush?.(args);
-        }
-        """,
-        message
-      )
+    case topic_to_id(topic) do
+      nil ->
+        Logger.warning("LLV dispatcher: dropping push on unsupported topic #{inspect(topic)}")
+
+      id ->
+        if validate_push(message) and Map.has_key?(state.views, id) do
+          Popcorn.Wasm.run_js(
+            ~S|({ args }) => { window.__llvPopcornTransportPush?.(args); }|,
+            message
+          )
+        end
     end
 
     :ok
-  end
-
-  defp validate_push(%{event: "redirect", topic: topic, payload: payload}) do
-    Logger.error("""
-    LLV #{topic_to_id(topic)}: redirect/2 is not supported in local views — \
-    redirect to #{inspect(payload[:to] || payload[:external])} ignored, \
-    the LLV terminated.
-    """)
-
-    false
   end
 
   defp validate_push(%{event: "live_redirect", topic: topic, payload: payload}) do
@@ -318,4 +306,5 @@ defmodule LocalLiveView.Dispatcher do
   end
 
   defp topic_to_id("lv:" <> id), do: id
+  defp topic_to_id(_topic), do: nil
 end

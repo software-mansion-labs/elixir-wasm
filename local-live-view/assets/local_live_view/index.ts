@@ -11,7 +11,7 @@ import type {
 import { createPopcornSocket, type PopcornLink } from "./transport";
 import { registerNavigationHandlers } from "./navigation";
 import { registerCustomEventBindings } from "./events";
-import { resolveLlvId } from "./helpers";
+import { llvIdOf, resolveLlvId } from "./helpers";
 import { Views } from "./views";
 import { Mirrors } from "./mirrors";
 
@@ -34,29 +34,30 @@ class PopcornClient {
   }
 
   /**
-   * Sends an action to the dispatcher, return's dispatcher's reply.
-   * By default, logs when an error reply is received. Disable with
-   * suppressErrorLog: true.
+   * Sends an action to the dispatcher and returns the dispatcher's reply.
+   * Error replies are logged by default; pass suppressErrorLog to silence them.
+   * Rejects if the runtime isn't ready or the call itself fails.
    */
-  call(
+  async call(
     message: { action: string; [key: string]: unknown },
     opts?: { suppressErrorLog?: boolean },
   ): Promise<CallResult> {
-    const called = this.popcorn
-      ? this.popcorn.call(message, { timeoutMs: DEFAULT_CALL_TIMEOUT_MS })
-      : Promise.reject(new Error("LLV: popcorn call before runtime was ready"));
-    return called
-      .catch((err: unknown): CallResult => ({
+    let result: CallResult;
+    try {
+      const { popcorn } = this;
+      if (!popcorn) throw new Error("LLV: popcorn call before runtime was ready");
+      result = await popcorn.call(message, { timeoutMs: DEFAULT_CALL_TIMEOUT_MS });
+    } catch (err) {
+      result = {
         ok: false,
         error: err instanceof Error ? err : new Error(String(err)),
         durationMs: 0,
-      }))
-      .then((result) => {
-        if (!result.ok && !opts?.suppressErrorLog) {
-          console.error(`LLV ${message.action} error`, result.error);
-        }
-        return result;
-      });
+      };
+    }
+    if (!result.ok && !opts?.suppressErrorLog) {
+      console.error(`LLV ${message.action} error`, result.error);
+    }
+    return result;
   }
 }
 
@@ -100,20 +101,22 @@ export class LLVEngine {
    * repeated calls are no-ops.
    */
   connect(): void {
-    this.connectPromise ??= this.doConnect().catch((err: unknown) => {
-      console.error("LLV: connect failed", err);
-    });
+    this.connectPromise ??= this.doConnect();
   }
 
   private async doConnect(): Promise<void> {
-    await this.bootPopcorn();
+    try {
+      await this.bootPopcorn();
 
-    this.mirrors.installSync();
-    this.exposeGlobals();
-    registerCustomEventBindings(this.socket);
+      this.mirrors.installSync();
+      this.exposeGlobals();
+      registerCustomEventBindings(this.socket);
 
-    await this.scanAndMount();
-    this.flushBufferedServerEvents();
+      this.scanAndMount();
+      this.flushBufferedServerEvents();
+    } catch (err) {
+      console.error("LLV: connect failed", err);
+    }
   }
 
   // The app's Phoenix Socket class, recovered from the live instance the
@@ -127,9 +130,13 @@ export class LLVEngine {
     this.popcornLink = createPopcornSocket(this.socketClass(), this.pop);
   }
 
-  private mountView(pop_view_el: HTMLElement): Promise<void> {
-    this.mirrors.ensureChannel(pop_view_el);
-    return this.views.mount(pop_view_el);
+  private async mountView(pop_view_el: HTMLElement): Promise<void> {
+    try {
+      this.mirrors.ensureChannel(pop_view_el);
+      await this.views.mount(pop_view_el);
+    } catch (err) {
+      console.error("LLV: failed to mount view", llvIdOf(pop_view_el), err);
+    }
   }
 
   private registerServerEventListener(): void {
@@ -144,7 +151,7 @@ export class LLVEngine {
   }
 
   private sendServerEvent(detail: LLVServerEventDetail): void {
-    void this.pop.call({
+    this.pop.call({
       action: "dispatch_to_view",
       id: resolveLlvId(detail.view),
       payload: { action: "server_event", params: detail.payload },
@@ -160,7 +167,7 @@ export class LLVEngine {
     const mountView = (el: HTMLElement) => this.mountView(el);
     this.socket.hooks.LocalLiveView = {
       mounted() {
-        if (pop.ready) void mountView(this.el);
+        if (pop.ready) mountView(this.el);
         // Sync assigns in case view was already mounted by the startup scan
         // (mountView is a noop) but the assigns changed.
         views.syncAssigns(this.el);
@@ -221,7 +228,7 @@ export class LLVEngine {
 
     window.__llvPushServer = (llvId: string, event: string, payload: Record<string, unknown>) => {
       const pushError = () =>
-        void this.pop.call({
+        this.pop.call({
           action: "dispatch_to_view",
           id: llvId,
           payload: { action: "push_error", event, params: payload },
@@ -243,9 +250,10 @@ export class LLVEngine {
   // This is the mount path for host-less pages (no hooks fire there) and the
   // catch-up for hooks that fired before Popcorn was ready (Views.mount
   // dedupes on its registry).
-  private async scanAndMount(): Promise<void> {
-    const pop_view_els = Array.from(document.querySelectorAll<HTMLElement>("[data-pop-view]"));
-    await Promise.all(pop_view_els.map((el) => this.mountView(el)));
+  private scanAndMount(): void {
+    for (const el of document.querySelectorAll<HTMLElement>("[data-pop-view]")) {
+      this.mountView(el);
+    }
   }
 
   // Flush any server events that arrived during Popcorn initialization.

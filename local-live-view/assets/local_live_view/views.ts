@@ -23,7 +23,7 @@ export class Views {
     const assigns = pop_view_el.getAttribute("data-pop-assigns");
     const data: ViewData = { lastAssigns: assigns };
     this.data.set(llvId, data);
-    void this.pop.call({ action: "url_changed", url: window.location.href });
+    this.pop.call({ action: "url_changed", url: window.location.href });
     const result = await this.pop.call(
       {
         action: "create",
@@ -46,7 +46,7 @@ export class Views {
     // that would handle the removal.
     if (!pop_view_el.isConnected) {
       this.data.delete(llvId);
-      void this.pop.call({ action: "destroy", id: llvId });
+      this.pop.call({ action: "destroy", id: llvId });
       return;
     }
     const { html } = result.data as { html: string };
@@ -60,7 +60,7 @@ export class Views {
 
   unmount(pop_view_el: HTMLElement): void {
     const llvId = llvIdOf(pop_view_el);
-    if (this.data.delete(llvId)) void this.pop.call({ action: "destroy", id: llvId });
+    if (this.data.delete(llvId)) this.pop.call({ action: "destroy", id: llvId });
   }
 
   // Replace the view's channel with the PopcornSocket channel
@@ -90,7 +90,7 @@ export class Views {
     const assigns = pop_view_el.getAttribute("data-pop-assigns");
     if (assigns === null || assigns === data.lastAssigns) return;
     data.lastAssigns = assigns;
-    void this.pop.call({ action: "update_assigns", id: llvId, assigns });
+    this.pop.call({ action: "update_assigns", id: llvId, assigns });
   }
 
   // Replaces the host-rendered placeholder with the locally

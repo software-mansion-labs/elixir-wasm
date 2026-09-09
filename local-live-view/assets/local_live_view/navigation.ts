@@ -22,7 +22,7 @@ export function registerNavigationHandlers(
   const phoenixOwnsNav = () => socket.isConnected();
 
   const llvHandleParams = (href: string) => {
-    void pop.call({ action: "navigated", url: absHref(href) });
+    pop.call({ action: "navigated", url: absHref(href) });
   };
 
   let lastLLVNavigatedHref: string | null = null;

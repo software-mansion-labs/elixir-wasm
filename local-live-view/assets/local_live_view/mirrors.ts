@@ -35,7 +35,7 @@ export class Mirrors {
       .join()
       .receive("ok", () => {
         if (rejoin) {
-          void this.pop.call({
+          this.pop.call({
             action: "dispatch_to_view",
             id: llvId,
             payload: { action: "mirror_reconnected" },

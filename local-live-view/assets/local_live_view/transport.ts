@@ -2,7 +2,9 @@ import type { Socket as PhoenixSocket, SocketConnectOption } from "phoenix";
 import type { TransportFrame } from "./types";
 import type { PopcornClient } from "./index";
 
-const llvIdFromTopic = (topic: string) => topic.slice("lv:".length);
+const LV_TOPIC_PREFIX = "lv:";
+const llvIdFromTopic = (topic: string) =>
+  topic.startsWith(LV_TOPIC_PREFIX) ? topic.slice(LV_TOPIC_PREFIX.length) : null;
 
 // LiveView retries a join after this timeout, we don't want that
 // thus we keep the timeout 'big enough'
@@ -61,11 +63,14 @@ export function createPopcornSocket(
         return;
       }
 
-      void pop
-        .call(
-          { action: "transport_frame", id: llvIdFromTopic(frame.topic), frame },
-          { suppressErrorLog: true },
-        )
+      const id = llvIdFromTopic(frame.topic);
+      if (id === null) {
+        this.ack(frame, "error", { reason: `unsupported channel ${frame.topic}` });
+        return;
+      }
+
+      pop
+        .call({ action: "transport_frame", id, frame }, { suppressErrorLog: true })
         .then((result) => {
           if (!result.ok) this.ack(frame, "error", result.error);
         });

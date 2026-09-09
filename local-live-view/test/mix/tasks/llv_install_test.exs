@@ -67,7 +67,7 @@ defmodule Mix.Tasks.Llv.InstallTest do
   end
 
   describe "inject_app_js" do
-    test "runs LLVEngine.create() before liveSocket.connect() and llvEngine.connect() after" do
+    test "state initialized with correct order" do
       installed()
       |> assert_has_patch(@app_js_path, """
       + |import { LLVEngine } from "local_live_view";

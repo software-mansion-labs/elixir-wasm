@@ -169,7 +169,13 @@ defmodule LocalLiveView do
   defmacro __using__(_opts) do
     quote do
       import LocalLiveView,
-        only: [mirror_sync: 2, push_patch: 2, push_server_event: 2, push_server_event: 3]
+        only: [
+          mirror_sync: 2,
+          push_patch: 2,
+          push_server_event: 2,
+          push_server_event: 3,
+          redirect: 2
+        ]
 
       @behaviour LocalLiveView
       @before_compile Phoenix.LiveView.Renderer
@@ -219,6 +225,23 @@ defmodule LocalLiveView do
     send(self(), {:llv, :patch, to, kind})
     socket
   end
+
+  @doc """
+  Performs a full-page redirect to a path or an external URL. The browser
+  navigates away and the local view terminates.
+
+  Mirrors `Phoenix.LiveView.redirect/2` semantics, but Flash is not carried over
+  to the target page. If that's required, use `push_server_event/3` and trigger
+  the redirect on the server.
+
+  ## Options
+
+    * `:to` — the path to redirect to
+    * `:external` — an external URL to redirect to
+
+  One of them is required.
+  """
+  defdelegate redirect(socket, opts), to: Phoenix.LiveView
 
   @type unsigned_params :: map
 

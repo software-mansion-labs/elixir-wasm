@@ -43,25 +43,25 @@ defmodule LocalLiveView.Proxy do
   end
 
   @impl true
-  def handle_info({:llv, %{"action" => "update_assigns", "assigns" => encoded_assigns}}, socket) do
+  def handle_info({:llv, %{"action" => "update_assigns"} = msg}, socket) do
+    %{"assigns" => encoded_assigns} = msg
     assigns = decode_assigns(encoded_assigns)
     {:noreply, socket |> call_update!(assigns) |> put_server_assigns(assigns)}
   end
 
-  def handle_info(
-        {:llv, %{"action" => "server_event", "params" => %{"type" => type} = params}},
-        socket
-      ) do
+  def handle_info({:llv, %{"action" => "server_event"} = msg}, socket) do
+    %{"params" => params} = msg
+    %{"type" => type} = params
+
     case view(socket).handle_server_event(type, params, socket) do
       {:noreply, %Socket{} = socket} -> {:noreply, socket}
       {:reply, _map, %Socket{} = socket} -> {:noreply, socket}
     end
   end
 
-  def handle_info(
-        {:llv, %{"action" => "push_event", "event" => event, "params" => params}},
-        socket
-      ) do
+  def handle_info({:llv, %{"action" => "push_event"} = msg}, socket) do
+    %{"event" => event, "params" => params} = msg
+
     case view(socket).handle_event(event, params, socket) do
       {:noreply, %Socket{} = socket} ->
         {:noreply, socket}
@@ -78,10 +78,8 @@ defmodule LocalLiveView.Proxy do
     end
   end
 
-  def handle_info(
-        {:llv, %{"action" => "push_error", "event" => event, "params" => params}},
-        socket
-      ) do
+  def handle_info({:llv, %{"action" => "push_error"} = msg}, socket) do
+    %{"event" => event, "params" => params} = msg
     server_assigns = socket.private[:llv_server_assigns] || %{}
 
     case view(socket).handle_push_error(event, params, server_assigns, socket) do
@@ -102,7 +100,8 @@ defmodule LocalLiveView.Proxy do
     {:noreply, socket}
   end
 
-  def handle_info({:llv, %{"action" => "handle_params", "url" => url}}, socket) do
+  def handle_info({:llv, %{"action" => "handle_params"} = msg}, socket) do
+    %{"url" => url} = msg
     {:noreply, call_handle_params(socket, query_params(url), url)}
   end
 
@@ -180,7 +179,7 @@ defmodule LocalLiveView.Proxy do
     module = Module.concat([name])
     loaded? = match?({:module, _module}, Code.ensure_loaded(module))
 
-    unless loaded? and function_exported?(module, :render, 1) do
+    if not loaded? or not function_exported?(module, :render, 1) do
       raise ArgumentError,
             "#{inspect(module)} (view #{inspect(name)}) is not a LocalLiveView — " <>
               "no such module, or it does not export render/1"
