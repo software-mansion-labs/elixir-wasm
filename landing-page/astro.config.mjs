@@ -5,6 +5,11 @@ import { fileURLToPath } from "node:url";
 import { popcorn } from "@swmansion/popcorn/vite";
 import tailwindcss from "@tailwindcss/vite";
 
+const isolationHeaders = {
+  "Cross-Origin-Embedder-Policy": "require-corp",
+  "Cross-Origin-Opener-Policy": "same-origin",
+};
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://popcorn.swmansion.com",
@@ -15,9 +20,13 @@ export default defineConfig({
     chromeDevtoolsWorkspace: true,
   },
   vite: {
+    server: { headers: isolationHeaders },
+    preview: { headers: isolationHeaders },
     plugins: [
       popcorn({
-        rootDir: fileURLToPath(new URL("../examples/iex-wasm", import.meta.url)),
+        rootDir: fileURLToPath(
+          new URL("../examples/iex-wasm", import.meta.url),
+        ),
         app: "iex",
         extraApps: ["logger"],
       }),
