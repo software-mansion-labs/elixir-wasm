@@ -91,7 +91,7 @@ const figures = [
     <div
       class="bg-cream-terminal @min-demos/demos:h-auto @min-demos/demos:flex-1 relative h-53 min-h-0 flex-none overflow-hidden md:h-75"
     >
-      <div class="absolute inset-0" data-iex-terminal></div>
+      <div class="absolute inset-1" data-iex-terminal></div>
       <div
         class="bg-cream-terminal absolute inset-0 z-10 flex flex-col px-4 pt-5 pb-4 md:px-7 md:pt-6.5 md:pb-4.5"
         data-iex-loading
@@ -168,7 +168,9 @@ const figures = [
             <dl class="font-label flex min-w-0 items-center gap-3 text-sm leading-5.5">
               <dt class="text-brown-70 flex min-w-0 flex-1 items-center gap-1.5">
                 {name}
-                {info !== null && <IexMetricInfo label={info} />}
+                {info !== null && (
+                  <IexMetricInfo id={`iex-${key}-info`} label={info} />
+                )}
               </dt>
               <dd
                 class="text-ink w-27.5 flex-none text-right whitespace-nowrap"
@@ -191,7 +193,9 @@ const figures = [
             <dl class="font-label flex min-w-0 items-center gap-3 text-sm leading-5.5">
               <dt class="text-brown-70 flex min-w-0 flex-1 items-center gap-1.5">
                 {name}
-                {info !== null && <IexMetricInfo label={info} />}
+                {info !== null && (
+                  <IexMetricInfo id={`iex-${key}-info`} label={info} />
+                )}
               </dt>
               <dd
                 class="text-ink w-27.5 flex-none text-right whitespace-nowrap"
@@ -209,7 +213,7 @@ const figures = [
           <div
             class="text-cream-muted flex min-w-0 items-baseline gap-3.5 py-0.75"
           >
-            <dt class="w-29.5 flex-none">#PID&lt;—&gt;</dt>
+            <dt class="sr-only">Processes</dt>
             <dd class="min-w-0 flex-1 truncate">no processes yet</dd>
           </div>
         </dl>
@@ -272,7 +276,7 @@ const figures = [
         <div
           class="text-cream-muted flex min-w-0 items-baseline gap-3.5 py-0.75"
         >
-          <dt class="w-29.5 flex-none">#PID&lt;—&gt;</dt>
+          <dt class="sr-only">Processes</dt>
           <dd class="min-w-0 flex-1 truncate">no processes yet</dd>
         </div>
       </dl>
@@ -724,7 +728,7 @@ const figures = [
     for (const processes of demo.querySelectorAll("[data-iex-processes]")) {
       processes.innerHTML = `
         <div class="text-cream-muted flex min-w-0 items-baseline gap-3.5 py-0.75">
-          <dt class="w-29.5 flex-none">#PID&lt;—&gt;</dt>
+          <dt class="sr-only">Processes</dt>
           <dd class="min-w-0 flex-1 truncate">no processes yet</dd>
         </div>
       `;
