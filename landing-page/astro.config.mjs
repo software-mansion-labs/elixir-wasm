@@ -2,13 +2,11 @@
 import { defineConfig } from "astro/config";
 import { fileURLToPath } from "node:url";
 
-import { popcorn } from "@swmansion/popcorn/vite";
+import {
+  crossOriginIsolationHeaders,
+  popcorn,
+} from "@swmansion/popcorn/vite";
 import tailwindcss from "@tailwindcss/vite";
-
-const isolationHeaders = {
-  "Cross-Origin-Embedder-Policy": "require-corp",
-  "Cross-Origin-Opener-Policy": "same-origin",
-};
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,12 +14,11 @@ export default defineConfig({
   redirects: {
     "/docs": "https://hexdocs.pm/popcorn",
   },
+  server: { headers: crossOriginIsolationHeaders },
   experimental: {
     chromeDevtoolsWorkspace: true,
   },
   vite: {
-    server: { headers: isolationHeaders },
-    preview: { headers: isolationHeaders },
     plugins: [
       popcorn({
         rootDir: fileURLToPath(
