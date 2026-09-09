@@ -76,7 +76,7 @@ defmodule LocalLiveView.MixProject do
       {:playwright, "~> 1.49.1-alpha.2", runtime: false, only: :test},
       # playwright pins cowlib ~> 2.7.0 which fails to compile on OTP 28
       {:cowlib, "~> 2.13", override: true, runtime: false, only: :test},
-      {:phoenix, "~> 1.8", runtime: false},
+      {:phoenix, "~> 1.8.4", runtime: false},
       {:phoenix_live_view, "~> 1.1", runtime: false},
       {:phoenix_html, "~> 4.1", runtime: false},
       {:phoenix_ecto, "~> 4.6", runtime: false},
