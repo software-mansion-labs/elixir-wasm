@@ -1,20 +1,27 @@
 ---
 const memory = [
-  { color: "bg-ink", name: "processes" },
-  { color: "bg-brown-70", name: "binary" },
-  { color: "bg-brown-60", name: "code" },
-  { color: "bg-brown-50", name: "ets" },
-  { color: "bg-brown-30", name: "atom + other" },
+  { color: "bg-ink", key: "processes", name: "processes" },
+  { color: "bg-brown-70", key: "binary", name: "binary" },
+  { color: "bg-brown-60", key: "code", name: "code" },
+  { color: "bg-brown-50", key: "ets", name: "ets" },
+  { color: "bg-brown-30", key: "other", name: "atom + other" },
 ];
 
-const metrics = ["run queue", "reductions / s"];
+const metrics = [
+  { key: "runQueue", name: "run queue" },
+  { key: "reductionsFull", name: "reductions / s" },
+];
 
-const processMetrics = ["count / limit", "gc runs", "uptime"];
+const processMetrics = [
+  { key: "processCountLimit", name: "count / limit" },
+  { key: "gcRuns", name: "gc runs" },
+  { key: "uptime", name: "uptime" },
+];
 
 const figures = [
-  { label: "Memory", value: "— MB" },
-  { label: "Processes", value: "—" },
-  { label: "Reductions/s", value: "—" },
+  { key: "memory", label: "Memory", value: "—" },
+  { key: "processCount", label: "Processes", value: "—" },
+  { key: "reductions", label: "Reductions/s", value: "—" },
 ];
 ---
 
@@ -31,22 +38,19 @@ const figures = [
       class="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto px-3 md:gap-2.5 md:px-5.5"
     >
       <button
-        class="bg-orange-20 aria-pressed:bg-orange font-copy md:font-label flex-none cursor-pointer rounded-full px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 aria-pressed:text-white md:rounded-sm md:px-4 md:py-2.25 md:text-sm md:leading-4.5"
+        class="border-demo font-copy text-ink md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
         type="button"
-        data-iex-example="greet"
-        aria-pressed="true">Greet a process</button
+        data-iex-example="greet">Greet a process</button
       >
       <button
-        class="border-demo font-copy text-ink aria-pressed:bg-orange md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 aria-pressed:border-transparent aria-pressed:text-white md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
+        class="border-demo font-copy text-ink md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
         type="button"
-        data-iex-example="sort"
-        aria-pressed="false">Enum.sort/1</button
+        data-iex-example="sort">Enum.sort/1</button
       >
       <button
-        class="border-demo font-copy text-ink aria-pressed:bg-orange md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 aria-pressed:border-transparent aria-pressed:text-white md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
+        class="border-demo font-copy text-ink md:font-label flex-none cursor-pointer rounded-full border px-3 py-2 text-xs leading-4 font-medium disabled:cursor-default disabled:opacity-40 md:rounded-sm md:px-4 md:py-2 md:text-sm md:leading-4.5"
         type="button"
-        data-iex-example="supervise"
-        aria-pressed="false">Supervise a crash</button
+        data-iex-example="supervise">Supervise a crash</button
       >
     </div>
 
@@ -78,10 +82,7 @@ const figures = [
         class="bg-cream-terminal absolute inset-0 z-10 flex flex-col px-4 pt-5 pb-4 md:px-7 md:pt-6.5 md:pb-4.5"
         data-iex-loading
       >
-        <div
-          class="flex flex-1 flex-col justify-center gap-3.5"
-          aria-hidden="true"
-        >
+        <div class="flex flex-1 flex-col gap-3.5" aria-hidden="true">
           <div class="flex items-center">
             <span class="font-label text-cream-muted text-sm leading-6"
               >iex(1)&gt;&nbsp;</span
@@ -110,19 +111,39 @@ const figures = [
         >
         <strong
           class="font-label text-cream-muted text-2xl leading-8 font-medium"
-          >— MB</strong
+          data-iex-stat="memory">— MB</strong
         >
-        <div class="bg-demo-soft h-2.5 rounded-sm" aria-hidden="true"></div>
-        <dl class="font-label text-sm leading-5.5 opacity-45">
+        <div
+          class="bg-demo-soft flex h-2.5 overflow-hidden rounded-sm"
+          aria-hidden="true"
+        >
           {
-            memory.map(({ color, name }) => (
+            memory.map(({ color, key }) => (
+              <span
+                class:list={["h-full flex-none", color]}
+                data-iex-memory-segment={key}
+              />
+            ))
+          }
+        </div>
+        <dl
+          class="font-label text-sm leading-5.5 opacity-45"
+          data-iex-memory-list
+        >
+          {
+            memory.map(({ color, key, name }) => (
               <div class="flex items-center gap-3 py-0.75">
                 <span
                   class:list={["size-2 flex-none rounded-sm", color]}
                   aria-hidden="true"
                 />
                 <dt class="text-brown-70 min-w-0 flex-1">{name}</dt>
-                <dd class="text-ink w-19 flex-none text-right">—</dd>
+                <dd
+                  class="text-ink w-19 flex-none text-right"
+                  data-iex-stat={`memory-${key}`}
+                >
+                  —
+                </dd>
               </div>
             ))
           }
@@ -135,10 +156,15 @@ const figures = [
           >Load</span
         >
         {
-          metrics.map((name) => (
+          metrics.map(({ key, name }) => (
             <dl class="font-label flex min-w-0 items-center gap-3 text-sm leading-5.5">
               <dt class="text-brown-70 min-w-0 flex-1">{name}</dt>
-              <dd class="text-ink w-27.5 flex-none text-right">—</dd>
+              <dd
+                class="text-ink w-27.5 flex-none whitespace-nowrap text-right"
+                data-iex-stat={key}
+              >
+                —
+              </dd>
             </dl>
           ))
         }
@@ -154,14 +180,22 @@ const figures = [
           >Processes</span
         >
         {
-          processMetrics.map((name) => (
+          processMetrics.map(({ key, name }) => (
             <dl class="font-label flex min-w-0 items-center gap-3 text-sm leading-5.5">
               <dt class="text-brown-70 min-w-0 flex-1">{name}</dt>
-              <dd class="text-ink w-27.5 flex-none text-right">—</dd>
+              <dd
+                class="text-ink w-27.5 flex-none whitespace-nowrap text-right"
+                data-iex-stat={key}
+              >
+                —
+              </dd>
             </dl>
           ))
         }
-        <dl class="font-label mt-1.5 flex min-w-0 flex-col text-sm leading-5.5">
+        <dl
+          class="font-label mt-1.5 flex min-w-0 flex-col text-sm leading-5.5"
+          data-iex-processes
+        >
           <div
             class="text-cream-muted flex min-w-0 items-baseline gap-3.5 py-0.75"
           >
@@ -180,12 +214,15 @@ const figures = [
       class="grid min-w-0 flex-1 grid-cols-3 gap-3 md:flex md:items-end md:gap-11"
     >
       {
-        figures.map(({ label, value }) => (
+        figures.map(({ key, label, value }) => (
           <div class="flex min-w-0 flex-col gap-0.75 md:w-32 md:flex-none md:gap-1">
             <dt class="font-label text-brown-60 tracking-label truncate text-xs leading-4 font-medium uppercase md:leading-4.5">
               {label}
             </dt>
-            <dd class="font-label text-ink truncate text-sm leading-5.5 md:text-2xl md:leading-8">
+            <dd
+              class="font-label text-ink truncate text-sm leading-5.5 md:text-2xl md:leading-8"
+              data-iex-stat={key}
+            >
               {value}
             </dd>
           </div>
@@ -218,7 +255,10 @@ const figures = [
         class="font-label text-brown-60 tracking-label text-xs leading-4.5 font-medium uppercase"
         >Processes</span
       >
-      <dl class="font-label mt-3 flex min-w-0 flex-col text-sm leading-5.5">
+      <dl
+        class="font-label mt-3 flex min-w-0 flex-col text-sm leading-5.5"
+        data-iex-processes
+      >
         <div
           class="text-cream-muted flex min-w-0 items-baseline gap-3.5 py-0.75"
         >
@@ -245,7 +285,63 @@ const figures = [
   import { Popcorn } from "@swmansion/popcorn";
   import { FitAddon, init, Terminal } from "ghostty-web";
 
+  const STATS_EVAL = `
+    {InitialReductions, _} = erlang:statistics(reductions),
+    spawn(fun() ->
+      Loop = fun Next(PreviousReductions) ->
+        timer:sleep(1000),
+        Total = erlang:memory(total),
+        ProcessesMemory = erlang:memory(processes),
+        Binary = erlang:memory(binary),
+        Code = erlang:memory(code),
+        Ets = erlang:memory(ets),
+        Atom = erlang:memory(atom),
+        Other = erlang:max(0, Total - ProcessesMemory - Binary - Code - Ets - Atom),
+        {CurrentReductions, _} = erlang:statistics(reductions),
+        {GcRuns, _, _} = erlang:statistics(garbage_collection),
+        {Uptime, _} = erlang:statistics(wall_clock),
+        ProcessRows = lists:sublist([
+          Row || {_, Row} <- lists:reverse(lists:keysort(1, [
+            {ProcessMemory, #{
+              pid => list_to_binary(["#PID", pid_to_list(Pid)]),
+              name => list_to_binary(case RegisteredName of
+                [] -> io_lib:format("~p.~p", [Module, Function]);
+                _ -> atom_to_list(RegisteredName)
+              end)
+            }} ||
+              Pid <- processes(),
+              [{memory, ProcessMemory}, {registered_name, RegisteredName},
+               {current_function, {Module, Function, _}}] <-
+                [process_info(Pid, [memory, registered_name, current_function])]
+          ]))
+        ], 3),
+        wasm:send(#{popcorn_demo_stats => #{
+          memory => #{
+            total => Total,
+            processes => ProcessesMemory,
+            binary => Binary,
+            code => Code,
+            ets => Ets,
+            other => Atom + Other
+          },
+          run_queue => erlang:statistics(run_queue),
+          reductions => CurrentReductions - PreviousReductions,
+          process_count => erlang:system_info(process_count),
+          process_limit => erlang:system_info(process_limit),
+          gc_runs => GcRuns,
+          uptime => Uptime,
+          processes => ProcessRows
+        }}),
+        Next(CurrentReductions)
+      end,
+      Loop(InitialReductions)
+    end),
+    ok.
+  `;
+
   const SHELL_ARGS = [
+    "-eval",
+    STATS_EVAL,
     "-elixir_root",
     "/lib",
     "-user",
@@ -269,6 +365,24 @@ const figures = [
       "Process.exit(pid, :kill)",
       "Supervisor.which_children(supervisor)",
     ],
+  };
+
+  type RuntimeStats = {
+    memory: {
+      total: number;
+      processes: number;
+      binary: number;
+      code: number;
+      ets: number;
+      other: number;
+    };
+    run_queue: number;
+    reductions: number;
+    process_count: number;
+    process_limit: number;
+    gc_runs: number;
+    uptime: number;
+    processes: Array<{ pid: string; name: string }>;
   };
 
   for (const demo of document.querySelectorAll<HTMLElement>(
@@ -315,6 +429,7 @@ const figures = [
 
     let popcorn: Popcorn | null = null;
     let terminal: Terminal | null = null;
+    let stopStatistics: (() => void) | null = null;
 
     if (
       details instanceof HTMLButtonElement &&
@@ -331,10 +446,6 @@ const figures = [
       button.addEventListener("click", () => {
         if (popcorn === null) return;
 
-        for (const candidate of exampleButtons) {
-          candidate.setAttribute("aria-pressed", String(candidate === button));
-        }
-
         const name = button.dataset.iexExample;
         console.assert(
           name === "greet" || name === "sort" || name === "supervise",
@@ -346,10 +457,12 @@ const figures = [
     }
 
     restart.addEventListener("click", async () => {
+      if (stopStatistics !== null) stopStatistics();
       if (popcorn !== null) popcorn.deinit();
       if (terminal !== null) terminal.dispose();
       terminalElement.replaceChildren();
-      ({ popcorn, terminal } = await startTerminal(
+      ({ popcorn, terminal, stopStatistics } = await startTerminal(
+        demo,
         terminalElement,
         loadingElement,
         loadingMessage,
@@ -360,7 +473,8 @@ const figures = [
       ));
     });
 
-    ({ popcorn, terminal } = await startTerminal(
+    ({ popcorn, terminal, stopStatistics } = await startTerminal(
+      demo,
       terminalElement,
       loadingElement,
       loadingMessage,
@@ -372,6 +486,7 @@ const figures = [
   }
 
   async function startTerminal(
+    demo: HTMLElement,
     terminalElement: HTMLElement,
     loadingElement: HTMLElement,
     loadingMessage: HTMLElement,
@@ -380,6 +495,7 @@ const figures = [
     exampleButtons: NodeListOf<HTMLButtonElement>,
     restart: HTMLButtonElement,
   ) {
+    resetStatistics(demo);
     setLoading(exampleButtons, restart, loadingElement, progress, true);
     loadingMessage.textContent = "Loading runtime…";
     status.textContent = "Starting the Elixir runtime";
@@ -390,7 +506,7 @@ const figures = [
       loadingMessage.textContent = message;
       progress.classList.add("hidden");
       status.textContent = message;
-      return { popcorn: null, terminal: null };
+      return { popcorn: null, terminal: null, stopStatistics: null };
     }
 
     await init();
@@ -460,7 +576,7 @@ const figures = [
       status.textContent = result.error.message;
       terminal.dispose();
       terminalElement.replaceChildren();
-      return { popcorn: null, terminal: null };
+      return { popcorn: null, terminal: null, stopStatistics: null };
     }
 
     const popcorn = result.data;
@@ -479,15 +595,12 @@ const figures = [
     terminalElement.dataset.ready = "true";
     status.textContent = "IEx is ready";
     setLoading(exampleButtons, restart, loadingElement, progress, false);
-    for (const button of exampleButtons) {
-      button.setAttribute(
-        "aria-pressed",
-        String(button.dataset.iexExample === "greet"),
-      );
-    }
-    runExample(popcorn, EXAMPLES.greet);
+    const stopStatistics = popcorn.onEvent((event) => {
+      const statistics = getRuntimeStatistics(event);
+      if (statistics !== null) updateStatistics(demo, statistics);
+    });
 
-    return { popcorn, terminal };
+    return { popcorn, terminal, stopStatistics };
   }
 
   function runExample(popcorn: Popcorn, commands: string[]) {
@@ -511,6 +624,142 @@ const figures = [
     for (const button of exampleButtons) button.disabled = loading;
     loadingElement.classList.toggle("hidden", loading === false);
     progress.classList.toggle("hidden", loading === false);
+  }
+
+  function getRuntimeStatistics(event: unknown): RuntimeStats | null {
+    if (
+      typeof event !== "object" ||
+      event === null ||
+      !("popcorn_demo_stats" in event)
+    ) {
+      return null;
+    }
+
+    return event.popcorn_demo_stats as RuntimeStats;
+  }
+
+  function updateStatistics(demo: HTMLElement, statistics: RuntimeStats) {
+    const { memory } = statistics;
+    setStatistic(demo, "memory", formatBytes(memory.total));
+    setStatistic(demo, "memory-processes", formatBytes(memory.processes));
+    setStatistic(demo, "memory-binary", formatBytes(memory.binary));
+    setStatistic(demo, "memory-code", formatBytes(memory.code));
+    setStatistic(demo, "memory-ets", formatBytes(memory.ets));
+    setStatistic(demo, "memory-other", formatBytes(memory.other));
+    setStatistic(demo, "runQueue", String(statistics.run_queue));
+    setStatistic(demo, "reductions", formatCompact(statistics.reductions));
+    setStatistic(demo, "reductionsFull", formatInteger(statistics.reductions));
+    setStatistic(demo, "processCount", String(statistics.process_count));
+    setStatistic(
+      demo,
+      "processCountLimit",
+      `${statistics.process_count} / ${statistics.process_limit}`,
+    );
+    setStatistic(demo, "gcRuns", formatInteger(statistics.gc_runs));
+    setStatistic(demo, "uptime", formatDuration(statistics.uptime));
+    renderProcesses(demo, statistics.processes);
+
+    for (const segment of demo.querySelectorAll<HTMLElement>(
+      "[data-iex-memory-segment]",
+    )) {
+      const key = segment.dataset.iexMemorySegment as keyof typeof memory;
+      segment.style.width = `${(memory[key] / memory.total) * 100}%`;
+    }
+
+    for (const list of demo.querySelectorAll("[data-iex-memory-list]")) {
+      list.classList.remove("opacity-45");
+    }
+    for (const total of demo.querySelectorAll('[data-iex-stat="memory"]')) {
+      total.classList.remove("text-cream-muted");
+    }
+  }
+
+  function resetStatistics(demo: HTMLElement) {
+    for (const statistic of demo.querySelectorAll<HTMLElement>(
+      "[data-iex-stat]",
+    )) {
+      statistic.textContent = "—";
+    }
+    for (const segment of demo.querySelectorAll<HTMLElement>(
+      "[data-iex-memory-segment]",
+    )) {
+      segment.style.width = "0";
+    }
+    for (const list of demo.querySelectorAll("[data-iex-memory-list]")) {
+      list.classList.add("opacity-45");
+    }
+    for (const total of demo.querySelectorAll('[data-iex-stat="memory"]')) {
+      total.classList.add("text-cream-muted");
+    }
+    for (const processes of demo.querySelectorAll("[data-iex-processes]")) {
+      processes.innerHTML = `
+        <div class="text-cream-muted flex min-w-0 items-baseline gap-3.5 py-0.75">
+          <dt class="w-29.5 flex-none">#PID&lt;—&gt;</dt>
+          <dd class="min-w-0 flex-1 truncate">no processes yet</dd>
+        </div>
+      `;
+    }
+  }
+
+  function renderProcesses(
+    demo: HTMLElement,
+    processRows: RuntimeStats["processes"],
+  ) {
+    for (const list of demo.querySelectorAll("[data-iex-processes]")) {
+      list.replaceChildren(
+        ...processRows.map(({ pid, name }) => {
+          const row = document.createElement("div");
+          row.className =
+            "flex min-w-0 items-baseline gap-3.5 overflow-hidden py-0.75";
+
+          const processId = document.createElement("dt");
+          processId.className = "text-ink w-29.5 flex-none";
+          processId.textContent = pid;
+
+          const processName = document.createElement("dd");
+          processName.className = "text-brown-60 min-w-0 flex-1 truncate";
+          processName.textContent = name;
+
+          row.append(processId, processName);
+          return row;
+        }),
+      );
+    }
+  }
+
+  function setStatistic(demo: HTMLElement, name: string, value: string) {
+    for (const statistic of demo.querySelectorAll<HTMLElement>(
+      `[data-iex-stat="${name}"]`,
+    )) {
+      statistic.textContent = value;
+    }
+  }
+
+  function formatBytes(bytes: number) {
+    return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  }
+
+  function formatCompact(value: number) {
+    if (value >= 1_000_000) return `${trimDecimal(value / 1_000_000)} M`;
+    if (value >= 1_000) return `${trimDecimal(value / 1_000)} K`;
+    return String(value);
+  }
+
+  function trimDecimal(value: number) {
+    return value.toFixed(1).replace(".0", "");
+  }
+
+  function formatInteger(value: number) {
+    return Math.round(value).toLocaleString("en-US").replaceAll(",", " ");
+  }
+
+  function formatDuration(milliseconds: number) {
+    const seconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return [hours, minutes, seconds % 60]
+      .map((part) => String(part).padStart(2, "0"))
+      .join(":");
   }
 
   function ttySize(terminal: Terminal) {
